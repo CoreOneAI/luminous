@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Luminous Salon — Book • Shop • Glow</title>
+  <meta name="theme-color" content="#B8860B" />
+  <link rel="manifest" href="/manifest.json?v=1" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --charcoal:#2C2C2C; --gold:#B8860B; --pearl:#F8F8F8; --ink:#111; --muted:#666; --grad:linear-gradient(135deg,#B8860B,#DAA520) }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--charcoal); color: var(--ink); }
+    .page { max-width: 414px; margin: 0 auto; min-height: 100vh; background: var(--charcoal); }
+    .header { background: var(--charcoal); padding: 18px 20px 12px; border-bottom: 1px solid #3A3A3A; text-align: center; position: sticky; top: 0; z-index: 5; }
+    .brand { font-weight: 800; font-size: 22px; letter-spacing: 0.3px; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    .sub { margin-top: 4px; font-size: 11px; color: var(--gold); font-weight: 600; opacity: .95; }
+    .main { background: var(--pearl); min-height: calc(100vh - 110px); padding: 12px 12px 160px; }
+    .hero { background: #fff; border-radius: 16px; padding: 0; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,.08); }
+    .hero-track { display: flex; gap: 0; overflow-x: auto; scroll-snap-type: x mandatory; }
+    .hero img { width: 100%; height: 180px; object-fit: cover; display: block; scroll-snap-align: start; }
+    .hero-copy { padding: 14px 16px; }
+    .hero-copy h1 { font-size: 17px; font-weight: 800; color: var(--ink); margin-bottom: 6px; }
+    .hero-copy p { font-size: 12px; color: var(--muted); }
+    .section { margin-top: 16px; }
+    .section .hd { background: var(--grad); color: #fff; border-radius: 12px; padding: 12px 14px; text-align: center; box-shadow: 0 4px 12px rgba(184,134,11,.25); }
+    .section .hd h2 { font-size: 13px; letter-spacing: .3px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .card { background: #fff; border-radius: 14px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.06); border: 1px solid #F0F0F0; transition: transform .15s ease; cursor: pointer; }
+    .card:hover { transform: translateY(-2px); }
+    .k { font-size: 12px; font-weight: 800; color: var(--ink); margin-bottom: 6px; letter-spacing: .2px; }
+    .d { font-size: 11px; color: var(--muted); line-height: 1.35; }
+    .cta { margin-top: 12px; }
+    .btn { width: 100%; border: none; border-radius: 26px; padding: 13px 16px; font-weight: 800; letter-spacing: .2px; color: #fff; background: var(--grad); box-shadow: 0 6px 16px rgba(184,134,11,.35); cursor: pointer; }
+    .strip { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .mini { background: #fff; border-radius: 12px; padding: 12px; border: 1px solid #EEE; }
+    .mini .name { font-size: 12px; font-weight: 700; margin-bottom: 6px; color: var(--ink); }
+    .mini .meta { font-size: 11px; color: var(--muted); }
+    .nav { position: fixed; left: 50%; transform: translateX(-50%); bottom: 0; width: 100%; max-width: 414px; background: #fff; border-top: 1px solid #E0E0E0; height: 60px; display: grid; grid-template-columns: repeat(4, 1fr); align-items: center; z-index: 10; }
+    .nav a { text-decoration: none; color: #777; font-size: 11px; text-align: center; }
+    .nav a.active { color: var(--gold); font-weight: 700; }
+    .dock { position: fixed; left: 50%; transform: translateX(-50%); bottom: 60px; width: 100%; max-width: 414px; padding: 10px 12px; z-index: 11; }
+    .advisor { display: flex; gap: 8px; align-items: center; background: #fff; border-radius: 26px; padding: 8px 10px; border: 1.5px solid #e7d3a6; box-shadow: 0 4px 12px rgba(0,0,0,.06); }
+    .advisor input { flex: 1; border: none; outline: none; font-size: 13px; background: transparent; color: var(--ink); }
+    .advisor input::placeholder { color: #9A9A9A; }
+    .btn-send { border: none; width: 36px; height: 36px; border-radius: 18px; background: var(--grad); color: #fff; font-weight: 800; cursor: pointer; }
+    .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.56); display: none; align-items: center; justify-content: center; padding: 18px; z-index: 1000; }
+    .modal { width: 100%; max-width: 380px; background: #fff; border-radius: 16px; box-shadow: 0 10px 28px rgba(0,0,0,.25); overflow: hidden; }
+    .modal-hd { background: var(--grad); color: #fff; padding: 12px 14px; font-weight: 800; font-size: 14px; }
+    .modal-bd { padding: 12px 14px; }
+    .field { margin-top: 10px; }
+    .label { font-size: 12px; color: #444; margin-bottom: 6px; font-weight: 700; }
+    .input, select { width: 100%; border: 1px solid #E6E6E6; border-radius: 12px; padding: 10px; font-size: 14px; outline: none; }
+    .modal-ft { padding: 12px 14px; border-top: 1px solid #EFEFEF; display: flex; gap: 10px; }
+    .btn-secondary { flex: 1; border: 1px solid #E6E6E6; background: #FAFAFA; color: #333; border-radius: 12px; padding: 12px; font-weight: 700; cursor: pointer; }
+    .btn-primary { flex: 2; border: none; background: var(--grad); color: #fff; border-radius: 12px; padding: 12px; font-weight: 800; cursor: pointer; }
+    .styles { display: grid; grid-template-columns: 1fr; gap: 8px; margin-top: 8px; max-height: 180px; overflow: auto; }
+    .style-row { display: flex; justify-content: space-between; align-items: center; border: 1px solid #EEE; border-radius: 10px; padding: 8px 10px; }
+    .style-row label { font-size: 12px; color: #222; display: flex; gap: 8px; align-items: center; }
+    .price { font-size: 12px; font-weight: 800; color: var(--gold); }
+    @media (max-width: 380px) { .grid { grid-template-columns: 1fr; } .strip { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+      <div class="brand">Luminous Salon</div>
+      <div class="sub">Book • Shop • Glow</div>
+    </header>
+
+    <main class="main">
+      <section class="hero" aria-label="Featured">
+        <div class="hero-track">
+          <img src="AFRICAN%20AMERICAN%20BEAUTY.jpg" alt="Radiant skin and serum product" loading="lazy"/>
+          <img src="HISPANIC%20BEAYTY%20CARE%20MODAL.jpg" alt="Smiling model with skincare bottles" loading="lazy"/>
+          <img src="WHITE%20FEMALE%20BEAUTY%20CARE%20MODAL.jpg" alt="Soft glow portrait closeup" loading="lazy"/>
+          <img src="WHITE%20FEMALE.jpg" alt="Cream application on cheek" loading="lazy"/>
+        </div>
+        <div class="hero-copy">
+          <h1>Your Appointment, Elevated</h1>
+          <p>Professional services with curated at‑home care. Seamless booking, tailored recommendations.</p>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="hd"><h2>Services</h2></div>
+        <div class="grid" id="services">
+          <article class="card" tabindex="0" data-svc="Haircut"><div class="k">Haircut</div><div class="d">Precision cuts and shaping. Includes consult & finish.</div></article>
+          <article class="card" tabindex="0" data-svc="Color"><div class="k">Color</div><div class="d">Single process, highlights, balayage. Gentle formulations.</div></article>
+          <article class="card" tabindex="0" data-svc="Blowout"><div class="k">Blowout</div><div class="d">Smooth finish or volume styling. Event‑ready.</div></article>
+          <article class="card" tabindex="0" data-svc="Nails"><div class="k">Nail Services</div><div class="d">Classic, gel, fills. Clean, careful, long‑lasting.</div></article>
+          <article class="card" tabindex="0" data-svc="Skin"><div class="k">Skin Treatments</div><div class="d">Facials, peels, targeted care. Calm, brighten, renew.</div></article>
+          <article class="card" tabindex="0" data-svc="Extensions"><div class="k">Extensions</div><div class="d">Length & fullness with expert application.</div></article>
+          <article class="card" tabindex="0" data-svc="Mens"><div class="k">Men’s Grooming</div><div class="d">Barbering, beard shaping, gray blending.</div></article>
+          <article class="card" tabindex="0" data-svc="Retail"><div class="k">Retail</div><div class="d">Salon‑grade hair & skin care for at‑home results.</div></article>
+        </div>
+        <div class="cta"><button class="btn" onclick="openBooking()">Book Now</button></div>
+      </section>
+
+      <section class="section">
+        <div class="hd"><h2>Recommended Retail</h2></div>
+        <div class="strip" id="retail">
+          <div class="mini"><div class="name">Color‑Safe Shampoo</div><div class="meta">Sulfate‑free • 250ml</div></div>
+          <div class="mini"><div class="name">Bond Repair Mask</div><div class="meta">Intense treatment • 200ml</div></div>
+          <div class="mini"><div class="name">Thermal Protectant</div><div class="meta">Heat shield • 150ml</div></div>
+          <div class="mini"><div class="name">Vitamin C Serum</div><div class="meta">Brighten • 30ml</div></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="hd"><h2>Packages & Membership</h2></div>
+        <div class="grid">
+          <article class="card" tabindex="0" onclick="openMembership('blowout')"><div class="k">Blowout Bundle</div><div class="d">5 blowouts • Preferred pricing • Priority booking</div></article>
+          <article class="card" tabindex="0" onclick="openMembership('skin')"><div class="k">Skin Refresh</div><div class="d">3 facials • Glow plan • Member perks</div></article>
+        </div>
+      </section>
+    </main>
+
+    <div class="dock" role="search">
+      <div class="advisor">
+        <input id="advisorInput" placeholder="Ask a stylist… e.g., color care after balayage" />
+        <button class="btn-send" title="Ask" aria-label="Ask" onclick="advisorAsk()">Go</button>
+      </div>
+    </div>
+
+    <nav class="nav" role="navigation" aria-label="Bottom Navigation">
+      <a class="active" href="/index.html">Home</a>
+      <a href="#" onclick="openBooking();return false;">Book</a>
+      <a href="/catalog.html">Shop</a>
+      <a href="/account.html">Account</a>
+    </nav>
+  </div>
+
+  <div class="modal-bg" id="bookingModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
+      <div class="modal-hd" id="bookingTitle">Book an Appointment</div>
+      <div class="modal-bd">
+        <div class="field">
+          <div class="label">Service</div>
+          <select id="svcSelect" onchange="loadStylesForService(this.value)">
+            <option value="Haircut">Haircut</option>
+            <option value="Color">Color</option>
+            <option value="Blowout">Blowout</option>
+            <option value="Nails">Nail Services</option>
+            <option value="Skin">Skin Treatments</option>
+            <option value="Extensions">Extensions (Consult)</option>
+            <option value="Mens">Men’s Grooming</option>
+          </select>
+        </div>
+        <div class="field">
+          <div class="label">Choose a style</div>
+          <div id="styleList" class="styles" role="radiogroup"></div>
+        </div>
+        <div class="field">
+          <div class="label">Date</div>
+          <input id="dateInput" class="input" type="date" />
+        </div>
+        <div class="field">
+          <div class="label">Time</div>
+          <input id="timeInput" class="input" type="time" />
+        </div>
+        <div class="field">
+          <div class="label">Notes (optional)</div>
+          <input id="notesInput" class="input" placeholder="Stylist preference, goals, sensitivities" />
+        </div>
+      </div>
+      <div class="modal-ft">
+        <button class="btn-secondary" onclick="closeBooking()">Cancel</button>
+        <button class="btn-primary" onclick="submitBooking()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Same-origin API (no CORS) because frontend and API are served together here
+    const API_BASE = '';
+
+    async function advisorAsk() {
+      const input = document.getElementById('advisorInput');
+      const q = (input?.value || '').trim();
+      if (!q) { alert('Please enter a question.'); return; }
+      const payload = {
+        message: `[Salon Advisor] ${q}\nReturn concise, professional guidance and suggest 1-3 in-salon services plus retail add-ons when relevant.`,
+        includeProducts: true,
+        sessionId: 'salon_' + Date.now()
+      };
+      try {
+        const r = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await r.json();
+        if (data?.success && data?.response) alert(data.response); else alert('No response. Please try again.');
+      } catch (e) { console.error(e); alert('Connection issue. Try again shortly.'); }
+    }
+
+    document.getElementById('services').addEventListener('click', (e) => {
+      const card = e.target.closest('.card'); if (!card) return;
+      const svc = card.getAttribute('data-svc'); if (svc === 'Retail') { window.location.href = '/catalog.html'; return; }
+      openBooking(svc);
+    });
+
+    function openBooking(preset) {
+      const modal = document.getElementById('bookingModal'); modal.style.display = 'flex';
+      if (preset) document.getElementById('svcSelect').value = preset;
+      const dt = new Date(Date.now() + 2 * 60 * 60 * 1000);
+      document.getElementById('dateInput').value = dt.toISOString().slice(0,10);
+      document.getElementById('timeInput').value = dt.toTimeString().slice(0,5);
+      loadStylesForService(document.getElementById('svcSelect').value);
+    }
+    function closeBooking(){ document.getElementById('bookingModal').style.display = 'none'; }
+
+    const STYLE_MAP = {
+      Haircut: [ ['Classic Bob', 55], ['Layered Cut', 60], ['Precision Pixie', 65], ['Blow‑Dry + Shape', 50], ['Cut + Deep Treatment', 75], ['Kids Cut', 35] ],
+      Color:   [ ['Single Process', 95], ['Partial Highlights', 120], ['Full Highlights', 165], ['Balayage', 185], ['Gloss / Toner', 45], ['Root Touch‑Up', 85] ],
+      Blowout: [ ['Smooth Finish', 40], ['Volume Blowout', 45], ['Beach Waves', 50], ['Event Style (Updo)', 85], ['Keratin Express', 160] ],
+      Nails:   [ ['Classic Manicure', 30], ['Gel Manicure', 45], ['Acrylic Fill', 40], ['Spa Pedicure', 55], ['Nail Art Add‑On', 15] ],
+      Skin:    [ ['Signature Facial', 95], ['Hydrafacial', 155], ['Chemical Peel', 135], ['LED Therapy', 35], ['Microdermabrasion', 120] ],
+      Extensions: [ ['Consult (Tape‑In)', 0], ['Consult (Keratin‑Tip)', 0], ['Maintenance Move‑Up', 140], ['Removal', 95] ],
+      Mens:    [ ['Clipper Cut', 35], ['Scissor Cut', 45], ['Beard Trim', 20], ['Gray Blend', 40], ['Hot Towel Shave', 30] ]
+    };
+
+    function loadStylesForService(svc) {
+      const list = document.getElementById('styleList'); list.innerHTML='';
+      (STYLE_MAP[svc]||[]).forEach(([name, price], i) => {
+        const id = `style_${i}`;
+        const row = document.createElement('div'); row.className = 'style-row';
+        row.innerHTML = `
+          <label for="${id}"><input type="radio" name="style" id="${id}" value="${name}" ${i===0?'checked':''}/> ${name}</label>
+          <span class="price">${price>0?`$${price.toFixed?price.toFixed(0):price}`:'Consult'}</span>`;
+        list.appendChild(row);
+      });
+    }
+
+    async function submitBooking() {
+      const service = document.getElementById('svcSelect').value;
+      const styleEl = document.querySelector('input[name="style"]:checked');
+      const style = styleEl ? styleEl.value : '';
+      const price = (() => { const pair = (STYLE_MAP[service]||[]).find(([n]) => n===style); return pair?pair[1]:0; })();
+      const date = document.getElementById('dateInput').value; const time = document.getElementById('timeInput').value;
+      const notes = document.getElementById('notesInput').value;
+      if (!date || !time) { alert('Please select a date and time.'); return; }
+
+      try {
+        const r = await fetch(`${API_BASE}/api/bookings/create`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ service, style, price, datetimeISO: new Date(`${date}T${time}:00`).toISOString(), notes })
+        });
+        const data = await r.json();
+        if (!data.success) throw new Error(data.error || 'Failed to create booking');
+
+        const when = new Date(`${date}T${time}:00`).toLocaleString();
+        alert(`Booking created.
+
+Ref: ${data.bookingId}
+${service} — ${style || 'Consult'} (${price>0?`$${price}`:'Consult'})
+When: ${when}`);
+
+        if (data.checkoutUrl) window.location.href = data.checkoutUrl;
+        closeBooking();
+      } catch (e) { console.error(e); alert('Unable to create booking right now.'); }
+    }
+
+    function openMembership(key){
+      const map = { blowout: 'Blowout Bundle — 5 visits at member pricing with priority booking.', skin: 'Skin Refresh — 3 facials plus member perks.' };
+      alert(map[key] || 'Membership details coming soon.');
+    }
+  </script>
+</body>
+</html>

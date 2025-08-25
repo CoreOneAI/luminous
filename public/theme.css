@@ -1,0 +1,21 @@
+:root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+html,body{height:100%}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--pearl);color:var(--ink);margin:0}
+.wrap{max-width:414px;margin:0 auto;padding:12px}
+.hd{background:var(--grad);color:#fff;border-radius:12px;padding:12px 14px;text-align:center;font-weight:800;box-shadow:0 4px 12px rgba(184,134,11,.25)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.card{background:#fff;border:1px solid #eee;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:12px;transition:transform .15s ease}
+.card:hover{transform:translateY(-2px)}
+.title{font-size:12px;font-weight:800;margin-bottom:6px}
+.meta{font-size:11px;color:var(--muted);line-height:1.35}
+.price{font-size:12px;font-weight:800;color:var(--gold)}
+.btn{display:block;width:100%;border:none;border-radius:26px;padding:12px 14px;font-weight:800;color:#fff;background:var(--grad);box-shadow:0 6px 16px rgba(184,134,11,.35);cursor:pointer;margin-top:10px}
+.search{display:flex;gap:8px;background:#fff;border:1.5px solid #e7d3a6;border-radius:26px;padding:8px 10px;margin:10px 0}
+.search input{flex:1;border:none;outline:none;background:transparent}
+.topnav{position:sticky;top:0;background:var(--pearl);padding:10px 12px;border-bottom:1px solid #e8e8e8;z-index:5}
+.topnav .brand{font-weight:800;font-size:16px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.botnav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
+.botnav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
+.botnav a.active{color:var(--gold);font-weight:700}
+.img{width:100%;height:120px;object-fit:cover;border-radius:10px;margin-bottom:8px}
+.badge{display:inline-block;font-size:10px;border:1px solid #ead5a1;color:#6b5b2a;border-radius:999px;padding:4px 8px;background:#f7f2e6;margin-top:6px}
