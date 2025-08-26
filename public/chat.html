@@ -1,17 +1,248 @@
-<!DOCTYPE html><html lang="en"><head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminous — Shop (Chat)</title>
-<link rel="stylesheet" href="theme.css?v=1">
-</head><body>
-  <div class="topnav"><div class="brand">Luminous • Shop</div></div>
-  <div class="wrap">
-    <div class="hd">Ask • Search • Shop</div>
-    <div id="chat" class="chat"></div>
-    <div class="row">
-      <input id="q" placeholder="Ask about acne, frizz, color care…" />
-      <button onclick="send()">Send</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luminous • Shop & Chat</title>
+  <meta name="theme-color" content="#B8860B" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;
+      --grad:linear-gradient(135deg,#B8860B,#DAA520)
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:#333}
+    .container{max-width:414px;margin:0 auto;background:var(--pearl);min-height:100vh;position:relative}
+    .header{background:var(--charcoal);padding:14px 16px 10px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:10}
+    .toprow{display:flex;align-items:center;gap:10px;justify-content:space-between}
+    .logo{font-size:20px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .back{color:#fff;text-decoration:none;font-weight:700}
+    .chips{display:flex;gap:8px;overflow:auto;margin-top:10px;padding-bottom:4px}
+    .chip{flex:0 0 auto;border:1px solid #4A4A4A;color:#eee;padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap}
+    .chip.active,.chip:hover{border-color:#e7d3a6;color:#fff;background:rgba(184,134,11,.18)}
+    .chat{padding:14px;min-height:calc(100vh - 210px);padding-bottom:100px}
+    .msg{margin-bottom:12px;padding:10px 14px;border-radius:16px;max-width:80%}
+    .user{margin-left:auto;background:var(--grad);color:#fff}
+    .bot{margin-right:auto;background:#eaeaea;color:#111}
+    .typing{display:inline-flex;gap:4px;align-items:center}
+    .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bounce 1.3s infinite ease-in-out}
+    .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
+    @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+    .card{background:#fff;border-radius:12px;padding:10px;border:1px solid #eee;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+    .img{height:110px;border-radius:8px;background:#f6f6f6;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:8px}
+    .img img{width:100%;height:100%;object-fit:cover}
+    .name{font-size:12px;font-weight:800;color:#111;line-height:1.2}
+    .brand{font-size:11px;color:#666;margin-top:2px}
+    .price{font-size:12px;color:var(--gold);font-weight:800;margin-top:6px}
+    .actions{margin-top:8px;display:flex;gap:6px}
+    .btn{flex:1;border:none;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:800;color:#fff;background:var(--grad);cursor:pointer}
+    .load{display:block;margin:14px auto 0;border:none;border-radius:18px;padding:10px 14px;font-weight:800;color:#fff;background:var(--grad);cursor:pointer}
+    .inputbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #ddd;padding:12px}
+    .row{display:flex;gap:10px}
+    input[type="text"]{flex:1;border:1px solid #ddd;border-radius:22px;padding:12px 14px;font-size:14px;outline:none}
+    .send{border:none;border-radius:22px;width:48px;height:48px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+    @media (max-width:380px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="toprow">
+        <a class="back" href="/index.html">← Home</a>
+        <div class="logo">Luminous • Shop</div>
+        <div style="width:40px"></div>
+      </div>
+      <div class="chips" id="chips">
+        <div class="chip">Acne Care</div>
+        <div class="chip">Anti-Aging</div>
+        <div class="chip">K-Beauty</div>
+        <div class="chip">Hair Repair</div>
+        <div class="chip">Nails & Tools</div>
+      </div>
+    </div>
+
+    <div class="chat" id="chat"></div>
+
+    <div class="inputbar">
+      <div class="row">
+        <input id="q" placeholder="Search or ask… e.g., sulfate-free shampoo for color" />
+        <button class="send" id="go" title="Ask">→</button>
+      </div>
     </div>
   </div>
-  <nav class="botnav"><a href="/index.html">Home</a><a class="active" href="/chat.html">Shop</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a></nav>
-  <script src="chat.js?v=2"></script>
-</body></html>
+
+  <script>
+    // same-origin API
+    const CHAT_URL = '/api/chat';
+    const PRODUCTS_URL = '/api/products';
+
+    const elChat = document.getElementById('chat');
+    const elQ = document.getElementById('q');
+    const elGo = document.getElementById('go');
+    const elChips = document.getElementById('chips');
+
+    let allProducts = [];
+    let filtered = [];
+    let shown = 0;
+    const PAGE = 8;
+
+    // Load catalog once
+    async function loadCatalog() {
+      try {
+        const r = await fetch(PRODUCTS_URL, { headers: { 'Accept':'application/json' } });
+        const data = await r.json();
+        // Support either {items:[]} or legacy {products:[]}
+        allProducts = (data && (data.items || data.products)) || [];
+      } catch(e) {
+        console.error('catalog error', e);
+        allProducts = [];
+      }
+    }
+
+    // Price formatter (supports cents number or "$" string)
+    function fmtPrice(v) {
+      if (v == null) return '';
+      if (typeof v === 'string') return v;
+      if (typeof v === 'number') {
+        // treat as cents if >= 100 or integer
+        const cents = Number.isInteger(v) ? v : Math.round(v * 100);
+        return '$' + (cents/100).toFixed(2);
+      }
+      return String(v);
+    }
+
+    function cardHTML(p) {
+      const img = p.image || p.image_url || '';
+      const price = fmtPrice(p.price);
+      const brand = p.brand || p.manufacturer || '';
+      const country = p.country || p.origin || p.category || '';
+      return `
+        <div class="card">
+          <div class="img">${img ? `<img src="${img}" alt="${p.name||'Product'}" onerror="this.parentElement.innerHTML='✨'">` : '✨'}</div>
+          <div class="name">${p.name || 'Premium Product'}</div>
+          <div class="brand">${brand}</div>
+          <div class="price">${price}</div>
+          <div style="font-size:11px;color:#777;margin-top:2px">${country}</div>
+          <div class="actions">
+            <button class="btn" onclick='addToCart(${JSON.stringify({
+              id: p.id || p.sku || ('id_'+Math.random().toString(36).slice(2)),
+              name: p.name, price: p.price, image: img
+            }).replace(/"/g, '&quot;')})'>Add to Cart</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function addToCart(item) {
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      cart.push({ ...item, qty:1, addedAt:Date.now() });
+      localStorage.setItem('cart', JSON.stringify(cart));
+      alert(`Added: ${item.name}`);
+    }
+
+    function renderBatch() {
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      const slice = filtered.slice(shown, shown + PAGE);
+      shown += slice.length;
+      slice.forEach(p => grid.insertAdjacentHTML('beforeend', cardHTML(p)));
+      elChat.appendChild(grid);
+
+      if (shown < filtered.length) {
+        const more = document.createElement('button');
+        more.className = 'load';
+        more.textContent = `Load more (${filtered.length - shown})`;
+        more.onclick = () => { more.remove(); renderBatch(); };
+        elChat.appendChild(more);
+      }
+      elChat.scrollTop = elChat.scrollHeight;
+    }
+
+    function showTyping() {
+      const d = document.createElement('div');
+      d.className = 'msg bot';
+      d.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
+      elChat.appendChild(d);
+      elChat.scrollTop = elChat.scrollHeight;
+      return d;
+    }
+
+    function addMsg(text, who='bot') {
+      const d = document.createElement('div');
+      d.className = 'msg ' + (who==='user' ? 'user' : 'bot');
+      d.textContent = text;
+      elChat.appendChild(d);
+      elChat.scrollTop = elChat.scrollHeight;
+      return d;
+    }
+
+    function filterProducts(query) {
+      if (!query) return allProducts.slice(0, 0);
+      const q = query.toLowerCase();
+      return allProducts.filter(p => {
+        const hay = [
+          p.name, p.brand, p.manufacturer, p.category, p.country, p.tags && p.tags.join(' ')
+        ].filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+    }
+
+    async function handleQuery(q) {
+      if (!q) return;
+      addMsg(q, 'user');
+      const typing = showTyping();
+
+      // Advisor
+      let advisorText = '';
+      try {
+        const r = await fetch(CHAT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
+          body: JSON.stringify({ message: q })
+        });
+        const t = await r.text();
+        advisorText = (r.ok && (t && JSON.parse(t).response)) || '';
+      } catch(e) { advisorText = ''; }
+
+      typing.remove();
+      if (advisorText) addMsg(advisorText, 'bot');
+
+      // Catalog
+      shown = 0;
+      filtered = filterProducts(q);
+      if (!filtered.length) {
+        addMsg('No matching products yet — try a different term (e.g., brand, concern, or category).', 'bot');
+        return;
+      }
+      renderBatch();
+    }
+
+    // chip search
+    elChips.addEventListener('click', (e) => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      [...elChips.children].forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      elQ.value = chip.textContent.trim();
+      handleQuery(elQ.value);
+    });
+
+    // go button / enter
+    elGo.addEventListener('click', () => handleQuery(elQ.value.trim()));
+    elQ.addEventListener('keydown', e => { if (e.key === 'Enter') handleQuery(elQ.value.trim()); });
+
+    // Support ?query= in URL
+    const params = new URLSearchParams(location.search);
+    const initialQ = params.get('query') || '';
+    elQ.value = initialQ;
+
+    // Init
+    (async function init(){
+      await loadCatalog();
+      if (initialQ) handleQuery(initialQ);
+    })();
+  </script>
+</body>
+</html>
