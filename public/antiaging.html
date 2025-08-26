@@ -1,20 +1,23 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Anti‑Aging — Luminous Salon</title>
-<link rel="stylesheet" href="theme.css?v=1"></head><body>
+<link rel="stylesheet" href="theme.css?v=1">
+</head><body>
   <div class="topnav"><div class="brand">Luminous • Anti‑Aging</div></div>
   <div class="wrap">
     <div class="hd">Anti‑Aging</div>
-    <div class="search"><input id="q" placeholder="Search…" oninput="filterCards(this.value)"><button class="btn" style="width:auto;padding:8px 12px;border-radius:18px" onclick="filterCards(document.getElementById('q').value)">Search</button></div>
+    <div class="search">
+      <input id="q" placeholder="Search products…">
+      <button id="searchBtn" class="btn" style="width:auto;padding:8px 12px;border-radius:18px">Search</button>
+    </div>
     <div class="grid" id="grid"></div>
   </div>
-  <nav class="botnav"><a href="/index.html">Home</a><a class="" href="/catalog.html">Shop</a><a class="" href="/cart.html">Cart</a><a href="/account.html">Account</a></nav>
-  <script src="shop.js?v=1"></script>
-  <script>
-    (async function(){
-      const grid = document.getElementById('grid');
-      const items = await fetchProducts({"category":"Skin"});
-      renderGrid(grid, items.slice(0, 24));
-    })();
-  </script>
+  <nav class="botnav">
+    <a href="/index.html">Home</a>
+    <a class="active" href="/antiaging.html">Shop</a>
+    <a href="/cart.html">Cart</a>
+    <a href="/chat.html">Advisor</a>
+  </nav>
+  <script src="shop.js?v=3"></script>
+  <script>wireSearch({ category: "Skin" });</script>
 </body></html>

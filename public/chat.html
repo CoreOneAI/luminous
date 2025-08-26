@@ -1,33 +1,17 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Luminous — Advisor</title>
+<title>Luminous — Shop (Chat)</title>
 <link rel="stylesheet" href="theme.css?v=1">
-<style>
-.chat{max-width:414px;margin:0 auto 70px;background:#fff;border:1px solid #eee;border-radius:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);padding:12px}
-.msg{margin:8px 0;padding:10px;border-radius:10px;font-size:13px;line-height:1.3}
-.me{background:#f0f6ff;align-self:flex-end}
-.bot{background:#f8f8f8}
-.row{display:flex;gap:8px;align-items:center;margin-top:12px}
-.row input{flex:1;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:14px;outline:none}
-.row button{border:none;border-radius:12px;padding:10px 14px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
-.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.pcard{border:1px solid #eee;border-radius:12px;overflow:hidden;background:#fff}
-.pcard img{width:100%;height:120px;object-fit:cover;display:block}
-.pcard .t{font-size:12px;font-weight:800;padding:8px 8px 0}
-.pcard .m{font-size:11px;color:#666;padding:0 8px 8px}
-.pcard .p{font-size:12px;font-weight:800;color:var(--gold);padding:0 8px 8px}
-.pcard .btn{border:none;border-radius:0 0 12px 12px;padding:10px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer;width:100%}
-</style>
 </head><body>
-  <div class="topnav"><div class="brand">Luminous • Advisor</div></div>
+  <div class="topnav"><div class="brand">Luminous • Shop</div></div>
   <div class="wrap">
-    <div class="hd">Ask a Stylist</div>
+    <div class="hd">Ask • Search • Shop</div>
     <div id="chat" class="chat"></div>
     <div class="row">
       <input id="q" placeholder="Ask about acne, frizz, color care…" />
       <button onclick="send()">Send</button>
     </div>
   </div>
-  <nav class="botnav"><a href="/index.html">Home</a><a href="/catalog.html">Shop</a><a href="/cart.html">Cart</a><a class="active" href="/chat.html">Advisor</a></nav>
-  <script src="chat.js?v=1"></script>
+  <nav class="botnav"><a href="/index.html">Home</a><a class="active" href="/chat.html">Shop</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a></nav>
+  <script src="chat.js?v=2"></script>
 </body></html>

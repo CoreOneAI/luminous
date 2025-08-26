@@ -1,4 +1,4 @@
-// chat.js — conversational advisor with product cards
+// chat.js — conversational shop experience
 const API_BASE = ''; // same-origin
 const chat = document.getElementById('chat');
 const input = document.getElementById('q');
@@ -20,7 +20,7 @@ function addCards(products){
       <div class="t">${p.name}</div>
       <div class="m">${(p.country||'').trim()} • ${p.category||''}</div>
       <div class="p">${p.price||'$25'}</div>
-      <button class="btn" onclick="addToCart('${(p.name||'').replace(/'/g, "\\'")}')">Add</button>
+      <button class="btn" onclick="addToCart('${(p.name||'').replace(/'/g, "\'")}')">Add</button>
     `;
     wrap.appendChild(card);
   });
@@ -34,11 +34,8 @@ function addToCart(name){
   alert(`${name} added to cart`);
 }
 
-async function send(){
-  const text = (input.value||'').trim();
-  if (!text) return;
+async function sendText(text){
   addMsg(text,'me');
-  input.value='';
   try{
     const r = await fetch(`${API_BASE}/api/chat`, {
       method:'POST', headers:{'Content-Type':'application/json'},
@@ -47,10 +44,17 @@ async function send(){
     const j = await r.json();
     if (j.response) addMsg(j.response,'bot');
     if (Array.isArray(j.products) && j.products.length) addCards(j.products.slice(0,6));
-  }catch(e){
-    addMsg('Connection issue. Try again shortly.','bot');
-  }
+  }catch(e){ addMsg('Connection issue. Try again shortly.','bot'); }
+}
+async function send(){
+  const text = (input.value||'').trim();
+  if (!text) return;
+  input.value='';
+  sendText(text);
 }
 
-// greet
-addMsg('Hi! I can help with acne, color care, frizz, and more. What are you targeting today?');
+// greet + optional ?q= auto search
+const params = new URLSearchParams(location.search);
+const q0 = params.get('q');
+addMsg('Hi! Tell me what you’re shopping for (e.g., acne routine, blonde care, frizz).');
+if (q0) sendText(q0);
