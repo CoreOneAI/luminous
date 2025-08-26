@@ -1,5 +1,5 @@
 // shop.js (unused in index.html inline version; provided for future externalization)
-const API_BASE = 'https://luminous-render.onrender.com';
+const API_BASE = ''; // same origin avoids CORS & hostname drift;
 function filterCards(q){
   const t=(q||'').trim().toLowerCase();
   document.querySelectorAll('[data-title]').forEach(el=>{
