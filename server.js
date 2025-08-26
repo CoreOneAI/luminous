@@ -8,7 +8,7 @@ const path = require('path');
 
 // ---------- Config ----------
 const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || '0.0.0.0'; // <- IMPORTANT for Render
+const HOST = process.env.HOST || '0.0.0.0'; // IMPORTANT for Render
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
 const OPENAI_CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini';
 const PEXELS_API_KEY = process.env.PEXELS_API_KEY || ''; // optional
@@ -139,55 +139,113 @@ app.post('/api/bookings/create', (req, res) => {
   res.json({ success: true, ...record });
 });
 
-// ---------- Chat (OpenAI if available; smart fallback) ----------
-const SYSTEM_PROMPT = `You are Luminous, a salon retail & services concierge.
-Keep answers lean and actionable. Always:
-• Suggest a primary service AND one add-on.
-• Recommend 1–2 retail products that pair with the service.
-• If asked for product search, include a short filter strategy.`;
+// ---------- Chat with slot-filling + product payload ----------
+const sessions = new Map();
+const TONES = ['fair','light','medium','olive','brown','deep','dark'];
+const SKIN_TYPES = ['oily','dry','combination','combo','normal','sensitive'];
 
 app.post('/api/chat', async (req, res) => {
-  const { message, tone = 'concise' } = req.body || {};
-  if (!message) return res.status(400).json({ success: false, error: 'message required' });
+  const { message, tone = 'concise', includeProducts = true, sessionId } = req.body || {};
+  if (!message) return res.status(400).json({ success:false, error:'message required' });
 
-  // OpenAI path
-  if (OPENAI_API_KEY) {
-    try {
-      const r = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${OPENAI_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          model: OPENAI_CHAT_MODEL,
-          temperature: 0.4,
-          messages: [
-            { role: 'system', content: SYSTEM_PROMPT },
-            { role: 'user', content: `${message}\n\nTone: ${tone}` }
-          ]
-        })
-      });
-      if (!r.ok) throw new Error(`openai ${r.status}`);
-      const data = await r.json();
-      const text = data.choices?.[0]?.message?.content?.trim();
-      if (text) return res.json({ success: true, provider: 'openai', response: text });
-    } catch (err) {
-      // fall through to fallback
+  const text = message.toLowerCase();
+  const isAcne = /acne|breakout|pimple/.test(text);
+  const isHair = /hair|frizz|dry|blonde|color/.test(text);
+
+  const sessKey = sessionId || 'default';
+  const sess = sessions.get(sessKey) || { intent: null, slots: {} };
+
+  if (isAcne) sess.intent = 'acne';
+  if (isHair) sess.intent = 'hair';
+
+  const slots = sess.slots;
+  if (isAcne && !slots.skinTone) {
+    const toneHit = TONES.find(t => text.includes(t));
+    if (toneHit) slots.skinTone = toneHit;
+  }
+  if (isAcne && !slots.skinType) {
+    const st = SKIN_TYPES.find(t => text.includes(t));
+    if (st) slots.skinType = (st === 'combo' ? 'combination' : st);
+  }
+  if (isAcne && slots.sensitive == null) {
+    if (text.includes('sensitive')) slots.sensitive = true;
+  }
+  if (isHair && slots.colorTreated == null) {
+    if (/blonde|color|toner|bleach/.test(text)) slots.colorTreated = true;
+  }
+  if (isHair && !slots.hairNeed) {
+    if (/dry|frizz/.test(text)) slots.hairNeed = 'hydrate';
+    if (/heat|iron|dryer/.test(text)) slots.hairNeed = slots.hairNeed || 'protect';
+  }
+
+  if (sess.intent === 'acne') {
+    const missing = [];
+    if (!slots.skinTone) missing.push('skin tone (fair / medium / deep)');
+    if (!slots.skinType) missing.push('skin type (oily / dry / combination / sensitive)');
+    if (missing.length) {
+      sessions.set(sessKey, { intent:'acne', slots });
+      return res.json({ success:true, provider:'luminous', response: `To tailor an acne routine, I need your ${missing.join(' and ')}. How would you describe it?`, products:[] });
+    }
+  }
+  if (sess.intent === 'hair') {
+    const missing = [];
+    if (slots.colorTreated == null) missing.push('Is your hair color-treated or blonde?');
+    if (!slots.hairNeed) missing.push('Are you targeting hydration or heat protection today?');
+    if (missing.length) {
+      sessions.set(sessKey, { intent:'hair', slots });
+      return res.json({ success:true, provider:'luminous', response: missing.join(' '), products:[] });
     }
   }
 
-  // Fallback (deterministic, fast)
-  const m = message.toLowerCase();
-  let primary = 'Hydration Facial', addon = 'Brow Shaping', retail = ['Vitamin C Serum', 'Thermal Protectant'];
-  if (m.includes('color') || m.includes('blonde')) { primary = 'Gloss + Toner'; addon = 'Bond Builder Treatment'; retail = ['Color-Safe Shampoo', 'Bond Repair Mask']; }
-  if (m.includes('dry') || m.includes('frizz')) { primary = 'Deep-Condition Mask'; addon = 'Trim & Blowout'; retail = ['Bond Repair Mask', 'Thermal Protectant']; }
-  const response =
-`• Book: ${primary} (+ ${addon} add-on)
-• Why: maximizes shine + health for your hair/skin goals
-• Retail: ${retail.join(', ')}
-• Search tip: filter by category, and sort by best-selling in-salon`;
-  res.json({ success: true, provider: 'fallback', response });
+  const plan = (() => {
+    if (sess.intent === 'acne') {
+      const tone = slots.skinTone || 'your tone';
+      const st = slots.skinType || 'your skin type';
+      return { primary:'Calming Acne Facial', addon:'Blue Light Therapy', retail:['Gentle Gel Cleanser','Niacinamide Serum','SPF 30 Mineral'], blurb:`For ${st} on ${tone}, focus on non‑comedogenic, fragrance‑free steps.` };
+    }
+    if (sess.intent === 'hair') {
+      const need = slots.hairNeed || 'hydration';
+      const ct = slots.colorTreated ? 'color-treated' : 'natural';
+      return { primary: need==='protect' ? 'Gloss + Heat Shield Blowout' : 'Hydration Mask + Blowout', addon: slots.colorTreated ? 'Bond Builder Add-In' : 'Scalp Treatment', retail: slots.colorTreated ? ['Color-Safe Shampoo','Bond Repair Mask','Thermal Protectant'] : ['Hydrating Shampoo','Deep Mask','Thermal Protectant'], blurb:`For ${ct} hair, we’ll target ${need}.` };
+    }
+    return { primary:'Hydration Facial', addon:'Brow Shaping', retail:['Vitamin C Serum','Thermal Protectant'], blurb:'Balanced routine to boost glow and protect.' };
+  })();
+
+  const responseText =
+`• Book: ${plan.primary} (+ ${plan.addon})
+• Why: ${plan.blurb}
+• Retail: ${plan.retail.join(', ')}
+• Tip: sort by “best‑selling in‑salon” and check usage notes.`;
+
+  let outProducts = [];
+  if (includeProducts) {
+    const want = [];
+    if (sess.intent === 'acne') want.push('serum','cleanser','spf','mask','toner');
+    if (sess.intent === 'hair') {
+      if (slots.hairNeed === 'protect') want.push('protectant','shield','spray');
+      else want.push('mask','shampoo','conditioner');
+      if (slots.colorTreated) want.push('color','bond');
+    }
+    if (!want.length) want.push('serum','mask','shampoo');
+
+    const matches = (PRODUCTS || FALLBACK_PRODUCTS).filter(p => {
+      const hay = (p.name + ' ' + (p.category||'') + ' ' + (p.tags||[]).join(' ')).toLowerCase();
+      return want.some(w => hay.includes(w));
+    }).slice(0, 24);
+
+    outProducts = matches.map(p => ({
+      name: p.name,
+      brand: p.brand || '',
+      price: p.priceCents != null ? `$${Math.round(p.priceCents/100)}` : '$25',
+      imageUrl: p.image || '',
+      country: p.country || '',
+      description: p.usage || '',
+      category: p.category || ''
+    }));
+  }
+
+  sessions.set(sessKey, { intent: sess.intent, slots });
+  return res.json({ success:true, provider:'luminous', response: responseText, products: outProducts });
 });
 
 // ---------- Error Handling ----------
