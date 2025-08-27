@@ -72,7 +72,7 @@
     <main class="main">
       <section class="hero" aria-label="Featured">
         <div class="hero-track">
-          <!-- If you keep spaces in filenames, URL-encode them as %20 -->
+          <!-- URL-encode filenames that contain spaces -->
           <img src="/AFRICAN%20AMERICAN%20BEAUTY.jpg" alt="Radiant skin" loading="lazy"/>
           <img src="/HISPANIC%20BEAYTY%20CARE%20MODAL.jpg" alt="Skincare display" loading="lazy"/>
           <img src="/WHITE%20FEMALE%20BEAUTY%20CARE%20MODAL.jpg" alt="Closeup" loading="lazy"/>
@@ -130,7 +130,7 @@
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a class="active" href="/index.html">Home</a>
       <a href="#" onclick="openBooking();return false;">Book</a>
-      <a href="/catalog.html">Shop</a>
+      <a href="/chat.html">Shop</a>
       <a href="/account.html">Account</a>
     </nav>
   </div>
@@ -177,7 +177,7 @@
   </div>
 
   <script>
-    const API_BASE = ''; // same-origin keeps things simple
+    const API_BASE = ''; // same-origin
 
     async function advisorAsk() {
       const input = document.getElementById('advisorInput');
@@ -207,7 +207,7 @@
     document.getElementById('services').addEventListener('click', (e) => {
       const card = e.target.closest('.card'); if (!card) return;
       const svc = card.getAttribute('data-svc');
-      if (svc === 'Retail') { window.location.href = '/catalog.html'; return; }
+      if (svc === 'Retail') { window.location.href = '/chat.html'; return; }
       openBooking(svc);
     });
 
@@ -255,7 +255,7 @@
       if (!date || !time) { alert('Please select a date and time.'); return; }
 
       try {
-        const r = await fetch(`${API_BASE}/api/bookings/create`, {
+        const r = await fetch(`/api/bookings/create`, {
           method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ service, style, price, datetimeISO: new Date(`${date}T${time}:00`).toISOString(), notes })
         });
