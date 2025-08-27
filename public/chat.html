@@ -10,8 +10,11 @@
 :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
 .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--pearl);padding-bottom:120px}
-.header{background:#fff;padding:16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
+.header{background:#fff;padding:12px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
+.headerbar{display:flex;align-items:center;justify-content:space-between}
 .brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.status{margin-top:8px;font-size:11px;color:#555;display:flex;gap:10px;flex-wrap:wrap}
+.bullet{padding:2px 8px;border:1px solid #eee;border-radius:12px;background:#fafafa}
 .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
 .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
 .nav a.active{color:var(--gold);font-weight:700}
@@ -25,7 +28,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .price{font-size:12px;font-weight:800;color:var(--gold)}
 .btn{border:none;border-radius:18px;padding:8px 10px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer;font-size:12px}
 .badge{min-width:18px;height:18px;background:var(--gold);color:#fff;border-radius:9px;font-size:10px;display:none;align-items:center;justify-content:center;padding:0 5px}
-.headerbar{display:flex;align-items:center;justify-content:space-between}
 .iconbtn{border:1px solid #e6e6e6;border-radius:12px;background:#fafafa;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:8px}
 .svg{width:16px;height:16px;display:inline-block}
 .composer{position:fixed;left:50%;transform:translateX(-50%);bottom:60px;max-width:414px;width:100%;padding:10px 12px}
@@ -47,6 +49,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .followup input{flex:1;border:1px solid #E6E6E6;border-radius:12px;padding:8px;font-size:12px}
 .note{font-size:12px;color:#666;margin:8px 0}
 .more{display:block;width:100%;margin:14px 0 0;border:1px solid #e6e6e6;background:#fff;color:#333;border-radius:16px;padding:10px;font-weight:700}
+.warn{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin-top:8px;font-size:12px}
 </style>
 </head>
 <body>
@@ -59,6 +62,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         <span class="badge" id="cartCount">0</span>
       </button>
     </div>
+    <div class="status" id="status">
+      <span class="bullet" id="st-api">API: …</span>
+      <span class="bullet" id="st-fb">Fallback: …</span>
+      <span class="bullet" id="st-total">Total: 0</span>
+    </div>
   </header>
 
   <main class="main">
@@ -69,6 +77,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <div class="note" id="note"></div>
     <div id="grid" class="grid"></div>
     <button id="moreBtn" class="more" style="display:none">Show 50 more</button>
+    <div class="warn" id="warn" style="display:none"></div>
   </main>
 
   <div class="composer">
@@ -90,7 +99,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <script>
 (function(){
-  const API_BASE='';
+  const API_BASE=location.origin; // absolute same-origin
   const BATCH=50;
   let all=[]; let filtered=[]; let cursor=0;
   let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
@@ -100,6 +109,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
   const $ = (s)=>document.querySelector(s);
   const thread=$('#thread'), grid=$('#grid'), note=$('#note');
+  const stApi=$('#st-api'), stFb=$('#st-fb'), stTotal=$('#st-total'), warn=$('#warn');
+
+  function setStatus(api, fb, total){
+    stApi.textContent = 'API: ' + api;
+    stFb.textContent = 'Fallback: ' + fb;
+    stTotal.textContent = 'Total: ' + total;
+  }
 
   function cents(v){
     if(v===null||v===undefined) return 0;
@@ -120,7 +136,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   }
 
   function addMsg(text,me=false){
-    if(!me && text && text===lastAssistant) return; // avoid duplicate guidance
+    if(!me && text && text===lastAssistant) return;
     const div=document.createElement('div'); div.className='msg'+(me?' me':''); div.textContent=text; thread.appendChild(div); thread.scrollTop=thread.scrollHeight;
     if(!me) lastAssistant = text;
   }
@@ -183,9 +199,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     if(has('red')||has('copper')||has('rose')||has('ruby')) tags.push('red');
     if(has('color-safe')||(has('color')&&has('safe'))) tags.push('color-safe');
     if(has('color')&&has('deposit')) tags.push('color-deposit');
-    if((p.category||'').toLowerCase().includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
-    if((p.category||'').toLowerCase().includes('skin') || tags.includes('serum')) tags.push('skin');
-    if((p.category||'').toLowerCase().includes('nail')) tags.push('nail');
+    const cat = (p.category||'').toLowerCase();
+    if(cat.includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
+    if(cat.includes('skin') || tags.includes('serum')) tags.push('skin');
+    if(cat.includes('nail')) tags.push('nail');
     return Array.from(new Set(tags));
   }
 
@@ -259,7 +276,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     return obj;
   }
 
+  async function fetchJSON(url){
+    const r = await fetch(url, {cache:'no-store'});
+    const ct = r.headers.get('content-type')||'';
+    if(!r.ok || !ct.includes('application/json')){
+      throw new Error('HTTP '+r.status+' '+url+' ct:'+ct);
+    }
+    return await r.json();
+  }
+
+  function extractItems(j){
+    const candidates=[j.items, j.data, j.results, j.products, j.productList, j];
+    for(const c of candidates){
+      if(Array.isArray(c) && c.length) return c;
+      if(c && typeof c==='object' && !Array.isArray(c)){
+        const vals=Object.values(c);
+        if(vals.length && typeof vals[0]==='object') return vals;
+      }
+    }
+    return [];
+  }
+
   async function loadProducts(){
+    const attempts=[];
     let items = [];
     const endpoints = [
       API_BASE + '/api/products?limit=2000',
@@ -269,37 +308,58 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     ];
     for (const url of endpoints) {
       try {
-        const r = await fetch(url, {cache: 'no-store'});
-        if (!r.ok) continue;
-        const j = await r.json();
-        const candidates = [j.items, j.data, j.results, j.products, j.productList, j];
-        for (const c of candidates) {
-          if (Array.isArray(c) && c.length) { items = c; break; }
-          if (c && typeof c === 'object' && !Array.isArray(c)) {
-            const vals = Object.values(c);
-            if (vals.length && typeof vals[0] === 'object') { items = vals; break; }
-          }
-        }
-        if (items.length) break;
-      } catch(e){ /* try next endpoint */ }
+        const j = await fetchJSON(url);
+        const arr = extractItems(j);
+        attempts.push(url+': ok '+arr.length);
+        if (arr.length){ items = arr; break; }
+      } catch(e){
+        attempts.push(url+': '+(e.message||'fail'));
+      }
     }
-    if(items.length < 100){
-      const fallbacks = ['/data/products.json','/products.json'];
-      for(const path of fallbacks){
+    // Static fallbacks
+    let fbCount=0;
+    if(items.length < 50){
+      const fallbacks = [API_BASE + '/data/products.json', API_BASE + '/products.json', API_BASE + '/data/products.ndjson'];
+      for(const url of fallbacks){
         try{
-          const r=await fetch(path,{cache:'no-store'});
-          if(!r.ok) continue;
-          const j=await r.json();
-          const arr = Array.isArray(j.items)?j.items:(Array.isArray(j)?j:[]);
-          if(arr.length){ items = items.concat(arr); }
-        }catch(e){}
+          const res = await fetch(url, {cache:'no-store'});
+          if(!res.ok){ attempts.append(url+': http '+res.status); continue; }
+          let arr=[];
+          const ct = res.headers.get('content-type')||'';
+          if(ct.includes('ndjson')){
+            const txt = await res.text();
+            arr = txt.split('\n').map(s=>{ try{return JSON.parse(s)}catch{return null} }).filter(Boolean);
+          }else{
+            const j = await res.json();
+            arr = Array.isArray(j.items)?j.items:(Array.isArray(j)?j:[]);
+          }
+          attempts.append(url+': ok '+arr.length);
+          if(arr.length){ items = items.concat(arr); fbCount += arr.length; }
+        }catch(e){ attempts.append(url+': '+(e.message||'fail')); }
       }
     }
     let normalized = items.map(normalize);
     const seen=new Set();
     all = normalized.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
+    setStatus(items.length?('ok '+items.length):'none', fbCount?('ok '+fbCount):'none', all.length);
+    if(!all.length){
+      warn.style.display='block';
+      warn.innerHTML = 'No products loaded. Quick checks: <ul><li>Open <b>'+API_BASE+'/api/products</b> — do you see JSON?</li><li>Ensure a static catalog at <b>/data/products.json</b> or <b>/products.json</b>.</li><li>Serve this page over HTTP (not file://) so same‑origin fetch works.</li></ul>';
+      console.warn('Product load attempts:', attempts);
+    }else{
+      console.log('Product load attempts:', attempts);
+    }
     filtered = all.slice();
     renderChunk(true);
+  }
+
+  function renderChunk(reset=false){
+    if(reset){ grid.innerHTML=''; cursor=0; }
+    const next=filtered.slice(cursor, cursor+BATCH);
+    next.forEach(p=>grid.appendChild(card(p)));
+    cursor += next.length;
+    document.getElementById('moreBtn').style.display = cursor < filtered.length ? 'block' : 'none';
+    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — try a different term.';
   }
 
   async function ask(q){
@@ -309,14 +369,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       const r = await fetch(API_BASE+'/api/chat', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({message:q})});
       const data = await r.json();
       if(data.response) addMsg(data.response);
-    }catch(e){ /* fine: still rank locally */ }
+    }catch(e){ /* still proceed with ranking */ }
     filtered = rankProducts(q);
     renderChunk(true);
   }
 
   document.getElementById('askBtn').addEventListener('click', ()=>{ const v=document.getElementById('ask').value.trim(); if(v) ask(v); });
   document.getElementById('ask').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ const v=e.target.value.trim(); if(v) ask(v); }});
-  document.getElementById('moreBtn').addEventListener('click', ()=>{ const ev=new Event('renderMore'); renderChunk(false); });
+  document.getElementById('moreBtn').addEventListener('click', ()=>renderChunk(false));
 
   updateCartBadge();
   loadProducts();
