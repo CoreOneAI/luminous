@@ -1,29 +1,24 @@
-// server.js — Luminous all-in-one (UI + API + diagnostics)
-// Node 18+ (global fetch). Start: `node server.js`
-// Render: Build `npm install`, Start `node server.js`
-
+// Luminous unified server (v2) — adds priceCents support + robust normalization
 const express = require('express');
-const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
+const cors = require('cors');
 
-// ---------- Config ----------
-const PORT = Number(process.env.PORT || 3000);
-const HOST = process.env.HOST || '0.0.0.0'; // IMPORTANT for Render
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
-const OPENAI_CHAT_MODEL = process.env.OPENAI_CHAT_MODEL || 'gpt-4o-mini';
-const PEXELS_API_KEY = process.env.PEXELS_API_KEY || ''; // optional
-
-// ---------- App ----------
 const app = express();
 
-// Minimal CSP: allow our inline for now; OK to tighten after moving all inline CSS/JS to files
+// --- Security & JSON ---
+app.disable('x-powered-by');
+app.use(express.json({ limit: '1mb' }));
+app.use(cors({ origin: '*'}));
+
+// --- CSP (allow Unsplash + data/blob and same-origin) ---
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', [
     "default-src 'self'",
     "script-src 'self' 'unsafe-inline'",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: https://images.unsplash.com",
-    "connect-src 'self' https://api.openai.com https://api.pexels.com",
+    "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
+    "connect-src 'self'",
     "font-src 'self' data:",
     "object-src 'none'",
     "base-uri 'self'",
@@ -35,226 +30,179 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors());
-app.use(express.json({ limit: '1mb' }));
+// --- Helpers ---
+const DATA_PATH = path.join(process.cwd(), 'data', 'products.json');
 
-// ---------- Static (public/) ----------
-const staticDir = path.join(__dirname, 'public');
-app.get('/favicon.ico', (_, res) => res.redirect(302, '/favicon.svg'));
-app.use(express.static(staticDir, {
-  setHeaders(res, filePath) {
-    if (filePath.endsWith('.html')) res.setHeader('Cache-Control', 'no-cache');
-    else res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+function toCents(val) {
+  if (val === null || val === undefined) return 0;
+  if (typeof val === 'number') {
+    // If it's a big integer (>= 1000) assume cents; if decimal/small assume dollars
+    if (Number.isInteger(val) && val >= 1000) return val;
+    return Math.round(val * 100);
   }
-}));
-app.get('/', (_, res) => res.sendFile(path.join(staticDir, 'index.html')));
+  if (typeof val === 'string') {
+    const s = val.trim().toLowerCase().replace(/[, ]/g, '');
+    const m = s.match(/(\d+(\.\d+)?)/);
+    if (!m) return 0;
+    return Math.round(parseFloat(m[1]) * 100);
+  }
+  return 0;
+}
 
-// ---------- Health & Diagnostics ----------
-app.get('/healthz', (_, res) => res.json({ ok: true, ts: new Date().toISOString() }));
-app.get('/__whoami', (_, res) => {
-  const list = (app._router.stack || [])
-    .filter(r => r.route && r.route.path)
-    .map(r => `${Object.keys(r.route.methods).join(',').toUpperCase()} ${r.route.path}`);
-  res.json({ running: 'server.js', routes: list });
-});
+function normImage(im) {
+  if (!im) return null;
+  const s = String(im).trim();
+  if (/^https?:\/\//i.test(s)) return s;
+  // ensure leading slash and URL-encode spaces
+  return '/' + encodeURI(s.replace(/^\/+/, ''));
+}
 
-// ---------- In-memory products (fallback) ----------
-const FALLBACK_PRODUCTS = [
-  { id: 'p001', name: 'Color-Safe Shampoo', category: 'Hair', priceCents: 1800, image: 'https://images.unsplash.com/photo-1582095133179-2988d1a4f5b0?q=80&w=800&auto=format&fit=crop' },
-  { id: 'p002', name: 'Bond Repair Mask', category: 'Hair', priceCents: 2400, image: 'https://images.unsplash.com/photo-1582095132990-7e83d90c1071?q=80&w=800&auto=format&fit=crop' },
-  { id: 'p003', name: 'Thermal Protectant', category: 'Hair', priceCents: 2000, image: 'https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop' },
-  { id: 'p004', name: 'Vitamin C Serum', category: 'Skin', priceCents: 2900, image: 'https://images.unsplash.com/photo-1556229010-aa3f7ff66b2c?q=80&w=800&auto=format&fit=crop' }
-];
+function firstDefined(obj, keys, fallback = undefined) {
+  for (const k of keys) {
+    if (obj[k] !== undefined && obj[k] !== null) return obj[k];
+  }
+  return fallback;
+}
 
-// Optional: load data/products.json if present
-let PRODUCTS = FALLBACK_PRODUCTS;
+function normalizeProduct(p, idx) {
+  if (!p || typeof p !== 'object') p = {};
+  const id = String(firstDefined(p, ['id','sku','code'], 'p' + (idx+1)));
+  const name = String(firstDefined(p, ['name','title'], 'Untitled'));
+  const brand = firstDefined(p, ['brand','line'], '');
+  const category = firstDefined(p, ['category','type'], '');
+  // Accept many price shapes, preferring cents keys
+  const rawPrice = firstDefined(p, ['price_cents','priceCents','price_cent','priceUSD','priceUsd','price_usd','price'], 0);
+  const priceCents = toCents(rawPrice);
+  const image = normImage(firstDefined(p, ['image','image_url','photo'], ''));
+  const usage = firstDefined(p, ['usage','howTo','how_to'], '');
+  const country = firstDefined(p, ['country','origin'], '');
+  return { id, name, brand, category, price: priceCents, image, usage, country };
+}
+
+function loadCatalog() {
+  try {
+    if (fs.existsSync(DATA_PATH)) {
+      const rawFile = fs.readFileSync(DATA_PATH, 'utf8');
+      const raw = JSON.parse(rawFile);
+      const arr = Array.isArray(raw) ? raw : Array.isArray(raw.items) ? raw.items : [];
+      return arr.map((p, i) => normalizeProduct(p, i));
+    }
+  } catch (e) {
+    console.error('Failed to read products.json', e);
+  }
+  // Fallback seed
+  return [
+    { id:'p001', name:'Color-Safe Shampoo', price:1800, category:'Hair' },
+    { id:'p002', name:'Bond Repair Mask',   price:2400, category:'Hair' },
+    { id:'p003', name:'Thermal Protectant', price:2200, category:'Hair' },
+    { id:'p004', name:'Vitamin C Serum',    price:2900, category:'Skin' },
+  ].map((p,i)=>normalizeProduct(p,i));
+}
+
+let CATALOG = loadCatalog();
+
+// Hot reload catalog on change (optional)
 try {
-  PRODUCTS = require(path.join(__dirname, 'data', 'products.json'));
-  if (!Array.isArray(PRODUCTS) || PRODUCTS.length === 0) PRODUCTS = FALLBACK_PRODUCTS;
-} catch { /* keep fallback */ }
+  fs.watch(path.dirname(DATA_PATH), { persistent:false }, (evt, file) => {
+    if (file && file.endsWith('products.json')) {
+      try { CATALOG = loadCatalog(); console.log('Catalog reloaded. count=', CATALOG.length); } catch{}
+    }
+  });
+} catch{}
 
-// ---------- Products API ----------
+// --- Routes ---
+app.get('/healthz', (req,res)=> res.json({ ok:true }));
+
+app.get('/__whoami', (req,res)=>{
+  res.json({
+    running: 'server.js',
+    routes: [
+      'GET /favicon.ico',
+      'GET /',
+      'GET /healthz',
+      'POST /api/chat',
+      'GET /api/products',
+      'POST /api/bookings/create',
+      'GET /__whoami',
+      'GET /^(?!api\\/).+'
+    ]
+  });
+});
+
 app.get('/api/products', (req, res) => {
-  const q = (req.query.search || '').toString().trim().toLowerCase();
-  const cat = (req.query.category || '').toString().trim().toLowerCase();
-  let items = PRODUCTS;
-  if (q) items = items.filter(p => (p.name + ' ' + (p.category || '')).toLowerCase().includes(q));
-  if (cat) items = items.filter(p => (p.category || '').toLowerCase() === cat);
-  res.json({ success: true, count: items.length, items });
-});
-app.get('/api/products/:id', (req, res) => {
-  const item = PRODUCTS.find(p => p.id === req.params.id);
-  if (!item) return res.status(404).json({ success: false, error: 'not_found' });
-  res.json({ success: true, item });
+  const q = (req.query.q || '').toString().toLowerCase();
+  const items = !q ? CATALOG : CATALOG.filter(p => (
+    (p.name||'').toLowerCase().includes(q) ||
+    (p.brand||'').toLowerCase().includes(q) ||
+    (p.category||'').toLowerCase().includes(q)
+  ));
+  res.json({ success:true, count: items.length, items });
 });
 
-// ---------- Image Search (Pexels optional; curated fallback) ----------
-const FALLBACK_IMAGES = {
-  shampoo: [
-    'https://images.unsplash.com/photo-1582095133179-2988d1a4f5b0?q=80&w=800&auto=format&fit=crop'
-  ],
-  serum: [
-    'https://images.unsplash.com/photo-1556229010-aa3f7ff66b2c?q=80&w=800&auto=format&fit=crop'
-  ],
-  nails: [
-    'https://images.unsplash.com/photo-1591843336032-9c9b272306f2?q=80&w=800&auto=format&fit=crop'
-  ]
-};
-app.get('/api/images', async (req, res) => {
-  const q = (req.query.q || '').toString().trim();
-  if (!q) return res.status(400).json({ success: false, error: 'q required' });
+// Minimal advisor with follow-up
+app.post('/api/chat', (req, res) => {
+  const msg = ((req.body && req.body.message) || '').toString().toLowerCase();
+  const ctx = (req.body && req.body.context) || { answers:{} };
 
-  // Preferred: Pexels API (legal + predictable)
-  if (PEXELS_API_KEY) {
-    try {
-      const r = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(q)}&per_page=10`, {
-        headers: { Authorization: PEXELS_API_KEY }
-      });
-      if (!r.ok) throw new Error(`pexels ${r.status}`);
-      const data = await r.json();
-      const images = (data.photos || []).map(p => p.src?.medium || p.src?.original).filter(Boolean);
-      return res.json({ success: true, provider: 'pexels', count: images.length, images });
-    } catch (err) {
-      // fall through to curated fallback
-    }
+  // Simple follow-up flow
+  if (msg.includes('acne') && !ctx.answers?.skinType) {
+    return res.json({
+      success:true,
+      provider:'followup',
+      response:'I have a quick question to tailor this for you.',
+      followUp:{
+        key:'skinType',
+        question:'Which best describes your skin? (oily / combination / dry / sensitive)',
+        options:['Oily','Combination','Dry','Sensitive']
+      }
+    });
+  }
+  if (ctx.answers?.skinType) {
+    const type = String(ctx.answers.skinType).toLowerCase();
+    const picks = CATALOG
+      .filter(p => (p.category||'').toLowerCase().includes('skin') || (p.name||'').match(/serum|cleanser|spf|mask/i))
+      .slice(0, 6);
+    return res.json({
+      success:true,
+      provider:'fallback',
+      response:`Plan for ${type} skin: gentle cleanser, targeted serum, and daily SPF.`,
+      products: picks
+    });
   }
 
-  // Fallback: curated Unsplash image URLs we already use
-  const key = q.toLowerCase().includes('shampoo') ? 'shampoo'
-    : q.toLowerCase().includes('serum') ? 'serum'
-    : q.toLowerCase().includes('nail') ? 'nails'
-    : 'serum';
-  return res.json({ success: true, provider: 'fallback', count: (FALLBACK_IMAGES[key] || []).length, images: FALLBACK_IMAGES[key] || [] });
+  // General guidance
+  const picks = CATALOG.slice(0, 6);
+  res.json({
+    success:true,
+    provider:'fallback',
+    response: 'Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Rationale: maximize shine/hydration.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard.',
+    products: picks
+  });
 });
 
-// ---------- Bookings (stub) ----------
-const bookings = new Map();
+// Booking stub
 app.post('/api/bookings/create', (req, res) => {
-  const { service, style, price, datetimeISO, notes } = req.body || {};
-  if (!service || !datetimeISO) return res.status(400).json({ success: false, error: 'service and datetimeISO required' });
-  const bookingId = 'bk_' + Math.random().toString(36).slice(2, 8);
-  const amountCents = Math.max(0, Math.round((Number(price) || 0) * 100));
-  const record = { bookingId, service, style: style || null, amountCents, currency: 'usd', datetimeISO, notes: notes || '', status: 'unpaid', createdAt: new Date().toISOString() };
-  bookings.set(bookingId, record);
-  res.json({ success: true, ...record });
+  const b = req.body || {};
+  const bookingId = 'BK' + Math.random().toString(36).slice(2,8).toUpperCase();
+  res.json({ success:true, bookingId, received: b });
 });
 
-// ---------- Chat with slot-filling + product payload ----------
-const sessions = new Map();
-const TONES = ['fair','light','medium','olive','brown','deep','dark'];
-const SKIN_TYPES = ['oily','dry','combination','combo','normal','sensitive'];
+// Static files
+const PUB = path.join(process.cwd(), 'public');
+app.use(express.static(PUB, { extensions: ['html'] }));
 
-app.post('/api/chat', async (req, res) => {
-  const { message, tone = 'concise', includeProducts = true, sessionId } = req.body || {};
-  if (!message) return res.status(400).json({ success:false, error:'message required' });
+// Favicon (SVG in /public preferred)
+app.get('/favicon.ico', (req,res)=> res.status(204).end());
 
-  const text = message.toLowerCase();
-  const isAcne = /acne|breakout|pimple/.test(text);
-  const isHair = /hair|frizz|dry|blonde|color/.test(text);
-
-  const sessKey = sessionId || 'default';
-  const sess = sessions.get(sessKey) || { intent: null, slots: {} };
-
-  if (isAcne) sess.intent = 'acne';
-  if (isHair) sess.intent = 'hair';
-
-  const slots = sess.slots;
-  if (isAcne && !slots.skinTone) {
-    const toneHit = TONES.find(t => text.includes(t));
-    if (toneHit) slots.skinTone = toneHit;
-  }
-  if (isAcne && !slots.skinType) {
-    const st = SKIN_TYPES.find(t => text.includes(t));
-    if (st) slots.skinType = (st === 'combo' ? 'combination' : st);
-  }
-  if (isAcne && slots.sensitive == null) {
-    if (text.includes('sensitive')) slots.sensitive = true;
-  }
-  if (isHair && slots.colorTreated == null) {
-    if (/blonde|color|toner|bleach/.test(text)) slots.colorTreated = true;
-  }
-  if (isHair && !slots.hairNeed) {
-    if (/dry|frizz/.test(text)) slots.hairNeed = 'hydrate';
-    if (/heat|iron|dryer/.test(text)) slots.hairNeed = slots.hairNeed || 'protect';
-  }
-
-  if (sess.intent === 'acne') {
-    const missing = [];
-    if (!slots.skinTone) missing.push('skin tone (fair / medium / deep)');
-    if (!slots.skinType) missing.push('skin type (oily / dry / combination / sensitive)');
-    if (missing.length) {
-      sessions.set(sessKey, { intent:'acne', slots });
-      return res.json({ success:true, provider:'luminous', response: `To tailor an acne routine, I need your ${missing.join(' and ')}. How would you describe it?`, products:[] });
-    }
-  }
-  if (sess.intent === 'hair') {
-    const missing = [];
-    if (slots.colorTreated == null) missing.push('Is your hair color-treated or blonde?');
-    if (!slots.hairNeed) missing.push('Are you targeting hydration or heat protection today?');
-    if (missing.length) {
-      sessions.set(sessKey, { intent:'hair', slots });
-      return res.json({ success:true, provider:'luminous', response: missing.join(' '), products:[] });
-    }
-  }
-
-  const plan = (() => {
-    if (sess.intent === 'acne') {
-      const tone = slots.skinTone || 'your tone';
-      const st = slots.skinType || 'your skin type';
-      return { primary:'Calming Acne Facial', addon:'Blue Light Therapy', retail:['Gentle Gel Cleanser','Niacinamide Serum','SPF 30 Mineral'], blurb:`For ${st} on ${tone}, focus on non‑comedogenic, fragrance‑free steps.` };
-    }
-    if (sess.intent === 'hair') {
-      const need = slots.hairNeed || 'hydration';
-      const ct = slots.colorTreated ? 'color-treated' : 'natural';
-      return { primary: need==='protect' ? 'Gloss + Heat Shield Blowout' : 'Hydration Mask + Blowout', addon: slots.colorTreated ? 'Bond Builder Add-In' : 'Scalp Treatment', retail: slots.colorTreated ? ['Color-Safe Shampoo','Bond Repair Mask','Thermal Protectant'] : ['Hydrating Shampoo','Deep Mask','Thermal Protectant'], blurb:`For ${ct} hair, we’ll target ${need}.` };
-    }
-    return { primary:'Hydration Facial', addon:'Brow Shaping', retail:['Vitamin C Serum','Thermal Protectant'], blurb:'Balanced routine to boost glow and protect.' };
-  })();
-
-  const responseText =
-`• Book: ${plan.primary} (+ ${plan.addon})
-• Why: ${plan.blurb}
-• Retail: ${plan.retail.join(', ')}
-• Tip: sort by “best‑selling in‑salon” and check usage notes.`;
-
-  let outProducts = [];
-  if (includeProducts) {
-    const want = [];
-    if (sess.intent === 'acne') want.push('serum','cleanser','spf','mask','toner');
-    if (sess.intent === 'hair') {
-      if (slots.hairNeed === 'protect') want.push('protectant','shield','spray');
-      else want.push('mask','shampoo','conditioner');
-      if (slots.colorTreated) want.push('color','bond');
-    }
-    if (!want.length) want.push('serum','mask','shampoo');
-
-    const matches = (PRODUCTS || FALLBACK_PRODUCTS).filter(p => {
-      const hay = (p.name + ' ' + (p.category||'') + ' ' + (p.tags||[]).join(' ')).toLowerCase();
-      return want.some(w => hay.includes(w));
-    }).slice(0, 24);
-
-    outProducts = matches.map(p => ({
-      name: p.name,
-      brand: p.brand || '',
-      price: p.priceCents != null ? `$${Math.round(p.priceCents/100)}` : '$25',
-      imageUrl: p.image || '',
-      country: p.country || '',
-      description: p.usage || '',
-      category: p.category || ''
-    }));
-  }
-
-  sessions.set(sessKey, { intent: sess.intent, slots });
-  return res.json({ success:true, provider:'luminous', response: responseText, products: outProducts });
+// SPA-ish fallback for non-API routes
+app.get(/^\/(?!api\/).+/, (req, res) => {
+  const idx = path.join(PUB, 'index.html');
+  if (fs.existsSync(idx)) return res.sendFile(idx);
+  res.type('text/plain').send('Luminous running.');
 });
 
-// ---------- Error Handling ----------
-app.use((err, req, res, next) => {
-  console.error('ERROR', err);
-  res.status(500).json({ success: false, error: 'server_error' });
-});
-
-// ---------- Start ----------
+const PORT = process.env.PORT || 3000;
+const HOST = '0.0.0.0'; // Bind publicly (Render)
 app.listen(PORT, HOST, () => {
   console.log(`Luminous listening on ${HOST}:${PORT}`);
 });
