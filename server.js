@@ -1,208 +1,145 @@
-// Luminous unified server (v2) — adds priceCents support + robust normalization
+// Luminous all-in-one server (UI + API) — r1
+// Binds to 0.0.0.0 and serves /data so chat fallbacks work on Render.
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
-const cors = require('cors');
 
 const app = express();
-
-// --- Security & JSON ---
-app.disable('x-powered-by');
 app.use(express.json({ limit: '1mb' }));
-app.use(cors({ origin: '*'}));
 
-// --- CSP (allow Unsplash + data/blob and same-origin) ---
+// --- Security headers (relaxed enough for our inline CSS/JS and images) ---
 app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
-    "connect-src 'self'",
-    "font-src 'self' data:",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "frame-ancestors 'self'",
-    "upgrade-insecure-requests"
-  ].join('; '));
+  res.setHeader('Content-Security-Policy',
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com; connect-src 'self'; font-src 'self' data:; object-src 'none'; base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests");
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
 
-// --- Helpers ---
-const DATA_PATH = path.join(process.cwd(), 'data', 'products.json');
+// --- Static assets ---
+const PUB = path.join(__dirname, 'public');
+app.use(express.static(PUB, { extensions: ['html'] }));
 
-function toCents(val) {
-  if (val === null || val === undefined) return 0;
-  if (typeof val === 'number') {
-    // If it's a big integer (>= 1000) assume cents; if decimal/small assume dollars
-    if (Number.isInteger(val) && val >= 1000) return val;
-    return Math.round(val * 100);
-  }
-  if (typeof val === 'string') {
-    const s = val.trim().toLowerCase().replace(/[, ]/g, '');
-    const m = s.match(/(\d+(\.\d+)?)/);
-    if (!m) return 0;
-    return Math.round(parseFloat(m[1]) * 100);
-  }
-  return 0;
+// Serve /data/* from ./data (so /data/products.json is reachable)
+const DATA_DIR = path.join(__dirname, 'data');
+if (fs.existsSync(DATA_DIR)) {
+  app.use('/data', express.static(DATA_DIR));
 }
 
-function normImage(im) {
-  if (!im) return null;
-  const s = String(im).trim();
-  if (/^https?:\/\//i.test(s)) return s;
-  // ensure leading slash and URL-encode spaces
-  return '/' + encodeURI(s.replace(/^\/+/, ''));
-}
-
-function firstDefined(obj, keys, fallback = undefined) {
-  for (const k of keys) {
-    if (obj[k] !== undefined && obj[k] !== null) return obj[k];
-  }
-  return fallback;
-}
-
-function normalizeProduct(p, idx) {
-  if (!p || typeof p !== 'object') p = {};
-  const id = String(firstDefined(p, ['id','sku','code'], 'p' + (idx+1)));
-  const name = String(firstDefined(p, ['name','title'], 'Untitled'));
-  const brand = firstDefined(p, ['brand','line'], '');
-  const category = firstDefined(p, ['category','type'], '');
-  // Accept many price shapes, preferring cents keys
-  const rawPrice = firstDefined(p, ['price_cents','priceCents','price_cent','priceUSD','priceUsd','price_usd','price'], 0);
-  const priceCents = toCents(rawPrice);
-  const image = normImage(firstDefined(p, ['image','image_url','photo'], ''));
-  const usage = firstDefined(p, ['usage','howTo','how_to'], '');
-  const country = firstDefined(p, ['country','origin'], '');
-  return { id, name, brand, category, price: priceCents, image, usage, country };
-}
-
-function loadCatalog() {
-  try {
-    if (fs.existsSync(DATA_PATH)) {
-      const rawFile = fs.readFileSync(DATA_PATH, 'utf8');
-      const raw = JSON.parse(rawFile);
-      const arr = Array.isArray(raw) ? raw : Array.isArray(raw.items) ? raw.items : [];
-      return arr.map((p, i) => normalizeProduct(p, i));
+// --- Helpers: load catalog from disk (various locations) ---
+function loadCatalogFromDisk() {
+  const candidates = [
+    path.join(PUB, 'data', 'products.json'),
+    path.join(PUB, 'products.json'),
+    path.join(DATA_DIR, 'products.json'),
+    path.join(__dirname, 'products.json'),
+  ];
+  for (const p of candidates) {
+    try {
+      if (!fs.existsSync(p)) continue;
+      const raw = fs.readFileSync(p, 'utf-8');
+      const j = JSON.parse(raw);
+      let arr = Array.isArray(j) ? j : (Array.isArray(j.items) ? j.items : []);
+      if (!Array.isArray(arr)) arr = [];
+      return { path: p, items: arr };
+    } catch (e) {
+      console.warn('[catalog] failed to parse', p, e.message);
     }
-  } catch (e) {
-    console.error('Failed to read products.json', e);
   }
-  // Fallback seed
-  return [
-    { id:'p001', name:'Color-Safe Shampoo', price:1800, category:'Hair' },
-    { id:'p002', name:'Bond Repair Mask',   price:2400, category:'Hair' },
-    { id:'p003', name:'Thermal Protectant', price:2200, category:'Hair' },
-    { id:'p004', name:'Vitamin C Serum',    price:2900, category:'Skin' },
-  ].map((p,i)=>normalizeProduct(p,i));
+  return { path: null, items: [] };
 }
 
-let CATALOG = loadCatalog();
+function normalizeProduct(p) {
+  const obj = {
+    id: String(p.id ?? p.sku ?? p._id ?? p.code ?? Math.random().toString(36).slice(2)),
+    name: p.name ?? p.title ?? 'Unnamed',
+    brand: p.brand ?? p.maker ?? p.vendor ?? '',
+    category: p.category ?? p.type ?? p.family ?? '',
+    price: p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0,
+    image: p.image ?? p.image_url ?? p.photo ?? p.img ?? ''
+  };
+  return obj;
+}
 
-// Hot reload catalog on change (optional)
-try {
-  fs.watch(path.dirname(DATA_PATH), { persistent:false }, (evt, file) => {
-    if (file && file.endsWith('products.json')) {
-      try { CATALOG = loadCatalog(); console.log('Catalog reloaded. count=', CATALOG.length); } catch{}
-    }
-  });
-} catch{}
-
-// --- Routes ---
-app.get('/healthz', (req,res)=> res.json({ ok:true }));
-
-app.get('/__whoami', (req,res)=>{
-  res.json({
-    running: 'server.js',
-    routes: [
-      'GET /favicon.ico',
-      'GET /',
-      'GET /healthz',
-      'POST /api/chat',
-      'GET /api/products',
-      'POST /api/bookings/create',
-      'GET /__whoami',
-      'GET /^(?!api\\/).+'
-    ]
-  });
-});
-
+// --- API: products ---
 app.get('/api/products', (req, res) => {
-  const q = (req.query.q || '').toString().toLowerCase();
-  const items = !q ? CATALOG : CATALOG.filter(p => (
-    (p.name||'').toLowerCase().includes(q) ||
-    (p.brand||'').toLowerCase().includes(q) ||
-    (p.category||'').toLowerCase().includes(q)
-  ));
-  res.json({ success:true, count: items.length, items });
+  const limit = Math.max(1, Math.min( Number(req.query.limit || 200), 5000 ));
+  const { path: usedPath, items } = loadCatalogFromDisk();
+  const normalized = items.map(normalizeProduct);
+  return res.json({
+    success: true,
+    source: usedPath ? ('disk:' + path.relative(__dirname, usedPath)) : 'none',
+    count: normalized.length,
+    items: normalized.slice(0, limit),
+  });
 });
 
-// Minimal advisor with follow-up
+// --- API: chat (simple deterministic fallback + light follow-up) ---
 app.post('/api/chat', (req, res) => {
-  const msg = ((req.body && req.body.message) || '').toString().toLowerCase();
-  const ctx = (req.body && req.body.context) || { answers:{} };
-
-  // Simple follow-up flow
-  if (msg.includes('acne') && !ctx.answers?.skinType) {
+  const msg = String((req.body && req.body.message) || '').toLowerCase();
+  // quick follow-up example
+  if (/(acne|breakout)/.test(msg)) {
     return res.json({
-      success:true,
-      provider:'followup',
-      response:'I have a quick question to tailor this for you.',
-      followUp:{
-        key:'skinType',
-        question:'Which best describes your skin? (oily / combination / dry / sensitive)',
-        options:['Oily','Combination','Dry','Sensitive']
+      success: true,
+      provider: 'followup',
+      response: 'I have a quick question to tailor this for you.',
+      followUp: {
+        key: 'skinType',
+        question: 'Which best describes your skin? (oily / combination / dry / sensitive)'
       }
     });
   }
-  if (ctx.answers?.skinType) {
-    const type = String(ctx.answers.skinType).toLowerCase();
-    const picks = CATALOG
-      .filter(p => (p.category||'').toLowerCase().includes('skin') || (p.name||'').match(/serum|cleanser|spf|mask/i))
-      .slice(0, 6);
-    return res.json({
-      success:true,
-      provider:'fallback',
-      response:`Plan for ${type} skin: gentle cleanser, targeted serum, and daily SPF.`,
-      products: picks
-    });
-  }
-
-  // General guidance
-  const picks = CATALOG.slice(0, 6);
-  res.json({
-    success:true,
-    provider:'fallback',
-    response: 'Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Rationale: maximize shine/hydration.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard.',
-    products: picks
+  return res.json({
+    success: true,
+    provider: 'fallback',
+    response: [
+      "Quick guidance:",
+      "• Book: Blowout or Hydration Facial.",
+      "• Rationale: maximize shine/hydration.",
+      "• Retail: color-safe shampoo, bond mask, thermal protectant.",
+      "• Tip: finish with heat guard."
+    ].join("\n")
   });
 });
 
-// Booking stub
+// --- API: bookings ---
 app.post('/api/bookings/create', (req, res) => {
-  const b = req.body || {};
-  const bookingId = 'BK' + Math.random().toString(36).slice(2,8).toUpperCase();
-  res.json({ success:true, bookingId, received: b });
+  const body = req.body || {};
+  const id = 'bk_' + Math.random().toString(36).slice(2, 8);
+  res.json({ success: true, bookingId: id, echo: body });
 });
 
-// Static files
-const PUB = path.join(process.cwd(), 'public');
-app.use(express.static(PUB, { extensions: ['html'] }));
+// --- Diagnostics ---
+app.get('/__whoami', (req, res) => {
+  const routes = [];
+  app._router.stack.forEach((m) => {
+    if (m.route && m.route.path) {
+      const methods = Object.keys(m.route.methods).map(x=>x.toUpperCase()).join(',');
+      routes.push(`${methods} ${m.route.path}`);
+    } else if (m.name === 'router' && m.handle && m.handle.stack) {
+      m.handle.stack.forEach((h)=>{
+        if (h.route && h.route.path) {
+          const methods = Object.keys(h.route.methods).map(x=>x.toUpperCase()).join(',');
+          routes.push(`${methods} ${h.route.path}`);
+        }
+      });
+    }
+  });
+  res.json({ running: 'server.js', routes });
+});
 
-// Favicon (SVG in /public preferred)
-app.get('/favicon.ico', (req,res)=> res.status(204).end());
+app.get('/healthz', (req, res) => res.json({ ok: true }));
 
-// SPA-ish fallback for non-API routes
+// --- SPA-ish fallback (serve index for unknown non-API routes) ---
 app.get(/^\/(?!api\/).+/, (req, res) => {
-  const idx = path.join(PUB, 'index.html');
-  if (fs.existsSync(idx)) return res.sendFile(idx);
-  res.type('text/plain').send('Luminous running.');
+  res.sendFile(path.join(PUB, 'index.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-const HOST = '0.0.0.0'; // Bind publicly (Render)
+// --- Start ---
+const PORT = Number(process.env.PORT || 3000);
+const HOST = process.env.BIND_HOST || '0.0.0.0'; // IMPORTANT for Render
 app.listen(PORT, HOST, () => {
   console.log(`Luminous listening on ${HOST}:${PORT}`);
 });
