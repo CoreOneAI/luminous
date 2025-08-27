@@ -6,422 +6,224 @@
 <title>Luminous • Catalog</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
-.page{max-width:960px;margin:0 auto;min-height:100vh;background:var(--pearl);padding-bottom:80px}
-.header{background:#fff;padding:12px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
-.brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
-.input{flex:1;min-width:220px;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:14px;background:#fff}
-.select{border:1px solid #E6E6E6;border-radius:12px;padding:10px;background:#fff}
-.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.pill{border:1px solid #e6e6e6;background:#fff;border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer}
-.pill.active{background:var(--gold);color:#fff;border-color:var(--gold)}
-.status{margin-top:6px;font-size:11px;color:#555;display:flex;gap:8px;flex-wrap:wrap}
-.bullet{padding:2px 8px;border:1px solid #eee;border-radius:12px;background:#fafafa}
-.main{padding:12px}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-@media (max-width:860px){ .grid{grid-template-columns:repeat(3,1fr)} }
-@media (max-width:640px){ .grid{grid-template-columns:repeat(2,1fr)} }
-.card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.card img{width:100%;height:140px;object-fit:cover;background:#f6f6f6}
-.card .meta{padding:10px 10px 12px}
-.card .name{font-size:12px;font-weight:700;line-height:1.2;min-height:30px}
-.card .brandx{font-size:11px;color:#777;margin-top:4px;min-height:16px}
-.card .row{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
-.price{font-size:12px;font-weight:800;color:var(--gold)}
-.btn{border:none;border-radius:18px;padding:8px 10px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer;font-size:12px}
-.more{display:block;width:100%;margin:14px 0 0;border:1px solid #e6e6e6;background:#fff;color:#333;border-radius:16px;padding:10px;font-weight:700}
-.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:960px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
-.nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
-.nav a.active{color:var(--gold);font-weight:700}
-.badge{min-width:18px;height:18px;background:var(--gold);color:#fff;border-radius:9px;font-size:10px;display:none;align-items:center;justify-content:center;padding:0 5px}
-.iconbtn{border:1px solid #e6e6e6;border-radius:12px;background:#fafafa;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:8px}
-.svg{width:16px;height:16px;display:inline-block}
-.drawer{position:fixed;right:-360px;top:0;width:360px;height:100vh;background:#fff;border-left:1px solid #eee;box-shadow:-4px 0 16px rgba(0,0,0,.12);transition:right .25s ease;z-index:20;padding:12px}
-.drawer.open{right:0}
-.drawer h3{font-size:14px}
-.drawer .item{display:flex;gap:8px;align-items:center;border-bottom:1px solid #f0f0f0;padding:8px 0}
-.drawer .name{font-size:12px;font-weight:700}
-.drawer .qty{font-size:12px;color:#555}
-.drawer .total{margin-top:8px;font-weight:800}
-.note{font-size:12px;color:#666;margin:8px 0}
-.warn{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin-top:8px;font-size:12px}
+  :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal)}
+  .page{max-width:960px;margin:0 auto;background:#fff;min-height:100vh}
+  header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:10}
+  .bar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px}
+  .brand{font-weight:800;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .status{font-size:12px;color:#555}
+  .search{display:flex;gap:8px;align-items:center;padding:12px 16px;border-top:1px solid #f3f3f3}
+  .search input{flex:1;border:1px solid #e5e5e5;border-radius:12px;padding:10px 12px;font-size:14px}
+  .filters{display:flex;flex-wrap:wrap;gap:8px;padding:8px 16px 0 16px}
+  .pill{border:1px solid #e5e5e5;border-radius:999px;padding:8px 12px;font-size:12px;cursor:pointer;background:#fafafa}
+  .pill.active{border-color:#f0d28a;background:#fff4da}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:16px}
+  @media (max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media (max-width:680px){.grid{grid-template-columns:repeat(2,1fr)}}
+  .card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+  .ph{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fafafa}
+  .meta{padding:10px 12px}
+  .name{font-size:13px;font-weight:700;color:#222;line-height:1.2;margin-bottom:6px}
+  .sub{font-size:12px;color:#666;margin-bottom:10px}
+  .price{font-weight:800;color:#B8860B;font-size:13px}
+  .cta{margin-top:auto;padding:12px;border-top:1px solid #f2f2f2;display:flex;gap:8px}
+  button{appearance:none;border:1px solid #e6e6e6;background:#fafafa;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer;flex:1}
+  .buy{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none}
+  .more{display:block;margin:0 auto 40px auto;border:none;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border-radius:24px;padding:12px 18px;font-weight:800}
+  .nav{position:sticky;bottom:0;background:#fff;border-top:1px solid #eee;display:grid;grid-template-columns:repeat(4,1fr);height:56px;align-items:center}
+  .nav a{text-align:center;text-decoration:none;color:#777;font-size:12px}
+  .nav a.active{color:#B8860B;font-weight:800}
+  .note{padding:8px 16px;color:#555;font-size:12px}
 </style>
 </head>
 <body>
 <div class="page">
-  <header class="header">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <div class="brand">Luminous • Catalog</div>
-      <button class="iconbtn" id="cartBtn" title="Cart">
-        <svg class="svg" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
-        <span class="badge" id="cartCount">0</span>
-      </button>
+  <header>
+    <div class="bar">
+      <div class="brand">Luminous Catalog</div>
+      <div class="status" id="status">Loading…</div>
     </div>
-    <div class="controls">
-      <input id="q" class="input" placeholder="Search: e.g., hair color • purple shampoo • anti-frizz serum"/>
-      <select id="sort" class="select" title="Sort">
-        <option value="best">Best match</option>
-        <option value="price_asc">Price ↑</option>
-        <option value="price_desc">Price ↓</option>
-        <option value="brand_asc">Brand A–Z</option>
-        <option value="brand_desc">Brand Z–A</option>
-      </select>
+    <div class="search">
+      <input id="q" placeholder="Search products or concerns (e.g., purple shampoo, anti-frizz serum, sensitive scalp)"/>
+      <button onclick="runSearch()">Search</button>
     </div>
-    <div class="pills" id="pills-domain">
-      <span class="pill" data-domain="hair">Hair</span>
-      <span class="pill" data-domain="skin">Skin</span>
-      <span class="pill" data-domain="nail">Nail</span>
-    </div>
-    <div class="pills" id="pills-type">
-      <span class="pill" data-type="shampoo">Shampoo</span>
-      <span class="pill" data-type="conditioner">Conditioner</span>
-      <span class="pill" data-type="mask">Mask</span>
-      <span class="pill" data-type="serum">Serum</span>
-      <span class="pill" data-type="spray">Spray</span>
-      <span class="pill" data-type="oil">Oil</span>
-    </div>
-    <div class="pills" id="pills-color">
-      <span class="pill" data-color="purple">Purple</span>
-      <span class="pill" data-color="blue">Blue</span>
-      <span class="pill" data-color="red">Red</span>
-      <span class="pill" data-color="copper">Copper</span>
-    </div>
-    <div class="status" id="status">
-      <span class="bullet" id="st-api">API: …</span>
-      <span class="bullet" id="st-fb">Fallback: …</span>
-      <span class="bullet" id="st-total">Total: 0</span>
+    <div class="filters">
+      <div class="pill" data-k="Hair" onclick="toggleFacet(this)">Hair</div>
+      <div class="pill" data-k="Skin" onclick="toggleFacet(this)">Skin</div>
+      <div class="pill" data-k="Nail" onclick="toggleFacet(this)">Nail</div>
+      <div class="pill" data-k="Shampoo" onclick="toggleFacet(this)">Shampoo</div>
+      <div class="pill" data-k="Conditioner" onclick="toggleFacet(this)">Conditioner</div>
+      <div class="pill" data-k="Mask" onclick="toggleFacet(this)">Mask</div>
+      <div class="pill" data-k="Serum" onclick="toggleFacet(this)">Serum</div>
+      <div class="pill" data-k="Spray" onclick="toggleFacet(this)">Spray</div>
+      <div class="pill" data-k="Purple" onclick="toggleFacet(this)">Purple</div>
+      <div class="pill" data-k="Blue" onclick="toggleFacet(this)">Blue</div>
+      <div class="pill" data-k="Red" onclick="toggleFacet(this)">Red</div>
+      <div class="pill" data-k="Copper" onclick="toggleFacet(this)">Copper</div>
     </div>
   </header>
 
-  <main class="main">
-    <div id="note" class="note"></div>
-    <div id="grid" class="grid"></div>
-    <button id="moreBtn" class="more" style="display:none">Show 50 more</button>
-    <div class="warn" id="warn" style="display:none"></div>
-  </main>
+  <div class="note">Showing best matches. Use pills to refine and “Show more” to load the next 50.</div>
+  <section id="grid" class="grid" aria-live="polite"></section>
+  <div style="padding:0 16px 32px">
+    <button id="moreBtn" class="more" style="display:none" onclick="renderNext()">Show 50 more</button>
+  </div>
 
   <nav class="nav">
     <a href="/index.html">Home</a>
-    <a href="#" onclick="location.href='/index.html#book';return false;">Book</a>
+    <a href="#" onclick="location.href='/index.html';return false;">Book</a>
     <a class="active" href="/catalog.html">Shop</a>
     <a href="/chat.html">Chat</a>
   </nav>
 </div>
 
-<div class="drawer" id="drawer"><h3>Your Cart</h3><div id="cartItems"></div><div class="total" id="cartTotal">$0.00</div></div>
-
 <script>
-(function(){
-  const API_BASE=location.origin;
-  const BATCH=50;
-  let all=[]; let filtered=[]; let cursor=0;
-  let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
+const API_BASE = '';
+const PAGE = 50;
+let allItems = [];
+let filtered = [];
+let offset = 0;
+let activePills = new Set();
 
-  const FALLBACKS = {
-    antiaging:'/images/zen-stone-serum.jpg',
-    hydration:'/images/spa-salts.jpg',
-    colorcare:'/images/studio-beige.jpg',
-    nails:'/images/wooden-tray.jpg',
-    hair:'/images/hero-almonds.jpg',
-    kbeauty:'/images/zen-stone-serum.jpg',
-    mens:'/images/mens-kit-1.jpg',
-    'default':'/images/studio-beige.jpg'
-  };
+function fmtPrice(cents){ if (!Number.isFinite(cents)) return '$—'; return '$'+(cents/100).toFixed(2); }
+function status(s){ document.getElementById('status').textContent = s; }
 
-  const $ = (s)=>document.querySelector(s);
-  const stApi=$('#st-api'), stFb=$('#st-fb'), stTotal=$('#st-total');
-  const grid=$('#grid'), note=$('#note'), warn=$('#warn');
+function pillTokensFromCategory(cat=''){
+  // cat like "Hair / Shampoo" -> tokens: ["Hair","Shampoo"]
+  return String(cat).split(/[\/]/).map(s=>s.trim()).filter(Boolean);
+}
+function deriveTags(item){
+  const t = [];
+  const name = (item.name||'').toLowerCase();
+  const cat = (item.category||'').toLowerCase();
+  if (/hair/.test(cat)) t.push('Hair');
+  if (/skin/.test(cat)) t.push('Skin');
+  if (/nail/.test(cat)) t.push('Nail');
+  if (/shampoo/.test(cat)||/shampoo/.test(name)) t.push('Shampoo');
+  if (/conditioner/.test(cat)||/conditioner/.test(name)) t.push('Conditioner');
+  if (/mask/.test(cat)||/mask/.test(name)) t.push('Mask');
+  if (/serum/.test(cat)||/serum/.test(name)) t.push('Serum');
+  if (/spray/.test(cat)||/spray/.test(name)) t.push('Spray');
+  if (/purple/.test(name)) t.push('Purple');
+  if (/blue/.test(name)) t.push('Blue');
+  if (/red/.test(name)) t.push('Red');
+  if (/copper/.test(name)) t.push('Copper');
+  return t;
+}
 
-  function setStatus(api, fb, total){
-    stApi.textContent = 'API: ' + api;
-    stFb.textContent = 'Fallback: ' + fb;
-    stTotal.textContent = 'Total: ' + total;
-  }
-
-  function cents(v){
-    if(v===null||v===undefined) return 0;
-    if(typeof v==='number') return v>=0 && v<1 ? Math.round(v*100) : (Number.isInteger(v)?v:Math.round(v*100));
-    if(typeof v==='string'){ const m=v.replace(/[, $]/g,'').match(/(\d+(\.\d+)?)/); if(!m) return 0; return Math.round(parseFloat(m[1])*100); }
-    return 0;
-  }
-  const fmt = v => '$' + (cents(v)/100).toFixed(2);
-
-  function imgFor(p){
-    const im = p.image || p.image_url || p.photo || '';
-    const cat = (p.category||'').toLowerCase();
-    const key = cat.includes('men')?'mens':cat.includes('nail')?'nails':cat.includes('color')?'colorcare':cat.includes('anti')?'antiaging':(cat.includes('k-beauty')||cat.includes('kbeauty'))?'kbeauty':cat.includes('hair')?'hair':cat.includes('hydrat')?'hydration':'default';
-    const fb = FALLBACKS[key];
-    if(!im) return fb;
-    if(/^https?:\/\//i.test(im)) return im;
-    return '/' + encodeURI(String(im).replace(/^\/+/,''));
-  }
-
-  function updateCartBadge(){
-    const cnt = cart.reduce((n,it)=>n+(it.qty||0),0);
-    const el = document.getElementById('cartCount');
-    if(cnt>0){ el.style.display='inline-flex'; el.textContent=String(cnt); }
-    else { el.style.display='none'; }
-  }
-  function renderCart(){
-    const wrap=document.getElementById('cartItems'); wrap.innerHTML='';
-    let total=0;
-    cart.forEach(it=>{
-      total += cents(it.price)*(it.qty||1);
-      const row=document.createElement('div'); row.className='item';
-      const imgSrc=imgFor(it);
-      row.innerHTML = '<img src="'+imgSrc+'" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid #eee" onerror="this.onerror=null;this.src=\''+FALLBACKS['default']+'\'"/>'
-        + '<div style="flex:1"><div class="name">'+it.name+'</div><div class="qty">Qty: '+it.qty+'</div></div>'
-        + '<div class="price">'+fmt(it.price)+'</div>';
-      wrap.appendChild(row);
-    });
-    document.getElementById('cartTotal').textContent = fmt(total);
-  }
-  document.getElementById('cartBtn').addEventListener('click', ()=>{
-    const d=document.getElementById('drawer'); d.classList.contains('open') ? d.classList.remove('open') : (d.classList.add('open'), renderCart());
+function score(item, qTokens){
+  // small ranking: name hits > category hits; boost by facet matches
+  const name = (item.name||'').toLowerCase();
+  const cat = (item.category||'').toLowerCase();
+  let s = 0;
+  qTokens.forEach(t=>{
+    if (name.includes(t)) s+=3;
+    if (cat.includes(t)) s+=2;
   });
-  function addToCart(p){
-    const priceC=cents(p.price);
-    const found=cart.find(x=>x.id===p.id);
-    if(found) found.qty += 1; else cart.push({id:p.id,name:p.name,price:priceC,image:p.image||imgFor(p),category:p.category,qty:1});
-    localStorage.setItem('luminous_cart', JSON.stringify(cart)); updateCartBadge();
+  // facet/pill boosts
+  const tags = deriveTags(item);
+  activePills.forEach(p=>{ if(tags.includes(p)) s+=2; });
+  // ensure stable order when scores tie
+  return s;
+}
+
+function renderCard(it){
+  const div = document.createElement('article');
+  div.className = 'card';
+  const imgSrc = it.image || '/images/wooden-tray.jpg';
+  div.innerHTML = `
+    <img class="ph" src="${imgSrc}" alt="${(it.name||'Product')}" onerror="this.src='/images/wooden-tray.jpg'">
+    <div class="meta">
+      <div class="name">${it.name||'Unnamed'}</div>
+      <div class="sub">${[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}</div>
+      <div class="price">${fmtPrice(it.price)}</div>
+    </div>
+    <div class="cta">
+      <button onclick='addToCart(${JSON.stringify(it).replace(/'/g,"&#39;")})' class="buy">Add to Cart</button>
+    </div>`;
+  document.getElementById('grid').appendChild(div);
+}
+
+function resetGrid(){
+  document.getElementById('grid').innerHTML='';
+  offset=0;
+}
+
+function renderNext(){
+  const slice = filtered.slice(offset, offset+PAGE);
+  slice.forEach(renderCard);
+  offset += slice.length;
+  document.getElementById('moreBtn').style.display = (offset < filtered.length) ? 'block' : 'none';
+  status(`Showing ${Math.min(offset, filtered.length)} of ${filtered.length} • Source cache: ${allItems.length}`);
+}
+
+function runSearch(){
+  const q = (document.getElementById('q').value||'').trim().toLowerCase();
+  const base = [...allItems];
+  let out = base;
+  if (q){
+    const tokens = q.split(/[^a-z0-9]+/).filter(Boolean);
+    // Rank by score, but keep everything (no 4-item cap)
+    out = base.map(x => ({ x, s: score(x, tokens) }))
+              .sort((a,b)=>b.s-a.s)
+              .map(o=>o.x);
   }
-
-  function card(p){
-    const d=document.createElement('div'); d.className='card';
-    const src=imgFor(p);
-    d.innerHTML = '<img src="'+src+'" alt="" onerror="this.onerror=null;this.src=\''+FALLBACKS['default']+'\'"/>'
-      + '<div class="meta"><div class="name">'+(p.name||'')+'</div><div class="brandx">'+(p.brand||p.category||'')+'</div>'
-      + '<div class="row"><div class="price">'+fmt(p.price)+'</div><button class="btn" data-id="'+p.id+'">Add</button></div></div>';
-    d.addEventListener('click', (e)=>{ const b=e.target.closest('.btn'); if(!b) return; addToCart(p); });
-    return d;
-  }
-
-  // ---------- Ranking utils (same as chat) ----------
-  function tok(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').split(/\s+/).filter(Boolean); }
-
-  function deriveTags(p){
-    const t = new Set(tok(p.name + ' ' + (p.category||'') + ' ' + (p.brand||'')));
-    const has = (w)=>t.has(w);
-    const tags=[];
-    if(has('shampoo')||has('cleanser')||has('wash')) tags.push('shampoo');
-    if(has('conditioner')||has('condition')) tags.push('conditioner');
-    if(has('mask')||has('masque')||has('treatment')) tags.push('mask');
-    if(has('serum')||has('ampoule')||has('essence')) tags.push('serum');
-    if(has('oil')||has('elixir')) tags.push('oil');
-    if(has('spray')||has('mist')) tags.push('spray');
-    if(has('purple')||has('violet')||has('toning')||has('anti-brass')||has('brass')) tags.push('purple');
-    if(has('blue')) tags.push('blue');
-    if(has('red')||has('copper')||has('rose')||has('ruby')) tags.push('red');
-    if(has('color-safe')||(has('color')&&has('safe'))) tags.push('color-safe');
-    if(has('color')&&has('deposit')) tags.push('color-deposit');
-    const cat = (p.category||'').toLowerCase();
-    if(cat.includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
-    if(cat.includes('skin') || tags.includes('serum')) tags.push('skin');
-    if(cat.includes('nail')) tags.push('nail');
-    return Array.from(new Set(tags));
-  }
-
-  function parseQuery(q){
-    const tokens = tok(q);
-    const wantTypes = tokens.filter(t => ['shampoo','conditioner','mask','serum','oil','spray'].includes(t));
-    const wantColors = tokens.filter(t => ['red','purple','blue','violet','copper','rose','ruby','toning'].includes(t))
-      .map(c => c==='violet'?'purple':c==='toning'?'purple':c);
-    const wantDomain = tokens.filter(t => ['hair','skin','nail','nails'].includes(t)).map(d => d==='nails'?'nail':d);
-    const wantColorCare = tokens.includes('color') || tokens.includes('color-safe') || tokens.includes('deposit');
-    return { tokens, wantTypes, wantColors, wantDomain, wantColorCare };
-  }
-
-  function haystack(p){
-    return (String(p.name||'')+' '+String(p.category||'')+' '+String(p.brand||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
-  }
-
-  function scoreProduct(p, ctx){
-    let s=0;
-    const hay = haystack(p);
-    if(ctx.wantDomain.length && !ctx.wantDomain.some(d => (p.tags||[]).includes(d) || hay.includes(d))) return -1e9;
-    if(ctx.wantTypes.length && !ctx.wantTypes.some(t => (p.tags||[]).includes(t) || hay.includes(t))) return -1e9;
-    if(ctx.wantColors.length){
-      if(ctx.wantColors.some(c => (p.tags||[]).includes(c) || hay.includes(c))) s += 30;
-      else s -= 8;
-    }
-    if(ctx.wantColorCare){
-      if(/color-safe|deposit|toning|highlight|gloss|dye|color/.test(hay)) s += 20;
-      else s -= 4;
-    }
-    ctx.tokens.forEach(t=>{ if(hay.includes(t)) s += 8; });
-    if((p.tags||[]).includes('hair')) s += 4;
-    return s;
-  }
-
-  function rankProducts(query, facets){
-    const ctx = parseQuery(query);
-    let candidates = all.slice();
-    if(facets.domain.size){
-      candidates = candidates.filter(p => Array.from(facets.domain).some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
-    }
-    if(facets.types.size){
-      candidates = candidates.filter(p => Array.from(facets.types).some(t => (p.tags||[]).includes(t) || haystack(p).includes(t)));
-    }
-    if(facets.colors.size){
-      candidates = candidates.filter(p => Array.from(facets.colors).some(c => (p.tags||[]).includes(c) || haystack(p).includes(c)));
-    }
-    if(ctx.wantDomain.length){
-      candidates = candidates.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
-    }
-    candidates.forEach(p => p._score = scoreProduct(p, ctx));
-    candidates.sort((a,b)=> b._score - a._score);
-    let top = candidates.filter(p => p._score>-1e9);
-    if(top.length === 0){
-      if(ctx.wantDomain.includes('hair') && ctx.wantColorCare){
-        top = all.filter(p => /hair/i.test(p.category||'') && /(color|color-safe|deposit|toning|highlight|gloss|dye)/i.test(haystack(p)));
-      } else if(ctx.wantDomain.length){
-        top = all.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
-      } else {
-        top = all.slice();
-      }
-    }
-    const seenBrand=new Map(); const diversified=[];
-    for(const p of top){
-      const b=(p.brand||'').toLowerCase();
-      const count = seenBrand.get(b)||0;
-      if(count<5){ diversified.push(p); seenBrand.set(b, count+1); }
-      if(diversified.length>=1000) break;
-    }
-    // Sorting
-    const sortVal = document.getElementById('sort').value;
-    if(sortVal==='price_asc') diversified.sort((a,b)=>cents(a.price)-cents(b.price));
-    else if(sortVal==='price_desc') diversified.sort((a,b)=>cents(b.price)-cents(a.price));
-    else if(sortVal==='brand_asc') diversified.sort((a,b)=>(a.brand||'').localeCompare(b.brand||''));
-    else if(sortVal==='brand_desc') diversified.sort((a,b)=>(b.brand||'').localeCompare(a.brand||''));
-    return diversified;
-  }
-
-  function normalize(p){
-    const priceRaw = p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0;
-    const idRaw = p.id ?? p.sku ?? p._id ?? p.code ?? p.upc ?? null;
-    const obj = { id: String(idRaw || (p.name||'').slice(0,24)+'|'+Math.random().toString(36).slice(2,7)),
-      name: p.name || p.title || 'Unnamed',
-      brand: p.brand || p.maker || p.vendor || '',
-      category: p.category || p.type || p.family || '',
-      price: priceRaw,
-      image: p.image || p.image_url || p.photo || p.img || ''
-    };
-    obj.tags = deriveTags(obj);
-    return obj;
-  }
-
-  async function fetchJSON(url){
-    const r = await fetch(url, {cache:'no-store'});
-    const ct = r.headers.get('content-type')||'';
-    if(!r.ok || !ct.includes('application/json')){
-      throw new Error('HTTP '+r.status+' '+url+' ct:'+ct);
-    }
-    return await r.json();
-  }
-
-  function extractItems(j){
-    const candidates=[j.items, j.data, j.results, j.products, j.productList, j];
-    for(const c of candidates){
-      if(Array.isArray(c) && c.length) return c;
-      if(c && typeof c==='object' && !Array.isArray(c)){
-        const vals=Object.values(c);
-        if(vals.length && typeof vals[0]==='object') return vals;
-      }
-    }
-    return [];
-  }
-
-  async function loadProducts(){
-    const attempts=[];
-    let items = [];
-    const endpoints = [
-      API_BASE + '/api/products?limit=5000',
-      API_BASE + '/api/products?limit=1000',
-      API_BASE + '/api/products'
-    ];
-    for (const url of endpoints) {
-      try {
-        const j = await fetchJSON(url);
-        const arr = extractItems(j);
-        attempts.push(url+': ok '+arr.length);
-        if (arr.length){ items = arr; break; }
-      } catch(e){
-        attempts.push(url+': '+(e.message||'fail'));
-      }
-    }
-    // Static fallbacks
-    let fbCount=0;
-    if(items.length < 50){
-      const fallbacks = [API_BASE + '/data/products.json', API_BASE + '/products.json'];
-      for(const url of fallbacks){
-        try{
-          const j = await fetchJSON(url);
-          const arr = extractItems(j);
-          attempts.push(url+': ok '+arr.length);
-          if(arr.length){ items = items.concat(arr); fbCount += arr.length; }
-        }catch(e){ attempts.push(url+': '+(e.message||'fail')); }
-      }
-    }
-    let normalized = items.map(normalize);
-    const seen=new Set();
-    all = normalized.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
-    setStatus(items.length?('ok '+items.length):'none', fbCount?('ok '+fbCount):'none', all.length);
-    if(!all.length){
-      warn.style.display='block';
-      warn.innerHTML = 'No products loaded. Quick checks: <ul><li>Open <b>'+API_BASE+'/api/products</b></li><li>Ensure static catalog at <b>/data/products.json</b></li></ul>';
-      console.warn('Product load attempts:', attempts);
-    }else{
-      console.log('Product load attempts:', attempts);
-    }
-    filtered = all.slice();
-    renderChunk(true);
-  }
-
-  function renderChunk(reset=false){
-    if(reset){ grid.innerHTML=''; cursor=0; }
-    const next=filtered.slice(cursor, cursor+BATCH);
-    next.forEach(p=>grid.appendChild(card(p)));
-    cursor += next.length;
-    document.getElementById('moreBtn').style.display = cursor < filtered.length ? 'block' : 'none';
-    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — widening search.';
-  }
-
-  function apply(){
-    const q=document.getElementById('q').value.trim();
-    const facets={
-      domain: new Set(Array.from(document.querySelectorAll('#pills-domain .pill.active')).map(x=>x.dataset.domain)),
-      types: new Set(Array.from(document.querySelectorAll('#pills-type .pill.active')).map(x=>x.dataset.type)),
-      colors: new Set(Array.from(document.querySelectorAll('#pills-color .pill.active')).map(x=>x.dataset.color)),
-    };
-    const ranked = rankProducts(q, facets);
-    filtered = ranked.length ? ranked : all.slice(0, 500);
-    renderChunk(true);
-  }
-
-  function normalizeClickPills(){
-    const groups=['#pills-domain','#pills-type','#pills-color'];
-    groups.forEach(sel=>{
-      document.querySelectorAll(sel+' .pill').forEach(p=>p.addEventListener('click', ()=>{
-        p.classList.toggle('active'); apply();
-      }));
+  // Facets: filter AFTER scoring so pills constrain result set
+  if (activePills.size){
+    out = out.filter(it => {
+      const tags = deriveTags(it);
+      for (const p of activePills) if (!tags.includes(p)) return false;
+      return true;
     });
   }
+  filtered = out;
+  resetGrid();
+  renderNext();
+}
 
-  // events
-  document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') apply(); });
-  document.getElementById('sort').addEventListener('change', apply);
-  document.getElementById('moreBtn').addEventListener('click', ()=>renderChunk(false));
-  document.getElementById('cartBtn').addEventListener('click', ()=>{
-    const d=document.getElementById('drawer'); d.classList.contains('open') ? d.classList.remove('open') : (d.classList.add('open'), renderCart());
-  });
+function toggleFacet(el){
+  const key = el.getAttribute('data-k');
+  if (el.classList.contains('active')){
+    el.classList.remove('active'); activePills.delete(key);
+  } else { el.classList.add('active'); activePills.add(key); }
+  runSearch();
+}
 
-  updateCartBadge();
-  normalizeClickPills();
-  loadProducts();
-})();
+function addToCart(it){
+  try{
+    const raw = localStorage.getItem('luminous_cart');
+    const cart = raw ? JSON.parse(raw) : [];
+    cart.push({ id: it.id, name: it.name, price: it.price||0, qty:1 });
+    localStorage.setItem('luminous_cart', JSON.stringify(cart));
+    alert(`${it.name} added to cart.`);
+  }catch(e){ console.error(e); }
+}
+
+async function boot(){
+  try{
+    const r = await fetch(`${API_BASE}/api/products?limit=5000`);
+    const data = await r.json();
+    allItems = Array.isArray(data.items) ? data.items : [];
+    status(`API: ok ${allItems.length}`);
+  }catch(e){
+    console.warn('API failed, attempting /data/products.json', e);
+    try{
+      const r2 = await fetch('/data/products.json');
+      const data2 = await r2.json();
+      const arr = data2.items || data2.data || data2.results || data2.products || (Array.isArray(data2)?data2:[]);
+      allItems = Array.isArray(arr)?arr:[];
+      status(`Fallback file: ok ${allItems.length}`);
+    }catch(e2){
+      status('No products available');
+      return;
+    }
+  }
+  filtered = [...allItems];
+  renderNext(); // first 50
+}
+boot();
 </script>
 </body>
 </html>
