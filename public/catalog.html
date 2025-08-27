@@ -9,33 +9,36 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
-.page{max-width:980px;margin:0 auto;min-height:100vh;background:#fff;padding-bottom:80px}
-.header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
-.headerbar{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap}
+.page{max-width:960px;margin:0 auto;min-height:100vh;background:var(--pearl);padding-bottom:80px}
+.header{background:#fff;padding:12px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
 .brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.input{border:1px solid #E6E6E6;border-radius:14px;padding:10px 12px;font-size:13px;min-width:220px}
-.select{border:1px solid #E6E6E6;border-radius:12px;padding:8px 10px;font-size:13px;background:#fff}
+.controls{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;align-items:center}
+.input{flex:1;min-width:220px;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:14px;background:#fff}
+.select{border:1px solid #E6E6E6;border-radius:12px;padding:10px;background:#fff}
 .pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
-.pill{border:1px solid #eee;border-radius:16px;padding:6px 10px;background:#fafafa;cursor:pointer;font-size:12px}
-.pill.active{border-color:#e7d3a6;background:#fff3cd}
-.grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;padding:14px}
-@media (max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
-@media (max-width:640px){.grid{grid-template-columns:repeat(2,1fr)}}
-.card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;flex-direction:column}
-.card img{width:100%;height:160px;object-fit:cover;background:#f6f6f6}
-.meta{padding:10px 10px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
-.name{font-size:13px;font-weight:700;line-height:1.2}
-.brandx{font-size:11px;color:#777}
-.row{margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.pill{border:1px solid #e6e6e6;background:#fff;border-radius:999px;padding:6px 10px;font-size:12px;cursor:pointer}
+.pill.active{background:var(--gold);color:#fff;border-color:var(--gold)}
+.status{margin-top:6px;font-size:11px;color:#555;display:flex;gap:8px;flex-wrap:wrap}
+.bullet{padding:2px 8px;border:1px solid #eee;border-radius:12px;background:#fafafa}
+.main{padding:12px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:860px){ .grid{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:640px){ .grid{grid-template-columns:repeat(2,1fr)} }
+.card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.card img{width:100%;height:140px;object-fit:cover;background:#f6f6f6}
+.card .meta{padding:10px 10px 12px}
+.card .name{font-size:12px;font-weight:700;line-height:1.2;min-height:30px}
+.card .brandx{font-size:11px;color:#777;margin-top:4px;min-height:16px}
+.card .row{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
 .price{font-size:12px;font-weight:800;color:var(--gold)}
 .btn{border:none;border-radius:18px;padding:8px 10px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer;font-size:12px}
-.footer{padding:0 14px 14px}
-.more{display:block;width:100%;border:1px solid #e6e6e6;background:#fff;color:#333;border-radius:16px;padding:10px;font-weight:700}
-.status{font-size:11px;color:#555;padding:8px 14px}
+.more{display:block;width:100%;margin:14px 0 0;border:1px solid #e6e6e6;background:#fff;color:#333;border-radius:16px;padding:10px;font-weight:700}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:960px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
+.nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
+.nav a.active{color:var(--gold);font-weight:700}
+.badge{min-width:18px;height:18px;background:var(--gold);color:#fff;border-radius:9px;font-size:10px;display:none;align-items:center;justify-content:center;padding:0 5px}
 .iconbtn{border:1px solid #e6e6e6;border-radius:12px;background:#fafafa;padding:6px 10px;cursor:pointer;display:flex;align-items:center;gap:8px}
 .svg{width:16px;height:16px;display:inline-block}
-.badge{min-width:18px;height:18px;background:var(--gold);color:#fff;border-radius:9px;font-size:10px;display:none;align-items:center;justify-content:center;padding:0 5px}
 .drawer{position:fixed;right:-360px;top:0;width:360px;height:100vh;background:#fff;border-left:1px solid #eee;box-shadow:-4px 0 16px rgba(0,0,0,.12);transition:right .25s ease;z-index:20;padding:12px}
 .drawer.open{right:0}
 .drawer h3{font-size:14px}
@@ -43,50 +46,62 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .drawer .name{font-size:12px;font-weight:700}
 .drawer .qty{font-size:12px;color:#555}
 .drawer .total{margin-top:8px;font-weight:800}
-.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:980px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
-.nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
-.nav a.active{color:var(--gold);font-weight:700}
-.warn{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin:8px 14px;font-size:12px;display:none}
+.note{font-size:12px;color:#666;margin:8px 0}
+.warn{background:#fff3cd;border:1px solid #ffeeba;color:#856404;border-radius:10px;padding:10px;margin-top:8px;font-size:12px}
 </style>
 </head>
 <body>
 <div class="page">
   <header class="header">
-    <div class="headerbar">
+    <div style="display:flex;justify-content:space-between;align-items:center">
       <div class="brand">Luminous • Catalog</div>
-      <div class="controls">
-        <input id="q" class="input" placeholder="Search products… (e.g., purple shampoo)"/>
-        <select id="sort" class="select">
-          <option value="best">Sort: Best match</option>
-          <option value="price_asc">Price: Low → High</option>
-          <option value="price_desc">Price: High → Low</option>
-          <option value="brand">Brand A→Z</option>
-        </select>
-        <button class="iconbtn" id="cartBtn" title="Cart">
-          <svg class="svg" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
-          <span class="badge" id="cartCount">0</span>
-        </button>
-      </div>
+      <button class="iconbtn" id="cartBtn" title="Cart">
+        <svg class="svg" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="1.5"><path d="M6 6h15l-1.5 9h-12z"/><circle cx="9" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg>
+        <span class="badge" id="cartCount">0</span>
+      </button>
     </div>
-    <div class="pills" id="pills">
-      <div class="pill" data-tag="hair">Hair</div>
-      <div class="pill" data-tag="skin">Skin</div>
-      <div class="pill" data-tag="nail">Nail</div>
-      <div class="pill" data-tag="shampoo">Shampoo</div>
-      <div class="pill" data-tag="conditioner">Conditioner</div>
-      <div class="pill" data-tag="mask">Mask</div>
-      <div class="pill" data-tag="serum">Serum</div>
-      <div class="pill" data-tag="spray">Spray</div>
-      <div class="pill" data-tag="purple">Purple</div>
-      <div class="pill" data-tag="red">Red</div>
-      <div class="pill" data-tag="blue">Blue</div>
+    <div class="controls">
+      <input id="q" class="input" placeholder="Search: e.g., hair color • purple shampoo • anti-frizz serum"/>
+      <select id="sort" class="select" title="Sort">
+        <option value="best">Best match</option>
+        <option value="price_asc">Price ↑</option>
+        <option value="price_desc">Price ↓</option>
+        <option value="brand_asc">Brand A–Z</option>
+        <option value="brand_desc">Brand Z–A</option>
+      </select>
+    </div>
+    <div class="pills" id="pills-domain">
+      <span class="pill" data-domain="hair">Hair</span>
+      <span class="pill" data-domain="skin">Skin</span>
+      <span class="pill" data-domain="nail">Nail</span>
+    </div>
+    <div class="pills" id="pills-type">
+      <span class="pill" data-type="shampoo">Shampoo</span>
+      <span class="pill" data-type="conditioner">Conditioner</span>
+      <span class="pill" data-type="mask">Mask</span>
+      <span class="pill" data-type="serum">Serum</span>
+      <span class="pill" data-type="spray">Spray</span>
+      <span class="pill" data-type="oil">Oil</span>
+    </div>
+    <div class="pills" id="pills-color">
+      <span class="pill" data-color="purple">Purple</span>
+      <span class="pill" data-color="blue">Blue</span>
+      <span class="pill" data-color="red">Red</span>
+      <span class="pill" data-color="copper">Copper</span>
+    </div>
+    <div class="status" id="status">
+      <span class="bullet" id="st-api">API: …</span>
+      <span class="bullet" id="st-fb">Fallback: …</span>
+      <span class="bullet" id="st-total">Total: 0</span>
     </div>
   </header>
 
-  <div class="status" id="status">Loading…</div>
-  <div class="warn" id="warn"></div>
-  <section class="grid" id="grid"></section>
-  <div class="footer"><button id="moreBtn" class="more" style="display:none">Show 50 more</button></div>
+  <main class="main">
+    <div id="note" class="note"></div>
+    <div id="grid" class="grid"></div>
+    <button id="moreBtn" class="more" style="display:none">Show 50 more</button>
+    <div class="warn" id="warn" style="display:none"></div>
+  </main>
 
   <nav class="nav">
     <a href="/index.html">Home</a>
@@ -100,10 +115,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <script>
 (function(){
-  const API_BASE = location.origin;
-  const BATCH = 50;
-  let all = []; let view = []; let cursor = 0;
-  let activeTags = new Set();
+  const API_BASE=location.origin;
+  const BATCH=50;
+  let all=[]; let filtered=[]; let cursor=0;
   let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
 
   const FALLBACKS = {
@@ -117,8 +131,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     'default':'/images/studio-beige.jpg'
   };
 
-  function $(s){ return document.querySelector(s); }
-  const grid=$('#grid'), status=$('#status'), warn=$('#warn');
+  const $ = (s)=>document.querySelector(s);
+  const stApi=$('#st-api'), stFb=$('#st-fb'), stTotal=$('#st-total');
+  const grid=$('#grid'), note=$('#note'), warn=$('#warn');
+
+  function setStatus(api, fb, total){
+    stApi.textContent = 'API: ' + api;
+    stFb.textContent = 'Fallback: ' + fb;
+    stTotal.textContent = 'Total: ' + total;
+  }
 
   function cents(v){
     if(v===null||v===undefined) return 0;
@@ -128,56 +149,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   }
   const fmt = v => '$' + (cents(v)/100).toFixed(2);
 
-  function deriveTags(p){
-    const s = (p.name + ' ' + (p.brand||'') + ' ' + (p.category||'')).toLowerCase();
-    const t = new Set(s.replace(/[^a-z0-9 ]+/g,' ').split(/\s+/).filter(Boolean));
-    const tags=[];
-    if(t.has('shampoo')||t.has('cleanser')) tags.push('shampoo');
-    if(t.has('conditioner')||t.has('condition')) tags.push('conditioner');
-    if(t.has('mask')||t.has('treatment')) tags.push('mask');
-    if(t.has('serum')||t.has('ampoule')||t.has('essence')) tags.push('serum');
-    if(t.has('spray')||t.has('mist')) tags.push('spray');
-    if(t.has('purple')||t.has('violet')||t.has('toning')||t.has('anti-brass')||t.has('brass')) tags.push('purple');
-    if(t.has('blue')) tags.push('blue');
-    if(t.has('red')||t.has('copper')||t.has('rose')||t.has('ruby')) tags.push('red');
-    const cat = (p.category||'').toLowerCase();
-    if(cat.includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
-    if(cat.includes('skin') || tags.includes('serum') || cat.includes('face')) tags.push('skin');
-    if(cat.includes('nail')) tags.push('nail');
-    return Array.from(new Set(tags));
-  }
-
-  function normalize(p){
-    const obj = {
-      id: String(p.id ?? p.sku ?? p._id ?? p.code ?? Math.random().toString(36).slice(2,7)),
-      name: p.name || p.title || 'Unnamed',
-      brand: p.brand || p.maker || p.vendor || '',
-      category: p.category || p.type || p.family || '',
-      price: p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0,
-      image: p.image || p.image_url || p.photo || p.img || '',
-    };
-    obj.tags = deriveTags(obj);
-    return obj;
-  }
-
   function imgFor(p){
-    const im = p.image || '';
+    const im = p.image || p.image_url || p.photo || '';
     const cat = (p.category||'').toLowerCase();
     const key = cat.includes('men')?'mens':cat.includes('nail')?'nails':cat.includes('color')?'colorcare':cat.includes('anti')?'antiaging':(cat.includes('k-beauty')||cat.includes('kbeauty'))?'kbeauty':cat.includes('hair')?'hair':cat.includes('hydrat')?'hydration':'default';
     const fb = FALLBACKS[key];
     if(!im) return fb;
     if(/^https?:\/\//i.test(im)) return im;
     return '/' + encodeURI(String(im).replace(/^\/+/,''));
-  }
-
-  function card(p){
-    const d=document.createElement('div'); d.className='card';
-    const src=imgFor(p);
-    d.innerHTML = '<img src="'+src+'" alt="" onerror="this.onerror=null;this.src=\''+FALLBACKS['default']+'\'"/>'
-      + '<div class="meta"><div class="name">'+(p.name||'')+'</div><div class="brandx">'+(p.brand||p.category||'')+'</div>'
-      + '<div class="row"><div class="price">'+fmt(p.price)+'</div><button class="btn" data-id="'+p.id+'">Add</button></div></div>';
-    d.addEventListener('click', (e)=>{ const b=e.target.closest('.btn'); if(!b) return; addToCart(p); });
-    return d;
   }
 
   function updateCartBadge(){
@@ -210,80 +189,237 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     localStorage.setItem('luminous_cart', JSON.stringify(cart)); updateCartBadge();
   }
 
-  function extractItems(j){
-    if(Array.isArray(j)) return j;
-    if(j && Array.isArray(j.items)) return j.items;
-    return [];
+  function card(p){
+    const d=document.createElement('div'); d.className='card';
+    const src=imgFor(p);
+    d.innerHTML = '<img src="'+src+'" alt="" onerror="this.onerror=null;this.src=\''+FALLBACKS['default']+'\'"/>'
+      + '<div class="meta"><div class="name">'+(p.name||'')+'</div><div class="brandx">'+(p.brand||p.category||'')+'</div>'
+      + '<div class="row"><div class="price">'+fmt(p.price)+'</div><button class="btn" data-id="'+p.id+'">Add</button></div></div>';
+    d.addEventListener('click', (e)=>{ const b=e.target.closest('.btn'); if(!b) return; addToCart(p); });
+    return d;
+  }
+
+  // ---------- Ranking utils (same as chat) ----------
+  function tok(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').split(/\s+/).filter(Boolean); }
+
+  function deriveTags(p){
+    const t = new Set(tok(p.name + ' ' + (p.category||'') + ' ' + (p.brand||'')));
+    const has = (w)=>t.has(w);
+    const tags=[];
+    if(has('shampoo')||has('cleanser')||has('wash')) tags.push('shampoo');
+    if(has('conditioner')||has('condition')) tags.push('conditioner');
+    if(has('mask')||has('masque')||has('treatment')) tags.push('mask');
+    if(has('serum')||has('ampoule')||has('essence')) tags.push('serum');
+    if(has('oil')||has('elixir')) tags.push('oil');
+    if(has('spray')||has('mist')) tags.push('spray');
+    if(has('purple')||has('violet')||has('toning')||has('anti-brass')||has('brass')) tags.push('purple');
+    if(has('blue')) tags.push('blue');
+    if(has('red')||has('copper')||has('rose')||has('ruby')) tags.push('red');
+    if(has('color-safe')||(has('color')&&has('safe'))) tags.push('color-safe');
+    if(has('color')&&has('deposit')) tags.push('color-deposit');
+    const cat = (p.category||'').toLowerCase();
+    if(cat.includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
+    if(cat.includes('skin') || tags.includes('serum')) tags.push('skin');
+    if(cat.includes('nail')) tags.push('nail');
+    return Array.from(new Set(tags));
+  }
+
+  function parseQuery(q){
+    const tokens = tok(q);
+    const wantTypes = tokens.filter(t => ['shampoo','conditioner','mask','serum','oil','spray'].includes(t));
+    const wantColors = tokens.filter(t => ['red','purple','blue','violet','copper','rose','ruby','toning'].includes(t))
+      .map(c => c==='violet'?'purple':c==='toning'?'purple':c);
+    const wantDomain = tokens.filter(t => ['hair','skin','nail','nails'].includes(t)).map(d => d==='nails'?'nail':d);
+    const wantColorCare = tokens.includes('color') || tokens.includes('color-safe') || tokens.includes('deposit');
+    return { tokens, wantTypes, wantColors, wantDomain, wantColorCare };
+  }
+
+  function haystack(p){
+    return (String(p.name||'')+' '+String(p.category||'')+' '+String(p.brand||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
+  }
+
+  function scoreProduct(p, ctx){
+    let s=0;
+    const hay = haystack(p);
+    if(ctx.wantDomain.length && !ctx.wantDomain.some(d => (p.tags||[]).includes(d) || hay.includes(d))) return -1e9;
+    if(ctx.wantTypes.length && !ctx.wantTypes.some(t => (p.tags||[]).includes(t) || hay.includes(t))) return -1e9;
+    if(ctx.wantColors.length){
+      if(ctx.wantColors.some(c => (p.tags||[]).includes(c) || hay.includes(c))) s += 30;
+      else s -= 8;
+    }
+    if(ctx.wantColorCare){
+      if(/color-safe|deposit|toning|highlight|gloss|dye|color/.test(hay)) s += 20;
+      else s -= 4;
+    }
+    ctx.tokens.forEach(t=>{ if(hay.includes(t)) s += 8; });
+    if((p.tags||[]).includes('hair')) s += 4;
+    return s;
+  }
+
+  function rankProducts(query, facets){
+    const ctx = parseQuery(query);
+    let candidates = all.slice();
+    if(facets.domain.size){
+      candidates = candidates.filter(p => Array.from(facets.domain).some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
+    }
+    if(facets.types.size){
+      candidates = candidates.filter(p => Array.from(facets.types).some(t => (p.tags||[]).includes(t) || haystack(p).includes(t)));
+    }
+    if(facets.colors.size){
+      candidates = candidates.filter(p => Array.from(facets.colors).some(c => (p.tags||[]).includes(c) || haystack(p).includes(c)));
+    }
+    if(ctx.wantDomain.length){
+      candidates = candidates.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
+    }
+    candidates.forEach(p => p._score = scoreProduct(p, ctx));
+    candidates.sort((a,b)=> b._score - a._score);
+    let top = candidates.filter(p => p._score>-1e9);
+    if(top.length === 0){
+      if(ctx.wantDomain.includes('hair') && ctx.wantColorCare){
+        top = all.filter(p => /hair/i.test(p.category||'') && /(color|color-safe|deposit|toning|highlight|gloss|dye)/i.test(haystack(p)));
+      } else if(ctx.wantDomain.length){
+        top = all.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
+      } else {
+        top = all.slice();
+      }
+    }
+    const seenBrand=new Map(); const diversified=[];
+    for(const p of top){
+      const b=(p.brand||'').toLowerCase();
+      const count = seenBrand.get(b)||0;
+      if(count<5){ diversified.push(p); seenBrand.set(b, count+1); }
+      if(diversified.length>=1000) break;
+    }
+    // Sorting
+    const sortVal = document.getElementById('sort').value;
+    if(sortVal==='price_asc') diversified.sort((a,b)=>cents(a.price)-cents(b.price));
+    else if(sortVal==='price_desc') diversified.sort((a,b)=>cents(b.price)-cents(a.price));
+    else if(sortVal==='brand_asc') diversified.sort((a,b)=>(a.brand||'').localeCompare(b.brand||''));
+    else if(sortVal==='brand_desc') diversified.sort((a,b)=>(b.brand||'').localeCompare(a.brand||''));
+    return diversified;
+  }
+
+  function normalize(p){
+    const priceRaw = p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0;
+    const idRaw = p.id ?? p.sku ?? p._id ?? p.code ?? p.upc ?? null;
+    const obj = { id: String(idRaw || (p.name||'').slice(0,24)+'|'+Math.random().toString(36).slice(2,7)),
+      name: p.name || p.title || 'Unnamed',
+      brand: p.brand || p.maker || p.vendor || '',
+      category: p.category || p.type || p.family || '',
+      price: priceRaw,
+      image: p.image || p.image_url || p.photo || p.img || ''
+    };
+    obj.tags = deriveTags(obj);
+    return obj;
   }
 
   async function fetchJSON(url){
     const r = await fetch(url, {cache:'no-store'});
     const ct = r.headers.get('content-type')||'';
-    if(!r.ok || !ct.includes('application/json')) throw new Error('HTTP '+r.status+' '+url+' ct:'+ct);
+    if(!r.ok || !ct.includes('application/json')){
+      throw new Error('HTTP '+r.status+' '+url+' ct:'+ct);
+    }
     return await r.json();
   }
 
+  function extractItems(j){
+    const candidates=[j.items, j.data, j.results, j.products, j.productList, j];
+    for(const c of candidates){
+      if(Array.isArray(c) && c.length) return c;
+      if(c && typeof c==='object' && !Array.isArray(c)){
+        const vals=Object.values(c);
+        if(vals.length && typeof vals[0]==='object') return vals;
+      }
+    }
+    return [];
+  }
+
   async function loadProducts(){
-    const tries=[];
-    let items=[]; let fb=0;
-    for(const url of [API_BASE+'/api/products?limit=5000', API_BASE+'/api/products?limit=1000', API_BASE+'/api/products']){
-      try{ const j=await fetchJSON(url); const arr=extractItems(j); tries.push(url+': ok '+arr.length); if(arr.length){ items=arr; break; } } catch(e){ tries.push(url+': '+e.message); }
+    const attempts=[];
+    let items = [];
+    const endpoints = [
+      API_BASE + '/api/products?limit=5000',
+      API_BASE + '/api/products?limit=1000',
+      API_BASE + '/api/products'
+    ];
+    for (const url of endpoints) {
+      try {
+        const j = await fetchJSON(url);
+        const arr = extractItems(j);
+        attempts.push(url+': ok '+arr.length);
+        if (arr.length){ items = arr; break; }
+      } catch(e){
+        attempts.push(url+': '+(e.message||'fail'));
+      }
     }
+    // Static fallbacks
+    let fbCount=0;
     if(items.length < 50){
-      for(const url of [API_BASE+'/data/products.json', API_BASE+'/products.json']){
-        try{ const j=await fetchJSON(url); const arr=extractItems(j); tries.push(url+': ok '+arr.length); if(arr.length){ items = items.concat(arr); fb += arr.length; } } catch(e){ tries.push(url+': '+e.message); }
+      const fallbacks = [API_BASE + '/data/products.json', API_BASE + '/products.json'];
+      for(const url of fallbacks){
+        try{
+          const j = await fetchJSON(url);
+          const arr = extractItems(j);
+          attempts.push(url+': ok '+arr.length);
+          if(arr.length){ items = items.concat(arr); fbCount += arr.length; }
+        }catch(e){ attempts.push(url+': '+(e.message||'fail')); }
       }
     }
-    all = items.map(normalize);
-    status.textContent = 'API: '+(items.length?('ok '+items.length):'none')+' • Fallback: '+(fb?('ok '+fb):'none')+' • Total: '+all.length;
-    if(!all.length){ warn.style.display='block'; warn.innerHTML='No products loaded. Check <b>/api/products</b> and <b>/data/products.json</b>.'; console.warn('Load attempts', tries); }
-    update();
+    let normalized = items.map(normalize);
+    const seen=new Set();
+    all = normalized.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
+    setStatus(items.length?('ok '+items.length):'none', fbCount?('ok '+fbCount):'none', all.length);
+    if(!all.length){
+      warn.style.display='block';
+      warn.innerHTML = 'No products loaded. Quick checks: <ul><li>Open <b>'+API_BASE+'/api/products</b></li><li>Ensure static catalog at <b>/data/products.json</b></li></ul>';
+      console.warn('Product load attempts:', attempts);
+    }else{
+      console.log('Product load attempts:', attempts);
+    }
+    filtered = all.slice();
+    renderChunk(true);
   }
 
-  function applyFilters(q){
-    const tokens = String(q||'').toLowerCase().trim().split(/\s+/).filter(Boolean);
-    view = all.filter(p => {
-      if(activeTags.size){
-        const t = p.tags || [];
-        let ok = true;
-        activeTags.forEach(tag => { if(!t.includes(tag)) ok = false; });
-        if(!ok) return false;
-      }
-      if(!tokens.length) return true;
-      const hay = (p.name+' '+(p.brand||'')+' '+(p.category||'')).toLowerCase();
-      return tokens.every(t => hay.includes(t));
-    });
-    const sort = document.getElementById('sort').value;
-    if(sort==='price_asc') view.sort((a,b)=> (cents(a.price)-cents(b.price)));
-    else if(sort==='price_desc') view.sort((a,b)=> (cents(b.price)-cents(a.price)));
-    else if(sort==='brand') view.sort((a,b)=> String(a.brand).localeCompare(String(b.brand)));
-    cursor=0;
-  }
-
-  function render(){
-    const next=view.slice(cursor, cursor+BATCH);
+  function renderChunk(reset=false){
+    if(reset){ grid.innerHTML=''; cursor=0; }
+    const next=filtered.slice(cursor, cursor+BATCH);
     next.forEach(p=>grid.appendChild(card(p)));
     cursor += next.length;
-    document.getElementById('moreBtn').style.display = cursor < view.length ? 'block' : 'none';
-  }
-  function update(){
-    grid.innerHTML='';
-    applyFilters(document.getElementById('q').value);
-    render();
+    document.getElementById('moreBtn').style.display = cursor < filtered.length ? 'block' : 'none';
+    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — widening search.';
   }
 
-  document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') update(); });
-  document.getElementById('sort').addEventListener('change', update);
-  document.getElementById('moreBtn').addEventListener('click', render);
-  document.getElementById('pills').addEventListener('click', (e)=>{
-    const pill = e.target.closest('.pill'); if(!pill) return;
-    const tag = pill.getAttribute('data-tag');
-    if(pill.classList.contains('active')) { pill.classList.remove('active'); activeTags.delete(tag); }
-    else { pill.classList.add('active'); activeTags.add(tag); }
-    update();
+  function apply(){
+    const q=document.getElementById('q').value.trim();
+    const facets={
+      domain: new Set(Array.from(document.querySelectorAll('#pills-domain .pill.active')).map(x=>x.dataset.domain)),
+      types: new Set(Array.from(document.querySelectorAll('#pills-type .pill.active')).map(x=>x.dataset.type)),
+      colors: new Set(Array.from(document.querySelectorAll('#pills-color .pill.active')).map(x=>x.dataset.color)),
+    };
+    const ranked = rankProducts(q, facets);
+    filtered = ranked.length ? ranked : all.slice(0, 500);
+    renderChunk(true);
+  }
+
+  function normalizeClickPills(){
+    const groups=['#pills-domain','#pills-type','#pills-color'];
+    groups.forEach(sel=>{
+      document.querySelectorAll(sel+' .pill').forEach(p=>p.addEventListener('click', ()=>{
+        p.classList.toggle('active'); apply();
+      }));
+    });
+  }
+
+  // events
+  document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') apply(); });
+  document.getElementById('sort').addEventListener('change', apply);
+  document.getElementById('moreBtn').addEventListener('click', ()=>renderChunk(false));
+  document.getElementById('cartBtn').addEventListener('click', ()=>{
+    const d=document.getElementById('drawer'); d.classList.contains('open') ? d.classList.remove('open') : (d.classList.add('open'), renderCart());
   });
 
   updateCartBadge();
+  normalizeClickPills();
   loadProducts();
 })();
 </script>

@@ -7,7 +7,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+:root{--charcoal:#2C2C2C;--gold:##B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
 .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--pearl);padding-bottom:120px}
 .header{background:#fff;padding:12px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
@@ -82,7 +82,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
   <div class="composer">
     <div class="box">
-      <input id="ask" placeholder="e.g., red shampoo • anti-frizz serum • sensitive scalp">
+      <input id="ask" placeholder="e.g., hair color care • purple shampoo • anti-frizz serum">
       <button class="btn-send" id="askBtn">Go</button>
     </div>
   </div>
@@ -99,13 +99,22 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
 <script>
 (function(){
-  const API_BASE=location.origin; // absolute same-origin
+  const API_BASE=location.origin;
   const BATCH=50;
   let all=[]; let filtered=[]; let cursor=0;
   let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
   let lastAssistant='';
 
-  const FALLBACKS = { antiaging:'/images/zen-stone-serum.jpg', hydration:'/images/spa-salts.jpg', colorcare:'/images/studio-beige.jpg', nails:'/images/wooden-tray.jpg', hair:'/images/hero-almonds.jpg', kbeauty:'/images/zen-stone-serum.jpg', mens:'/images/mens-kit-1.jpg', 'default':'/images/studio-beige.jpg' };
+  const FALLBACKS = {
+    antiaging:'/images/zen-stone-serum.jpg',
+    hydration:'/images/spa-salts.jpg',
+    colorcare:'/images/studio-beige.jpg',
+    nails:'/images/wooden-tray.jpg',
+    hair:'/images/hero-almonds.jpg',
+    kbeauty:'/images/zen-stone-serum.jpg',
+    mens:'/images/mens-kit-1.jpg',
+    'default':'/images/studio-beige.jpg'
+  };
 
   const $ = (s)=>document.querySelector(s);
   const thread=$('#thread'), grid=$('#grid'), note=$('#note');
@@ -211,47 +220,60 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     const wantTypes = tokens.filter(t => ['shampoo','conditioner','mask','serum','oil','spray'].includes(t));
     const wantColors = tokens.filter(t => ['red','purple','blue','violet','copper','rose','ruby','toning'].includes(t))
       .map(c => c==='violet'?'purple':c==='toning'?'purple':c);
-    const wantDomain = tokens.filter(t => ['hair','skin','nail','nails'].includes(t))
-      .map(d => d==='nails'?'nail':d);
-    return { tokens, wantTypes, wantColors, wantDomain };
+    const wantDomain = tokens.filter(t => ['hair','skin','nail','nails'].includes(t)).map(d => d==='nails'?'nail':d);
+    const wantColorCare = tokens.includes('color') || tokens.includes('color-safe') || tokens.includes('deposit');
+    return { tokens, wantTypes, wantColors, wantDomain, wantColorCare };
+  }
+
+  function haystack(p){
+    return (String(p.name||'')+' '+String(p.category||'')+' '+String(p.brand||'')+' '+(p.tags||[]).join(' ')).toLowerCase();
   }
 
   function scoreProduct(p, ctx){
     let s=0;
-    const name=(p.name||'').toLowerCase();
-    const cat=(p.category||'').toLowerCase();
-    const brand=(p.brand||'').toLowerCase();
-    const hay = name+' '+cat+' '+brand+' '+(p.tags||[]).join(' ');
-    if(ctx.wantTypes.length && !ctx.wantTypes.some(t => (p.tags||[]).includes(t) || hay.includes(t))) return -1e9;
+    const hay = haystack(p);
+    // Hard domain filter
     if(ctx.wantDomain.length && !ctx.wantDomain.some(d => (p.tags||[]).includes(d) || hay.includes(d))) return -1e9;
+    // Optional type filter
+    if(ctx.wantTypes.length && !ctx.wantTypes.some(t => (p.tags||[]).includes(t) || hay.includes(t))) return -1e9;
+    // Color intent
     if(ctx.wantColors.length){
       if(ctx.wantColors.some(c => (p.tags||[]).includes(c) || hay.includes(c))) s += 30;
-      else s -= 10;
+      else s -= 8;
+    }
+    // Color-care intent (hair color, color safe, deposit)
+    if(ctx.wantColorCare){
+      if(/color-safe|deposit|toning|highlight|gloss|dye|color/.test(hay)) s += 20;
+      else s -= 4;
     }
     ctx.tokens.forEach(t=>{
-      if(name.includes(t)) s += 10;
-      if(cat.includes(t)) s += 6;
-      if(brand.includes(t)) s += 4;
-      if((p.tags||[]).includes(t)) s += 8;
+      if(hay.includes(t)) s += 8;
     });
-    ctx.wantTypes.forEach(t => { if((p.tags||[]).includes(t)) s += 20; });
-    const hairHints = ['shampoo','conditioner','mask','spray','oil'];
-    if(hairHints.some(h=>ctx.tokens.includes(h)) && (p.tags||[]).includes('hair')) s+=5;
+    if((p.tags||[]).includes('hair')) s += 4;
     return s;
   }
 
   function rankProducts(query){
     const ctx = parseQuery(query);
     let candidates = all.slice();
-    if(ctx.wantTypes.length){
-      candidates = candidates.filter(p => ctx.wantTypes.some(t => (p.tags||[]).includes(t) || (p.name||'').toLowerCase().includes(t) || (p.category||'').toLowerCase().includes(t)));
+    // Pre-filter by domain if present to reduce noise
+    if(ctx.wantDomain.length){
+      candidates = candidates.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
     }
     candidates.forEach(p => p._score = scoreProduct(p, ctx));
     candidates.sort((a,b)=> b._score - a._score);
     let top = candidates.filter(p => p._score>-1e9);
-    if(top.length < 20 && ctx.wantTypes.length){
-      top = all.filter(p => ctx.wantTypes.some(t=> (p.tags||[]).includes(t) || (p.name||'').toLowerCase().includes(t))).slice(0,200);
+    // If nothing matched, widen gracefully
+    if(top.length === 0){
+      if(ctx.wantDomain.includes('hair') && ctx.wantColorCare){
+        top = all.filter(p => /hair/i.test(p.category||'') && /(color|color-safe|deposit|toning|highlight|gloss|dye)/i.test(haystack(p)));
+      } else if(ctx.wantDomain.length){
+        top = all.filter(p => ctx.wantDomain.some(d => (p.tags||[]).includes(d) || haystack(p).includes(d)));
+      } else {
+        top = all.slice();
+      }
     }
+    // Diversify by brand (max 5 per brand)
     const seenBrand=new Map(); const diversified=[];
     for(const p of top){
       const b=(p.brand||'').toLowerCase();
@@ -301,9 +323,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     const attempts=[];
     let items = [];
     const endpoints = [
-      API_BASE + '/api/products?limit=2000',
+      API_BASE + '/api/products?limit=5000',
       API_BASE + '/api/products?limit=1000',
-      API_BASE + '/api/products?limit=500',
       API_BASE + '/api/products'
     ];
     for (const url of endpoints) {
@@ -319,23 +340,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     // Static fallbacks
     let fbCount=0;
     if(items.length < 50){
-      const fallbacks = [API_BASE + '/data/products.json', API_BASE + '/products.json', API_BASE + '/data/products.ndjson'];
+      const fallbacks = [API_BASE + '/data/products.json', API_BASE + '/products.json'];
       for(const url of fallbacks){
         try{
-          const res = await fetch(url, {cache:'no-store'});
-          if(!res.ok){ attempts.append(url+': http '+res.status); continue; }
-          let arr=[];
-          const ct = res.headers.get('content-type')||'';
-          if(ct.includes('ndjson')){
-            const txt = await res.text();
-            arr = txt.split('\n').map(s=>{ try{return JSON.parse(s)}catch{return null} }).filter(Boolean);
-          }else{
-            const j = await res.json();
-            arr = Array.isArray(j.items)?j.items:(Array.isArray(j)?j:[]);
-          }
-          attempts.append(url+': ok '+arr.length);
+          const j = await fetchJSON(url);
+          const arr = extractItems(j);
+          attempts.push(url+': ok '+arr.length);
           if(arr.length){ items = items.concat(arr); fbCount += arr.length; }
-        }catch(e){ attempts.append(url+': '+(e.message||'fail')); }
+        }catch(e){ attempts.push(url+': '+(e.message||'fail')); }
       }
     }
     let normalized = items.map(normalize);
@@ -344,7 +356,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     setStatus(items.length?('ok '+items.length):'none', fbCount?('ok '+fbCount):'none', all.length);
     if(!all.length){
       warn.style.display='block';
-      warn.innerHTML = 'No products loaded. Quick checks: <ul><li>Open <b>'+API_BASE+'/api/products</b> — do you see JSON?</li><li>Ensure a static catalog at <b>/data/products.json</b> or <b>/products.json</b>.</li><li>Serve this page over HTTP (not file://) so same‑origin fetch works.</li></ul>';
+      warn.innerHTML = 'No products loaded. Quick checks: <ul><li>Open <b>'+API_BASE+'/api/products</b></li><li>Ensure static catalog at <b>/data/products.json</b></li></ul>';
       console.warn('Product load attempts:', attempts);
     }else{
       console.log('Product load attempts:', attempts);
@@ -359,7 +371,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     next.forEach(p=>grid.appendChild(card(p)));
     cursor += next.length;
     document.getElementById('moreBtn').style.display = cursor < filtered.length ? 'block' : 'none';
-    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — try a different term.';
+    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — widening search to related items.';
   }
 
   async function ask(q){
@@ -370,7 +382,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       const data = await r.json();
       if(data.response) addMsg(data.response);
     }catch(e){ /* still proceed with ranking */ }
-    filtered = rankProducts(q);
+    const ranked = rankProducts(q);
+    filtered = ranked.length ? ranked : all.slice(0, 200); // last resort: show something useful
     renderChunk(true);
   }
 
