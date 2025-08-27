@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Luminous Salon — Book • Shop • Glow</title>
   <meta name="theme-color" content="#B8860B" />
-  <link rel="manifest" href="/manifest.json?v=1" />
+  <link rel="manifest" href="/manifest.json" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
@@ -72,7 +71,6 @@
     <main class="main">
       <section class="hero" aria-label="Featured">
         <div class="hero-track">
-          <!-- URL-encode filenames that contain spaces -->
           <img src="/AFRICAN%20AMERICAN%20BEAUTY.jpg" alt="Radiant skin" loading="lazy"/>
           <img src="/HISPANIC%20BEAYTY%20CARE%20MODAL.jpg" alt="Skincare display" loading="lazy"/>
           <img src="/WHITE%20FEMALE%20BEAUTY%20CARE%20MODAL.jpg" alt="Closeup" loading="lazy"/>
@@ -84,7 +82,7 @@
         </div>
       </section>
 
-      <section class="section">
+      <section class="section" id="services-section">
         <div class="hd"><h2>Services</h2></div>
         <div class="grid" id="services">
           <article class="card" tabindex="0" data-svc="Haircut"><div class="k">Haircut</div><div class="d">Precision cuts and shaping. Includes consult & finish.</div></article>
@@ -96,7 +94,7 @@
           <article class="card" tabindex="0" data-svc="Mens"><div class="k">Men’s Grooming</div><div class="d">Barbering, beard shaping, gray blending.</div></article>
           <article class="card" tabindex="0" data-svc="Retail"><div class="k">Retail</div><div class="d">Salon-grade hair & skin care for at-home results.</div></article>
         </div>
-        <div class="cta"><button class="btn" onclick="openBooking()">Book Now</button></div>
+        <div class="cta"><button class="btn" id="bookBtn">Book Now</button></div>
       </section>
 
       <section class="section">
@@ -112,8 +110,8 @@
       <section class="section">
         <div class="hd"><h2>Packages & Membership</h2></div>
         <div class="grid">
-          <article class="card" tabindex="0" onclick="openMembership('blowout')"><div class="k">Blowout Bundle</div><div class="d">5 blowouts • Preferred pricing • Priority booking</div></article>
-          <article class="card" tabindex="0" onclick="openMembership('skin')"><div class="k">Skin Refresh</div><div class="d">3 facials • Glow plan • Member perks</div></article>
+          <article class="card" tabindex="0" data-membership="blowout"><div class="k">Blowout Bundle</div><div class="d">5 blowouts • Preferred pricing • Priority booking</div></article>
+          <article class="card" tabindex="0" data-membership="skin"><div class="k">Skin Refresh</div><div class="d">3 facials • Glow plan • Member perks</div></article>
         </div>
       </section>
     </main>
@@ -122,14 +120,14 @@
     <div class="dock" role="search">
       <div class="advisor">
         <input id="advisorInput" placeholder="Ask a stylist… e.g., color care after balayage" />
-        <button class="btn-send" title="Ask" aria-label="Ask" onclick="advisorAsk()">Go</button>
+        <button class="btn-send" id="advisorGo" title="Ask" aria-label="Ask">Go</button>
       </div>
     </div>
 
     <!-- Bottom nav -->
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a class="active" href="/index.html">Home</a>
-      <a href="#" onclick="openBooking();return false;">Book</a>
+      <a href="#" id="navBook">Book</a>
       <a href="/chat.html">Shop</a>
       <a href="/account.html">Account</a>
     </nav>
@@ -142,7 +140,7 @@
       <div class="modal-bd">
         <div class="field">
           <div class="label">Service</div>
-          <select id="svcSelect" onchange="loadStylesForService(this.value)">
+          <select id="svcSelect" aria-label="Service type">
             <option value="Haircut">Haircut</option>
             <option value="Color">Color</option>
             <option value="Blowout">Blowout</option>
@@ -170,108 +168,131 @@
         </div>
       </div>
       <div class="modal-ft">
-        <button class="btn-secondary" onclick="closeBooking()">Cancel</button>
-        <button class="btn-primary" onclick="submitBooking()">Continue</button>
+        <button class="btn-secondary" id="cancelBooking">Cancel</button>
+        <button class="btn-primary" id="submitBooking">Continue</button>
       </div>
     </div>
   </div>
 
-  <script>
-    const API_BASE = ''; // same-origin
+<script>
+(function(){
+  const API_BASE = ''; // same-origin
 
-    async function advisorAsk() {
-      const input = document.getElementById('advisorInput');
-      const q = (input?.value || '').trim();
-      if (!q) { alert('Please enter a question.'); return; }
-
-      try {
-        const r = await fetch(`${API_BASE}/api/chat`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ message: q })
-        });
-        const ct = r.headers.get('content-type') || '';
-        const text = await r.text();
-        if (!r.ok || !ct.includes('application/json')) {
-          alert('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.');
-          return;
-        }
-        const data = JSON.parse(text);
-        alert(data?.response || 'No response.');
-      } catch (e) {
-        console.error(e);
-        alert('Connection issue. Try again shortly.');
-      }
-    }
-
-    document.getElementById('services').addEventListener('click', (e) => {
-      const card = e.target.closest('.card'); if (!card) return;
-      const svc = card.getAttribute('data-svc');
-      if (svc === 'Retail') { window.location.href = '/chat.html'; return; }
-      openBooking(svc);
-    });
-
-    function openBooking(preset) {
-      const modal = document.getElementById('bookingModal'); modal.style.display = 'flex';
-      if (preset) document.getElementById('svcSelect').value = preset;
-      const dt = new Date(Date.now() + 2 * 60 * 60 * 1000);
-      document.getElementById('dateInput').value = dt.toISOString().slice(0,10);
-      document.getElementById('timeInput').value = dt.toTimeString().slice(0,5);
-      loadStylesForService(document.getElementById('svcSelect').value);
-    }
-    function closeBooking(){ document.getElementById('bookingModal').style.display = 'none'; }
-
-    const STYLE_MAP = {
-      Haircut: [ ['Classic Bob', 55], ['Layered Cut', 60], ['Precision Pixie', 65], ['Blow-Dry + Shape', 50], ['Cut + Deep Treatment', 75], ['Kids Cut', 35] ],
-      Color:   [ ['Single Process', 95], ['Partial Highlights', 120], ['Full Highlights', 165], ['Balayage', 185], ['Gloss / Toner', 45], ['Root Touch-Up', 85] ],
-      Blowout: [ ['Smooth Finish', 40], ['Volume Blowout', 45], ['Beach Waves', 50], ['Event Style (Updo)', 85], ['Keratin Express', 160] ],
-      Nails:   [ ['Classic Manicure', 30], ['Gel Manicure', 45], ['Acrylic Fill', 40], ['Spa Pedicure', 55], ['Nail Art Add-On', 15] ],
-      Skin:    [ ['Signature Facial', 95], ['Hydrafacial', 155], ['Chemical Peel', 135], ['LED Therapy', 35], ['Microdermabrasion', 120] ],
-      Extensions: [ ['Consult (Tape-In)', 0], ['Consult (Keratin-Tip)', 0], ['Maintenance Move-Up', 140], ['Removal', 95] ],
-      Mens:    [ ['Clipper Cut', 35], ['Scissor Cut', 45], ['Beard Trim', 20], ['Gray Blend', 40], ['Hot Towel Shave', 30] ]
-    };
-
-    function loadStylesForService(svc) {
-      const list = document.getElementById('styleList'); list.innerHTML='';
-      (STYLE_MAP[svc]||[]).forEach(([name, price], i) => {
-        const id = `style_${i}`;
-        const row = document.createElement('div'); row.className = 'style-row';
-        row.innerHTML = `
-          <label for="${id}"><input type="radio" name="style" id="${id}" value="${name}" ${i===0?'checked':''}/> ${name}</label>
-          <span class="price">${price>0?('$'+price):'Consult'}</span>`;
-        list.appendChild(row);
+  // --- Advisor (quick) ---
+  const ask = async (q) => {
+    try {
+      const r = await fetch(API_BASE + '/api/chat', {
+        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
+        body: JSON.stringify({ message:q })
       });
+      const ct = (r.headers.get('content-type')||'').toLowerCase();
+      const text = await r.text();
+      if (!r.ok || !ct.includes('application/json')) {
+        alert('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.');
+        return;
+      }
+      const data = JSON.parse(text);
+      if (data.followUp && data.followUp.question){
+        alert((data.response? (data.response + '\n\n') : '') + 'Next: ' + data.followUp.question + '  → Open Shop to answer.');
+      } else {
+        alert(data.response || 'No response.');
+      }
+    } catch(e){
+      console.error(e);
+      alert('Connection issue. Try again shortly.');
     }
+  };
+  document.getElementById('advisorGo').addEventListener('click', ()=>{
+    const v = (document.getElementById('advisorInput').value||'').trim();
+    if (v){ ask(v); }
+  });
+  document.getElementById('advisorInput').addEventListener('keydown', (e)=>{
+    if (e.key==='Enter'){ const v = e.target.value.trim(); if (v){ ask(v); } }
+  });
 
-    async function submitBooking() {
-      const service = document.getElementById('svcSelect').value;
-      const styleEl = document.querySelector('input[name="style"]:checked');
-      const style = styleEl ? styleEl.value : '';
-      const pair = (STYLE_MAP[service]||[]).find(([n]) => n===style);
-      const price = pair ? pair[1] : 0;
-      const date = document.getElementById('dateInput').value;
-      const time = document.getElementById('timeInput').value;
-      const notes = document.getElementById('notesInput').value;
-      if (!date || !time) { alert('Please select a date and time.'); return; }
+  // --- Services click → open booking or retail ---
+  document.getElementById('services').addEventListener('click', (e)=>{
+    const card = e.target.closest('.card'); if (!card) return;
+    const svc = card.getAttribute('data-svc');
+    if (svc === 'Retail'){ window.location.href = '/catalog.html'; return; }
+    openBooking(svc);
+  });
+  document.getElementById('bookBtn').addEventListener('click', ()=> openBooking());
+  document.getElementById('navBook').addEventListener('click', (e)=>{ e.preventDefault(); openBooking(); });
 
-      try {
-        const r = await fetch(`/api/bookings/create`, {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ service, style, price, datetimeISO: new Date(`${date}T${time}:00`).toISOString(), notes })
-        });
-        const ct = r.headers.get('content-type') || '';
-        const text = await r.text();
-        if (!r.ok || !ct.includes('application/json')) {
-          alert('Booking service unavailable. Your details are saved locally. We will confirm shortly.');
-          return;
-        }
-        const data = JSON.parse(text);
-        if (!data.success) { alert('Could not create booking.'); return; }
-        const when = new Date(`${date}T${time}:00`).toLocaleString();
-        alert(`Booking created.\n\nRef: ${data.bookingId}\n${service} — ${style || 'Consult'} (${price>0?('$'+price):'Consult'})\nWhen: ${when}`);
-        closeBooking();
-      } catch (e) { console.error(e); alert('Unable to create booking right now.'); }
+  // --- Booking modal ---
+  const STYLE_MAP = {
+    Haircut: [ ['Classic Bob', 55], ['Layered Cut', 60], ['Precision Pixie', 65], ['Blow-Dry + Shape', 50], ['Cut + Deep Treatment', 75], ['Kids Cut', 35] ],
+    Color:   [ ['Single Process', 95], ['Partial Highlights', 120], ['Full Highlights', 165], ['Balayage', 185], ['Gloss / Toner', 45], ['Root Touch-Up', 85] ],
+    Blowout: [ ['Smooth Finish', 40], ['Volume Blowout', 45], ['Beach Waves', 50], ['Event Style (Updo)', 85], ['Keratin Express', 160] ],
+    Nails:   [ ['Classic Manicure', 30], ['Gel Manicure', 45], ['Acrylic Fill', 40], ['Spa Pedicure', 55], ['Nail Art Add-On', 15] ],
+    Skin:    [ ['Signature Facial', 95], ['Hydrafacial', 155], ['Chemical Peel', 135], ['LED Therapy', 35], ['Microdermabrasion', 120] ],
+    Extensions: [ ['Consult (Tape-In)', 0], ['Consult (Keratin-Tip)', 0], ['Maintenance Move-Up', 140], ['Removal', 95] ],
+    Mens:    [ ['Clipper Cut', 35], ['Scissor Cut', 45], ['Beard Trim', 20], ['Gray Blend', 40], ['Hot Towel Shave', 30] ]
+  };
+  const fmt = (c) => (c>0? ('$'+c) : 'Consult');
+
+  function loadStylesForService(svc){
+    const list = document.getElementById('styleList'); list.innerHTML='';
+    (STYLE_MAP[svc]||[]).forEach(([name, price], i)=>{
+      const id = 'style_'+i;
+      const row = document.createElement('div'); row.className='style-row';
+      row.innerHTML = '<label for="'+id+'"><input type="radio" name="style" id="'+id+'" value="'+name+'" '+(i===0?'checked':'')+'> '+name+'</label>' +
+                      '<span class="price">'+fmt(price)+'</span>';
+      list.appendChild(row);
+    });
+  }
+  function openBooking(preset){
+    const modal = document.getElementById('bookingModal');
+    modal.style.display='flex';
+    const svcSel = document.getElementById('svcSelect');
+    if (preset) svcSel.value = preset;
+    const dt = new Date(Date.now() + 2*60*60*1000);
+    document.getElementById('dateInput').value = dt.toISOString().slice(0,10);
+    document.getElementById('timeInput').value = dt.toTimeString().slice(0,5);
+    loadStylesForService(svcSel.value);
+  }
+  function closeBooking(){ document.getElementById('bookingModal').style.display='none'; }
+  document.getElementById('cancelBooking').addEventListener('click', closeBooking);
+  document.getElementById('svcSelect').addEventListener('change', (e)=> loadStylesForService(e.target.value));
+
+  async function submitBooking(){
+    const service = document.getElementById('svcSelect').value;
+    const styleEl = document.querySelector('input[name="style"]:checked');
+    const style = styleEl ? styleEl.value : '';
+    const pair = (STYLE_MAP[service]||[]).find(([n]) => n===style);
+    const price = pair ? pair[1] : 0;
+    const date = document.getElementById('dateInput').value;
+    const time = document.getElementById('timeInput').value;
+    const notes = document.getElementById('notesInput').value;
+    if (!date || !time){ alert('Please select a date and time.'); return; }
+
+    try{
+      const r = await fetch(API_BASE + '/api/bookings/create', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ service, style, price, datetimeISO: new Date(date+'T'+time+':00').toISOString(), notes })
+      });
+      const ct = (r.headers.get('content-type')||'').toLowerCase();
+      const text = await r.text();
+      if (!r.ok || !ct.includes('application/json')){
+        alert('Booking service unavailable. Your details are saved locally. We will confirm shortly.');
+        return;
+      }
+      const data = JSON.parse(text);
+      if (!data.success){ alert('Could not create booking.'); return; }
+      const when = new Date(date+'T'+time+':00').toLocaleString();
+      alert('Booking created.\n\nRef: '+data.bookingId+'\n'+service+' — '+(style || 'Consult')+' ('+(price>0?('$'+price):'Consult')+')\nWhen: '+when);
+      closeBooking();
+    } catch(e){
+      console.error(e);
+      alert('Unable to create booking right now.');
     }
-  </script>
+  }
+  document.getElementById('submitBooking').addEventListener('click', submitBooking);
+
+  // If URL has #book, open modal on load
+  if (location.hash.replace('#','').toLowerCase()==='book'){ openBooking(); }
+})();
+</script>
 </body>
 </html>
