@@ -6,7 +6,6 @@
 <title>Luminous • Chat</title>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <style>
-
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
@@ -40,7 +39,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .drawer .name{font-size:12px;font-weight:700}
 .drawer .qty{font-size:12px;color:#555}
 .drawer .total{margin-top:8px;font-weight:800}
-
 .main{padding:12px}
 .thread{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;max-height:220px;overflow:auto}
 .msg{font-size:12px;line-height:1.35;margin:6px 0}
@@ -188,27 +186,62 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   }
 
   function normalize(p){
-    return { id:p.id||p.sku||p._id||String(Math.random()).slice(2),
-      name:p.name||p.title||'Unnamed',
-      brand:p.brand||p.maker||'',
-      category:p.category||p.type||'',
-      price:cents(p.price),
-      image:p.image||p.image_url||p.photo||''
+    const priceRaw = p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0;
+    const idRaw = p.id ?? p.sku ?? p._id ?? p.code ?? p.upc ?? null;
+    return { id: String(idRaw || (p.name||'').slice(0,24)+'|'+Math.random().toString(36).slice(2,7)),
+      name: p.name || p.title || 'Unnamed',
+      brand: p.brand || p.maker || p.vendor || '',
+      category: p.category || p.type || p.family || '',
+      price: priceRaw,
+      image: p.image || p.image_url || p.photo || p.img || ''
     };
   }
 
   async function loadProducts(){
-    try{
-      const r=await fetch(API_BASE+'/api/products',{cache:'no-store'});
-      const j=await r.json();
-      const items = Array.isArray(j.items) ? j.items : (Array.isArray(j)?j:[]);
-      all = items.map(normalize);
-      filtered = all.slice();
-      renderChunk(true);
-    }catch(e){
-      console.error('loadProducts', e);
-      all=[]; filtered=[]; renderChunk(true);
+    let items = [];
+    const endpoints = [
+      API_BASE + '/api/products?limit=1000',
+      API_BASE + '/api/products?limit=500',
+      API_BASE + '/api/products'
+    ];
+    for (const url of endpoints) {
+      try {
+        const r = await fetch(url, {cache: 'no-store'});
+        if (!r.ok) continue;
+        const j = await r.json();
+        const candidates = [j.items, j.data, j.results, j.products, j.productList, j];
+        for (const c of candidates) {
+          if (Array.isArray(c) && c.length) { items = c; break; }
+          if (c && typeof c === 'object' && !Array.isArray(c)) {
+            const vals = Object.values(c);
+            if (vals.length && typeof vals[0] === 'object') { items = vals; break; }
+          }
+        }
+        if (items.length) break;
+      } catch(e){ /* try next endpoint */ }
     }
+    // Optional naive paging if server supports page/pageSize
+    if (items.length <= 50) {
+      let page=1; const pageSize=200; const collected=[]; let more=true;
+      while(more && page<=10){
+        try{
+          const r=await fetch(API_BASE + '/api/products?page='+page+'&pageSize='+pageSize, {cache:'no-store'});
+          const j=await r.json();
+          const arr = Array.isArray(j.items) ? j.items : (Array.isArray(j)?j:[]);
+          if (!arr.length){ more=false; break; }
+          collected.push(...arr);
+          if (arr.length < pageSize) more=false;
+          page++;
+        }catch(e){ more=false; }
+      }
+      if (collected.length > items.length) items = collected;
+    }
+    all = items.map(normalize);
+    // de-dup (id+name)
+    const seen=new Set();
+    all = all.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
+    filtered = all.slice();
+    renderChunk(true);
   }
 
   // Ask flow with follow-up support
