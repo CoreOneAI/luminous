@@ -1,14 +1,13 @@
-// server.js (Render-hardened)
+// server.js — data-path hardened for Render
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
-
-// --- Basics
 app.disable('x-powered-by');
 app.use(express.json({ limit: '1mb' }));
 
-// --- CSP: permissive but safe for your stack
+// ---- Security headers (permissive but safe for current stack)
 app.use((req, res, next) => {
   res.setHeader('Content-Security-Policy', [
     "default-src 'self'",
@@ -28,62 +27,93 @@ app.use((req, res, next) => {
   next();
 });
 
-// --- Static (must exist in repo; case-sensitive in prod)
-const PUBLIC_DIR = path.join(__dirname, 'public');
+// ---- Static dirs (case-sensitive in Linux)
+const STATIC_DIR = process.env.STATIC_DIR || 'public';
+const PUBLIC_DIR = path.join(__dirname, STATIC_DIR);
+
+// Serve /public (index/chat/catalog, images, etc.)
 app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
 
-// --- Health
+// Also map explicit subpaths in case your assets are at different roots
+// (e.g., repo has /data or /images outside /public).
+app.use('/data', express.static(path.join(__dirname, 'data')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+// ---- Health
 app.get('/healthz', (req, res) => res.json({ ok: true }));
 
-// --- Whoami for quick inspection in prod
-app.get('/__whoami', (req, res) => {
-  const routes = [];
-  app._router.stack.forEach(mw => {
-    if (mw.route && mw.route.path) {
-      const methods = Object.keys(mw.route.methods).map(m => m.toUpperCase()).join(',');
-      routes.push(`${methods} ${mw.route.path}`);
-    } else if (mw.name === 'router' && mw.handle.stack) {
-      mw.handle.stack.forEach(h => {
-        if (h.route) {
-          const methods = Object.keys(h.route.methods).map(m => m.toUpperCase()).join(',');
-          routes.push(`${methods} ${h.route.path}`);
-        }
-      });
+// ---- Debug: inspect which files exist in container
+app.get('/__files', (req, res) => {
+  const candidates = [
+    path.join(PUBLIC_DIR, 'data', 'products.json'),
+    path.join(__dirname, 'data', 'products.json'),
+    path.join(PUBLIC_DIR, 'products.json'),
+    path.join(__dirname, 'products.json')
+  ];
+  const exists = candidates.map(p => ({ path: p, exists: fs.existsSync(p) }));
+  const listing = [];
+  for (const dir of [PUBLIC_DIR, path.join(PUBLIC_DIR,'data'), path.join(__dirname,'data')]) {
+    try {
+      const files = fs.readdirSync(dir).slice(0, 200);
+      listing.push({ dir, ok: true, files });
+    } catch (e) {
+      listing.push({ dir, ok: false, error: String(e) });
     }
+  }
+  res.json({
+    cwd: process.cwd(),
+    STATIC_DIR, PUBLIC_DIR,
+    candidates: exists,
+    listing
   });
-  res.json({ running: 'server.js', routes });
 });
 
-// --- Data helpers
-const fs = require('fs');
-function loadJSON(file) {
+// ---- Helper to find JSON in multiple common locations
+function findFirstExisting() {
+  const candidates = [
+    path.join(PUBLIC_DIR, 'data', 'products.json'),
+    path.join(__dirname, 'data', 'products.json'),
+    path.join(PUBLIC_DIR, 'products.json'),
+    path.join(__dirname, 'products.json')
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return p;
+  }
+  return null;
+}
+
+function loadJSONSafe(p) {
   try {
-    const p = path.join(PUBLIC_DIR, file);
-    if (!fs.existsSync(p)) return null;
     return JSON.parse(fs.readFileSync(p, 'utf8'));
-  } catch {
+  } catch (e) {
     return null;
   }
 }
 
-// --- API: products (live first, fallback to static)
+// ---- API: products (live from disk; 0-copy transform)
 app.get('/api/products', (req, res) => {
   const limit = Math.max(0, Math.min(5000, Number(req.query.limit) || 150));
-  // source of truth: public/data/products.json
-  const j = loadJSON('data/products.json') || loadJSON('products.json') || { items: [] };
-  const items = (j.items || j.data || j.results || j.products || (Array.isArray(j) ? j : [])).slice(0, limit);
-  res.json({ success: true, source: 'disk:public/data/products.json', count: items.length, items });
+  const file = findFirstExisting();
+  let items = [];
+  let source = 'none';
+
+  if (file) {
+    const j = loadJSONSafe(file) || {};
+    const arr = j.items || j.data || j.results || j.products || (Array.isArray(j) ? j : []);
+    items = Array.isArray(arr) ? arr.slice(0, limit) : [];
+    source = file;
+  }
+
+  res.json({ success: true, source, count: items.length, items });
 });
 
-// --- API: chat (uses follow-up + fallback text; plug real LLM later)
+// ---- API: chat (simple follow-up + fallback; plug real LLM later)
 app.post('/api/chat', (req, res) => {
   const { message } = req.body || {};
   if (!message || typeof message !== 'string') {
     return res.status(400).json({ success: false, error: 'message required' });
   }
-
   const q = message.toLowerCase();
-  // very light intent to keep UX responsive
   const needsFollowUp =
     /(acne|sensitive|irritation|allergy|retinol|aha|bha|peel|toner|serum|hair color|toning|purple|blue)/.test(q);
 
@@ -92,14 +122,10 @@ app.post('/api/chat', (req, res) => {
       success: true,
       provider: 'followup',
       response: 'I have a quick question to tailor this for you.',
-      followUp: {
-        key: 'skinType',
-        question: 'Which best describes your skin? (oily / combination / dry / sensitive)'
-      }
+      followUp: { key: 'skinType', question: 'Which best describes your skin? (oily / combination / dry / sensitive)' }
     });
   }
 
-  // crisp, safe fallback
   return res.json({
     success: true,
     provider: 'fallback',
@@ -109,18 +135,18 @@ app.post('/api/chat', (req, res) => {
       '• Rationale: maximize shine/hydration.',
       '• Retail: color-safe shampoo, bond mask, thermal protectant.',
       '• Tip: finish with heat guard.'
-    ].join('\n')
+    ].join('\\n')
   });
 });
 
-// --- SPA-friendly: serve index.html for non-API routes
-app.get(/^\/(?!api\/).+/, (req, res) => {
+// ---- SPA-friendly: serve index.html for non-API routes
+app.get(/^\\/(?!api\\/).+/, (req, res) => {
   res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
 });
 
-// --- Start (Render requires 0.0.0.0 and process.env.PORT)
+// ---- Start (Render needs 0.0.0.0 & process.env.PORT)
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = '0.0.0.0';
 app.listen(PORT, HOST, () => {
-  console.log(`Luminous listening on ${HOST}:${PORT}`);
+  console.log(`Luminous listening on ${HOST}:${PORT} (static dir: ${PUBLIC_DIR})`);
 });
