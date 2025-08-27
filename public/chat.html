@@ -73,7 +73,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 
   <div class="composer">
     <div class="box">
-      <input id="ask" placeholder="e.g., best for acne • purple shampoo for brassy highlights">
+      <input id="ask" placeholder="e.g., red shampoo • anti-frizz serum • sensitive scalp">
       <button class="btn-send" id="askBtn">Go</button>
     </div>
   </div>
@@ -94,21 +94,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   const BATCH=50;
   let all=[]; let filtered=[]; let cursor=0;
   let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
-  let lastQuestion=''; let pendingFollow=null;
+  let lastAssistant='';
 
-  const FALLBACKS = {
-    antiaging:'/images/zen-stone-serum.jpg',
-    hydration:'/images/spa-salts.jpg',
-    colorcare:'/images/studio-beige.jpg',
-    nails:'/images/wooden-tray.jpg',
-    hair:'/images/hero-almonds.jpg',
-    kbeauty:'/images/zen-stone-serum.jpg',
-    mens:'/images/mens-kit-1.jpg',
-    'default':'/images/studio-beige.jpg'
-  };
+  const FALLBACKS = { antiaging:'/images/zen-stone-serum.jpg', hydration:'/images/spa-salts.jpg', colorcare:'/images/studio-beige.jpg', nails:'/images/wooden-tray.jpg', hair:'/images/hero-almonds.jpg', kbeauty:'/images/zen-stone-serum.jpg', mens:'/images/mens-kit-1.jpg', 'default':'/images/studio-beige.jpg' };
 
   const $ = (s)=>document.querySelector(s);
-  const thread=$('#thread'), grid=$('#grid'), note=$('#note'), moreBtn=document.getElementById('moreBtn');
+  const thread=$('#thread'), grid=$('#grid'), note=$('#note');
 
   function cents(v){
     if(v===null||v===undefined) return 0;
@@ -129,7 +120,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   }
 
   function addMsg(text,me=false){
+    if(!me && text && text===lastAssistant) return; // avoid duplicate guidance
     const div=document.createElement('div'); div.className='msg'+(me?' me':''); div.textContent=text; thread.appendChild(div); thread.scrollTop=thread.scrollHeight;
+    if(!me) lastAssistant = text;
   }
 
   function updateCartBadge(){
@@ -152,15 +145,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     });
     document.getElementById('cartTotal').textContent = fmt(total);
   }
+  document.getElementById('cartBtn').addEventListener('click', ()=>{
+    const d=document.getElementById('drawer'); d.classList.contains('open') ? d.classList.remove('open') : (d.classList.add('open'), renderCart());
+  });
   function addToCart(p){
     const priceC=cents(p.price);
     const found=cart.find(x=>x.id===p.id);
     if(found) found.qty += 1; else cart.push({id:p.id,name:p.name,price:priceC,image:p.image||imgFor(p),category:p.category,qty:1});
     localStorage.setItem('luminous_cart', JSON.stringify(cart)); updateCartBadge();
   }
-  document.getElementById('cartBtn').addEventListener('click', ()=>{
-    const d=document.getElementById('drawer'); d.classList.contains('open') ? d.classList.remove('open') : (d.classList.add('open'), renderCart());
-  });
 
   function card(p){
     const d=document.createElement('div'); d.className='card';
@@ -168,38 +161,108 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     d.innerHTML = '<img src="'+src+'" alt="" onerror="this.onerror=null;this.src=\''+FALLBACKS['default']+'\'"/>'
       + '<div class="meta"><div class="name">'+(p.name||'')+'</div><div class="brandx">'+(p.brand||p.category||'')+'</div>'
       + '<div class="row"><div class="price">'+fmt(p.price)+'</div><button class="btn" data-id="'+p.id+'">Add</button></div></div>';
-    d.addEventListener('click', (e)=>{
-      const b=e.target.closest('.btn'); if(!b) return;
-      const item = filtered.find(x=>x.id===b.getAttribute('data-id'));
-      if(item) addToCart(item);
-    });
+    d.addEventListener('click', (e)=>{ const b=e.target.closest('.btn'); if(!b) return; addToCart(p); });
     return d;
   }
 
-  function renderChunk(reset=false){
-    if(reset){ grid.innerHTML=''; cursor=0; }
-    const next=filtered.slice(cursor, cursor+BATCH);
-    next.forEach(p=>grid.appendChild(card(p)));
-    cursor += next.length;
-    document.getElementById('moreBtn').style.display = cursor < filtered.length ? 'block' : 'none';
-    note.textContent = filtered.length ? (filtered.length+' products • showing '+cursor) : 'No matching products yet — try a different term.';
+  // ---------- Query understanding & ranking ----------
+  function tok(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9+]+/g,' ').split(/\s+/).filter(Boolean); }
+
+  function deriveTags(p){
+    const t = new Set(tok(p.name + ' ' + (p.category||'') + ' ' + (p.brand||'')));
+    const has = (w)=>t.has(w);
+    const tags=[];
+    if(has('shampoo')||has('cleanser')||has('wash')) tags.push('shampoo');
+    if(has('conditioner')||has('condition')) tags.push('conditioner');
+    if(has('mask')||has('masque')||has('treatment')) tags.push('mask');
+    if(has('serum')||has('ampoule')||has('essence')) tags.push('serum');
+    if(has('oil')||has('elixir')) tags.push('oil');
+    if(has('spray')||has('mist')) tags.push('spray');
+    if(has('purple')||has('violet')||has('toning')||has('anti-brass')||has('brass')) tags.push('purple');
+    if(has('blue')) tags.push('blue');
+    if(has('red')||has('copper')||has('rose')||has('ruby')) tags.push('red');
+    if(has('color-safe')||(has('color')&&has('safe'))) tags.push('color-safe');
+    if(has('color')&&has('deposit')) tags.push('color-deposit');
+    if((p.category||'').toLowerCase().includes('hair') || tags.includes('shampoo') || tags.includes('conditioner') || tags.includes('spray')) tags.push('hair');
+    if((p.category||'').toLowerCase().includes('skin') || tags.includes('serum')) tags.push('skin');
+    if((p.category||'').toLowerCase().includes('nail')) tags.push('nail');
+    return Array.from(new Set(tags));
+  }
+
+  function parseQuery(q){
+    const tokens = tok(q);
+    const wantTypes = tokens.filter(t => ['shampoo','conditioner','mask','serum','oil','spray'].includes(t));
+    const wantColors = tokens.filter(t => ['red','purple','blue','violet','copper','rose','ruby','toning'].includes(t))
+      .map(c => c==='violet'?'purple':c==='toning'?'purple':c);
+    const wantDomain = tokens.filter(t => ['hair','skin','nail','nails'].includes(t))
+      .map(d => d==='nails'?'nail':d);
+    return { tokens, wantTypes, wantColors, wantDomain };
+  }
+
+  function scoreProduct(p, ctx){
+    let s=0;
+    const name=(p.name||'').toLowerCase();
+    const cat=(p.category||'').toLowerCase();
+    const brand=(p.brand||'').toLowerCase();
+    const hay = name+' '+cat+' '+brand+' '+(p.tags||[]).join(' ');
+    if(ctx.wantTypes.length && !ctx.wantTypes.some(t => (p.tags||[]).includes(t) || hay.includes(t))) return -1e9;
+    if(ctx.wantDomain.length && !ctx.wantDomain.some(d => (p.tags||[]).includes(d) || hay.includes(d))) return -1e9;
+    if(ctx.wantColors.length){
+      if(ctx.wantColors.some(c => (p.tags||[]).includes(c) || hay.includes(c))) s += 30;
+      else s -= 10;
+    }
+    ctx.tokens.forEach(t=>{
+      if(name.includes(t)) s += 10;
+      if(cat.includes(t)) s += 6;
+      if(brand.includes(t)) s += 4;
+      if((p.tags||[]).includes(t)) s += 8;
+    });
+    ctx.wantTypes.forEach(t => { if((p.tags||[]).includes(t)) s += 20; });
+    const hairHints = ['shampoo','conditioner','mask','spray','oil'];
+    if(hairHints.some(h=>ctx.tokens.includes(h)) && (p.tags||[]).includes('hair')) s+=5;
+    return s;
+  }
+
+  function rankProducts(query){
+    const ctx = parseQuery(query);
+    let candidates = all.slice();
+    if(ctx.wantTypes.length){
+      candidates = candidates.filter(p => ctx.wantTypes.some(t => (p.tags||[]).includes(t) || (p.name||'').toLowerCase().includes(t) || (p.category||'').toLowerCase().includes(t)));
+    }
+    candidates.forEach(p => p._score = scoreProduct(p, ctx));
+    candidates.sort((a,b)=> b._score - a._score);
+    let top = candidates.filter(p => p._score>-1e9);
+    if(top.length < 20 && ctx.wantTypes.length){
+      top = all.filter(p => ctx.wantTypes.some(t=> (p.tags||[]).includes(t) || (p.name||'').toLowerCase().includes(t))).slice(0,200);
+    }
+    const seenBrand=new Map(); const diversified=[];
+    for(const p of top){
+      const b=(p.brand||'').toLowerCase();
+      const count = seenBrand.get(b)||0;
+      if(count<5){ diversified.push(p); seenBrand.set(b, count+1); }
+      if(diversified.length>=500) break;
+    }
+    return diversified;
   }
 
   function normalize(p){
     const priceRaw = p.price_cents ?? p.priceCents ?? p.price_usd ?? p.priceUsd ?? p.priceUSD ?? p.price ?? 0;
     const idRaw = p.id ?? p.sku ?? p._id ?? p.code ?? p.upc ?? null;
-    return { id: String(idRaw || (p.name||'').slice(0,24)+'|'+Math.random().toString(36).slice(2,7)),
+    const obj = { id: String(idRaw || (p.name||'').slice(0,24)+'|'+Math.random().toString(36).slice(2,7)),
       name: p.name || p.title || 'Unnamed',
       brand: p.brand || p.maker || p.vendor || '',
       category: p.category || p.type || p.family || '',
       price: priceRaw,
       image: p.image || p.image_url || p.photo || p.img || ''
     };
+    obj.tags = deriveTags(obj);
+    return obj;
   }
 
   async function loadProducts(){
     let items = [];
     const endpoints = [
+      API_BASE + '/api/products?limit=2000',
       API_BASE + '/api/products?limit=1000',
       API_BASE + '/api/products?limit=500',
       API_BASE + '/api/products'
@@ -220,62 +283,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
         if (items.length) break;
       } catch(e){ /* try next endpoint */ }
     }
-    // Optional naive paging if server supports page/pageSize
-    if (items.length <= 50) {
-      let page=1; const pageSize=200; const collected=[]; let more=true;
-      while(more && page<=10){
+    if(items.length < 100){
+      const fallbacks = ['/data/products.json','/products.json'];
+      for(const path of fallbacks){
         try{
-          const r=await fetch(API_BASE + '/api/products?page='+page+'&pageSize='+pageSize, {cache:'no-store'});
+          const r=await fetch(path,{cache:'no-store'});
+          if(!r.ok) continue;
           const j=await r.json();
-          const arr = Array.isArray(j.items) ? j.items : (Array.isArray(j)?j:[]);
-          if (!arr.length){ more=false; break; }
-          collected.push(...arr);
-          if (arr.length < pageSize) more=false;
-          page++;
-        }catch(e){ more=false; }
+          const arr = Array.isArray(j.items)?j.items:(Array.isArray(j)?j:[]);
+          if(arr.length){ items = items.concat(arr); }
+        }catch(e){}
       }
-      if (collected.length > items.length) items = collected;
     }
-    all = items.map(normalize);
-    // de-dup (id+name)
+    let normalized = items.map(normalize);
     const seen=new Set();
-    all = all.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
+    all = normalized.filter(p => { const k=(p.id||'')+'|'+(p.name||''); if(seen.has(k)) return false; seen.add(k); return true; });
     filtered = all.slice();
     renderChunk(true);
   }
 
-  // Ask flow with follow-up support
-  async function ask(q, ctx={}){
+  async function ask(q){
     if(!q) return;
-    lastQuestion=q;
-    addMsg(q, true);
+    const div=document.createElement('div'); div.className='msg me'; div.textContent=q; thread.appendChild(div); thread.scrollTop=thread.scrollHeight;
     try{
-      const r = await fetch(API_BASE+'/api/chat', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify(Object.assign({message:q}, ctx))});
+      const r = await fetch(API_BASE+'/api/chat', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({message:q})});
       const data = await r.json();
       if(data.response) addMsg(data.response);
-      if(data.followUp && data.followUp.question){ showFollow(data.followUp); }
-      const words = (q+' '+(data.response||'')).toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>3);
-      filtered = all.filter(p => words.some(w => (p.name||'').toLowerCase().includes(w) || (p.category||'').toLowerCase().includes(w) || (p.brand||'').toLowerCase().includes(w)));
-      if(filtered.length<1) filtered = all.slice(0, Math.max(50, all.length));
-      renderChunk(true);
-    }catch(e){
-      console.error('chat error', e);
-      addMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.');
-    }
-  }
-
-  function showFollow(fu){
-    pendingFollow = fu;
-    const box = document.getElementById('follow'); box.style.display='flex'; box.innerHTML='';
-    const input=document.createElement('input'); input.placeholder = fu.question;
-    const btn=document.createElement('button'); btn.className='btn'; btn.textContent='Reply';
-    btn.onclick = ()=>{ const answer=(input.value||'').trim(); if(!answer) return; box.style.display='none'; ask(lastQuestion+'\n'+fu.key+': '+answer); };
-    box.append(input, btn);
+    }catch(e){ /* fine: still rank locally */ }
+    filtered = rankProducts(q);
+    renderChunk(true);
   }
 
   document.getElementById('askBtn').addEventListener('click', ()=>{ const v=document.getElementById('ask').value.trim(); if(v) ask(v); });
   document.getElementById('ask').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ const v=e.target.value.trim(); if(v) ask(v); }});
-  document.getElementById('moreBtn').addEventListener('click', ()=>renderChunk(false));
+  document.getElementById('moreBtn').addEventListener('click', ()=>{ const ev=new Event('renderMore'); renderChunk(false); });
 
   updateCartBadge();
   loadProducts();
