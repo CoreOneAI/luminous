@@ -2,247 +2,331 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Luminous • Shop & Chat</title>
-  <meta name="theme-color" content="#B8860B" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Luminous • Shop & Advisor</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;
-      --grad:linear-gradient(135deg,#B8860B,#DAA520)
-    }
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:#333}
-    .container{max-width:414px;margin:0 auto;background:var(--pearl);min-height:100vh;position:relative}
-    .header{background:var(--charcoal);padding:14px 16px 10px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:10}
-    .toprow{display:flex;align-items:center;gap:10px;justify-content:space-between}
-    .logo{font-size:20px;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .back{color:#fff;text-decoration:none;font-weight:700}
-    .chips{display:flex;gap:8px;overflow:auto;margin-top:10px;padding-bottom:4px}
-    .chip{flex:0 0 auto;border:1px solid #4A4A4A;color:#eee;padding:8px 10px;border-radius:999px;font-size:12px;cursor:pointer;white-space:nowrap}
-    .chip.active,.chip:hover{border-color:#e7d3a6;color:#fff;background:rgba(184,134,11,.18)}
-    .chat{padding:14px;min-height:calc(100vh - 210px);padding-bottom:100px}
-    .msg{margin-bottom:12px;padding:10px 14px;border-radius:16px;max-width:80%}
-    .user{margin-left:auto;background:var(--grad);color:#fff}
-    .bot{margin-right:auto;background:#eaeaea;color:#111}
-    .typing{display:inline-flex;gap:4px;align-items:center}
-    .dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:bounce 1.3s infinite ease-in-out}
-    .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
-    @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
-    .card{background:#fff;border-radius:12px;padding:10px;border:1px solid #eee;box-shadow:0 2px 6px rgba(0,0,0,.06)}
-    .img{height:110px;border-radius:8px;background:#f6f6f6;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-bottom:8px}
-    .img img{width:100%;height:100%;object-fit:cover}
-    .name{font-size:12px;font-weight:800;color:#111;line-height:1.2}
-    .brand{font-size:11px;color:#666;margin-top:2px}
-    .price{font-size:12px;color:var(--gold);font-weight:800;margin-top:6px}
-    .actions{margin-top:8px;display:flex;gap:6px}
-    .btn{flex:1;border:none;border-radius:10px;padding:8px 10px;font-size:12px;font-weight:800;color:#fff;background:var(--grad);cursor:pointer}
-    .load{display:block;margin:14px auto 0;border:none;border-radius:18px;padding:10px 14px;font-weight:800;color:#fff;background:var(--grad);cursor:pointer}
-    .inputbar{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #ddd;padding:12px}
-    .row{display:flex;gap:10px}
-    input[type="text"]{flex:1;border:1px solid #ddd;border-radius:22px;padding:12px 14px;font-size:14px;outline:none}
-    .send{border:none;border-radius:22px;width:48px;height:48px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
-    @media (max-width:380px){.grid{grid-template-columns:1fr}}
+    :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
+    .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--pearl); padding-bottom:120px}
+    .header{background:#fff;padding:16px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between}
+    .brand{font-weight:800;font-size:18px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .badge{position:relative;display:inline-block;cursor:pointer}
+    .badge .dot{position:absolute;right:-6px;top:-6px;background:var(--gold);color:#fff;border-radius:10px;font-size:10px;padding:1px 5px}
+    .searchbar{padding:10px 12px;display:flex;gap:8px;background:#fff;border-bottom:1px solid #eee}
+    .searchbar input{flex:1;border:1px solid #e6e6e6;border-radius:20px;padding:10px 12px;font-size:13px}
+    .pills{display:flex;gap:8px;overflow-x:auto;padding:8px 12px;background:#fff;border-bottom:1px solid #eee}
+    .pill{padding:8px 12px;border:1px solid #e6e6e6;border-radius:16px;background:#fafafa;font-size:12px;cursor:pointer;white-space:nowrap}
+    .main{padding:12px}
+    .thread{display:flex;flex-direction:column;gap:10px}
+    .msg{background:#fff;border:1px solid #eee;border-radius:12px;padding:10px 12px;box-shadow:0 2px 8px rgba(0,0,0,.04);max-width:85%}
+    .me{align-self:flex-end;background:#f9f6ee;border-color:#f0e6c8}
+    .bot{align-self:flex-start}
+    .cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:8px}
+    .card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+    .card img{width:100%;height:120px;object-fit:cover;background:#f6f6f6}
+    .card .meta{padding:10px 10px 12px}
+    .card .name{font-size:12px;font-weight:700;line-height:1.2;min-height:28px}
+    .card .brand{font-size:11px;color:#777;margin-top:4px}
+    .card .row{margin-top:8px;display:flex;justify-content:space-between;align-items:center}
+    .price{font-size:12px;font-weight:800;color:var(--gold)}
+    .btn{border:none;border-radius:18px;padding:8px 10px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer;font-size:12px}
+    .composer{position:fixed;left:50%;transform:translateX(-50%);bottom:60px;max-width:414px;width:100%;padding:10px 12px}
+    .composer .box{display:flex;gap:8px;align-items:center;background:#fff;border-radius:26px;padding:8px 10px;border:1.5px solid #e7d3a6;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    .composer input{flex:1;border:none;outline:none;font-size:13px;background:transparent;color:var(--ink)}
+    .composer input::placeholder{color:#9A9A9A}
+    .composer .btn-send{border:none;width:40px;height:36px;border-radius:18px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+    .followup{position:fixed;left:50%;transform:translateX(-50%);bottom:122px;max-width:414px;width:100%;padding:0 12px}
+    .fu-box{background:#fff;border:1px solid #eee;border-radius:12px;padding:10px}
+    .fu-q{font-size:12px;font-weight:700}
+    .fu-opts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .fu-opt{padding:6px 10px;border:1px solid #e6e6e6;border-radius:16px;background:#fafafa;font-size:12px;cursor:pointer}
+    .fu-actions{margin-top:8px;display:flex;gap:8px}
+    .fu-actions .btn{flex:1}
+    .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
+    .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
+    .nav a.active{color:var(--gold);font-weight:700}
+    /* Cart drawer */
+    .drawer{position:fixed;right:-320px;top:0;width:320px;height:100vh;background:#fff;border-left:1px solid #eee;box-shadow:-4px 0 16px rgba(0,0,0,.12);transition:right .25s ease;z-index:20;padding:12px}
+    .drawer.open{right:0}
+    .drawer h3{font-size:14px}
+    .drawer .item{display:flex;gap:8px;align-items:center;border-bottom:1px solid #f0f0f0;padding:8px 0}
+    .drawer .name{font-size:12px;font-weight:700}
+    .drawer .qty{font-size:12px;color:#555}
+    .drawer .total{margin-top:8px;font-weight:800}
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="toprow">
-        <a class="back" href="/index.html">← Home</a>
-        <div class="logo">Luminous • Shop</div>
-        <div style="width:40px"></div>
+  <div class="page">
+    <header class="header">
+      <div class="brand">Luminous • Shop</div>
+      <div class="badge" id="cartBtn" title="Cart">
+        🛍️<span class="dot" id="cartCount" style="display:none">0</span>
       </div>
-      <div class="chips" id="chips">
-        <div class="chip">Acne Care</div>
-        <div class="chip">Anti-Aging</div>
-        <div class="chip">K-Beauty</div>
-        <div class="chip">Hair Repair</div>
-        <div class="chip">Nails & Tools</div>
+    </header>
+
+    <div class="searchbar">
+      <input id="searchInput" placeholder="Search products (e.g., bond repair, acne, heat protectant)" />
+      <button class="btn" id="searchBtn">Search</button>
+    </div>
+
+    <div class="pills">
+      <div class="pill" data-cat="Hair">Hair</div>
+      <div class="pill" data-cat="Skin">Skin</div>
+      <div class="pill" data-cat="Nails">Nails</div>
+      <div class="pill" data-cat="Tools">Tools</div>
+      <div class="pill" data-cat="Color Care">Color Care</div>
+    </div>
+
+    <main class="main">
+      <div id="thread" class="thread" aria-live="polite"></div>
+    </main>
+
+    <!-- follow-up box -->
+    <div class="followup" id="followup" style="display:none">
+      <div class="fu-box">
+        <div class="fu-q" id="fuQ"></div>
+        <div class="fu-opts" id="fuOpts"></div>
+        <div class="fu-actions">
+          <button class="btn" id="fuSubmit">Submit</button>
+          <button class="btn" id="fuSkip" style="background:#999">Skip</button>
+        </div>
       </div>
     </div>
 
-    <div class="chat" id="chat"></div>
-
-    <div class="inputbar">
-      <div class="row">
-        <input id="q" placeholder="Search or ask… e.g., sulfate-free shampoo for color" />
-        <button class="send" id="go" title="Ask">→</button>
+    <!-- composer -->
+    <div class="composer">
+      <div class="box">
+        <input id="askInput" placeholder="Ask the advisor… e.g., best for acne / brassy color / heat damage" />
+        <button class="btn-send" id="askBtn">Go</button>
       </div>
     </div>
+
+    <!-- bottom nav -->
+    <nav class="nav" role="navigation" aria-label="Bottom Navigation">
+      <a href="/index.html">Home</a>
+      <a href="#" onclick="location.href='/index.html#book';return false;">Book</a>
+      <a class="active" href="/chat.html">Shop</a>
+      <a href="/account.html">Account</a>
+    </nav>
   </div>
 
-  <script>
-    // same-origin API
-    const CHAT_URL = '/api/chat';
-    const PRODUCTS_URL = '/api/products';
+  <!-- cart drawer -->
+  <div class="drawer" id="drawer">
+    <h3>Your Cart</h3>
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal">$0.00</div>
+  </div>
 
-    const elChat = document.getElementById('chat');
-    const elQ = document.getElementById('q');
-    const elGo = document.getElementById('go');
-    const elChips = document.getElementById('chips');
+<script>
+  const API_BASE = '';
+  let advisorContext = { answers: {} };
+  let originalQuestion = '';
+  let followUp = null;
+  let catalog = [];
+  let cart = JSON.parse(localStorage.getItem('luminous_cart')||'[]');
 
-    let allProducts = [];
-    let filtered = [];
-    let shown = 0;
-    const PAGE = 8;
+  // ---------- Utils ----------
+  const $ = sel => document.querySelector(sel);
+  const fmt = c => '$' + (Number(c||0)/100).toFixed(2);
+  const imgFor = (p) => {
+    if (p.image) return p.image;
+    const q = encodeURIComponent((p.category || p.name || 'beauty'));
+    // Unsplash (allowed by CSP): simple category-based image
+    return `https://images.unsplash.com/photo-1556228453-efd1f4a7fae9?auto=format&fit=crop&w=800&q=60`;
+  };
 
-    // Load catalog once
-    async function loadCatalog() {
-      try {
-        const r = await fetch(PRODUCTS_URL, { headers: { 'Accept':'application/json' } });
-        const data = await r.json();
-        // Support either {items:[]} or legacy {products:[]}
-        allProducts = (data && (data.items || data.products)) || [];
-      } catch(e) {
-        console.error('catalog error', e);
-        allProducts = [];
-      }
-    }
+  function saveCart(){ localStorage.setItem('luminous_cart', JSON.stringify(cart)); updateCartBadge(); }
+  function updateCartBadge(){
+    const cnt = cart.reduce((n,it)=>n+it.qty,0);
+    const el = $('#cartCount'); if (!el) return;
+    if (cnt>0){ el.style.display='inline-block'; el.textContent = cnt; } else { el.style.display='none'; }
+  }
+  function openDrawer(){ $('#drawer').classList.add('open'); renderCart(); }
+  function closeDrawer(){ $('#drawer').classList.remove('open'); }
+  $('#cartBtn').addEventListener('click', ()=>{ const d=$('#drawer'); d.classList.contains('open')?closeDrawer():openDrawer(); });
 
-    // Price formatter (supports cents number or "$" string)
-    function fmtPrice(v) {
-      if (v == null) return '';
-      if (typeof v === 'string') return v;
-      if (typeof v === 'number') {
-        // treat as cents if >= 100 or integer
-        const cents = Number.isInteger(v) ? v : Math.round(v * 100);
-        return '$' + (cents/100).toFixed(2);
-      }
-      return String(v);
-    }
-
-    function cardHTML(p) {
-      const img = p.image || p.image_url || '';
-      const price = fmtPrice(p.price);
-      const brand = p.brand || p.manufacturer || '';
-      const country = p.country || p.origin || p.category || '';
-      return `
-        <div class="card">
-          <div class="img">${img ? `<img src="${img}" alt="${p.name||'Product'}" onerror="this.parentElement.innerHTML='✨'">` : '✨'}</div>
-          <div class="name">${p.name || 'Premium Product'}</div>
-          <div class="brand">${brand}</div>
-          <div class="price">${price}</div>
-          <div style="font-size:11px;color:#777;margin-top:2px">${country}</div>
-          <div class="actions">
-            <button class="btn" onclick='addToCart(${JSON.stringify({
-              id: p.id || p.sku || ('id_'+Math.random().toString(36).slice(2)),
-              name: p.name, price: p.price, image: img
-            }).replace(/"/g, '&quot;')})'>Add to Cart</button>
-          </div>
+  function renderCart(){
+    const wrap = $('#cartItems'); wrap.innerHTML='';
+    let total = 0;
+    cart.forEach((it,idx)=>{
+      total += (it.price||0)*it.qty;
+      const row = document.createElement('div');
+      row.className = 'item';
+      row.innerHTML = \`
+        <img src="\${imgFor(it)}" alt="" style="width:48px;height:48px;object-fit:cover;border-radius:8px;border:1px solid #eee"/>
+        <div style="flex:1">
+          <div class="name">\${it.name}</div>
+          <div class="qty">Qty: \${it.qty}</div>
         </div>
-      `;
-    }
-
-    function addToCart(item) {
-      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-      cart.push({ ...item, qty:1, addedAt:Date.now() });
-      localStorage.setItem('cart', JSON.stringify(cart));
-      alert(`Added: ${item.name}`);
-    }
-
-    function renderBatch() {
-      const grid = document.createElement('div');
-      grid.className = 'grid';
-      const slice = filtered.slice(shown, shown + PAGE);
-      shown += slice.length;
-      slice.forEach(p => grid.insertAdjacentHTML('beforeend', cardHTML(p)));
-      elChat.appendChild(grid);
-
-      if (shown < filtered.length) {
-        const more = document.createElement('button');
-        more.className = 'load';
-        more.textContent = `Load more (${filtered.length - shown})`;
-        more.onclick = () => { more.remove(); renderBatch(); };
-        elChat.appendChild(more);
-      }
-      elChat.scrollTop = elChat.scrollHeight;
-    }
-
-    function showTyping() {
-      const d = document.createElement('div');
-      d.className = 'msg bot';
-      d.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
-      elChat.appendChild(d);
-      elChat.scrollTop = elChat.scrollHeight;
-      return d;
-    }
-
-    function addMsg(text, who='bot') {
-      const d = document.createElement('div');
-      d.className = 'msg ' + (who==='user' ? 'user' : 'bot');
-      d.textContent = text;
-      elChat.appendChild(d);
-      elChat.scrollTop = elChat.scrollHeight;
-      return d;
-    }
-
-    function filterProducts(query) {
-      if (!query) return allProducts.slice(0, 0);
-      const q = query.toLowerCase();
-      return allProducts.filter(p => {
-        const hay = [
-          p.name, p.brand, p.manufacturer, p.category, p.country, p.tags && p.tags.join(' ')
-        ].filter(Boolean).join(' ').toLowerCase();
-        return hay.includes(q);
-      });
-    }
-
-    async function handleQuery(q) {
-      if (!q) return;
-      addMsg(q, 'user');
-      const typing = showTyping();
-
-      // Advisor
-      let advisorText = '';
-      try {
-        const r = await fetch(CHAT_URL, {
-          method: 'POST',
-          headers: { 'Content-Type':'application/json', 'Accept':'application/json' },
-          body: JSON.stringify({ message: q })
-        });
-        const t = await r.text();
-        advisorText = (r.ok && (t && JSON.parse(t).response)) || '';
-      } catch(e) { advisorText = ''; }
-
-      typing.remove();
-      if (advisorText) addMsg(advisorText, 'bot');
-
-      // Catalog
-      shown = 0;
-      filtered = filterProducts(q);
-      if (!filtered.length) {
-        addMsg('No matching products yet — try a different term (e.g., brand, concern, or category).', 'bot');
-        return;
-      }
-      renderBatch();
-    }
-
-    // chip search
-    elChips.addEventListener('click', (e) => {
-      const chip = e.target.closest('.chip');
-      if (!chip) return;
-      [...elChips.children].forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      elQ.value = chip.textContent.trim();
-      handleQuery(elQ.value);
+        <div class="price">\${fmt(it.price)}</div>
+      \`;
+      wrap.appendChild(row);
     });
+    $('#cartTotal').textContent = fmt(total);
+  }
 
-    // go button / enter
-    elGo.addEventListener('click', () => handleQuery(elQ.value.trim()));
-    elQ.addEventListener('keydown', e => { if (e.key === 'Enter') handleQuery(elQ.value.trim()); });
+  function addToCart(p){
+    const ex = cart.find(x => x.id===p.id);
+    if (ex) ex.qty += 1; else cart.push({ id:p.id, name:p.name, price:p.price, image:p.image, category:p.category, qty:1 });
+    saveCart();
+  }
 
-    // Support ?query= in URL
-    const params = new URLSearchParams(location.search);
-    const initialQ = params.get('query') || '';
-    elQ.value = initialQ;
+  function appendMsg(text, me=false){
+    const m = document.createElement('div');
+    m.className = 'msg ' + (me?'me':'bot');
+    m.textContent = text;
+    $('#thread').appendChild(m);
+    m.scrollIntoView({ behavior:'smooth', block:'end' });
+  }
 
-    // Init
-    (async function init(){
-      await loadCatalog();
-      if (initialQ) handleQuery(initialQ);
-    })();
-  </script>
+  function renderCards(items){
+    if (!items || !items.length) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'cards';
+    items.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = \`
+        <img src="\${imgFor(p)}" alt=""/>
+        <div class="meta">
+          <div class="name">\${p.name}</div>
+          <div class="brand">\${p.brand || p.category || ''}</div>
+          <div class="row">
+            <div class="price">\${fmt(p.price)}</div>
+            <button class="btn">Add</button>
+          </div>
+        </div>\`;
+      card.querySelector('.btn').addEventListener('click', ()=> addToCart(p));
+      wrap.appendChild(card);
+    });
+    $('#thread').appendChild(wrap);
+    wrap.scrollIntoView({ behavior:'smooth', block:'end' });
+  }
+
+  async function loadCatalog(){
+    try{
+      const r = await fetch(\`\${API_BASE}/api/products\`);
+      const j = await r.json();
+      catalog = j.items || [];
+    }catch(e){ catalog = []; }
+  }
+
+  function matchProductsFromText(text){
+    const t = (text||'').toLowerCase();
+    // naive match: product name terms contained in text OR category keyword present
+    const byName = catalog.filter(p => (p.name||'').toLowerCase().split(/[^a-z0-9]+/).some(w => w.length>3 && t.includes(w)));
+    if (byName.length) return dedupe(byName).slice(0,6);
+    // fallback by common keywords
+    if (/acne|breakout|pimple/.test(t)) return catalog.filter(p => /serum|clean|mask|toner/i.test(p.name)).slice(0,6);
+    if (/color|highlight|balayage|brassy/.test(t)) return catalog.filter(p => /(shampoo|mask|protect|gloss)/i.test(p.name)).slice(0,6);
+    if (/dry|dehydrated/.test(t)) return catalog.filter(p => /(serum|cream|hydrate|mask)/i.test(p.name)).slice(0,6);
+    return catalog.slice(0,6);
+  }
+  function dedupe(arr){
+    const seen = new Set(); const out=[];
+    arr.forEach(p => { if(!seen.has(p.id)){ seen.add(p.id); out.push(p); } });
+    return out;
+  }
+
+  async function askAdvisor(q){
+    originalQuestion = q;
+    appendMsg(q, true);
+    const r = await fetch(\`\${API_BASE}/api/chat\`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','Accept':'application/json' },
+      body: JSON.stringify({ message: q, context: advisorContext })
+    });
+    const data = await r.json();
+
+    if (data.followUp) {
+      followUp = data.followUp;
+      showFollowUp(followUp);
+      if (data.response) appendMsg(data.response, false);
+      return;
+    }
+
+    const text = data.response || 'No response.';
+    appendMsg(text, false);
+    const picks = matchProductsFromText(text + ' ' + q);
+    renderCards(picks);
+  }
+
+  function showFollowUp(fu){
+    $('#followup').style.display='block';
+    $('#fuQ').textContent = fu.question || 'A quick question:';
+    const opts = $('#fuOpts'); opts.innerHTML='';
+    (fu.options || []).forEach(o => {
+      const b = document.createElement('div');
+      b.className='fu-opt';
+      b.textContent = o;
+      b.addEventListener('click', ()=>{
+        document.querySelectorAll('.fu-opt').forEach(x=>x.style.background='#fafafa');
+        b.style.background='#f2e7c5';
+        $('#fuSubmit').dataset.value = o;
+      });
+      opts.appendChild(b);
+    });
+  }
+
+  async function submitFollowUp(){
+    const fu = followUp; if (!fu) return hideFollowUp();
+    const chosen = $('#fuSubmit').dataset.value || prompt('Enter your answer');
+    if (!chosen) return;
+    advisorContext.answers[fu.key] = chosen;
+    hideFollowUp();
+    // re-ask with enriched context
+    const r = await fetch(\`\${API_BASE}/api/chat\`, {
+      method: 'POST',
+      headers: { 'Content-Type':'application/json','Accept':'application/json' },
+      body: JSON.stringify({ message: originalQuestion, context: advisorContext })
+    });
+    const data = await r.json();
+    if (data.followUp) { followUp = data.followUp; showFollowUp(followUp); }
+    const text = data.response || 'No response.';
+    appendMsg(text, false);
+    const picks = matchProductsFromText(text + ' ' + originalQuestion);
+    renderCards(picks);
+  }
+  function hideFollowUp(){ $('#followup').style.display='none'; $('#fuSubmit').dataset.value=''; followUp=null; }
+
+  // ---------- Events ----------
+  $('#askBtn').addEventListener('click', ()=>{
+    const v = $('#askInput').value.trim();
+    if (v){ askAdvisor(v); $('#askInput').value=''; }
+  });
+  $('#askInput').addEventListener('keydown', (e)=>{
+    if (e.key === 'Enter'){ const v = e.target.value.trim(); if (v){ askAdvisor(v); e.target.value=''; } }
+  });
+  $('#fuSubmit').addEventListener('click', submitFollowUp);
+  $('#fuSkip').addEventListener('click', hideFollowUp);
+
+  $('#searchBtn').addEventListener('click', ()=>{
+    const q = $('#searchInput').value.trim().toLowerCase();
+    if (!q) return;
+    const found = catalog.filter(p => (p.name||'').toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q));
+    appendMsg('Showing results for "'+q+'":', false);
+    renderCards(found.slice(0,8));
+  });
+
+  document.querySelectorAll('.pill').forEach(p => p.addEventListener('click', ()=>{
+    const cat = p.dataset.cat;
+    const found = catalog.filter(it => (it.category||'').toLowerCase().includes(cat.toLowerCase()));
+    appendMsg(cat + ' — best picks:', false);
+    renderCards(found.slice(0,8));
+  }));
+
+  // ---------- Init ----------
+  (async function init(){
+    updateCartBadge();
+    await loadCatalog();
+    // greet
+    appendMsg('Welcome. Ask anything or pick a category. I’ll show tailored services and retail with clear prices.', false);
+    // show a few best-sellers
+    renderCards(catalog.slice(0,4));
+  })();
+</script>
 </body>
 </html>
