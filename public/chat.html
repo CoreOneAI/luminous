@@ -80,8 +80,28 @@ const PAGE=50;
 let allItems=[];
 let current=[];
 let offset=0;
+let apiSource='';
 
-function fmtPrice(c){return Number.isFinite(c)?'$'+(c/100).toFixed(2):'$—';}
+function toCents(v){
+  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
+  if (typeof v === 'string'){
+    const m=v.match(/([\d.,]+)/); if(m){ const n=Number(m[1].replace(/,/g,'')); if(Number.isFinite(n)) return n<1000?Math.round(n*100):Math.round(n); }
+  }
+  return 0;
+}
+function normalize(list){
+  return list.map((x,i)=>{
+    const id = x.id || x.sku || `sku-${String(i+1).padStart(4,'0')}`;
+    const name = x.name || x.title || 'Unnamed';
+    const brand = x.brand || x.maker || 'Salon';
+    const category = x.category || x.type || '—';
+    const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
+    const image = x.image || x.img || x.photo || '/images/wooden-tray.jpg';
+    return { id, name, brand, category, price, image };
+  });
+}
+
+function fmtPrice(c){return '$'+(Number(c||0)/100).toFixed(2);}
 function pushMsg(text,who='bot'){
   const div=document.createElement('div');
   div.className='msg '+(who==='you'?'you':'bot');
@@ -129,7 +149,6 @@ async function ask(){
   }catch(e){
     pushMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.','bot');
   }
-  // Always rank & show products (no 4-item cap)
   current = rank(allItems,q);
   resetGrid();
   renderNext(); // first 50
@@ -149,23 +168,36 @@ document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{
   const q=p.getAttribute('data-q'); document.getElementById('q').value=q; ask();
 }));
 
-async function boot(){
+async function fetchBest(){
+  let api = { items: [], source: '' };
   try{
-    const r=await fetch(`${API_BASE}/api/products?limit=5000`);
-    const data=await r.json();
-    allItems = Array.isArray(data.items)?data.items:[];
-    document.getElementById('status').textContent = `API: ok ${allItems.length}`;
-  }catch(e){
-    try{
-      const r2=await fetch('/data/products.json');
-      const j=await r2.json();
-      const arr=j.items||j.data||j.results||j.products||(Array.isArray(j)?j:[]);
-      allItems = Array.isArray(arr)?arr:[];
-      document.getElementById('status').textContent = `File: ok ${allItems.length}`;
-    }catch(e2){
-      document.getElementById('status').textContent = 'No products available';
-    }
-  }
+    const r = await fetch(`${API_BASE}/api/products?limit=5000`);
+    const d = await r.json();
+    api.items = Array.isArray(d.items) ? d.items : [];
+    api.source = d.source || 'api';
+  }catch(e){ /* ignore */ }
+
+  let file = { items: [], source: '' };
+  try{
+    const r2 = await fetch('/data/products.json');
+    const j = await r2.json();
+    const arr = j.items || j.data || j.results || j.products || (Array.isArray(j)?j:[]);
+    file.items = Array.isArray(arr)?arr:[];
+    file.source = '/data/products.json';
+  }catch(e){ /* ignore */ }
+
+  // Prefer larger set
+  let chosen = api;
+  if (file.items.length > api.items.length) chosen = file;
+
+  return { items: normalize(chosen.items), source: chosen.source };
+}
+
+async function boot(){
+  const best = await fetchBest();
+  allItems = best.items;
+  apiSource = best.source;
+  document.getElementById('status').textContent = `Loaded: ${allItems.length} • Source: ${apiSource}`;
 }
 boot();
 </script>

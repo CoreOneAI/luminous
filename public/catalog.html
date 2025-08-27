@@ -86,14 +86,30 @@ let allItems = [];
 let filtered = [];
 let offset = 0;
 let activePills = new Set();
+let apiSource = '';
 
-function fmtPrice(cents){ if (!Number.isFinite(cents)) return '$—'; return '$'+(cents/100).toFixed(2); }
+function toCents(v){
+  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
+  if (typeof v === 'string'){
+    const m=v.match(/([\d.,]+)/); if(m){ const n=Number(m[1].replace(/,/g,'')); if(Number.isFinite(n)) return n<1000?Math.round(n*100):Math.round(n); }
+  }
+  return 0;
+}
+function normalize(list){
+  return list.map((x,i)=>{
+    const id = x.id || x.sku || `sku-${String(i+1).padStart(4,'0')}`;
+    const name = x.name || x.title || 'Unnamed';
+    const brand = x.brand || x.maker || 'Salon';
+    const category = x.category || x.type || '—';
+    const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
+    const image = x.image || x.img || x.photo || '/images/wooden-tray.jpg';
+    return { id, name, brand, category, price, image };
+  });
+}
+
+function fmtPrice(cents){ return '$'+(Number(cents||0)/100).toFixed(2); }
 function status(s){ document.getElementById('status').textContent = s; }
 
-function pillTokensFromCategory(cat=''){
-  // cat like "Hair / Shampoo" -> tokens: ["Hair","Shampoo"]
-  return String(cat).split(/[\/]/).map(s=>s.trim()).filter(Boolean);
-}
 function deriveTags(item){
   const t = [];
   const name = (item.name||'').toLowerCase();
@@ -114,7 +130,6 @@ function deriveTags(item){
 }
 
 function score(item, qTokens){
-  // small ranking: name hits > category hits; boost by facet matches
   const name = (item.name||'').toLowerCase();
   const cat = (item.category||'').toLowerCase();
   let s = 0;
@@ -122,10 +137,7 @@ function score(item, qTokens){
     if (name.includes(t)) s+=3;
     if (cat.includes(t)) s+=2;
   });
-  // facet/pill boosts
-  const tags = deriveTags(item);
-  activePills.forEach(p=>{ if(tags.includes(p)) s+=2; });
-  // ensure stable order when scores tie
+  activePills.forEach(p=>{ if(deriveTags(item).includes(p)) s+=2; });
   return s;
 }
 
@@ -156,7 +168,7 @@ function renderNext(){
   slice.forEach(renderCard);
   offset += slice.length;
   document.getElementById('moreBtn').style.display = (offset < filtered.length) ? 'block' : 'none';
-  status(`Showing ${Math.min(offset, filtered.length)} of ${filtered.length} • Source cache: ${allItems.length}`);
+  status(`Source: ${apiSource||'n/a'} • Showing ${Math.min(offset, filtered.length)} of ${filtered.length} • Cached: ${allItems.length}`);
 }
 
 function runSearch(){
@@ -165,12 +177,10 @@ function runSearch(){
   let out = base;
   if (q){
     const tokens = q.split(/[^a-z0-9]+/).filter(Boolean);
-    // Rank by score, but keep everything (no 4-item cap)
     out = base.map(x => ({ x, s: score(x, tokens) }))
               .sort((a,b)=>b.s-a.s)
               .map(o=>o.x);
   }
-  // Facets: filter AFTER scoring so pills constrain result set
   if (activePills.size){
     out = out.filter(it => {
       const tags = deriveTags(it);
@@ -201,25 +211,35 @@ function addToCart(it){
   }catch(e){ console.error(e); }
 }
 
-async function boot(){
+async function fetchBest(){
+  let api = { items: [], source: '' };
   try{
     const r = await fetch(`${API_BASE}/api/products?limit=5000`);
-    const data = await r.json();
-    allItems = Array.isArray(data.items) ? data.items : [];
-    status(`API: ok ${allItems.length}`);
-  }catch(e){
-    console.warn('API failed, attempting /data/products.json', e);
-    try{
-      const r2 = await fetch('/data/products.json');
-      const data2 = await r2.json();
-      const arr = data2.items || data2.data || data2.results || data2.products || (Array.isArray(data2)?data2:[]);
-      allItems = Array.isArray(arr)?arr:[];
-      status(`Fallback file: ok ${allItems.length}`);
-    }catch(e2){
-      status('No products available');
-      return;
-    }
-  }
+    const d = await r.json();
+    api.items = Array.isArray(d.items) ? d.items : [];
+    api.source = d.source || 'api';
+  }catch(e){ /* ignore */ }
+
+  let file = { items: [], source: '' };
+  try{
+    const r2 = await fetch('/data/products.json');
+    const j = await r2.json();
+    const arr = j.items || j.data || j.results || j.products || (Array.isArray(j)?j:[]);
+    file.items = Array.isArray(arr)?arr:[];
+    file.source = '/data/products.json';
+  }catch(e){ /* ignore */ }
+
+  // Prefer the larger set (fixes "only 4 items" when API points at stub)
+  let chosen = api;
+  if (file.items.length > api.items.length) chosen = file;
+
+  return { items: normalize(chosen.items), source: chosen.source };
+}
+
+async function boot(){
+  const best = await fetchBest();
+  allItems = best.items;
+  apiSource = best.source;
   filtered = [...allItems];
   renderNext(); // first 50
 }
