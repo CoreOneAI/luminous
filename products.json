@@ -1,0 +1,38 @@
+[
+  {
+    "id": "color-safe-shampoo",
+    "name": "Color-Safe Shampoo",
+    "category": "Hair",
+    "country": "USA",
+    "priceCents": 1800,
+    "image": "https://images.unsplash.com/photo-1582095133179-2988d1a4f5b0?q=80&w=800&auto=format&fit=crop",
+    "usage": "Massage into scalp, rinse thoroughly."
+  },
+  {
+    "id": "bond-repair-mask",
+    "name": "Bond Repair Mask",
+    "category": "Hair",
+    "country": "USA",
+    "priceCents": 2400,
+    "image": "https://images.unsplash.com/photo-1582095132990-7e83d90c1071?q=80&w=800&auto=format&fit=crop",
+    "usage": "Apply mid\u2011length to ends, leave 5\u201310 min."
+  },
+  {
+    "id": "thermal-protectant",
+    "name": "Thermal Protectant",
+    "category": "Hair",
+    "country": "USA",
+    "priceCents": 2000,
+    "image": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop",
+    "usage": "Mist on damp hair before heat styling."
+  },
+  {
+    "id": "vitamin-c-serum",
+    "name": "Vitamin C Serum",
+    "category": "Skin",
+    "country": "France",
+    "priceCents": 2900,
+    "image": "https://images.unsplash.com/photo-1556229010-aa3f7ff66b2c?q=80&w=800&auto=format&fit=crop",
+    "usage": "Use AM under SPF to brighten."
+  }
+]
