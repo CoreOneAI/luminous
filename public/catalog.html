@@ -1,96 +1,427 @@
-<!DOCTYPE html><html lang='en'><head>
-<meta charset='UTF-8'/><meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-<title>Catalog — Luminous</title>
-
-<style>
-*{box-sizing:border-box}body{margin:0;background:#111;color:#111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-.page{max-width:414px;margin:0 auto;background:#f7f7f7;min-height:100vh;padding-bottom:80px}
-.header{position:sticky;top:0;background:#222;color:#fff;padding:12px 14px;border-bottom:1px solid #333;z-index:5;text-align:center}
-.brand{font-weight:800;letter-spacing:.3px;font-size:16px}
-.main{padding:10px}
-.search{display:flex;gap:8px;margin:8px 0}
-input[type=search]{flex:1;border:1px solid #e6e6e6;background:#fff;border-radius:12px;padding:10px 12px;font-size:14px;outline:none}
-button{border:none;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
-.card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06)}
-.card .photo{width:100%;height:120px;object-fit:cover;display:block;background:#f3f3f3}
-.card .name{font-weight:800;font-size:13px;margin:8px 10px 2px 10px;color:#111}
-.card .sub{font-size:11px;color:#666;margin:0 10px 8px 10px}
-.card .row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px 10px 10px}
-.card .price{font-weight:800;color:#B8860B;font-size:13px}
-.card .add{background:#111;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800}
-.meta{font-size:11px;color:#666;margin-top:6px;text-align:center}
-.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #e0e0e0;height:50px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center}
-.nav a{text-decoration:none;color:#666;text-align:center;font-size:12px;padding-top:4px}
-.nav a.active{color:#B8860B;font-weight:800}
-@media (max-width:380px){.grid{grid-template-columns:1fr}}
-</style>
-
-</head><body><div class='page'>
-  <header class='header'><div class='brand'>Luminous • Catalog</div></header>
-  <main class='main'>
-    <div class='search'><input id='q' type='search' placeholder='Search products…'/><button id='go'>Search</button></div>
-    <div id='meta' class='meta'></div>
-    <div id='grid' class='grid'></div>
-    <div id='moreRow' class='meta' style='display:none;'><button id='moreBtn'>Show more</button></div>
-  </main>
-  <nav class='nav'><a href='/index.html'>Home</a><a class='active' href='/catalog.html'>Shop</a><a href='/chat.html'>Chat</a><a href='/account.html'>Account</a></nav>
-</div>
-
-<script>
-const API_BASE = ''; // same-origin
-function money(cents){ return (typeof cents==='number' && cents>=0) ? `$${(cents/100).toFixed(2)}` : '$—'; }
-function imgOrFallback(src){
-  if (!src) return 'placeholder.png';
-  try {
-    const u = new URL(src, location.href);
-    return u.pathname.startsWith('/images/') ? u.href : src;
-  } catch { return 'placeholder.png'; }
-}
-function productCard(p){
-  const sub = [p.brand||'—', p.category||'—'].filter(Boolean).join(' • ');
-  return `<article class="card">
-    <img class="photo" alt="${(p.name||'Product').replace(/"/g,'&quot;')}" src="${imgOrFallback(p.image)}" loading="lazy" onerror="this.src='placeholder.png'"/>
-    <div class="name">${p.name||'Product'}</div>
-    <div class="sub">${sub}</div>
-    <div class="row">
-      <div class="price">${money(p.price)}</div>
-      <button class="add">Add</button>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catalog - Luminous Salon</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #111;
+            color: #333;
+            line-height: 1.4;
+        }
+        
+        .container {
+            max-width: 414px;
+            margin: 0 auto;
+            background: #f8f8f8;
+            min-height: 100vh;
+            padding-bottom: 80px;
+        }
+        
+        .header {
+            background: #222;
+            color: white;
+            padding: 16px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header h1 {
+            font-size: 18px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+        
+        .main {
+            padding: 16px;
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            font-size: 14px;
+            outline: none;
+            background: white;
+        }
+        
+        .search-input:focus {
+            border-color: #B8860B;
+            box-shadow: 0 0 0 2px rgba(184, 134, 11, 0.1);
+        }
+        
+        .search-btn {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #B8860B, #DAA520);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .search-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .status {
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+            margin-bottom: 16px;
+            padding: 8px;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border: 1px solid #eee;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 12px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .product-image::after {
+            content: '📦';
+            font-size: 24px;
+        }
+        
+        .product-info {
+            padding: 12px;
+        }
+        
+        .product-name {
+            font-weight: 700;
+            font-size: 13px;
+            color: #222;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        
+        .product-meta {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .product-price {
+            font-weight: 700;
+            color: #B8860B;
+            font-size: 14px;
+        }
+        
+        .add-btn {
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .add-btn:hover {
+            background: #555;
+        }
+        
+        .load-more {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .load-more-btn {
+            background: linear-gradient(135deg, #B8860B, #DAA520);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .navigation {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 414px;
+            background: white;
+            border-top: 1px solid #ddd;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            height: 60px;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: #666;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .nav-item.active {
+            color: #B8860B;
+            font-weight: 700;
+        }
+        
+        .loading {
+            text-align: center;
+            color: #666;
+            padding: 20px;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 16px 0;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 380px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Luminous • Catalog</h1>
+        </header>
+        
+        <main class="main">
+            <div class="search-box">
+                <input type="search" class="search-input" id="searchInput" placeholder="Search products..." autocomplete="off">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+            
+            <div class="status" id="status">Loading products...</div>
+            
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+            
+            <div class="load-more" id="loadMoreSection" style="display: none;">
+                <button class="load-more-btn" id="loadMoreBtn">Show More Products</button>
+            </div>
+        </main>
+        
+        <nav class="navigation">
+            <a href="/index.html" class="nav-item">Home</a>
+            <a href="/catalog.html" class="nav-item active">Shop</a>
+            <a href="/chat.html" class="nav-item">Chat</a>
+            <a href="#" class="nav-item">Account</a>
+        </nav>
     </div>
-  </article>`;
-}
-async function fetchProducts(q, limit=24, offset=0){
-  const url = `${API_BASE}/api/products?` + new URLSearchParams({ q:q||'', limit:String(limit), offset:String(offset) });
-  const r = await fetch(url, { headers: { 'Accept':'application/json' } });
-  if (!r.ok) throw new Error('products http '+r.status);
-  const j = await r.json();
-  if (!j || !Array.isArray(j.items)) throw new Error('bad products payload');
-  return j;
-}
-</script>
 
-<script>
-let lastQ = ''; let offset = 0; let total = 0;
-
-async function search(reset){
-  if(reset){ document.getElementById('grid').innerHTML=''; offset=0; }
-  const q = document.getElementById('q').value.trim(); lastQ=q;
-  let data;
-  try { data = await fetchProducts(q, 24, offset); }
-  catch(e) { document.getElementById('meta').textContent='No products available.'; return; }
-  total = data.total||0;
-  document.getElementById('meta').textContent = `${data.items.length} products • showing ${offset + data.items.length} of ${total}`;
-  const frag = document.createElement('div');
-  data.items.forEach(p => { frag.insertAdjacentHTML('beforeend', productCard(p)); });
-  document.getElementById('grid').appendChild(frag);
-  offset += data.items.length;
-  document.getElementById('moreRow').style.display = (offset < total) ? 'block' : 'none';
-}
-
-document.getElementById('go').addEventListener('click', ()=>search(true));
-document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') search(true); });
-document.getElementById('moreBtn').addEventListener('click', ()=>search(false));
-
-search(true);
-</script>
-</body></html>
+    <script>
+        class ProductCatalog {
+            constructor() {
+                this.currentQuery = '';
+                this.currentOffset = 0;
+                this.totalProducts = 0;
+                this.isLoading = false;
+                
+                this.searchInput = document.getElementById('searchInput');
+                this.searchBtn = document.getElementById('searchBtn');
+                this.status = document.getElementById('status');
+                this.grid = document.getElementById('productsGrid');
+                this.loadMoreSection = document.getElementById('loadMoreSection');
+                this.loadMoreBtn = document.getElementById('loadMoreBtn');
+                
+                this.bindEvents();
+                this.loadProducts(true);
+            }
+            
+            bindEvents() {
+                this.searchBtn.addEventListener('click', () => this.search());
+                this.searchInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') this.search();
+                });
+                this.loadMoreBtn.addEventListener('click', () => this.loadMore());
+            }
+            
+            search() {
+                this.currentQuery = this.searchInput.value.trim();
+                this.loadProducts(true);
+            }
+            
+            loadMore() {
+                this.loadProducts(false);
+            }
+            
+            async loadProducts(reset = false) {
+                if (this.isLoading) return;
+                
+                this.isLoading = true;
+                
+                if (reset) {
+                    this.currentOffset = 0;
+                    this.grid.innerHTML = '';
+                }
+                
+                try {
+                    this.status.textContent = 'Loading products...';
+                    
+                    const params = new URLSearchParams({
+                        q: this.currentQuery,
+                        limit: '25',
+                        offset: this.currentOffset.toString()
+                    });
+                    
+                    const response = await fetch(`/api/products?${params}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+                    
+                    const data = await response.json();
+                    
+                    if (!data.success) {
+                        throw new Error(data.error || 'Failed to load products');
+                    }
+                    
+                    this.totalProducts = data.total;
+                    this.currentOffset += data.items.length;
+                    
+                    this.renderProducts(data.items);
+                    this.updateStatus(data);
+                    this.updateLoadMoreButton();
+                    
+                } catch (error) {
+                    console.error('Error loading products:', error);
+                    this.showError(error.message);
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+            
+            renderProducts(products) {
+                products.forEach(product => {
+                    const card = this.createProductCard(product);
+                    this.grid.appendChild(card);
+                });
+            }
+            
+            createProductCard(product) {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                
+                const price = this.formatPrice(product.price);
+                const meta = `${product.brand} • ${product.category}`;
+                
+                card.innerHTML = `
+                    <div class="product-image" data-name="${product.name}"></div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-meta">${meta}</div>
+                        <div class="product-footer">
+                            <div class="product-price">${price}</div>
+                            <button class="add-btn" data-id="${product.id}">Add</button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add click handler for add button
+                const addBtn = card.querySelector('.add-btn');
+                addBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    this.addToCart(product);
+                });
+                
+                return card;
+            }
+            
+            formatPrice(cents) {
+                if (typeof cents !== 'number' || cents <= 0) return '$—';
+                return '$' + (cents / 100).toFixed(2);
+            }
+            
+            updateStatus(data) {
+                const showing = this.currentOffset;
+                const total = data.total;
+                const query = this.currentQuery ? ` for "${this.currentQuery}"` : '';
+                
+                this.status.textContent = `Showing ${showing} of ${total} products${query}`;
+            }
+            
+            updateLoadMoreButton() {
+                const hasMore = this.currentOffset < this.totalProducts;
+                this.loadMoreSection.style.display = hasMore ? 'block' : 'none';
+            }
+            
+            showError(message) {
+                this.status.innerHTML = `<div class="error">Error: ${message}</div>`;
+            }
+            
+            addToCart(product) {
+                // Placeholder for cart functionality
+                alert(`Added "${product.name}" to cart!\n\nPrice: ${this.formatPrice(product.price)}`);
+            }
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new ProductCatalog();
+        });
+    </script>
+</body>
+</html>
