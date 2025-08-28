@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang='en'><head>
 <meta charset='UTF-8'/><meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-<title>Chat — Luminous</title>
+<title>Chat – Luminous</title>
 
 <style>
 *{box-sizing:border-box}body{margin:0;background:#111;color:#111;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
@@ -20,6 +20,8 @@ button{border:none;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff
 .card .price{font-weight:800;color:#B8860B;font-size:13px}
 .card .add{background:#111;color:#fff;border-radius:10px;padding:8px 10px;font-weight:800}
 .meta{font-size:11px;color:#666;margin-top:6px;text-align:center}
+.debug{font-size:10px;color:#999;background:#f0f0f0;padding:8px;margin:8px 0;border-radius:8px}
+.chat-response{background:#fff;border:1px solid #eee;border-radius:12px;padding:12px;margin:8px 0;font-size:13px;line-height:1.4}
 .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #e0e0e0;height:50px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center}
 .nav a{text-decoration:none;color:#666;text-align:center;font-size:12px;padding-top:4px}
 .nav a.active{color:#B8860B;font-weight:800}
@@ -30,7 +32,8 @@ button{border:none;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff
   <header class='header'><div class='brand'>Luminous • Chat</div></header>
   <main class='main'>
     <div class='search'><input id='q' type='search' placeholder='Ask or search… e.g., sensitive scalp shampoo'/><button id='go'>Go</button></div>
-    <div id='reply' class='meta'>Hi! Ask about routines, ingredients, or products. I’ll answer and show matching items below.</div>
+    <div id='reply' class='chat-response'>Hi! Ask about routines, ingredients, or products. I'll answer and show matching items below.</div>
+    <div id='debug' class='debug' style='display:none'></div>
     <div id='grid' class='grid'></div>
     <div id='moreRow' class='meta' style='display:none;'><button id='moreBtn'>Show more</button></div>
   </main>
@@ -39,7 +42,13 @@ button{border:none;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff
 
 <script>
 const API_BASE = ''; // same-origin
-function money(cents){ return (typeof cents==='number' && cents>=0) ? `$${(cents/100).toFixed(2)}` : '$—'; }
+
+// Fixed money function to handle cents properly
+function money(cents){ 
+  if (typeof cents !== 'number' || cents < 0) return '$—';
+  return '$' + (cents / 100).toFixed(2);
+}
+
 function imgOrFallback(src){
   if (!src) return 'placeholder.png';
   try {
@@ -47,6 +56,7 @@ function imgOrFallback(src){
     return u.pathname.startsWith('/images/') ? u.href : src;
   } catch { return 'placeholder.png'; }
 }
+
 function productCard(p){
   const sub = [p.brand||'—', p.category||'—'].filter(Boolean).join(' • ');
   return `<article class="card">
@@ -59,42 +69,68 @@ function productCard(p){
     </div>
   </article>`;
 }
-async function fetchProducts(q, limit=24, offset=0){
+
+async function fetchProducts(q, limit=25, offset=0){
   const url = `${API_BASE}/api/products?` + new URLSearchParams({ q:q||'', limit:String(limit), offset:String(offset) });
+  console.log('Fetching products:', url);
+  
   const r = await fetch(url, { headers: { 'Accept':'application/json' } });
   if (!r.ok) throw new Error('products http '+r.status);
+  
   const j = await r.json();
+  console.log('Products API Response:', j);
+  
   if (!j || !Array.isArray(j.items)) throw new Error('bad products payload');
   return j;
 }
-</script>
 
-<script>
 let lastQ = ''; let offset = 0; let total = 0;
 
 async function doAsk(){
   const q = document.getElementById('q').value.trim();
   if(!q) return;
   lastQ = q; offset = 0; total = 0;
+  
+  // Chat API call
   try{
     const r = await fetch('/api/chat', {method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({message:q})});
-    const j = await r.json(); document.getElementById('reply').textContent = j.response || '…';
-  }catch(e){ document.getElementById('reply').textContent = 'Advisor temporarily unavailable.'; }
+    const j = await r.json(); 
+    document.getElementById('reply').textContent = j.response || '…';
+    console.log('Chat API Response:', j);
+  }catch(e){ 
+    console.error('Chat error:', e);
+    document.getElementById('reply').textContent = 'Advisor temporarily unavailable.'; 
+  }
+  
   await loadMore(true);
 }
 
 async function loadMore(reset){
   if(reset){ document.getElementById('grid').innerHTML=''; offset=0; }
+  
   let data;
-  try { data = await fetchProducts(lastQ, 24, offset); }
-  catch(e){
-    document.getElementById('grid').innerHTML = '<div class="meta">No products available.</div>';
+  try { 
+    data = await fetchProducts(lastQ, 25, offset); // Request 25 products
+    
+    // Show debug info
+    document.getElementById('debug').textContent = `Debug: Source=${data.source}, Total=${data.total}, Offset=${offset}, Items=${data.items.length}`;
+    document.getElementById('debug').style.display = 'block';
+    
+  } catch(e){
+    console.error('Products fetch error:', e);
+    document.getElementById('grid').innerHTML = '<div class="meta">Error loading products: ' + e.message + '</div>';
     document.getElementById('moreRow').style.display='none';
+    document.getElementById('debug').textContent = 'Products Error: ' + e.message;
+    document.getElementById('debug').style.display = 'block';
     return;
   }
+  
   total = data.total||0;
   const frag = document.createElement('div');
-  data.items.forEach(p => { frag.insertAdjacentHTML('beforeend', productCard(p)); });
+  data.items.forEach(p => { 
+    console.log('Product:', p.name, 'Price:', p.price);
+    frag.insertAdjacentHTML('beforeend', productCard(p)); 
+  });
   document.getElementById('grid').appendChild(frag);
   offset += data.items.length;
   document.getElementById('moreRow').style.display = (offset < total) ? 'block' : 'none';
@@ -104,6 +140,8 @@ document.getElementById('go').addEventListener('click', doAsk);
 document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') doAsk(); });
 document.getElementById('moreBtn').addEventListener('click', ()=>loadMore(false));
 
-document.getElementById('q').value='shampoo'; doAsk();
+// Initial load with default query
+document.getElementById('q').value='shampoo'; 
+doAsk();
 </script>
 </body></html>
