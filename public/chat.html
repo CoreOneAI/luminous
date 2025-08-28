@@ -32,7 +32,7 @@
   .imgbx{width:100%;height:120px;background:#f6f6f6;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .imgbx img{width:100%;height:100%;object-fit:cover}
   .meta{padding:10px}
-  .brand{font-size:10px;color:#888;margin-bottom:2px}
+  .brandtxt{font-size:10px;color:#888;margin-bottom:2px}
   .name{font-size:12px;font-weight:800;color:#222;min-height:30px}
   .cat{font-size:11px;color:#777;margin-top:4px}
   .price{font-size:12px;font-weight:800;color:var(--gold);margin-top:6px}
@@ -45,6 +45,7 @@
   .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
   .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
   .nav a.active{color:var(--gold);font-weight:700}
+  .debug{display:none;font-size:10px;color:#666;margin:6px 2px}
 </style>
 </head>
 <body>
@@ -54,25 +55,23 @@
       <div class="sub">Ask • Discover • Add to Cart</div>
     </header>
 
-    <!-- quick topics -->
     <div class="chips">
       <div class="chip" data-q="shampoo">Shampoo</div>
       <div class="chip" data-q="conditioner">Conditioner</div>
-      <div class="chip" data-q="anti-frizz">Anti-Frizz</div>
+      <div class="chip" data-q="anti-frizz">Anti‑Frizz</div>
       <div class="chip" data-q="purple shampoo">Purple</div>
-      <div class="chip" data-q="sensitive scalp">Sensitive Scalp</div>
+      <div class="chip" data-q="sensitive scalp shampoo">Sensitive</div>
       <div class="chip" data-q="hydrating mask">Hydrating</div>
     </div>
 
     <main class="content" id="content">
-      <!-- seeded helper message -->
       <div class="bubble-wrap bot">
         <div class="bubble">
           Hi! Ask about routines, ingredients, or products. I’ll answer and show matching items below.
         </div>
       </div>
 
-      <!-- products header + grid -->
+      <div class="debug" id="dbg"></div>
       <div class="list-hd" id="listHd" style="display:none">
         <div class="h" id="countText"></div>
         <button class="loadmore" id="loadMoreBtn" style="display:none">Load more</button>
@@ -80,7 +79,6 @@
       <div class="grid" id="grid"></div>
     </main>
 
-    <!-- composer -->
     <div class="dock">
       <div class="composer">
         <input id="q" placeholder="e.g., red shampoo for color care"/>
@@ -88,7 +86,6 @@
       </div>
     </div>
 
-    <!-- bottom nav -->
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a href="/index.html">Home</a>
       <a href="#" onclick="window.location='/index.html#book';return false;">Book</a>
@@ -98,171 +95,154 @@
   </div>
 
 <script>
-  const API = ''; // same-origin
-  const grid = document.getElementById('grid');
-  const countText = document.getElementById('countText');
-  const listHd = document.getElementById('listHd');
-  const loadMoreBtn = document.getElementById('loadMoreBtn');
+const API = '';
+const grid = document.getElementById('grid');
+const listHd = document.getElementById('listHd');
+const countText = document.getElementById('countText');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const dbg = document.getElementById('dbg');
 
-  let lastQuery = '';
-  let offset = 0;
-  const LIMIT = 50;
-  let total = 0;
+let lastQuery = '';
+let offset = 0;
+const LIMIT = 50;
+let total = 0;
 
-  // ---- helpers
-  const $ = sel => document.querySelector(sel);
-  function centsToUSD(c){ const n = Number(c||0); return '$' + (n/100).toFixed(2); }
-  function fallbackImg(el){ el.onerror=null; el.src='/images/wooden-tray.png'; }
-  function addBubble(text, who='bot'){
-    const wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap ' + (who==='me' ? 'me' : 'bot');
-    const b = document.createElement('div');
-    b.className = 'bubble';
-    b.textContent = text;
-    wrap.appendChild(b);
-    document.getElementById('content').insertBefore(wrap, listHd);
-    wrap.scrollIntoView({behavior:'smooth',block:'end'});
-  }
-  function renderFollowUp(fu){
-    const wrap = document.createElement('div');
-    wrap.className = 'bubble-wrap bot';
-    const b = document.createElement('div'); b.className='bubble';
-    const q = document.createElement('div'); q.textContent = fu.question || 'A quick question:';
-    const row = document.createElement('div'); row.className='followup';
-    (fu.options || []).forEach(opt=>{
-      const btn = document.createElement('button'); btn.className='fu-btn'; btn.textContent = opt;
-      btn.onclick = ()=> {
-        addBubble(opt, 'me');
-        // refine query and search again
-        const refined = (lastQuery ? (lastQuery + ' ') : '') + (fu.key + ':' + opt);
-        searchProducts(refined, true);
-      };
-      row.appendChild(btn);
-    });
-    b.appendChild(q); b.appendChild(row); wrap.appendChild(b);
-    document.getElementById('content').insertBefore(wrap, listHd);
-  }
-
-  // ---- products rendering
-  function clearProducts(){ grid.innerHTML=''; offset=0; total=0; countText.textContent=''; listHd.style.display='none'; loadMoreBtn.style.display='none'; }
-  function cardHTML(it){
-    const brand = it.brand ? `<div class="brand">${it.brand}</div>` : '';
-    const cat = it.category ? `<div class="cat">${it.category}</div>` : '';
-    const price = typeof it.price === 'number' ? centsToUSD(it.price) : '$—';
-    const img = it.image && it.image.startsWith('http') ? '' : (it.image || '');
-    const src = img || '/images/wooden-tray.png';
-    return `
-      <article class="card">
-        <div class="imgbx"><img src="${src}" alt="${(it.name||'Product')}" onerror="this.onerror=null;this.src='/images/wooden-tray.png'"/></div>
-        <div class="meta">
-          ${brand}
-          <div class="name">${it.name || 'Unnamed'}</div>
-          ${cat}
-          <div class="price">${price}</div>
-          <button class="add" data-id="${it.id}">Add to Cart</button>
-        </div>
-      </article>`;
-  }
-  function wireAddButtons(){
-    grid.querySelectorAll('.add').forEach(btn=>{
-      btn.onclick = ()=>{
-        const id = btn.getAttribute('data-id');
-        const item = window.__lastItems?.find(x=>String(x.id)===String(id));
-        if (!item) return;
-        const cart = JSON.parse(localStorage.getItem('cart')||'[]');
-        cart.push({ id:item.id, name:item.name, price:item.price, qty:1 });
-        localStorage.setItem('cart', JSON.stringify(cart));
-        btn.textContent = 'Added';
-        setTimeout(()=>btn.textContent='Add to Cart', 1200);
-      };
-    });
-  }
-
-  // ---- search & load
-  async function searchProducts(q, fromFollowUp=false){
-    lastQuery = q;
-    if (!fromFollowUp){ addBubble(q, 'me'); }
-
-    // 1) talk to advisor (text)
-    try{
-      const r = await fetch(`${API}/api/chat`, {
-        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ message: q })
-      });
-      const t = await r.text();
-      let data = {};
-      try { data = JSON.parse(t); } catch{}
-      if (data?.response) addBubble(data.response, 'bot');
-      if (data?.followUp) renderFollowUp(data.followUp);
-    }catch(e){
-      addBubble('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.', 'bot');
-    }
-
-    // 2) fetch products (50 at a time)
-    clearProducts();
-    await loadMore(true);
-  }
-
-  async function loadMore(firstPage=false){
-    const params = new URLSearchParams({ q:lastQuery, offset:String(offset), limit:String(LIMIT) });
-    try{
-      const r = await fetch(`${API}/api/products?` + params.toString());
-      const data = await r.json();
-      total = data.total || 0;
-      const items = data.items || [];
-      window.__lastItems = (window.__lastItems || []).concat(items);
-
-      if (firstPage && total===0){
-        // one widen attempt: if user asked for “red shampoo”, fall back to just “shampoo”
-        const basic = (lastQuery||'').match(/\b(shampoo|conditioner|serum|spray|mask)\b/i);
-        if (basic){
-          const r2 = await fetch(`${API}/api/products?` + new URLSearchParams({ q: basic[1], offset:'0', limit:String(LIMIT) }));
-          const d2 = await r2.json();
-          total = d2.total || 0;
-          window.__lastItems = d2.items || [];
-          grid.innerHTML = (window.__lastItems||[]).map(cardHTML).join('');
-          listHd.style.display = 'flex';
-          countText.textContent = `${total} products • showing ${(window.__lastItems||[]).length}`;
-          loadMoreBtn.style.display = (window.__lastItems||[]).length < total ? 'inline-block' : 'none';
-          wireAddButtons();
-          return;
-        }
-      }
-
-      // render
-      const html = items.map(cardHTML).join('');
-      grid.insertAdjacentHTML('beforeend', html);
-      listHd.style.display = 'flex';
-      const shown = (grid.children || []).length;
-      countText.textContent = `${total} products • showing ${shown}`;
-      loadMoreBtn.style.display = shown < total ? 'inline-block' : 'none';
-      wireAddButtons();
-
-      offset += items.length;
-    }catch(e){
-      listHd.style.display='flex';
-      countText.textContent = 'No products loaded. Check /api/products and /public/data/products.json';
-    }
-  }
-
-  // ---- events
-  document.getElementById('sendBtn').onclick = ()=> {
-    const q = (document.getElementById('q').value||'').trim();
-    if (!q) return;
-    searchProducts(q);
-  };
-  document.getElementById('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter') $('#sendBtn').click(); });
-  loadMoreBtn.onclick = ()=> loadMore(false);
-  document.querySelectorAll('.chip').forEach(c => {
-    c.onclick = ()=> {
-      const q = c.getAttribute('data-q');
-      $('#q').value = q;
-      searchProducts(q);
+function money(c){ return '$' + (Number(c||0)/100).toFixed(2); }
+function sanitizeImage(src){
+  if (!src) return '/images/placeholder.png';
+  if (src.startsWith('/')) return src;     // local path OK
+  return '/images/placeholder.png';        // avoid ORB remote blocks
+}
+function addBubble(text, who='bot'){
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap ' + (who==='me'?'me':'bot');
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  b.textContent = text;
+  wrap.appendChild(b);
+  document.getElementById('content').insertBefore(wrap, listHd);
+  wrap.scrollIntoView({behavior:'smooth',block:'end'});
+}
+function renderFollowUp(fu){
+  const wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap bot';
+  const b = document.createElement('div'); b.className='bubble';
+  const q = document.createElement('div'); q.textContent = fu.question || 'A quick question:';
+  const row = document.createElement('div'); row.className='followup';
+  (fu.options || []).forEach(opt=>{
+    const btn = document.createElement('button');
+    btn.className='fu-btn'; btn.textContent = opt;
+    btn.onclick = ()=>{
+      addBubble(opt,'me');
+      const refined = (lastQuery?lastQuery+' ':'') + (fu.key+':'+opt);
+      search(refined, true);
+    };
+    row.appendChild(btn);
+  });
+  b.appendChild(q); b.appendChild(row); wrap.appendChild(b);
+  document.getElementById('content').insertBefore(wrap, listHd);
+}
+function cardHTML(it){
+  const img = sanitizeImage(it.image);
+  const brand = it.brand ? `<div class="brandtxt">${it.brand}</div>` : '';
+  const cat = it.category ? `<div class="cat">${it.category}</div>` : '';
+  const price = (typeof it.price === 'number') ? money(it.price) : '$—';
+  const name = (it.name||'Product').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `
+    <article class="card">
+      <div class="imgbx"><img src="${img}" alt="${name}" onerror="this.onerror=null;this.src='/images/placeholder.png'"/></div>
+      <div class="meta">
+        ${brand}
+        <div class="name">${name}</div>
+        ${cat}
+        <div class="price">${price}</div>
+        <button class="add" data-id="${it.id}">Add to Cart</button>
+      </div>
+    </article>`;
+}
+function wireAddButtons(){
+  grid.querySelectorAll('.add').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.getAttribute('data-id');
+      const list = window.__items||[];
+      const item = list.find(x=>String(x.id)===String(id));
+      if (!item) return;
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      const idx = cart.findIndex(c=>c.id===item.id);
+      if (idx>=0) cart[idx].qty += 1; else cart.push({id:item.id,name:item.name,price:item.price,qty:1});
+      localStorage.setItem('cart', JSON.stringify(cart));
+      btn.textContent='Added'; setTimeout(()=>btn.textContent='Add to Cart',900);
     };
   });
+}
+function clearGrid(){
+  grid.innerHTML='';
+  listHd.style.display='none';
+  countText.textContent='';
+  loadMoreBtn.style.display='none';
+  window.__items = [];
+  offset = 0; total = 0;
+}
+async function loadMore(first=false){
+  const url = `${API}/api/products?` + new URLSearchParams({ q:lastQuery, offset:String(offset), limit:String(LIMIT) });
+  dbg.textContent = `GET ${url}`;
+  const r = await fetch(url);
+  const data = await r.json();
+  const items = data.items || [];
+  total = data.total || 0;
+  window.__items = (window.__items||[]).concat(items);
 
-  // Optional: seed first view with a popular category
-  // searchProducts('shampoo');
+  if (first && total===0){
+    const m = (lastQuery||'').match(/\b(shampoo|conditioner|serum|spray|mask)\b/i);
+    if (m){
+      const r2 = await fetch(`${API}/api/products?` + new URLSearchParams({ q:m[1], offset:'0', limit:String(LIMIT) }));
+      const d2 = await r2.json();
+      total = d2.total || 0;
+      window.__items = d2.items || [];
+      grid.innerHTML = (window.__items||[]).map(cardHTML).join('');
+      listHd.style.display='flex';
+      countText.textContent = `${total} products • showing ${(window.__items||[]).length}`;
+      loadMoreBtn.style.display = (window.__items||[]).length < total ? 'inline-block' : 'none';
+      wireAddButtons();
+      return;
+    }
+  }
+
+  grid.insertAdjacentHTML('beforeend', items.map(cardHTML).join(''));
+  const shown = grid.children.length;
+  listHd.style.display='flex';
+  countText.textContent = `${total} products • showing ${shown}`;
+  loadMoreBtn.style.display = shown < total ? 'inline-block' : 'none';
+  wireAddButtons();
+  offset += items.length;
+}
+async function search(q, fromFU=false){
+  lastQuery = q;
+  if (!fromFU) addBubble(q,'me');
+
+  // advisor
+  try{
+    const resp = await fetch(`${API}/api/chat`, { method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'}, body: JSON.stringify({message:q}) });
+    const text = await resp.text();
+    let data = {}; try{ data = JSON.parse(text); }catch{}
+    if (data.response) addBubble(data.response,'bot');
+    if (data.followUp) renderFollowUp(data.followUp);
+  }catch(e){ addBubble('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.','bot'); }
+
+  // products
+  clearGrid();
+  await loadMore(true);
+}
+
+// events
+document.getElementById('sendBtn').onclick = ()=>{
+  const q = (document.getElementById('q').value||'').trim();
+  if (!q) return;
+  search(q);
+};
+document.getElementById('q').addEventListener('keydown', (e)=>{ if (e.key==='Enter') document.getElementById('sendBtn').click(); });
+document.querySelectorAll('.chip').forEach(ch=> ch.onclick = ()=>{ const q = ch.getAttribute('data-q'); document.getElementById('q').value=q; search(q); });
+loadMoreBtn.onclick = ()=> loadMore(false);
 </script>
 </body>
 </html>

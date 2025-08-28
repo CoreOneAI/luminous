@@ -1,158 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Luminous • Catalog</title>
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
-    .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--charcoal)}
-    .header{background:var(--charcoal);padding:16px 16px 10px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:5;text-align:center}
-    .brand{font-weight:800;font-size:20px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .sub{margin-top:4px;font-size:11px;color:var(--gold);font-weight:600;opacity:.95}
-    .status{margin-top:6px;font-size:10px;color:#aaa}
-    .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 12px;background:var(--charcoal);border-bottom:1px solid #3A3A3A}
-    .pill{font-size:11px;border:1px solid #50442a;color:#e9d6a6;border-radius:999px;padding:6px 10px;cursor:pointer;background:rgba(184,134,11,.08)}
-    .main{background:#fff;min-height:calc(100vh - 60px);padding:12px 10px 80px}
-    .search{display:flex;gap:8px;margin:6px 0 10px}
-    .inp{flex:1;border:1px solid #e6e6e6;border-radius:12px;padding:10px 12px;font-size:13px}
-    .btn{border:none;border-radius:12px;padding:10px 12px;font-weight:800;color:#fff;background:var(--grad);cursor:pointer}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .card{background:#fff;border-radius:14px;border:1px solid #F0F0F0;box-shadow:0 2px 8px rgba(0,0,0,.04);overflow:hidden;display:flex;flex-direction:column}
-    .ph{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fafafa}
-    .meta{padding:10px}
-    .name{font-size:12px;font-weight:800;color:#222;line-height:1.25;margin-bottom:4px}
-    .subt{font-size:11px;color:#777;margin-bottom:8px}
-    .price{font-size:12px;font-weight:800;color:var(--gold)}
-    .cta{margin-top:auto;padding:10px;border-top:1px solid #eee}
-    .buy{width:100%;border:none;border-radius:12px;padding:10px 12px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer}
-    .more{display:block;width:100%;border:none;background:var(--grad);color:#fff;border-radius:12px;padding:10px;font-weight:800;margin:8px 0 0}
-    .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
-    .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
-    .nav a.active{color:var(--gold);font-weight:700}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Luminous • Catalog</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+<style>
+  *{box-sizing:border-box} html,body{margin:0;padding:0}
+  :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--charcoal);color:var(--ink)}
+  .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--pearl);display:flex;flex-direction:column}
+  .header{background:#2C2C2C;color:#fff;padding:14px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:5;text-align:center}
+  .brand{font-weight:800;font-size:18px;letter-spacing:.2px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+  .sub{margin-top:2px;font-size:11px;color:#e8c77a;font-weight:600;opacity:.95}
+  .bar{background:#fff;padding:10px 12px;border-bottom:1px solid #eee;display:flex;gap:8px}
+  .bar input{flex:1;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:13px}
+  .bar button{border:none;border-radius:12px;padding:10px 14px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+  .chips{display:flex;gap:8px;padding:8px 12px;flex-wrap:wrap;background:#fff;border-bottom:1px solid #eee}
+  .chip{font-size:11px;border:1px solid #E6E6E6;border-radius:16px;padding:6px 10px;background:#fafafa;cursor:pointer}
+  .content{flex:1;overflow:auto;padding:10px 12px 80px}
+  .list-hd{display:flex;justify-content:space-between;align-items:center;margin:0 2px 8px}
+  .h{font-size:12px;color:#555}
+  .loadmore{border:none;border-radius:20px;padding:10px 14px;background:var(--grad);color:#fff;font-weight:700;cursor:pointer}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.05)}
+  .imgbx{width:100%;height:120px;background:#f6f6f6;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .imgbx img{width:100%;height:100%;object-fit:cover}
+  .meta{padding:10px}
+  .brandtxt{font-size:10px;color:#888;margin-bottom:2px}
+  .name{font-size:12px;font-weight:800;color:#222;min-height:30px}
+  .cat{font-size:11px;color:#777;margin-top:4px}
+  .price{font-size:12px;font-weight:800;color:var(--gold);margin-top:6px}
+  .add{width:100%;margin-top:8px;border:none;border-radius:10px;padding:8px;background:var(--grad);color:#fff;font-weight:700;font-size:12px;cursor:pointer}
+  .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
+  .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
+  .nav a.active{color:var(--gold);font-weight:700}
+  .debug{display:none;font-size:10px;color:#666;margin:6px 2px}
+</style>
 </head>
 <body>
   <div class="page">
     <header class="header">
       <div class="brand">Luminous Catalog</div>
       <div class="sub">Browse • Filter • Add to Cart</div>
-      <div class="status" id="status">Loading…</div>
     </header>
 
-    <div class="pills" id="quickPills">
-      <button class="pill" data-q="purple shampoo">Purple Shampoo</button>
-      <button class="pill" data-q="sensitive scalp">Sensitive Scalp</button>
-      <button class="pill" data-q="bond repair">Bond Repair</button>
-      <button class="pill" data-q="anti-frizz">Anti-frizz</button>
+    <div class="bar">
+      <input id="q" placeholder="Search (e.g., purple shampoo, anti-frizz)"/>
+      <button id="go">Search</button>
+    </div>
+    <div class="chips">
+      <div class="chip" data-q="shampoo">Shampoo</div>
+      <div class="chip" data-q="conditioner">Conditioner</div>
+      <div class="chip" data-q="serum">Serum</div>
+      <div class="chip" data-q="spray">Spray</div>
+      <div class="chip" data-q="mask">Mask</div>
+      <div class="chip" data-q="sensitive scalp">Sensitive</div>
+      <div class="chip" data-q="anti-frizz">Anti‑Frizz</div>
+      <div class="chip" data-q="purple shampoo">Purple</div>
     </div>
 
-    <main class="main">
-      <div class="search">
-        <input id="q" class="inp" placeholder="Search products… e.g., hydrating conditioner"/>
-        <button class="btn" onclick="runSearch()">Search</button>
+    <main class="content">
+      <div class="debug" id="dbg"></div>
+      <div class="list-hd" id="listHd" style="display:none">
+        <div class="h" id="countText"></div>
+        <button class="loadmore" id="loadMoreBtn" style="display:none">Load more</button>
       </div>
-      <section class="grid" id="grid"></section>
-      <button id="moreBtn" class="more" style="display:none" onclick="renderNext()">Show more</button>
+      <div class="grid" id="grid"></div>
     </main>
 
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a href="/index.html">Home</a>
-      <a href="/index.html">Book</a>
-      <a class="active" href="/catalog.html">Shop</a>
+      <a href="#" onclick="window.location='/index.html#book';return false;">Book</a>
+      <a href="/catalog.html" class="active">Shop</a>
       <a href="/chat.html">Chat</a>
     </nav>
   </div>
 
-  <script>
 <script>
+const API = '';
+const grid = document.getElementById('grid');
+const listHd = document.getElementById('listHd');
+const countText = document.getElementById('countText');
+const loadMoreBtn = document.getElementById('loadMoreBtn');
+const dbg = document.getElementById('dbg');
 
-function toCents(v){
-  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
-  if (typeof v === 'string'){
-    const m = v.match(/([\d.,]+)/);
-    if (m){ const n = Number(m[1].replace(/,/g,'')); if (Number.isFinite(n)) return n < 1000 ? Math.round(n*100) : Math.round(n); }
-  }
-  return 0;
-}
+let lastQuery = '';
+let offset = 0;
+const LIMIT = 50;
+let total = 0;
+
 function money(c){ return '$' + (Number(c||0)/100).toFixed(2); }
-function sanitizeImage(u){
-  if(!u) return '/images/wooden-tray.jpg';
-  if(/^https?:\/\//i.test(u)){
-    if(/unsplash\.com\/photos\//.test(u)){
-      const id = u.split('/photos/')[1]?.split(/[\/?#]/)[0] || '';
-      if(id) return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80';
-    }
-    if(/images\.unsplash\.com\/photo-/.test(u)) return u;
-    return u;
-  }
-  const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
-  if(m){ const id=m[1]||m[0]; return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80'; }
-  if(/\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/') ? u : '/images/' + u.replace(/^\//,''); }
-  return '/images/wooden-tray.jpg';
+function sanitizeImage(src){
+  if (!src) return '/images/placeholder.png';
+  if (src.startsWith('/')) return src; // local only
+  return '/images/placeholder.png';
 }
+function cardHTML(it){
+  const img = sanitizeImage(it.image);
+  const brand = it.brand ? `<div class="brandtxt">${it.brand}</div>` : '';
+  const cat = it.category ? `<div class="cat">${it.category}</div>` : '';
+  const price = (typeof it.price === 'number') ? money(it.price) : '$—';
+  const name = (it.name||'Product').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  return `
+    <article class="card">
+      <div class="imgbx"><img src="${img}" alt="${name}" onerror="this.onerror=null;this.src='/images/placeholder.png'"/></div>
+      <div class="meta">
+        ${brand}
+        <div class="name">${name}</div>
+        ${cat}
+        <div class="price">${price}</div>
+        <button class="add" data-id="${it.id}">Add to Cart</button>
+      </div>
+    </article>`;
+}
+function wireAddButtons(){
+  grid.querySelectorAll('.add').forEach(btn=>{
+    btn.onclick = ()=>{
+      const id = btn.getAttribute('data-id');
+      const list = window.__items||[];
+      const item = list.find(x=>String(x.id)===String(id));
+      if (!item) return;
+      const cart = JSON.parse(localStorage.getItem('cart')||'[]');
+      const idx = cart.findIndex(c=>c.id===item.id);
+      if (idx>=0) cart[idx].qty += 1; else cart.push({id:item.id,name:item.name,price:item.price,qty:1});
+      localStorage.setItem('cart', JSON.stringify(cart));
+      btn.textContent='Added'; setTimeout(()=>btn.textContent='Add to Cart',900);
+    };
+  });
+}
+function clearGrid(){
+  grid.innerHTML='';
+  listHd.style.display='none';
+  countText.textContent='';
+  loadMoreBtn.style.display='none';
+  window.__items = [];
+  offset = 0; total = 0;
+}
+async function loadMore(){
+  const url = `${API}/api/products?` + new URLSearchParams({ q:lastQuery, offset:String(offset), limit:String(LIMIT) });
+  dbg.textContent = `GET ${url}`;
+  const r = await fetch(url);
+  const data = await r.json();
+  const items = data.items || [];
+  total = data.total || 0;
+  window.__items = (window.__items||[]).concat(items);
+
+  // render
+  grid.insertAdjacentHTML('beforeend', items.map(cardHTML).join(''));
+  const shown = grid.children.length;
+  listHd.style.display='flex';
+  countText.textContent = `${total} products • showing ${shown}`;
+  loadMoreBtn.style.display = shown < total ? 'inline-block' : 'none';
+  wireAddButtons();
+  offset += items.length;
+}
+async function search(q){
+  lastQuery = q;
+  clearGrid();
+  await loadMore();
+}
+
+document.getElementById('go').onclick = ()=>{
+  const q = (document.getElementById('q').value||'').trim();
+  search(q);
+};
+document.getElementById('q').addEventListener('keydown',(e)=>{ if(e.key==='Enter') document.getElementById('go').click(); });
+document.querySelectorAll('.chip').forEach(ch=> ch.onclick = ()=>{ const q = ch.getAttribute('data-q'); document.getElementById('q').value=q; search(q); });
+
+// initial load
+search('shampoo');
 </script>
-
-    const API_BASE = '';
-    const PAGE_SIZE = 20;
-    let currentQ = '';
-    let total = 0;
-    let shown = 0;
-
-    function cardHTML(it){
-      const img = sanitizeImage(it.image);
-      const safeName = (it.name||'Product').replace(/"/g,'&quot;');
-      const sub = [it.brand||'—', it.category||'—'].filter(Boolean).join(' • ');
-      const price = money(it.price);
-      return `
-        <article class="card">
-          <img class="ph" src="${img}" alt="${safeName}" onerror="this.src='/images/wooden-tray.jpg'">
-          <div class="meta">
-            <div class="name">${safeName}</div>
-            <div class="subt">${sub}</div>
-            <div class="price">${price}</div>
-          </div>
-          <div class="cta"><button class="buy" onclick='(function(){try{const raw=localStorage.getItem("luminous_cart");const cart=raw?JSON.parse(raw):[];cart.push({id:"${it.id}",name:"${safeName}",price:${it.price or 0},qty:1});localStorage.setItem("luminous_cart",JSON.stringify(cart));alert("Added to cart.");}catch(e){}})()'>Add to Cart</button></div>
-        </article>`;
-    }
-
-    async function fetchPage(q, offset, limit){
-      const u = new URL(API_BASE + '/api/products', location.origin);
-      if (q) u.searchParams.set('q', q);
-      u.searchParams.set('offset', String(offset||0));
-      u.searchParams.set('limit', String(limit||PAGE_SIZE));
-      const r = await fetch(u.toString());
-      const j = await r.json();
-      return j;
-    }
-
-    function clearGrid(){ document.getElementById('grid').innerHTML=''; shown = 0; }
-
-    async function renderNext(){
-      if (shown >= total) return;
-      const j = await fetchPage(currentQ, shown, PAGE_SIZE);
-      const grid = document.getElementById('grid');
-      (j.items||[]).forEach(it => { grid.insertAdjacentHTML('beforeend', cardHTML(it)); });
-      shown += (j.items||[]).length;
-      document.getElementById('moreBtn').style.display = shown < total ? 'block' : 'none';
-      document.getElementById('status').textContent = `Showing ${Math.min(shown,total)} of ${total} • Source: ${j.source||'n/a'}`;
-    }
-
-    async function runSearch(){
-      currentQ = (document.getElementById('q').value || '').trim();
-      clearGrid();
-      total = 0;
-      try { const meta = await fetchPage(currentQ, 0, PAGE_SIZE); total = meta.total || (meta.items?meta.items.length:0); renderNext(); }
-      catch { /* ignore */ }
-    }
-
-    document.getElementById('quickPills').addEventListener('click', (e)=>{ const btn=e.target.closest('[data-q]'); if(!btn) return; document.getElementById('q').value = btn.getAttribute('data-q'); runSearch(); });
-
-    (async function boot(){ try{ const meta = await fetchPage('', 0, 1); total = meta.total || 0; document.getElementById('status').textContent = `Loaded: ${total} • Source: ${meta.source||'n/a'}`; }catch{ document.getElementById('status').textContent='Dataset unavailable'; } })();
-  </script>
 </body>
 </html>
