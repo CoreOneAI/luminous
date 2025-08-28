@@ -1,4 +1,4 @@
-// Luminous — PRODUCTS-ONLY SERVER (diagnostics on; no UI changes)
+// Luminous – PRODUCTS-ONLY SERVER (diagnostics on; no UI changes)
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -47,27 +47,66 @@ function loadCatalog(){
   var candidates = [
     path.join(PUB, 'data', 'products.json'),
     path.join(__dirname, 'public', 'data', 'products.json'),
-    path.join(__dirname, 'data', 'products.json')
+    path.join(__dirname, 'data', 'products.json'),
+    path.join(__dirname, 'products.json'), // Add root level
+    './products.json' // Current directory
   ];
+  
+  console.log('[catalog] Attempting to load from candidates:', candidates);
+  
   for (var i=0;i<candidates.length;i++){
     var p = candidates[i];
+    console.log('[catalog] Trying path:', p, 'exists:', fs.existsSync(p));
     try{
       if (fs.existsSync(p)){
         var raw = fs.readFileSync(p, 'utf8');
+        console.log('[catalog] Raw file content length:', raw.length);
         var j = JSON.parse(raw);
-        if (Array.isArray(j)) { CATALOG = j; SOURCE = p; return; }
-        if (j && Array.isArray(j.items)) { CATALOG = j.items; SOURCE = p; return; }
+        if (Array.isArray(j)) { 
+          CATALOG = j; 
+          SOURCE = p; 
+          console.log('[catalog] Loaded', j.length, 'products from array at', p);
+          return; 
+        }
+        if (j && Array.isArray(j.items)) { 
+          CATALOG = j.items; 
+          SOURCE = p; 
+          console.log('[catalog] Loaded', j.items.length, 'products from items at', p);
+          return; 
+        }
+        console.log('[catalog] File exists but not in expected format:', typeof j);
       }
     }catch(e){
       console.error('[catalog] failed to read', p, e.message);
     }
   }
-  console.warn('[catalog] products.json NOT FOUND — using 4-item in-memory fallback so UI stays alive');
+  console.warn('[catalog] products.json NOT FOUND – using 25-item in-memory fallback so UI stays alive');
   CATALOG = [
-    { id:'p001', name:'Color-Safe Shampoo', brand:'Salon', category:'Hair / Shampoo', price:1800, image:'/images/studio-beige.jpg' },
-    { id:'p002', name:'Bond Repair Mask',   brand:'Salon', category:'Hair / Mask',     price:2400, image:'/images/zen-stone-serum.jpg' },
-    { id:'p003', name:'Thermal Protectant', brand:'Salon', category:'Hair / Spray',    price:2000, image:'/images/wooden-tray.jpg' },
-    { id:'p004', name:'Vitamin C Serum',    brand:'Salon', category:'Skin / Serum',    price:2900, image:'/images/hero-almonds.jpg' }
+    { id:'p001', name:'Color-Safe Shampoo', brand:'Salon', category:'Hair', priceCents:1800, image:'/images/studio-beige.jpg' },
+    { id:'p002', name:'Bond Repair Mask',   brand:'Salon', category:'Hair', priceCents:2400, image:'/images/zen-stone-serum.jpg' },
+    { id:'p003', name:'Thermal Protectant', brand:'Salon', category:'Hair', priceCents:2000, image:'/images/wooden-tray.jpg' },
+    { id:'p004', name:'Vitamin C Serum',    brand:'Salon', category:'Skin', priceCents:2900, image:'/images/hero-almonds.jpg' },
+    { id:'p005', name:'Hydrating Conditioner', brand:'Salon', category:'Hair', priceCents:1900, image:'/images/studio-beige.jpg' },
+    { id:'p006', name:'Anti-Aging Serum', brand:'Salon', category:'Skin', priceCents:3200, image:'/images/zen-stone-serum.jpg' },
+    { id:'p007', name:'Curl Defining Cream', brand:'Salon', category:'Hair', priceCents:2100, image:'/images/wooden-tray.jpg' },
+    { id:'p008', name:'Moisturizing Mask', brand:'Salon', category:'Skin', priceCents:2700, image:'/images/hero-almonds.jpg' },
+    { id:'p009', name:'Volume Spray', brand:'Salon', category:'Hair', priceCents:1750, image:'/images/studio-beige.jpg' },
+    { id:'p010', name:'Eye Cream', brand:'Salon', category:'Skin', priceCents:3500, image:'/images/zen-stone-serum.jpg' },
+    { id:'p011', name:'Dry Shampoo', brand:'Salon', category:'Hair', priceCents:1650, image:'/images/wooden-tray.jpg' },
+    { id:'p012', name:'Cleansing Oil', brand:'Salon', category:'Skin', priceCents:2800, image:'/images/hero-almonds.jpg' },
+    { id:'p013', name:'Hair Oil Treatment', brand:'Salon', category:'Hair', priceCents:2300, image:'/images/studio-beige.jpg' },
+    { id:'p014', name:'Toner', brand:'Salon', category:'Skin', priceCents:2200, image:'/images/zen-stone-serum.jpg' },
+    { id:'p015', name:'Texturizing Paste', brand:'Salon', category:'Hair', priceCents:1850, image:'/images/wooden-tray.jpg' },
+    { id:'p016', name:'Night Cream', brand:'Salon', category:'Skin', priceCents:3100, image:'/images/hero-almonds.jpg' },
+    { id:'p017', name:'Leave-In Conditioner', brand:'Salon', category:'Hair', priceCents:2050, image:'/images/studio-beige.jpg' },
+    { id:'p018', name:'Exfoliating Scrub', brand:'Salon', category:'Skin', priceCents:2600, image:'/images/zen-stone-serum.jpg' },
+    { id:'p019', name:'Styling Gel', brand:'Salon', category:'Hair', priceCents:1700, image:'/images/wooden-tray.jpg' },
+    { id:'p020', name:'Sunscreen SPF 30', brand:'Salon', category:'Skin', priceCents:2500, image:'/images/hero-almonds.jpg' },
+    { id:'p021', name:'Clarifying Shampoo', brand:'Salon', category:'Hair', priceCents:1950, image:'/images/studio-beige.jpg' },
+    { id:'p022', name:'Retinol Serum', brand:'Salon', category:'Skin', priceCents:3800, image:'/images/zen-stone-serum.jpg' },
+    { id:'p023', name:'Beach Wave Spray', brand:'Salon', category:'Hair', priceCents:1800, image:'/images/wooden-tray.jpg' },
+    { id:'p024', name:'Lip Balm', brand:'Salon', category:'Skin', priceCents:1200, image:'/images/hero-almonds.jpg' },
+    { id:'p025', name:'Scalp Treatment', brand:'Salon', category:'Hair', priceCents:2900, image:'/images/studio-beige.jpg' }
   ];
   SOURCE = 'memory:fallback';
 }
@@ -84,6 +123,44 @@ app.get('/__ls', function(req,res){
   var dir = (req.query.dir || 'public/data').toString();
   var abs = path.join(__dirname, dir);
   res.json({ dir: abs, files: listDirSafe(abs) });
+});
+
+// Test file reading directly  
+app.get('/__test_files', function(req,res){
+  var results = {};
+  var testPaths = [
+    'products.json',
+    'public/data/products.json', 
+    'data/products.json',
+    path.join(__dirname, 'products.json'),
+    path.join(__dirname, 'public', 'data', 'products.json'),
+    path.join(__dirname, 'data', 'products.json')
+  ];
+  
+  testPaths.forEach(function(p){
+    try {
+      var fullPath = path.isAbsolute(p) ? p : path.join(__dirname, p);
+      results[p] = {
+        exists: fs.existsSync(fullPath),
+        fullPath: fullPath,
+        isFile: fs.existsSync(fullPath) ? fs.statSync(fullPath).isFile() : false,
+        size: fs.existsSync(fullPath) ? fs.statSync(fullPath).size : 0
+      };
+      if (fs.existsSync(fullPath) && fs.statSync(fullPath).isFile()) {
+        var content = fs.readFileSync(fullPath, 'utf8');
+        results[p].contentPreview = content.slice(0, 200);
+      }
+    } catch(e) {
+      results[p] = { error: e.message };
+    }
+  });
+  
+  res.json({ 
+    __dirname: __dirname,
+    cwd: process.cwd(),
+    results: results,
+    currentCatalog: { source: SOURCE, count: CATALOG.length }
+  });
 });
 
 // -------- Search (tokenized with light boosting) --------
@@ -136,21 +213,35 @@ function searchCatalog(q){
 // -------- API --------
 app.get('/api/products', function(req,res){
   var q = (req.query.q || '').toString();
-  var limit = parseInt(req.query.limit,10); if(!limit || limit<1) limit=24; if (limit>200) limit=200;
+  var limit = parseInt(req.query.limit,10); 
+  if(!limit || limit<1) limit=25; // Changed from 24 to 25 as requested
+  if (limit>200) limit=200;
   var offset = parseInt(req.query.offset,10); if(!offset || offset<0) offset=0;
+
+  console.log('[api] products query:', q, 'limit:', limit, 'offset:', offset, 'catalog size:', CATALOG.length);
 
   var items = searchCatalog(q);
   var total = items.length;
   items = items.slice(offset, offset+limit).map(function(p){
+    // FIX: Handle both priceCents and price fields correctly
+    var priceValue = 0;
+    if (typeof p.priceCents === 'number') {
+      priceValue = p.priceCents; // Already in cents
+    } else if (typeof p.price === 'number') {
+      priceValue = p.price; // Assume this is also in cents
+    }
+    
     return {
       id: p.id,
       name: p.name,
-      brand: p.brand || '—',
-      category: p.category || '—',
-      price: (typeof p.price === 'number' ? p.price : 0),
+      brand: p.brand || '–',
+      category: p.category || '–',
+      price: priceValue, // Return as cents for client
       image: p.image || '/images/studio-beige.jpg'
     };
   });
+  
+  console.log('[api] returning', items.length, 'items of', total, 'total');
   res.json({ success:true, source: SOURCE, total: total, offset: offset, limit: limit, items: items });
 });
 
@@ -174,7 +265,8 @@ app.get('/__whoami', function(req,res){
     running: path.basename(__filename),
     products: { source: SOURCE, count: Array.isArray(CATALOG)?CATALOG.length:0 },
     public_data_ls: listDirSafe(path.join(PUB,'data')),
-    routes: ['GET /api/products','POST /api/chat','POST /__reload_catalog','GET /__ls','GET /healthz','GET /__whoami','(static)']
+    root_ls: listDirSafe(__dirname),
+    routes: ['GET /api/products','POST /api/chat','POST /__reload_catalog','GET /__ls','GET /__test_files','GET /healthz','GET /__whoami','(static)']
   });
 });
 
@@ -183,5 +275,8 @@ app.get(/^(?!\/api\/).+/, function(req,res,next){ next(); });
 
 app.listen(PORT, '0.0.0.0', function(){
   console.log('Luminous listening on', PORT, 'source='+SOURCE);
+  console.log('[catalog] Loaded products:', CATALOG.length);
+  console.log('[catalog] First product sample:', CATALOG[0]);
   console.log('[catalog] public/data files:', listDirSafe(path.join(PUB,'data')));
+  console.log('[catalog] root files:', listDirSafe(__dirname));
 });
