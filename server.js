@@ -1,219 +1,165 @@
-/**
- * Luminous — Products API fix r2 (focused on product/pricing)
- * Drop in project root as server.js.
- *
- * Changes over r1:
- *  - Multi-path discovery for products.json (public/data | /data | env PRODUCTS_JSON)
- *  - Accepts priceCents/price_cents/price (string or number)
- *  - /__catalog diagnostics to prove path, exists, count
- */
-
+// Luminous unified server — products-first fix (no UI changes)
 const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
-app.use(express.json({ limit: '1mb' }));
-app.use(cors());
+const PORT = process.env.PORT || 3000;
 
-// CSP suitable for local images and your current inline CSS/JS
-app.use(function(req, res, next) {
-  res.setHeader('Content-Security-Policy',
-    "default-src 'self'; " +
-    "script-src 'self' 'unsafe-inline'; " +
-    "style-src 'self' 'unsafe-inline'; " +
-    "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com; " +
-    "connect-src 'self'; " +
-    "font-src 'self' data:; " +
-    "object-src 'none'; " +
-    "base-uri 'self'; " +
-    "frame-ancestors 'self'; " +
-    "upgrade-insecure-requests"
-  );
+// --- Minimal security headers (kept permissive for this stage) ---
+app.use((req, res, next) => {
   res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
   res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Allow Unsplash + local images; no cross-site scripts; inline allowed for simplicity
+  res.setHeader('Content-Security-Policy', [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
+    "connect-src 'self'",
+    "font-src 'self' data:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "frame-ancestors 'self'",
+    "upgrade-insecure-requests",
+  ].join('; '));
   next();
 });
 
-const ROOT = process.cwd();
-const PUBLIC_DIR = path.join(ROOT, 'public');
+app.use(express.json({ limit: '1mb' }));
 
-// ---- Find products.json from multiple candidates ----
-const CANDIDATES = [];
-if (process.env.PRODUCTS_JSON) CANDIDATES.push(path.resolve(process.env.PRODUCTS_JSON));
-CANDIDATES.push(path.join(PUBLIC_DIR, 'data', 'products.json'));     // preferred
-CANDIDATES.push(path.join(ROOT, 'data', 'products.json'));          // alt
+// --- Static site ---
+const PUB = path.join(__dirname, 'public');
+app.use(express.static(PUB, { extensions: ['html'] }));
 
-let PRODUCTS_PATH = null;
-for (const p of CANDIDATES) {
-  try { if (fs.existsSync(p)) { PRODUCTS_PATH = p; break; } } catch(e){}
-}
+// --- Health ---
+app.get('/healthz', (req, res) => res.json({ ok: true }));
 
-// ---- Load & normalize ----
-let RAW_CATALOG = [];
-let CATALOG_SOURCE = PRODUCTS_PATH ? ('disk:' + PRODUCTS_PATH) : 'error:no path found';
-let FILE_STAT = null;
+// --- Load catalog once ---
+const DATA_PATHS = [
+  path.join(PUB, 'data', 'products.json'),
+  path.join(__dirname, 'public', 'data', 'products.json'), // alt
+  path.join(__dirname, 'data', 'products.json'),            // alt
+];
+let CATALOG = [];
+let CATALOG_SOURCE = 'none';
 
-function toCents(val) {
-  if (typeof val === 'number' && Number.isFinite(val)) {
-    // Heuristic: treat integers >= 100 as cents; small integers as dollars*100
-    if (Number.isInteger(val) && val >= 100) return val;
-    return Math.round(val * 100);
-  }
-  if (typeof val === 'string') {
-    const m = val.match(/^(\d+)(?:\.(\d{1,2}))?$/);
-    if (m) {
-      const dollars = parseInt(m[1],10);
-      let cents = m[2] ? parseInt(m[2],10) : 0;
-      if (m[2] && m[2].length === 1) cents *= 10;
-      return dollars*100 + cents;
+function loadCatalog() {
+  for (const p of DATA_PATHS) {
+    try {
+      if (fs.existsSync(p)) {
+        const raw = fs.readFileSync(p, 'utf8');
+        const j = JSON.parse(raw);
+        if (Array.isArray(j)) { CATALOG = j; CATALOG_SOURCE = p; return; }
+        if (Array.isArray(j.items)) { CATALOG = j.items; CATALOG_SOURCE = p; return; }
+      }
+    } catch (e) {
+      console.error('Failed to read products.json at', p, e.message);
     }
   }
-  return 0;
+  console.warn('No products.json found — using tiny fallback');
+  CATALOG = [
+    { id:'p001', name:'Color-Safe Shampoo', brand:'Salon', category:'Hair / Shampoo', price:1800, image:'/images/studio-beige.jpg' },
+    { id:'p002', name:'Bond Repair Mask', brand:'Salon', category:'Hair / Mask', price:2400, image:'/images/zen-stone-serum.jpg' },
+    { id:'p003', name:'Thermal Protectant', brand:'Salon', category:'Hair / Spray', price:2000, image:'/images/wooden-tray.jpg' },
+    { id:'p004', name:'Vitamin C Serum', brand:'Salon', category:'Skin / Serum', price:2900, image:'/images/hero-almonds.jpg' },
+  ];
+  CATALOG_SOURCE = 'memory:fallback';
 }
+loadCatalog();
 
-try {
-  if (!PRODUCTS_PATH) throw new Error('products.json not found in candidates: ' + CANDIDATES.join(', '));
-  FILE_STAT = fs.statSync(PRODUCTS_PATH);
-  const raw = fs.readFileSync(PRODUCTS_PATH, 'utf-8');
-  const parsed = JSON.parse(raw);
-  RAW_CATALOG = (parsed && Array.isArray(parsed.items)) ? parsed.items :
-                (Array.isArray(parsed) ? parsed : []);
-} catch (e) {
-  console.error('Catalog load error:', e.message);
-  RAW_CATALOG = [];
-}
-
-function normalizeItem(it, idx) {
-  const id = (it && it.id != null) ? String(it.id) : ('sku-' + String(idx+1).padStart(4,'0'));
-  const name = it && it.name ? String(it.name) : 'Product';
-  const brand = it && it.brand ? String(it.brand) : '';
-  const category = it && it.category ? String(it.category) : '';
-  // price: support priceCents / price_cents / price
-  let price = 0;
-  if (it && (it.priceCents != null)) price = toCents(it.priceCents);
-  else if (it && (it.price_cents != null)) price = toCents(it.price_cents);
-  else if (it && (it.price != null)) price = toCents(it.price);
-  const image = it && it.image ? String(it.image) : '';
-  const hay = (name + ' ' + brand + ' ' + category).toLowerCase();
-  const tokens = hay.split(/[^a-z0-9]+/).filter(Boolean);
-  return { id, name, brand, category, price, image, hay, tokens };
-}
-
-const ITEMS = RAW_CATALOG.map(normalizeItem);
-
-// ---- Search helpers ----
-function tokenizeQuery(q) {
-  return String(q || '')
-    .toLowerCase()
-    .replace(/["']/g, '')
-    .split(/[^a-z0-9]+/)
-    .filter(Boolean);
-}
-const SYN = {
-  purple: ['purple','violet','silver'],
-  red: ['red','copper'],
-  toner: ['toner','toning','tone'],
-  serum: ['serum','elixir','ampoule'],
-  shampoo: ['shampoo','cleanser','wash'],
-  conditioner: ['conditioner','cond','condtnr'],
-  mask: ['mask','masque'],
-  spray: ['spray','mist']
+// --- Helpers for robust searching ---
+function norm(s){ return (s||'').toString().toLowerCase(); }
+const COLOR_SYNONYM = {
+  red:['red','copper','auburn','ginger'],
+  purple:['purple','violet','blonde toning','brass'],
+  blue:['blue','ash','cool'],
 };
-function expandTerms(terms) {
-  const out = new Set();
-  for (const t of terms) {
-    out.add(t);
-    if (SYN[t]) SYN[t].forEach(x => out.add(x));
-  }
-  return Array.from(out);
-}
-function scoreItem(item, terms, rawQ) {
-  let s = 0;
-  for (const t of terms) {
-    if (item.hay.indexOf(t) !== -1) s += 3;
-    if (item.category && item.category.toLowerCase().indexOf(t) !== -1) s += 2;
-  }
-  if (rawQ && item.name && item.name.toLowerCase().indexOf(rawQ.toLowerCase()) !== -1) s += 5;
-  return s;
-}
-
-// ---- /api/products ----
-app.get('/api/products', (req, res) => {
-  const q = (req.query.q || '').toString().trim();
-  let limit = parseInt(req.query.limit || '50', 10);
-  let offset = parseInt(req.query.offset || '0', 10);
-  if (isNaN(limit) || limit < 1) limit = 50;
-  if (limit > 100) limit = 100;
-  if (isNaN(offset) || offset < 0) offset = 0;
-
-  let results = ITEMS;
-  if (q) {
-    const terms = expandTerms(tokenizeQuery(q));
-    const scored = [];
-    for (let i=0;i<ITEMS.length;i++) {
-      const it = ITEMS[i];
-      const s = scoreItem(it, terms, q);
-      if (s > 0) scored.push({ it, s });
-    }
-    scored.sort((a,b)=> b.s - a.s);
-    results = scored.map(r => r.it);
-    if (results.length === 0) {
-      const m = q.match(/\b(shampoo|conditioner|serum|spray|mask)\b/i);
-      if (m) {
-        const t = m[1].toLowerCase();
-        results = ITEMS.filter(x => x.hay.indexOf(t) !== -1);
+function tokenScore(p, tokens) {
+  const hay = norm([p.name, p.brand, p.category].filter(Boolean).join(' '));
+  let score = 0;
+  for (const t of tokens) {
+    if (!t) continue;
+    let matched = false;
+    for (const [canon, list] of Object.entries(COLOR_SYNONYM)) {
+      if (list.some(w => t.includes(w))) {
+        if (hay.includes(canon)) { score += 3; matched = true; break; }
       }
     }
+    if (matched) continue;
+    if (hay.includes(t)) score += 2;
   }
+  const T = tokens.join(' ');
+  if (/shampoo/.test(T) && /shampoo/.test(hay)) score += 3;
+  if (/conditioner/.test(T) && /conditioner/.test(hay)) score += 3;
+  if (/serum/.test(T) && /serum/.test(hay)) score += 2;
+  if (/sensitive scalp/.test(T) && /sensitive scalp/.test(hay)) score += 4;
+  return score;
+}
+function searchCatalog(q) {
+  const tokens = norm(q).split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return CATALOG.slice();
+  const scored = CATALOG.map(p => ({ p, s: tokenScore(p, tokens) }))
+    .filter(x => x.s > 0)
+    .sort((a,b) => b.s - a.s || norm(a.p.name).localeCompare(norm(b.p.name)));
+  return scored.map(x => x.p);
+}
 
-  const total = results.length;
-  const slice = results.slice(offset, offset + limit).map(({ hay, tokens, ...rest }) => rest);
-  res.json({ success:true, source: CATALOG_SOURCE, total, offset, limit, items: slice });
+// --- /api/products ---
+app.get('/api/products', (req,res) => {
+  const q = (req.query.q || '').toString();
+  const limit = Math.max(1, Math.min(200, parseInt(req.query.limit, 10) || 24));
+  const offset = Math.max(0, parseInt(req.query.offset, 10) || 0);
+
+  let items = searchCatalog(q);
+  const total = items.length;
+  items = items.slice(offset, offset + limit);
+
+  items = items.map(p => ({
+    id: p.id,
+    name: p.name,
+    brand: p.brand || '—',
+    category: p.category || '—',
+    price: (typeof p.price === 'number' ? p.price : 0),
+    image: p.image || '/images/studio-beige.jpg',
+  }));
+
+  res.json({ success:true, source: CATALOG_SOURCE, total, offset, limit, items });
 });
 
-// ---- Minimal chat + bookings (unchanged behavior; not the focus) ----
-app.post('/api/chat', (req,res) => {
-  const message = (req.body && req.body.message || '').toString();
-  const lower = message.toLowerCase();
+// --- /api/chat --- (simple, deterministic; does not affect products)
+app.post('/api/chat', async (req,res) => {
+  const msg = (req.body && req.body.message || '').toString().trim();
+  if (!msg) return res.json({ success:true, provider:'fallback', response: 'Ask me about hair color care, scalp concerns, or routines.' });
+
+  let response = "Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard.";
+  const lower = msg.toLowerCase();
   let followUp = null;
-  if (/(acne|breakout|oily|dry|mask|serum|shampoo|color|frizz|purple|red)/.test(lower)) {
-    followUp = { key: 'need', question: 'Are you shopping hair or skin today?', options: ['Hair','Skin'] };
+  if (lower.includes('acne')) {
+    response = "I have a quick question to tailor this for you.";
+    followUp = { key: 'skinType', question: "Which best describes your skin? (oily / combination / dry / sensitive)" };
   }
-  res.json({ success:true, provider:'fallback',
-    response: "Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Rationale: maximize shine/hydration.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard.",
-    followUp });
+  res.json({ success:true, provider:'fallback', response, followUp });
 });
 
-app.post('/api/bookings/create', (req,res)=>{
-  const bookingId = 'bk_' + Math.random().toString(36).slice(2,8);
-  res.json({ success:true, bookingId, received: req.body || {} });
-});
-
-// ---- Diagnostics: prove path & count ----
-app.get('/__catalog', (req,res)=>{
-  let bytes = null;
-  try { if (FILE_STAT) bytes = FILE_STAT.size; } catch(e){}
+// --- Diagnostics ---
+app.get('/__whoami', (req,res) => {
   res.json({
-    pathTried: CANDIDATES,
-    pathSelected: PRODUCTS_PATH,
-    exists: !!PRODUCTS_PATH,
-    sizeBytes: bytes,
-    items: ITEMS.length,
-    sample: ITEMS.slice(0,3).map(x => ({ id:x.id, name:x.name, category:x.category, price:x.price }))
+    running: path.basename(__filename),
+    products: { source: CATALOG_SOURCE, count: Array.isArray(CATALOG) ? CATALOG.length : 0 },
+    routes: [
+      'GET /api/products',
+      'POST /api/chat',
+      'GET /healthz',
+      'GET /__whoami',
+      'GET /(static)'
+    ]
   });
 });
 
-// ---- Static + catch-all ----
-app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
-app.get('*', (req, res, next) => {
-  if (req.path.indexOf('/api/') === 0 || req.path.indexOf('/__') === 0) return next();
-  const indexPath = path.join(PUBLIC_DIR, 'index.html');
-  if (fs.existsSync(indexPath)) return res.sendFile(indexPath);
-  res.status(200).send('<!DOCTYPE html><title>Luminous</title><p>Welcome</p>');
-});
+// Fallback to static for any non-API paths
+app.get(/^(?!\/api\/).+/, (req,res,next) => next());
 
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
-app.listen(PORT, '0.0.0.0', ()=> console.log('Luminous listening on ' + PORT + '.'));
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Luminous listening on ${PORT}. Catalog source: ${CATALOG_SOURCE}`);
+});
