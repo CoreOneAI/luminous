@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat - Luminous Salon</title>
+    <title>AI Salon Consultant - Luminous</title>
     <style>
         * {
             margin: 0;
@@ -27,13 +27,14 @@
         }
         
         .header {
-            background: #222;
+            background: linear-gradient(135deg, #B8860B, #DAA520);
             color: white;
-            padding: 16px;
+            padding: 20px 16px;
             text-align: center;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
         .header h1 {
@@ -42,12 +43,55 @@
             letter-spacing: 0.5px;
         }
         
+        .header .tagline {
+            font-size: 12px;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        
         .main {
             padding: 16px;
         }
         
         .chat-section {
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .client-profile {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            border: 1px solid #eee;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .profile-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #222;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+        
+        .profile-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .profile-select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 12px;
+            background: white;
+            outline: none;
+        }
+        
+        .profile-select:focus {
+            border-color: #B8860B;
         }
         
         .chat-input-box {
@@ -58,7 +102,7 @@
         
         .chat-input {
             flex: 1;
-            padding: 12px 16px;
+            padding: 14px 16px;
             border: 1px solid #ddd;
             border-radius: 12px;
             font-size: 14px;
@@ -72,7 +116,7 @@
         }
         
         .chat-btn {
-            padding: 12px 20px;
+            padding: 14px 20px;
             background: linear-gradient(135deg, #B8860B, #DAA520);
             color: white;
             border: none;
@@ -80,6 +124,7 @@
             font-weight: 700;
             cursor: pointer;
             font-size: 14px;
+            min-width: 70px;
         }
         
         .chat-btn:hover {
@@ -100,6 +145,22 @@
             font-size: 14px;
             line-height: 1.5;
             color: #444;
+        }
+        
+        .ai-indicator {
+            display: none;
+            background: #e7f3ff;
+            color: #0066cc;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+            border: 1px solid #cce7ff;
+        }
+        
+        .ai-indicator.active {
+            display: block;
         }
         
         .products-section {
@@ -126,7 +187,7 @@
         
         .products-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr;
             gap: 12px;
             margin-bottom: 20px;
         }
@@ -139,31 +200,37 @@
             border: 1px solid #eee;
         }
         
+        .product-card.enhanced {
+            border-left: 4px solid #B8860B;
+        }
+        
+        .product-content {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 12px;
+        }
+        
         .product-image {
-            width: 100%;
-            height: 120px;
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #999;
-            font-size: 12px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .product-image::after {
-            content: '📦';
-            font-size: 24px;
+            font-size: 20px;
+            margin: 12px 0 12px 12px;
+            border-radius: 8px;
         }
         
         .product-info {
-            padding: 12px;
+            padding: 12px 12px 12px 0;
+            flex: 1;
         }
         
         .product-name {
             font-weight: 700;
-            font-size: 13px;
+            font-size: 14px;
             color: #222;
             margin-bottom: 4px;
             line-height: 1.2;
@@ -173,6 +240,33 @@
             font-size: 11px;
             color: #666;
             margin-bottom: 8px;
+        }
+        
+        .product-description {
+            font-size: 12px;
+            color: #555;
+            line-height: 1.4;
+            margin-bottom: 8px;
+        }
+        
+        .product-benefits {
+            display: none;
+            margin-bottom: 8px;
+        }
+        
+        .product-benefits.visible {
+            display: block;
+        }
+        
+        .benefit-tag {
+            display: inline-block;
+            background: #f0f8ff;
+            color: #0066cc;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            margin: 2px;
+            border: 1px solid #cce7ff;
         }
         
         .product-footer {
@@ -187,13 +281,29 @@
             font-size: 14px;
         }
         
+        .product-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .details-btn {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 4px 8px;
+            font-size: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
         .add-btn {
             background: #333;
             color: white;
             border: none;
-            border-radius: 8px;
-            padding: 6px 12px;
-            font-size: 11px;
+            border-radius: 6px;
+            padding: 4px 10px;
+            font-size: 10px;
             font-weight: 600;
             cursor: pointer;
         }
@@ -247,6 +357,29 @@
             font-weight: 700;
         }
         
+        .quick-suggestions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .suggestion-btn {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 12px;
+            text-align: center;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .suggestion-btn:hover {
+            border-color: #B8860B;
+            color: #B8860B;
+        }
+        
         .loading {
             text-align: center;
             color: #666;
@@ -263,12 +396,16 @@
         }
         
         @media (max-width: 380px) {
-            .products-grid {
+            .container {
+                max-width: 100%;
+            }
+            
+            .profile-row {
                 grid-template-columns: 1fr;
             }
             
-            .container {
-                max-width: 100%;
+            .quick-suggestions {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -276,98 +413,171 @@
 <body>
     <div class="container">
         <header class="header">
-            <h1>Luminous • Chat</h1>
+            <h1>AI Salon Consultant</h1>
+            <div class="tagline">Personalized product recommendations powered by AI</div>
         </header>
         
         <main class="main">
             <section class="chat-section">
+                <div class="client-profile">
+                    <div class="profile-title">Tell me about yourself</div>
+                    <div class="profile-row">
+                        <select class="profile-select" id="hairType">
+                            <option value="">Hair Type</option>
+                            <option value="straight">Straight</option>
+                            <option value="wavy">Wavy</option>
+                            <option value="curly">Curly</option>
+                            <option value="coily">Coily</option>
+                        </select>
+                        <select class="profile-select" id="skinType">
+                            <option value="">Skin Type</option>
+                            <option value="oily">Oily</option>
+                            <option value="dry">Dry</option>
+                            <option value="combination">Combination</option>
+                            <option value="sensitive">Sensitive</option>
+                        </select>
+                    </div>
+                    <div class="profile-row">
+                        <select class="profile-select" id="concerns">
+                            <option value="">Main Concerns</option>
+                            <option value="damage">Damage/Breakage</option>
+                            <option value="frizz">Frizz Control</option>
+                            <option value="volume">Volume</option>
+                            <option value="color">Color Protection</option>
+                            <option value="aging">Anti-Aging</option>
+                            <option value="acne">Acne</option>
+                            <option value="dryness">Dryness</option>
+                        </select>
+                        <select class="profile-select" id="budget">
+                            <option value="">Budget Range</option>
+                            <option value="budget">Budget ($10-25)</option>
+                            <option value="mid">Mid-Range ($25-50)</option>
+                            <option value="luxury">Luxury ($50+)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="quick-suggestions">
+                    <button class="suggestion-btn" onclick="quickAsk('damaged hair routine')">Repair Damaged Hair</button>
+                    <button class="suggestion-btn" onclick="quickAsk('anti-aging skincare')">Anti-Aging Routine</button>
+                    <button class="suggestion-btn" onclick="quickAsk('volume for fine hair')">Add Volume</button>
+                    <button class="suggestion-btn" onclick="quickAsk('sensitive skin products')">Sensitive Skin</button>
+                </div>
+                
                 <div class="chat-input-box">
                     <input type="text" class="chat-input" id="chatInput" 
-                           placeholder="Ask about products... e.g., 'best shampoo for dry hair'" 
+                           placeholder="Ask me anything... 'I need products for dry, curly hair'" 
                            autocomplete="off">
-                    <button class="chat-btn" id="chatBtn">Ask</button>
+                    <button class="chat-btn" id="chatBtn">Ask AI</button>
+                </div>
+                
+                <div class="ai-indicator" id="aiIndicator">
+                    AI is generating personalized recommendations...
                 </div>
                 
                 <div class="chat-response" id="chatResponse">
-                    Hi! I'm here to help you find the perfect products. Ask me about hair care, skin care, or any specific needs you have.
+                    Hi! I'm your AI salon consultant. Tell me about your hair or skin concerns, and I'll recommend the perfect professional products just for you.
                 </div>
             </section>
             
             <section class="products-section">
-                <h2 class="section-title">Recommended Products</h2>
+                <h2 class="section-title">AI-Generated Recommendations</h2>
                 
-                <div class="status" id="status">Search for products to see recommendations</div>
+                <div class="status" id="status">Ask me about your needs to see personalized recommendations</div>
                 
                 <div class="products-grid" id="productsGrid">
-                    <!-- Products will be loaded here -->
+                    <!-- AI-generated products will appear here -->
                 </div>
                 
                 <div class="load-more" id="loadMoreSection" style="display: none;">
-                    <button class="load-more-btn" id="loadMoreBtn">Show More Products</button>
+                    <button class="load-more-btn" id="loadMoreBtn">Show More Recommendations</button>
                 </div>
             </section>
         </main>
         
         <nav class="navigation">
             <a href="/index.html" class="nav-item">Home</a>
-            <a href="/catalog.html" class="nav-item">Shop</a>
-            <a href="/chat.html" class="nav-item active">Chat</a>
-            <a href="#" class="nav-item">Account</a>
+            <a href="/catalog.html" class="nav-item">Catalog</a>
+            <a href="/chat.html" class="nav-item active">AI Chat</a>
+            <a href="#" class="nav-item">Book</a>
         </nav>
     </div>
 
     <script>
-        class ChatInterface {
+        class AIConsultant {
             constructor() {
                 this.currentQuery = '';
                 this.currentOffset = 0;
                 this.totalProducts = 0;
                 this.isLoading = false;
                 
-                // Chat elements
+                // Elements
                 this.chatInput = document.getElementById('chatInput');
                 this.chatBtn = document.getElementById('chatBtn');
                 this.chatResponse = document.getElementById('chatResponse');
-                
-                // Products elements
+                this.aiIndicator = document.getElementById('aiIndicator');
                 this.status = document.getElementById('status');
                 this.grid = document.getElementById('productsGrid');
                 this.loadMoreSection = document.getElementById('loadMoreSection');
                 this.loadMoreBtn = document.getElementById('loadMoreBtn');
                 
+                // Profile elements
+                this.hairType = document.getElementById('hairType');
+                this.skinType = document.getElementById('skinType');
+                this.concerns = document.getElementById('concerns');
+                this.budget = document.getElementById('budget');
+                
                 this.bindEvents();
-                this.loadInitialProducts();
             }
             
             bindEvents() {
                 this.chatBtn.addEventListener('click', () => this.handleChat());
                 this.chatInput.addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') this.handleChat();
+                    if (e.key === 'Enter' && !this.isLoading) this.handleChat();
                 });
                 this.loadMoreBtn.addEventListener('click', () => this.loadMore());
+                
+                // Profile change events
+                [this.hairType, this.skinType, this.concerns, this.budget].forEach(select => {
+                    select.addEventListener('change', () => this.onProfileChange());
+                });
+            }
+            
+            onProfileChange() {
+                // Auto-generate recommendations when profile changes
+                if (this.currentQuery) {
+                    this.searchProducts(this.currentQuery, true);
+                }
             }
             
             async handleChat() {
                 const message = this.chatInput.value.trim();
                 if (!message || this.isLoading) return;
                 
+                this.isLoading = true;
                 this.chatBtn.disabled = true;
                 this.chatBtn.textContent = '...';
+                this.aiIndicator.classList.add('active');
                 
                 try {
-                    // Get chat response
+                    // Get AI chat response
                     await this.sendChatMessage(message);
                     
-                    // Search for related products
-                    this.currentQuery = this.extractSearchTerms(message);
-                    this.loadProducts(true);
+                    // Search for AI-generated products
+                    this.currentQuery = message;
+                    await this.searchProducts(message, true);
+                    
+                    // Clear input
+                    this.chatInput.value = '';
                     
                 } catch (error) {
                     console.error('Chat error:', error);
-                    this.showChatError('Sorry, I had trouble processing your message. Please try again.');
+                    this.showChatError('I had trouble processing that. Please try again.');
                 } finally {
+                    this.isLoading = false;
                     this.chatBtn.disabled = false;
-                    this.chatBtn.textContent = 'Ask';
+                    this.chatBtn.textContent = 'Ask AI';
+                    this.aiIndicator.classList.remove('active');
                 }
             }
             
@@ -383,135 +593,130 @@
                 }
                 
                 const data = await response.json();
-                this.chatResponse.textContent = data.response || 'I\'m not sure how to help with that. Try asking about specific products or concerns.';
+                this.chatResponse.textContent = data.response || 'Let me help you find the perfect products.';
             }
             
-            extractSearchTerms(message) {
-                // Simple extraction - look for product-related keywords
-                const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'moisturizer', 'cleanser', 'cream', 'oil', 'treatment', 'spray'];
-                const hairKeywords = ['hair', 'scalp', 'dry', 'oily', 'damaged', 'color', 'curly'];
-                const skinKeywords = ['skin', 'face', 'acne', 'aging', 'sensitive', 'wrinkle'];
-                
-                const lowerMessage = message.toLowerCase();
-                
-                // Look for specific product mentions
-                for (const keyword of productKeywords) {
-                    if (lowerMessage.includes(keyword)) {
-                        return keyword;
-                    }
-                }
-                
-                // Look for hair-related terms
-                for (const keyword of hairKeywords) {
-                    if (lowerMessage.includes(keyword)) {
-                        return 'hair';
-                    }
-                }
-                
-                // Look for skin-related terms
-                for (const keyword of skinKeywords) {
-                    if (lowerMessage.includes(keyword)) {
-                        return 'skin';
-                    }
-                }
-                
-                // Default to general search
-                return message.split(' ').slice(0, 2).join(' ');
+            getClientProfile() {
+                return {
+                    hairType: this.hairType.value,
+                    skinType: this.skinType.value,
+                    concerns: this.concerns.value,
+                    budget: this.budget.value
+                };
             }
             
-            showChatError(message) {
-                this.chatResponse.innerHTML = `<div class="error">${message}</div>`;
-            }
-            
-            loadInitialProducts() {
-                this.currentQuery = 'shampoo';
-                this.loadProducts(true);
-            }
-            
-            loadMore() {
-                this.loadProducts(false);
-            }
-            
-            async loadProducts(reset = false) {
-                if (this.isLoading) return;
-                
-                this.isLoading = true;
-                
+            async searchProducts(query, reset = false) {
                 if (reset) {
                     this.currentOffset = 0;
                     this.grid.innerHTML = '';
                 }
                 
                 try {
-                    this.status.textContent = 'Loading products...';
+                    this.status.textContent = 'AI is generating personalized recommendations...';
                     
+                    const profile = this.getClientProfile();
                     const params = new URLSearchParams({
-                        q: this.currentQuery,
-                        limit: '25',
-                        offset: this.currentOffset.toString()
+                        q: query,
+                        limit: '12',
+                        offset: this.currentOffset.toString(),
+                        ...profile
                     });
                     
                     const response = await fetch(`/api/products?${params}`);
                     
                     if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                        throw new Error(`HTTP ${response.status}`);
                     }
                     
                     const data = await response.json();
                     
                     if (!data.success) {
-                        throw new Error(data.error || 'Failed to load products');
+                        throw new Error(data.error || 'Failed to get recommendations');
                     }
                     
                     this.totalProducts = data.total;
                     this.currentOffset += data.items.length;
                     
-                    this.renderProducts(data.items);
+                    this.renderProducts(data.items, data.aiGenerated);
                     this.updateStatus(data);
                     this.updateLoadMoreButton();
                     
                 } catch (error) {
-                    console.error('Error loading products:', error);
+                    console.error('Products error:', error);
                     this.showProductError(error.message);
-                } finally {
-                    this.isLoading = false;
                 }
             }
             
-            renderProducts(products) {
+            renderProducts(products, aiGenerated = false) {
                 products.forEach(product => {
-                    const card = this.createProductCard(product);
+                    const card = this.createProductCard(product, aiGenerated);
                     this.grid.appendChild(card);
                 });
             }
             
-            createProductCard(product) {
+            createProductCard(product, aiGenerated = false) {
                 const card = document.createElement('div');
-                card.className = 'product-card';
+                card.className = `product-card${aiGenerated ? ' enhanced' : ''}`;
                 
                 const price = this.formatPrice(product.price);
                 const meta = `${product.brand} • ${product.category}`;
                 
+                const benefits = product.benefits && product.benefits.length > 0
+                    ? product.benefits.map(b => `<span class="benefit-tag">${b}</span>`).join('')
+                    : '';
+                
                 card.innerHTML = `
-                    <div class="product-image" data-name="${product.name}"></div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-meta">${meta}</div>
-                        <div class="product-footer">
-                            <div class="product-price">${price}</div>
-                            <button class="add-btn" data-id="${product.id}">Add</button>
+                    <div class="product-content">
+                        <div class="product-image">💆‍♀️</div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-meta">${meta}</div>
+                            ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
+                            ${benefits ? `<div class="product-benefits">${benefits}</div>` : ''}
+                            <div class="product-footer">
+                                <div class="product-price">${price}</div>
+                                <div class="product-actions">
+                                    ${product.description ? '<button class="details-btn">Details</button>' : ''}
+                                    <button class="add-btn" data-id="${product.id}">Add</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 `;
                 
-                // Add click handler for add button
+                // Add event listeners
+                const detailsBtn = card.querySelector('.details-btn');
+                if (detailsBtn) {
+                    detailsBtn.addEventListener('click', () => this.toggleDetails(card, product));
+                }
+                
                 const addBtn = card.querySelector('.add-btn');
-                addBtn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    this.addToCart(product);
-                });
+                addBtn.addEventListener('click', () => this.addToCart(product));
                 
                 return card;
+            }
+            
+            toggleDetails(card, product) {
+                const benefits = card.querySelector('.product-benefits');
+                if (benefits) {
+                    benefits.classList.toggle('visible');
+                }
+                
+                // Could show modal with full product details
+                if (product.usage || product.ingredients) {
+                    this.showProductDetails(product);
+                }
+            }
+            
+            showProductDetails(product) {
+                const details = [];
+                if (product.usage) details.push(`Usage: ${product.usage}`);
+                if (product.ingredients) details.push(`Key Ingredients: ${product.ingredients}`);
+                if (product.suitableFor) details.push(`Perfect For: ${product.suitableFor}`);
+                
+                if (details.length > 0) {
+                    alert(`${product.name}\n\n${details.join('\n\n')}`);
+                }
             }
             
             formatPrice(cents) {
@@ -522,9 +727,9 @@
             updateStatus(data) {
                 const showing = this.currentOffset;
                 const total = data.total;
-                const query = this.currentQuery ? ` matching "${this.currentQuery}"` : '';
+                const type = data.aiGenerated ? 'AI-generated recommendations' : 'products';
                 
-                this.status.textContent = `Showing ${showing} of ${total} products${query}`;
+                this.status.textContent = `Showing ${showing} of ${total} ${type} for "${data.query || this.currentQuery}"`;
             }
             
             updateLoadMoreButton() {
@@ -532,19 +737,33 @@
                 this.loadMoreSection.style.display = hasMore ? 'block' : 'none';
             }
             
+            showChatError(message) {
+                this.chatResponse.innerHTML = `<div class="error">${message}</div>`;
+            }
+            
             showProductError(message) {
-                this.status.innerHTML = `<div class="error">Error loading products: ${message}</div>`;
+                this.status.innerHTML = `<div class="error">Error: ${message}</div>`;
             }
             
             addToCart(product) {
-                // Placeholder for cart functionality
-                alert(`Added "${product.name}" to cart!\n\nPrice: ${this.formatPrice(product.price)}`);
+                alert(`Added "${product.name}" to cart!\n\nPrice: ${this.formatPrice(product.price)}\n\n${product.description || 'Perfect for your needs!'}`);
             }
+            
+            loadMore() {
+                this.searchProducts(this.currentQuery, false);
+            }
+        }
+        
+        // Quick suggestion function
+        function quickAsk(suggestion) {
+            const consultant = window.aiConsultant;
+            consultant.chatInput.value = suggestion;
+            consultant.handleChat();
         }
         
         // Initialize when page loads
         document.addEventListener('DOMContentLoaded', () => {
-            new ChatInterface();
+            window.aiConsultant = new AIConsultant();
         });
     </script>
 </body>
