@@ -8,10 +8,7 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;
-      --grad:linear-gradient(135deg,#B8860B,#DAA520)
-    }
+    :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
     .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--charcoal)}
     .header{background:var(--charcoal);padding:16px 16px 10px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:5;text-align:center}
@@ -33,7 +30,7 @@
     .ph{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fafafa}
     .meta{padding:10px}
     .name{font-size:12px;font-weight:800;color:#222;line-height:1.25;margin-bottom:4px}
-    .sub{font-size:11px;color:#777;margin-bottom:8px}
+    .subt{font-size:11px;color:#777;margin-bottom:8px}
     .price{font-size:12px;font-weight:800;color:var(--gold)}
     .cta{margin-top:auto;padding:10px;border-top:1px solid #eee}
     .buy{width:100%;border:none;border-radius:12px;padding:10px 12px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer}
@@ -58,9 +55,9 @@
 
     <div class="pills" id="quickPills">
       <button class="pill" data-q="purple shampoo">Purple Shampoo</button>
-      <button class="pill" data-q="anti-frizz serum">Anti-frizz Serum</button>
       <button class="pill" data-q="sensitive scalp shampoo">Sensitive Scalp</button>
       <button class="pill" data-q="bond repair mask">Bond Repair</button>
+      <button class="pill" data-q="anti-frizz serum">Anti-frizz Serum</button>
     </div>
 
     <main class="main">
@@ -73,7 +70,6 @@
       <button id="moreBtn" class="more" style="display:none" onclick="renderNext()">Show more</button>
     </main>
 
-    <!-- Composer -->
     <div class="dock">
       <div class="advisor">
         <input id="q" placeholder="Ask a stylist… e.g., purple shampoo for brassiness"/>
@@ -81,82 +77,49 @@
       </div>
     </div>
 
-    <!-- Bottom nav -->
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a href="/index.html">Home</a>
-      <a href="#" onclick="window.location.href='/index.html';return false;">Book</a>
+      <a href="/index.html">Book</a>
       <a href="/catalog.html">Shop</a>
       <a class="active" href="/chat.html">Chat</a>
     </nav>
   </div>
 
   <script>
-    const API_BASE = '';           // same-origin
-    const PAGE_SIZE = 20;          // mobile chunk size
-    let allItems = [];
-    let ranked = [];
-    let offset = 0;
-    let dataSource = '';
+<script>
 
-    // ---------- Helpers (price + image) ----------
-    function toCents(v){
-      if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
-      if (typeof v === 'string'){
-        const m = v.match(/([\\d.,]+)/);
-        if (m){ const n = Number(m[1].replace(/,/g,'')); if (Number.isFinite(n)) return n < 1000 ? Math.round(n*100) : Math.round(n); }
-      }
-      return 0;
+function toCents(v){
+  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
+  if (typeof v === 'string'){
+    const m = v.match(/([\d.,]+)/);
+    if (m){ const n = Number(m[1].replace(/,/g,'')); if (Number.isFinite(n)) return n < 1000 ? Math.round(n*100) : Math.round(n); }
+  }
+  return 0;
+}
+function money(c){ return '$' + (Number(c||0)/100).toFixed(2); }
+function sanitizeImage(u){
+  if(!u) return '/images/wooden-tray.jpg';
+  if(/^https?:\/\//i.test(u)){
+    if(/unsplash\.com\/photos\//.test(u)){
+      const id = u.split('/photos/')[1]?.split(/[\/?#]/)[0] || '';
+      if(id) return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80';
     }
-    function money(c){ return '$' + (Number(c||0)/100).toFixed(2); }
-    function sanitizeImage(u){
-      if(!u) return '/images/wooden-tray.jpg';
-      if(/^https?:\\/\\//i.test(u)){
-        if(/unsplash\\.com\\/photos\\//.test(u)){
-          const id = u.split('/photos/')[1]?.split(/[\\/?#]/)[0] || '';
-          if(id) return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80';
-        }
-        return u;
-      }
-      const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
-      if(m){ const id=m[1]||m[0]; return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80'; }
-      if(/\\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/') ? u : '/images/' + u.replace(/^\\//,''); }
-      return '/images/wooden-tray.jpg';
-    }
-    function normalize(list){
-      return list.map((x,i)=>{
-        const id = x.id || x.sku || x.SKU || ('sku-' + String(i+1).padStart(4,'0'));
-        const name = x.name || x.title || 'Unnamed';
-        const brand = x.brand || x.maker || 'Salon';
-        const category = x.category || x.type || '—';
-        const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
-        const image = sanitizeImage(x.image || x.img || x.photo || '');
-        return { id, name, brand, category, price, image };
-      });
-    }
+    if(/images\.unsplash\.com\/photo-/.test(u)) return u;
+    return u;
+  }
+  const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
+  if(m){ const id=m[1]||m[0]; return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80'; }
+  if(/\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/') ? u : '/images/' + u.replace(/^\//,''); }
+  return '/images/wooden-tray.jpg';
+}
+</script>
 
-    // ---------- Data load (choose largest set: API vs /data/products.json) ----------
-    async function fetchBest(){
-      let api = { items: [], source: '' };
-      try {
-        const r = await fetch(API_BASE + '/api/products?limit=5000');
-        const d = await r.json();
-        api.items = Array.isArray(d.items) ? d.items : [];
-        api.source = d.source || 'api';
-      } catch {}
-      let file = { items: [], source: '' };
-      try {
-        const r2 = await fetch('/data/products.json');
-        const j = await r2.json();
-        const arr = j.items || j.data || j.results || j.products || (Array.isArray(j) ? j : []);
-        file.items = Array.isArray(arr) ? arr : [];
-        file.source = '/data/products.json';
-      } catch {}
-      let chosen = api;
-      if (file.items.length > api.items.length) chosen = file;
-      return { items: normalize(chosen.items), source: chosen.source };
-    }
+    const API_BASE = '';
+    const PAGE_SIZE = 20;
+    let currentQ = '';
+    let total = 0;
+    let shown = 0;
 
-    // ---------- Chat + Ranking ----------
     function pushMsg(txt, who='bot'){
       const div = document.createElement('div');
       div.className = 'msg ' + (who === 'you' ? 'you' : 'bot');
@@ -164,107 +127,81 @@
       document.getElementById('chat').appendChild(div);
       div.scrollIntoView({behavior:'smooth',block:'end'});
     }
-    function pushFollowUp(options = [], original = ''){
+    function pushFollowUp(options = [], q=''){
       if (!options.length) return;
       const wrap = document.createElement('div');
       wrap.className = 'follow';
       options.forEach(opt => {
         const b = document.createElement('button');
         b.textContent = opt;
-        b.onclick = () => {
-          const q = (original + ' ' + opt).trim();
-          document.getElementById('q').value = q;
-          ask();
-        };
+        b.onclick = () => { document.getElementById('q').value = (q + ' ' + opt).trim(); ask(); };
         wrap.appendChild(b);
       });
       document.getElementById('chat').appendChild(wrap);
     }
-    function tokens(s){ return String(s).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); }
-    function score(item, toks){
-      const name=(item.name||'').toLowerCase();
-      const cat=(item.category||'').toLowerCase();
-      let s=0; toks.forEach(t=>{ if(name.includes(t)) s+=3; if(cat.includes(t)) s+=2; });
-      return s;
-    }
-    function rank(items, q){
-      if (!q) return items.slice();
-      const t = tokens(q);
-      return items.map(x=>({x,s:score(x,t)})).sort((a,b)=>b.s-a.s).map(o=>o.x);
-    }
-
-    // ---------- Render ----------
-    function clearGrid(){ document.getElementById('grid').innerHTML=''; offset=0; }
-    function renderCard(it){
-      const el = document.createElement('article');
-      el.className = 'card';
+    function cardHTML(it){
       const img = sanitizeImage(it.image);
-      el.innerHTML = `
-        <img class="ph" src="${img}" alt="${(it.name||'Product').replace(/"/g,'&quot;')}" onerror="this.src='/images/wooden-tray.jpg'">
-        <div class="meta">
-          <div class="name">${it.name||'Unnamed'}</div>
-          <div class="sub">${[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}</div>
-          <div class="price">${money(it.price)}</div>
-        </div>
-        <div class="cta"><button class="buy" onclick='(function(){try{const raw=localStorage.getItem("luminous_cart");const cart=raw?JSON.parse(raw):[];cart.push({id:"${it.id}",name:"${(it.name||'').replace(/"/g,'&quot;')}",price:${it.price||0},qty:1});localStorage.setItem("luminous_cart",JSON.stringify(cart));alert("Added to cart.");}catch(e){}})()'>Add to Cart</button></div>`;
-      document.getElementById('grid').appendChild(el);
+      const safeName = (it.name||'Product').replace(/"/g,'&quot;');
+      const sub = [it.brand||'—', it.category||'—'].filter(Boolean).join(' • ');
+      const price = money(it.price);
+      return `
+        <article class="card">
+          <img class="ph" src="${img}" alt="${safeName}" onerror="this.src='/images/wooden-tray.jpg'">
+          <div class="meta">
+            <div class="name">${safeName}</div>
+            <div class="subt">${sub}</div>
+            <div class="price">${price}</div>
+          </div>
+          <div class="cta"><button class="buy" onclick='(function(){try{const raw=localStorage.getItem("luminous_cart");const cart=raw?JSON.parse(raw):[];cart.push({id:"${it.id}",name:"${safeName}",price:${it.price or 0},qty:1});localStorage.setItem("luminous_cart",JSON.stringify(cart));alert("Added to cart.");}catch(e){}})()'>Add to Cart</button></div>
+        </article>`;
     }
-    function renderNext(){
-      const slice = ranked.slice(offset, offset + PAGE_SIZE);
-      slice.forEach(renderCard);
-      offset += slice.length;
-      const more = document.getElementById('moreBtn');
-      more.style.display = offset < ranked.length ? 'block' : 'none';
-      document.getElementById('resultsHd').style.display = ranked.length ? 'block' : 'none';
-      document.getElementById('status').textContent = `Showing ${Math.min(offset, ranked.length)} of ${ranked.length} results • Source: ${dataSource||'n/a'}`;
+    function clearGrid(){ document.getElementById('grid').innerHTML=''; shown = 0; }
+
+    async function fetchPage(q, offset, limit){
+      const u = new URL(API_BASE + '/api/products', location.origin);
+      if (q) u.searchParams.set('q', q);
+      u.searchParams.set('offset', String(offset||0));
+      u.searchParams.set('limit', String(limit||PAGE_SIZE));
+      const r = await fetch(u.toString());
+      const j = await r.json();
+      return j;
     }
 
-    // ---------- Interactions ----------
+    async function renderNext(){
+      if (shown >= total) return;
+      const j = await fetchPage(currentQ, shown, PAGE_SIZE);
+      const grid = document.getElementById('grid');
+      (j.items||[]).forEach(it => { grid.insertAdjacentHTML('beforeend', cardHTML(it)); });
+      shown += (j.items||[]).length;
+      document.getElementById('moreBtn').style.display = shown < total ? 'block' : 'none';
+      document.getElementById('resultsHd').style.display = total ? 'block' : 'none';
+      document.getElementById('status').textContent = `Showing ${shown} of ${total} • Source: ${j.source||'n/a'}`;
+    }
+
     async function ask(){
       const input = document.getElementById('q');
       const q = (input.value || '').trim();
       if (!q) { alert('Please enter a question.'); return; }
       pushMsg(q, 'you');
 
-      // Call chat API (shows guidance + may return follow-up)
-      try{
-        const r = await fetch(API_BASE + '/api/chat', {
-          method:'POST', headers:{'Content-Type':'application/json'},
-          body: JSON.stringify({ message: q })
-        });
-        const data = await r.json();
-        if (data.response) pushMsg(data.response, 'bot');
-        if (data.followUp && data.followUp.key === 'skinType'){
-          pushFollowUp(['oily','combination','dry','sensitive'], q);
-        }
-      }catch{
-        pushMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.', 'bot');
-      }
-
-      // Rank products for the query
-      ranked = rank(allItems, q);
-      if (!ranked.length){
-        pushMsg('No matching products yet — widening search to related items.', 'bot');
-        ranked = allItems.slice(0); // fall back to all
-      }
+      currentQ = q;
       clearGrid();
-      renderNext();
+      total = 0;
+
+      try { 
+        const r = await fetch(API_BASE + '/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message: q }) });
+        const d = await r.json();
+        if (d.response) pushMsg(d.response, 'bot');
+        if (d.followUp && d.followUp.options) pushFollowUp(d.followUp.options, q);
+      } catch(e) { pushMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.', 'bot'); }
+
+      try { const meta = await fetchPage(q, 0, PAGE_SIZE); total = meta.total || (meta.items ? meta.items.length : 0); if (!total) pushMsg('No matching products yet — widening search to related items.', 'bot'); renderNext(); }
+      catch(e) { pushMsg('Could not load products right now.', 'bot'); }
     }
 
-    // Quick pills
-    document.getElementById('quickPills').addEventListener('click', (e)=>{
-      const btn = e.target.closest('[data-q]'); if (!btn) return;
-      document.getElementById('q').value = btn.getAttribute('data-q');
-      ask();
-    });
+    document.getElementById('quickPills').addEventListener('click', (e)=>{ const btn=e.target.closest('[data-q]'); if(!btn) return; document.getElementById('q').value=btn.getAttribute('data-q'); ask(); });
 
-    // Boot
-    (async function boot(){
-      const best = await fetchBest();
-      allItems = best.items;
-      dataSource = best.source;
-      document.getElementById('status').textContent = `Loaded: ${allItems.length} • Source: ${dataSource||'n/a'}`;
-    })();
+    (async function boot(){ try{ const meta = await fetchPage('', 0, 1); total = meta.total || 0; document.getElementById('status').textContent = `Loaded: ${total} • Source: ${meta.source||'n/a'}`; }catch{ document.getElementById('status').textContent='Dataset unavailable'; } })();
   </script>
 </body>
 </html>
