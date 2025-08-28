@@ -1,197 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Luminous • Chat</title>
-<link rel="icon" href="/favicon.svg" type="image/svg+xml">
-<style>
-  :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal)}
-  .page{max-width:960px;margin:0 auto;background:#fff;min-height:100vh;display:flex;flex-direction:column}
-  header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:10}
-  .bar{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:12px 16px}
-  .brand{font-weight:800;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-  .status{font-size:12px;color:#555}
-  .ver{font-size:11px;color:#999;padding:0 16px 8px}
-  .strip{display:flex;gap:8px;flex-wrap:wrap;padding:8px 16px;border-top:1px solid #f3f3f3}
-  .pill{border:1px solid #e5e5e5;border-radius:999px;padding:8px 12px;font-size:12px;cursor:pointer;background:#fafafa}
-  .pill.active{border-color:#f0d28a;background:#fff4da}
-  .chat{flex:1;display:grid;grid-template-columns:1fr;gap:10px;padding:12px 16px;align-content:start}
-  .msg{padding:10px 12px;border-radius:12px;max-width:80%}
-  .bot{background:#f7f7f7;border:1px solid #eee}
-  .you{background:#fff7e5;border:1px solid #ffe1a3;margin-left:auto}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 16px 80px}
-  @media (max-width:900px){.grid{grid-template-columns:repeat(3,1fr)}}
-  @media (max-width:680px){.grid{grid-template-columns:repeat(2,1fr)}}
-  .card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-  .ph{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fafafa}
-  .meta{padding:10px 12px}
-  .name{font-size:13px;font-weight:700;color:#222;line-height:1.2;margin-bottom:6px}
-  .sub{font-size:12px;color:#666;margin-bottom:10px}
-  .price{font-weight:800;color:#B8860B;font-size:13px}
-  .cta{margin-top:auto;padding:12px;border-top:1px solid #f2f2f2;display:flex;gap:8px}
-  button{appearance:none;border:1px solid #e6e6e6;background:#fafafa;border-radius:12px;padding:10px 12px;font-weight:700;cursor:pointer;flex:1}
-  .buy{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none}
-  .composer{position:sticky;bottom:0;background:#fff;border-top:1px solid #eee;display:flex;gap:8px;padding:12px 16px}
-  .composer input{flex:1;border:1px solid #e5e5e5;border-radius:12px;padding:10px 12px;font-size:14px}
-  .nav{position:sticky;bottom:0;background:#fff;border-top:1px solid #eee;display:grid;grid-template-columns:repeat(4,1fr);height:56px;align-items:center}
-  .nav a{text-align:center;text-decoration:none;color:#777;font-size:12px}
-  .nav a.active{color:#B8860B;font-weight:800}
-</style>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+  <title>Luminous • Chat</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;
+      --grad:linear-gradient(135deg,#B8860B,#DAA520)
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
+    .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--charcoal)}
+    .header{background:var(--charcoal);padding:16px 16px 10px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:5;text-align:center}
+    .brand{font-weight:800;font-size:20px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .sub{margin-top:4px;font-size:11px;color:var(--gold);font-weight:600;opacity:.95}
+    .status{margin-top:6px;font-size:10px;color:#aaa}
+    .pills{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding:10px 12px;background:var(--charcoal);border-bottom:1px solid #3A3A3A}
+    .pill{font-size:11px;border:1px solid #50442a;color:#e9d6a6;border-radius:999px;padding:6px 10px;cursor:pointer;background:rgba(184,134,11,.08)}
+    .main{background:#fff;min-height:calc(100vh - 60px);padding:10px 10px 140px}
+    .chat{display:flex;flex-direction:column;gap:8px}
+    .msg{max-width:85%;padding:10px 12px;border-radius:14px;font-size:13px;line-height:1.35;box-shadow:0 2px 6px rgba(0,0,0,.05)}
+    .bot{align-self:flex-start;background:#f7f7f7;border:1px solid #eee}
+    .you{align-self:flex-end;background:#fff7e5;border:1px solid #ffe1a3}
+    .follow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+    .follow button{border:1px solid #e6e6e6;background:#faf7ef;border-radius:999px;padding:6px 10px;font-size:11px;cursor:pointer}
+    .hd{margin:12px 2px 6px;font-size:12px;font-weight:800;color:#333}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .card{background:#fff;border-radius:14px;border:1px solid #F0F0F0;box-shadow:0 2px 8px rgba(0,0,0,.04);overflow:hidden;display:flex;flex-direction:column}
+    .ph{width:100%;aspect-ratio:1/1;object-fit:cover;background:#fafafa}
+    .meta{padding:10px}
+    .name{font-size:12px;font-weight:800;color:#222;line-height:1.25;margin-bottom:4px}
+    .sub{font-size:11px;color:#777;margin-bottom:8px}
+    .price{font-size:12px;font-weight:800;color:var(--gold)}
+    .cta{margin-top:auto;padding:10px;border-top:1px solid #eee}
+    .buy{width:100%;border:none;border-radius:12px;padding:10px 12px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);cursor:pointer}
+    .more{display:block;width:100%;border:none;background:var(--grad);color:#fff;border-radius:12px;padding:10px;font-weight:800;margin:8px 0 0}
+    .dock{position:fixed;left:50%;transform:translateX(-50%);bottom:60px;width:100%;max-width:414px;padding:10px 12px;z-index:11}
+    .advisor{display:flex;gap:8px;align-items:center;background:#fff;border-radius:26px;padding:8px 10px;border:1.5px solid #e7d3a6;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    .advisor input{flex:1;border:none;outline:none;font-size:13px;background:transparent;color:var(--ink)}
+    .advisor input::placeholder{color:#9A9A9A}
+    .btn-send{border:none;width:36px;height:36px;border-radius:18px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+    .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
+    .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
+    .nav a.active{color:var(--gold);font-weight:700}
+  </style>
 </head>
 <body>
-<div class="page">
-  <header>
-    <div class="bar">
+  <div class="page">
+    <header class="header">
       <div class="brand">Luminous Chat</div>
+      <div class="sub">Ask • Recommend • Add to Cart</div>
       <div class="status" id="status">Loading…</div>
+    </header>
+
+    <div class="pills" id="quickPills">
+      <button class="pill" data-q="purple shampoo">Purple Shampoo</button>
+      <button class="pill" data-q="anti-frizz serum">Anti-frizz Serum</button>
+      <button class="pill" data-q="sensitive scalp shampoo">Sensitive Scalp</button>
+      <button class="pill" data-q="bond repair mask">Bond Repair</button>
     </div>
-    <div class="ver">CHAT VERSION: r2</div>
-    <div class="strip">
-      <div class="pill" data-q="purple shampoo">Purple Shampoo</div>
-      <div class="pill" data-q="anti-frizz serum">Anti‑frizz Serum</div>
-      <div class="pill" data-q="sensitive scalp shampoo">Sensitive Scalp</div>
-      <div class="pill" data-q="bond repair mask">Bond Repair Mask</div>
+
+    <main class="main">
+      <section class="chat" id="chat">
+        <div class="msg bot">Hi! Ask about routines, ingredients, or products. I’ll answer and show matching items below.</div>
+      </section>
+
+      <div class="hd" id="resultsHd" style="display:none">Results</div>
+      <section class="grid" id="grid"></section>
+      <button id="moreBtn" class="more" style="display:none" onclick="renderNext()">Show more</button>
+    </main>
+
+    <!-- Composer -->
+    <div class="dock">
+      <div class="advisor">
+        <input id="q" placeholder="Ask a stylist… e.g., purple shampoo for brassiness"/>
+        <button class="btn-send" onclick="ask()">Go</button>
+      </div>
     </div>
-  </header>
 
-  <section id="chat" class="chat" aria-live="polite">
-    <div class="msg bot">Hi! Ask about routines, ingredients, or products. I’ll answer and show matching items below.</div>
-  </section>
-
-  <section id="grid" class="grid"></section>
-
-  <div class="composer">
-    <input id="q" placeholder="Ask a stylist… e.g., purple shampoo for brassiness"/>
-    <button onclick="ask()">Ask</button>
+    <!-- Bottom nav -->
+    <nav class="nav" role="navigation" aria-label="Bottom Navigation">
+      <a href="/index.html">Home</a>
+      <a href="#" onclick="window.location.href='/index.html';return false;">Book</a>
+      <a href="/catalog.html">Shop</a>
+      <a class="active" href="/chat.html">Chat</a>
+    </nav>
   </div>
 
-  <nav class="nav">
-    <a href="/index.html">Home</a>
-    <a href="#" onclick="location.href='/index.html';return false;">Book</a>
-    <a href="/catalog.html">Shop</a>
-    <a class="active" href="/chat.html">Chat</a>
-  </nav>
-</div>
+  <script>
+    const API_BASE = '';           // same-origin
+    const PAGE_SIZE = 20;          // mobile chunk size
+    let allItems = [];
+    let ranked = [];
+    let offset = 0;
+    let dataSource = '';
 
-<script>
-const API_BASE='';
-const PAGE=50;
-let allItems=[];
-let current=[];
-let offset=0;
-let apiSource='';
-
-
-function toCents(v){
-  if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
-  if (typeof v === 'string'){
-    const m=v.match(/([\d.,]+)/); if(m){ const n=Number(m[1].replace(/,/g,'')); if(Number.isFinite(n)) return n<1000?Math.round(n*100):Math.round(n); }
-  }
-  return 0;
-}
-function fmtPrice(c){ return '$'+(Number(c||0)/100).toFixed(2); }
-function sanitizeImage(u){
-  if(!u) return '/images/wooden-tray.jpg';
-  if(/^https?:\/\//i.test(u)){
-    if(/unsplash\.com\/photos\//.test(u)){
-      const id = u.split('/photos/')[1]?.split(/[\/?#]/)[0] || '';
-      if(id) return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=640&q=80`;
+    // ---------- Helpers (price + image) ----------
+    function toCents(v){
+      if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
+      if (typeof v === 'string'){
+        const m = v.match(/([\\d.,]+)/);
+        if (m){ const n = Number(m[1].replace(/,/g,'')); if (Number.isFinite(n)) return n < 1000 ? Math.round(n*100) : Math.round(n); }
+      }
+      return 0;
     }
-    return u;
-  }
-  const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
-  if(m){ const id=m[1]||m[0]; return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=640&q=80`; }
-  if(/\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/')?u:`/images/${u.replace(/^\//,'')}`; }
-  return '/images/wooden-tray.jpg';
-}
-function normalize(list){
-  return list.map((x,i)=>{
-    const id = x.id || x.sku || `sku-${String(i+1).padStart(4,'0')}`;
-    const name = x.name || x.title || 'Unnamed';
-    const brand = x.brand || x.maker || 'Salon';
-    const category = x.category || x.type || '—';
-    const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
-    const image = sanitizeImage(x.image || x.img || x.photo || '');
-    return { id, name, brand, category, price, image };
-  });
-}
+    function money(c){ return '$' + (Number(c||0)/100).toFixed(2); }
+    function sanitizeImage(u){
+      if(!u) return '/images/wooden-tray.jpg';
+      if(/^https?:\\/\\//i.test(u)){
+        if(/unsplash\\.com\\/photos\\//.test(u)){
+          const id = u.split('/photos/')[1]?.split(/[\\/?#]/)[0] || '';
+          if(id) return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80';
+        }
+        return u;
+      }
+      const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
+      if(m){ const id=m[1]||m[0]; return 'https://images.unsplash.com/photo-' + id + '?auto=format&fit=crop&w=640&q=80'; }
+      if(/\\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/') ? u : '/images/' + u.replace(/^\\//,''); }
+      return '/images/wooden-tray.jpg';
+    }
+    function normalize(list){
+      return list.map((x,i)=>{
+        const id = x.id || x.sku || x.SKU || ('sku-' + String(i+1).padStart(4,'0'));
+        const name = x.name || x.title || 'Unnamed';
+        const brand = x.brand || x.maker || 'Salon';
+        const category = x.category || x.type || '—';
+        const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
+        const image = sanitizeImage(x.image || x.img || x.photo || '');
+        return { id, name, brand, category, price, image };
+      });
+    }
 
+    // ---------- Data load (choose largest set: API vs /data/products.json) ----------
+    async function fetchBest(){
+      let api = { items: [], source: '' };
+      try {
+        const r = await fetch(API_BASE + '/api/products?limit=5000');
+        const d = await r.json();
+        api.items = Array.isArray(d.items) ? d.items : [];
+        api.source = d.source || 'api';
+      } catch {}
+      let file = { items: [], source: '' };
+      try {
+        const r2 = await fetch('/data/products.json');
+        const j = await r2.json();
+        const arr = j.items || j.data || j.results || j.products || (Array.isArray(j) ? j : []);
+        file.items = Array.isArray(arr) ? arr : [];
+        file.source = '/data/products.json';
+      } catch {}
+      let chosen = api;
+      if (file.items.length > api.items.length) chosen = file;
+      return { items: normalize(chosen.items), source: chosen.source };
+    }
 
-function pushMsg(text,who='bot'){
-  const div=document.createElement('div');
-  div.className='msg '+(who==='you'?'you':'bot');
-  div.textContent=text;
-  document.getElementById('chat').appendChild(div);
-  div.scrollIntoView({behavior:'smooth',block:'end'});
-}
-function renderCard(it){
-  const div=document.createElement('article');
-  div.className='card';
-  const img=sanitizeImage(it.image);
-  div.innerHTML=`
-    <img class="ph" src="${{img}}" alt="${{it.name||'Product'}}" onerror="this.src='/images/wooden-tray.jpg'">
-    <div class="meta">
-      <div class="name">${{it.name||'Unnamed'}}</div>
-      <div class="sub">${{[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}}</div>
-      <div class="price">${{fmtPrice(it.price)}}</div>
-    </div>
-    <div class="cta">
-      <button class="buy" onclick='addToCart({{"id":"${"{id}"}","name":"${"{name}"}","price":${"{price}"}}})'>Add to Cart</button>
-    </div>`
-    .replace("${{img}}", img)
-    .replace("${{id}}", it.id)
-    .replace("${{name}}", (it.name||'').replace(/'/g,"&#39;"))
-    .replace("${{price}}", String(it.price||0));
-  document.getElementById('grid').appendChild(div);
-}
-function resetGrid(){ document.getElementById('grid').innerHTML=''; offset=0; }
-function renderNext(){ const slice=current.slice(offset,offset+PAGE); slice.forEach(renderCard); offset+=slice.length; }
-function tokens(s){return String(s).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);}
-function score(item, toks){ const name=(item.name||'').toLowerCase(); const cat=(item.category||'').toLowerCase(); let s=0; toks.forEach(t=>{ if(name.includes(t)) s+=3; if(cat.includes(t)) s+=2; }); return s; }
-function rank(items,q){ const toks=tokens(q); return items.map(x=>({x,s:score(x,toks)})).sort((a,b)=>b.s-a.s).map(o=>o.x); }
+    // ---------- Chat + Ranking ----------
+    function pushMsg(txt, who='bot'){
+      const div = document.createElement('div');
+      div.className = 'msg ' + (who === 'you' ? 'you' : 'bot');
+      div.textContent = txt;
+      document.getElementById('chat').appendChild(div);
+      div.scrollIntoView({behavior:'smooth',block:'end'});
+    }
+    function pushFollowUp(options = [], original = ''){
+      if (!options.length) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'follow';
+      options.forEach(opt => {
+        const b = document.createElement('button');
+        b.textContent = opt;
+        b.onclick = () => {
+          const q = (original + ' ' + opt).trim();
+          document.getElementById('q').value = q;
+          ask();
+        };
+        wrap.appendChild(b);
+      });
+      document.getElementById('chat').appendChild(wrap);
+    }
+    function tokens(s){ return String(s).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean); }
+    function score(item, toks){
+      const name=(item.name||'').toLowerCase();
+      const cat=(item.category||'').toLowerCase();
+      let s=0; toks.forEach(t=>{ if(name.includes(t)) s+=3; if(cat.includes(t)) s+=2; });
+      return s;
+    }
+    function rank(items, q){
+      if (!q) return items.slice();
+      const t = tokens(q);
+      return items.map(x=>({x,s:score(x,t)})).sort((a,b)=>b.s-a.s).map(o=>o.x);
+    }
 
-async function ask(){
-  const q=document.getElementById('q').value.trim();
-  if(!q) return;
-  pushMsg(q,'you');
-  try{
-    const r=await fetch(`${{API_BASE}}/api/chat`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:q})});
-    const data=await r.json();
-    pushMsg(data.response||'…','bot');
-  }catch(e){
-    pushMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.','bot');
-  }
-  current = rank(allItems,q);
-  resetGrid();
-  renderNext(); // first 50
-}
+    // ---------- Render ----------
+    function clearGrid(){ document.getElementById('grid').innerHTML=''; offset=0; }
+    function renderCard(it){
+      const el = document.createElement('article');
+      el.className = 'card';
+      const img = sanitizeImage(it.image);
+      el.innerHTML = `
+        <img class="ph" src="${img}" alt="${(it.name||'Product').replace(/"/g,'&quot;')}" onerror="this.src='/images/wooden-tray.jpg'">
+        <div class="meta">
+          <div class="name">${it.name||'Unnamed'}</div>
+          <div class="sub">${[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}</div>
+          <div class="price">${money(it.price)}</div>
+        </div>
+        <div class="cta"><button class="buy" onclick='(function(){try{const raw=localStorage.getItem("luminous_cart");const cart=raw?JSON.parse(raw):[];cart.push({id:"${it.id}",name:"${(it.name||'').replace(/"/g,'&quot;')}",price:${it.price||0},qty:1});localStorage.setItem("luminous_cart",JSON.stringify(cart));alert("Added to cart.");}catch(e){}})()'>Add to Cart</button></div>`;
+      document.getElementById('grid').appendChild(el);
+    }
+    function renderNext(){
+      const slice = ranked.slice(offset, offset + PAGE_SIZE);
+      slice.forEach(renderCard);
+      offset += slice.length;
+      const more = document.getElementById('moreBtn');
+      more.style.display = offset < ranked.length ? 'block' : 'none';
+      document.getElementById('resultsHd').style.display = ranked.length ? 'block' : 'none';
+      document.getElementById('status').textContent = `Showing ${Math.min(offset, ranked.length)} of ${ranked.length} results • Source: ${dataSource||'n/a'}`;
+    }
 
-function addToCart(it){
-  try{ const raw=localStorage.getItem('luminous_cart'); const cart=raw?JSON.parse(raw):[]; cart.push({id:it.id,name:it.name,price:it.price||0,qty:1}); localStorage.setItem('luminous_cart',JSON.stringify(cart)); alert(`${{it.name}} added to cart.`); }catch(e){console.error(e);}
-}
+    // ---------- Interactions ----------
+    async function ask(){
+      const input = document.getElementById('q');
+      const q = (input.value || '').trim();
+      if (!q) { alert('Please enter a question.'); return; }
+      pushMsg(q, 'you');
 
-document.querySelectorAll('.pill').forEach(p=>p.addEventListener('click',()=>{ const q=p.getAttribute('data-q'); document.getElementById('q').value=q; ask(); }));
+      // Call chat API (shows guidance + may return follow-up)
+      try{
+        const r = await fetch(API_BASE + '/api/chat', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ message: q })
+        });
+        const data = await r.json();
+        if (data.response) pushMsg(data.response, 'bot');
+        if (data.followUp && data.followUp.key === 'skinType'){
+          pushFollowUp(['oily','combination','dry','sensitive'], q);
+        }
+      }catch{
+        pushMsg('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.', 'bot');
+      }
 
-async function fetchBest(){
-  let api={items:[],source:''};
-  try{ const r=await fetch(`${{API_BASE}}/api/products?limit=5000`); const d=await r.json(); api.items=Array.isArray(d.items)?d.items:[]; api.source=d.source||'api'; }catch(e){}
+      // Rank products for the query
+      ranked = rank(allItems, q);
+      if (!ranked.length){
+        pushMsg('No matching products yet — widening search to related items.', 'bot');
+        ranked = allItems.slice(0); // fall back to all
+      }
+      clearGrid();
+      renderNext();
+    }
 
-  let file={items:[],source:''};
-  try{ const r2=await fetch('/data/products.json'); const j=await r2.json(); const arr = j.items || j.data || j.results || j.products || (Array.isArray(j)?j:[]); file.items=Array.isArray(arr)?arr:[]; file.source='/data/products.json'; }catch(e){}
+    // Quick pills
+    document.getElementById('quickPills').addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-q]'); if (!btn) return;
+      document.getElementById('q').value = btn.getAttribute('data-q');
+      ask();
+    });
 
-  let chosen=api; if(file.items.length>api.items.length) chosen=file;
-  return { items: normalize(chosen.items), source: chosen.source };
-}
-
-async function boot(){
-  const best=await fetchBest();
-  allItems=best.items; apiSource=best.source;
-  document.getElementById('status').textContent = `Loaded: ${allItems.length} • Source: ${apiSource}`;
-}
-boot();
-</script>
+    // Boot
+    (async function boot(){
+      const best = await fetchBest();
+      allItems = best.items;
+      dataSource = best.source;
+      document.getElementById('status').textContent = `Loaded: ${allItems.length} • Source: ${dataSource||'n/a'}`;
+    })();
+  </script>
 </body>
 </html>
