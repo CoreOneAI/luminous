@@ -1,82 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Luminous • Catalog</title>
-  <link rel="icon" href="/favicon.svg"/>
-  <style>
-    :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
-    *{box-sizing:border-box}
-    body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f6f6f6;color:#111}
-    header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #eee;padding:12px 14px}
-    .brand{font-weight:800;font-size:18px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-    .toolbar{display:flex;gap:8px;margin-top:8px}
-    .input{flex:1;border:1px solid #e6e6e6;border-radius:12px;padding:10px 12px}
-    .btn{border:none;border-radius:12px;padding:10px 14px;font-weight:700;background:var(--grad);color:#fff;cursor:pointer}
-    main{max-width:960px;margin:0 auto;padding:12px}
-    #stats{font-size:12px;color:#666;margin:8px 2px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-    .card{background:#fff;border:1px solid #eee;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
-    .imgwrap{aspect-ratio:1/1;overflow:hidden;background:#fafafa}
-    .imgwrap img{width:100%;height:100%;object-fit:cover;display:block}
-    .pad{padding:10px 12px}
-    .name{font-weight:800;font-size:14px}
-    .meta{font-size:12px;color:#777;margin-top:4px}
-    .price{margin-top:8px;font-weight:800;color:var(--gold)}
-    #more{margin:16px auto;display:block}
-    nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:960px;background:#fff;border-top:1px solid #e0e0e0;height:56px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center}
-    nav a{text-decoration:none;color:#777;font-size:12px;text-align:center}
-    nav a.active{color:var(--gold);font-weight:700}
-    @media (max-width:420px){.grid{grid-template-columns:repeat(2,1fr)}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+<title>Luminous • Catalog</title>
+<link rel="icon" href="/favicon.svg"/>
+<style>
+:root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--pearl);color:var(--ink)}
+.page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--pearl)}
+.header{background:#fff;padding:14px 16px;border-bottom:1px solid #eee;position:sticky;top:0;z-index:5}
+.brand{font-weight:800;font-size:18px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.toolbar{display:flex;gap:8px;margin-top:8px}
+.input{flex:1;border:1px solid #E6E6E6;border-radius:12px;padding:10px 12px}
+.btn{border:none;border-radius:12px;padding:10px 14px;font-weight:800;background:var(--grad);color:#fff;cursor:pointer}
+.main{padding:12px}
+#stats{font-size:12px;color:#777;margin:6px 2px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{background:#fff;border:1px solid #EEE;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+.imgwrap{aspect-ratio:1/1;overflow:hidden;background:#fafafa}
+.imgwrap img{width:100%;height:100%;object-fit:cover;display:block}
+.pad{padding:10px 12px}
+.name{font-weight:800;font-size:14px}
+.meta{font-size:11px;color:#777;margin-top:4px}
+.price{margin-top:8px;font-weight:800;color:var(--gold)}
+#more{margin:14px auto;display:block}
+.nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:56px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center}
+.nav a{text-decoration:none;color:#777;font-size:12px;text-align:center}
+.nav a.active{color:var(--gold);font-weight:700}
+</style>
 </head>
 <body>
-  <header>
-    <div class="brand">Luminous Catalog</div>
+<div class="page">
+  <header class="header">
+    <div class="brand">Catalog</div>
     <div class="toolbar">
-      <input id="q" class="input" placeholder="Search (e.g., sensitive scalp shampoo)" />
-      <button class="btn" id="go">Search</button>
+      <input id="q" class="input" placeholder="Search products"/>
+      <button id="go" class="btn">Search</button>
     </div>
   </header>
-  <main>
-    <div id="stats">Loading products…</div>
+  <main class="main">
+    <div id="stats">Loading…</div>
     <div id="grid" class="grid"></div>
     <button id="more" class="btn" style="display:none">Show more</button>
   </main>
-
-  <nav>
+  <nav class="nav">
     <a href="/index.html">Home</a>
-    <a href="/catalog.html" class="active">Shop</a>
+    <a class="active" href="/catalog.html">Shop</a>
     <a href="/chat.html">Chat</a>
     <a href="/account.html">Account</a>
   </nav>
-
+</div>
 <script>
-const API_BASE = '';
 const LIMIT = 24;
-let offset = 0;
-let total = 0;
-
-function money(cents){
-  const v = (typeof cents==='number' && isFinite(cents)) ? cents : 0;
-  return '$' + (v/100).toFixed(2);
-}
+let offset = 0, total = 0;
+function money(c){return '$'+((c||0)/100).toFixed(2)}
 function sanitizeImage(src){
   if(!src) return '/images/studio-beige.jpg';
-  try {
+  try{
     if(src.startsWith('/')) return src;
     if(src.startsWith('data:')||src.startsWith('blob:')) return src;
     if(src.includes('images.unsplash.com')||src.includes('plus.unsplash.com')) return src;
-  } catch(e){}
+  }catch(e){}
   return '/images/studio-beige.jpg';
 }
-function cardHTML(it){
-  const img = sanitizeImage(it.image||'');
+function card(it){
   const sub = [it.brand||'—', it.category||'—'].filter(Boolean).join(' • ');
   return \`
-  <article class="card" data-id="\${it.id}">
-    <div class="imgwrap"><img src="\${img}" alt="\${(it.name||'Product').replace(/"/g,'&quot;')}" loading="lazy"/></div>
+  <article class="card">
+    <div class="imgwrap"><img src="\${sanitizeImage(it.image)}" alt="\${(it.name||'Product').replace(/"/g,'&quot;')}" loading="lazy"/></div>
     <div class="pad">
       <div class="name">\${it.name||'Product'}</div>
       <div class="meta">\${sub||'—'}</div>
@@ -84,44 +77,29 @@ function cardHTML(it){
     </div>
   </article>\`;
 }
-
-function getQ(){
-  try {
-    const sp = new URLSearchParams(location.search);
-    return (sp.get('q')||'').trim();
-  } catch(e){ return ''; }
-}
-
-async function fetchProducts(reset=false){
+function getQ(){ try{ return (new URLSearchParams(location.search).get('q')||'').trim(); }catch(e){ return ''; } }
+async function load(reset=false){
   const q = getQ();
   if(reset){ offset=0; document.getElementById('grid').innerHTML=''; }
   if(q) document.getElementById('q').value = q;
   const url = new URL(location.origin + '/api/products');
   if(q) url.searchParams.set('q', q);
-  url.searchParams.set('offset', String(offset));
-  url.searchParams.set('limit', String(LIMIT));
-  const r = await fetch(url.toString(), { headers: { 'Accept':'application/json' }});
+  url.searchParams.set('limit', LIMIT); url.searchParams.set('offset', offset);
+  const r = await fetch(url, { headers:{'Accept':'application/json'} });
   const data = await r.json();
-  total = data.total||0;
-  const items = Array.isArray(data.items) ? data.items : [];
-  const grid = document.getElementById('grid');
-  grid.insertAdjacentHTML('beforeend', items.map(cardHTML).join(''));
-  const showing = Math.min(offset+LIMIT, total, grid.children.length);
-  document.getElementById('stats').textContent = \`\${total} products • showing \${showing}\`;
+  total = data.total || data.count || 0;
+  const items = Array.isArray(data.items)?data.items:[];
+  document.getElementById('grid').insertAdjacentHTML('beforeend', items.map(card).join(''));
   offset += items.length;
+  document.getElementById('stats').textContent = \`\${total} products • showing \${offset}\`;
   document.getElementById('more').style.display = (offset < total) ? 'block' : 'none';
 }
-
 document.getElementById('go').addEventListener('click', ()=>{
-  const v = (document.getElementById('q').value||'').trim();
-  const next = v ? ('/catalog.html?q=' + encodeURIComponent(v)) : '/catalog.html';
-  location.href = next;
+  const v=(document.getElementById('q').value||'').trim();
+  location.href = v?('/catalog.html?q='+encodeURIComponent(v)):'/catalog.html';
 });
-
-document.getElementById('more').addEventListener('click', ()=>fetchProducts(false));
-
-// initial load
-fetchProducts(true);
+document.getElementById('more').addEventListener('click', ()=>load(false));
+load(true);
 </script>
 </body>
 </html>
