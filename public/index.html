@@ -2,40 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Luminous Salon — Book • Shop • Glow</title>
   <meta name="theme-color" content="#B8860B" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    :root{--charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;--grad:linear-gradient(135deg,#B8860B,#DAA520)}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--charcoal);color:var(--ink)}
+    :root{
+      --charcoal:#2C2C2C;--gold:#B8860B;--pearl:#F8F8F8;--ink:#111;--muted:#666;
+      --grad:linear-gradient(135deg,#B8860B,#DAA520)
+    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;background:var(--charcoal);color:var(--ink)}
     .page{max-width:414px;margin:0 auto;min-height:100vh;background:var(--charcoal)}
-    .header{background:var(--charcoal);padding:18px 20px 12px;border-bottom:1px solid #3A3A3A;text-align:center;position:sticky;top:0;z-index:5}
+    .header{background:var(--charcoal);padding:18px 16px 12px;border-bottom:1px solid #3A3A3A;position:sticky;top:0;z-index:5;text-align:center}
     .brand{font-weight:800;font-size:22px;letter-spacing:.3px;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .sub{margin-top:4px;font-size:11px;color:var(--gold);font-weight:600;opacity:.95}
     .main{background:var(--pearl);min-height:calc(100vh - 110px);padding:12px 12px 160px}
+    /* hero */
     .hero{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08)}
     .hero-track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory}
     .hero img{width:100%;height:180px;object-fit:cover;display:block;scroll-snap-align:start}
     .hero-copy{padding:14px 16px}
-    .hero-copy h1{font-size:17px;font-weight:800;color:var(--ink);margin-bottom:6px}
+    .hero-copy h1{font-size:17px;font-weight:800;margin-bottom:6px}
     .hero-copy p{font-size:12px;color:var(--muted)}
+    /* sections/cards */
     .section{margin-top:16px}
     .section .hd{background:var(--grad);color:#fff;border-radius:12px;padding:12px 14px;text-align:center;box-shadow:0 4px 12px rgba(184,134,11,.25)}
     .section .hd h2{font-size:13px;letter-spacing:.3px}
     .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
-    .card{background:#fff;border-radius:14px;padding:14px;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #F0F0F0;transition:transform .15s ease;cursor:pointer}
+    .card{background:#fff;border-radius:14px;padding:14px;border:1px solid #F0F0F0;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:transform .15s ease;cursor:pointer}
     .card:hover{transform:translateY(-2px)}
-    .k{font-size:12px;font-weight:800;color:var(--ink);margin-bottom:6px;letter-spacing:.2px}
+    .k{font-size:12px;font-weight:800;margin-bottom:6px}
     .d{font-size:11px;color:var(--muted);line-height:1.35}
     .cta{margin-top:12px}
     .btn{width:100%;border:none;border-radius:26px;padding:13px 16px;font-weight:800;letter-spacing:.2px;color:#fff;background:var(--grad);box-shadow:0 6px 16px rgba(184,134,11,.35);cursor:pointer}
     .strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
     .mini{background:#fff;border-radius:12px;padding:12px;border:1px solid #EEE}
-    .mini .name{font-size:12px;font-weight:700;margin-bottom:6px;color:var(--ink)}
+    .mini .name{font-size:12px;font-weight:700;margin-bottom:6px}
     .mini .meta{font-size:11px;color:var(--muted)}
+    /* bottom nav & advisor dock */
     .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:414px;background:#fff;border-top:1px solid #E0E0E0;height:60px;display:grid;grid-template-columns:repeat(4,1fr);align-items:center;z-index:10}
     .nav a{text-decoration:none;color:#777;font-size:11px;text-align:center}
     .nav a.active{color:var(--gold);font-weight:700}
@@ -44,20 +51,21 @@
     .advisor input{flex:1;border:none;outline:none;font-size:13px;background:transparent;color:var(--ink)}
     .advisor input::placeholder{color:#9A9A9A}
     .btn-send{border:none;width:36px;height:36px;border-radius:18px;background:var(--grad);color:#fff;font-weight:800;cursor:pointer}
+    /* modal */
     .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.56);display:none;align-items:center;justify-content:center;padding:18px;z-index:1000}
     .modal{width:100%;max-width:380px;background:#fff;border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.25);overflow:hidden}
     .modal-hd{background:var(--grad);color:#fff;padding:12px 14px;font-weight:800;font-size:14px}
     .modal-bd{padding:12px 14px}
     .field{margin-top:10px}
     .label{font-size:12px;color:#444;margin-bottom:6px;font-weight:700}
-    .input,select{width:100%;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:14px;outline:none}
-    .modal-ft{padding:12px 14px;border-top:1px solid #EFEFEF;display:flex;gap:10px}
-    .btn-secondary{flex:1;border:1px solid #E6E6E6;background:#FAFAFA;color:#333;border-radius:12px;padding:12px;font-weight:700;cursor:pointer}
-    .btn-primary{flex:2;border:none;background:var(--grad);color:#fff;border-radius:12px;padding:12px;font-weight:800;cursor:pointer}
+    .input, select{width:100%;border:1px solid #E6E6E6;border-radius:12px;padding:10px;font-size:14px;outline:none;background:#fff}
     .styles{display:grid;grid-template-columns:1fr;gap:8px;margin-top:8px;max-height:180px;overflow:auto}
     .style-row{display:flex;justify-content:space-between;align-items:center;border:1px solid #EEE;border-radius:10px;padding:8px 10px}
     .style-row label{font-size:12px;color:#222;display:flex;gap:8px;align-items:center}
     .price{font-size:12px;font-weight:800;color:var(--gold)}
+    .modal-ft{padding:12px 14px;border-top:1px solid #EFEFEF;display:flex;gap:10px}
+    .btn-secondary{flex:1;border:1px solid #E6E6E6;background:#FAFAFA;color:#333;border-radius:12px;padding:12px;font-weight:700;cursor:pointer}
+    .btn-primary{flex:2;border:none;background:var(--grad);color:#fff;border-radius:12px;padding:12px;font-weight:800;cursor:pointer}
     @media (max-width:380px){.grid{grid-template-columns:1fr}.strip{grid-template-columns:1fr}}
   </style>
 </head>
@@ -69,12 +77,13 @@
     </header>
 
     <main class="main">
+      <!-- HERO -->
       <section class="hero" aria-label="Featured">
         <div class="hero-track">
-          <img src="/AFRICAN%20AMERICAN%20BEAUTY.jpg" alt="Radiant skin" loading="lazy"/>
-          <img src="/HISPANIC%20BEAYTY%20CARE%20MODAL.jpg" alt="Skincare display" loading="lazy"/>
-          <img src="/WHITE%20FEMALE%20BEAUTY%20CARE%20MODAL.jpg" alt="Closeup" loading="lazy"/>
-          <img src="/WHITE%20FEMALE.jpg" alt="Cream application" loading="lazy"/>
+          <img src="/images/studio-beige.jpg" alt="Premium skincare" loading="lazy" onerror="this.src='/images/wooden-tray.png'"/>
+          <img src="/images/zen-stone-serum.jpg" alt="Serum & stones" loading="lazy" onerror="this.src='/images/wooden-tray.png'"/>
+          <img src="/images/wooden-tray.jpg" alt="Spa tray" loading="lazy" onerror="this.src='/images/wooden-tray.png'"/>
+          <img src="/images/hero-almonds.jpg" alt="" loading="lazy" onerror="this.src='/images/wooden-tray.png'"/>
         </div>
         <div class="hero-copy">
           <h1>Your Appointment, Elevated</h1>
@@ -82,7 +91,8 @@
         </div>
       </section>
 
-      <section class="section" id="services-section">
+      <!-- SERVICES -->
+      <section class="section">
         <div class="hd"><h2>Services</h2></div>
         <div class="grid" id="services">
           <article class="card" tabindex="0" data-svc="Haircut"><div class="k">Haircut</div><div class="d">Precision cuts and shaping. Includes consult & finish.</div></article>
@@ -94,9 +104,10 @@
           <article class="card" tabindex="0" data-svc="Mens"><div class="k">Men’s Grooming</div><div class="d">Barbering, beard shaping, gray blending.</div></article>
           <article class="card" tabindex="0" data-svc="Retail"><div class="k">Retail</div><div class="d">Salon-grade hair & skin care for at-home results.</div></article>
         </div>
-        <div class="cta"><button class="btn" id="bookBtn">Book Now</button></div>
+        <div class="cta"><button class="btn" id="bookNowBtn">Book Now</button></div>
       </section>
 
+      <!-- RECOMMENDED RETAIL -->
       <section class="section">
         <div class="hd"><h2>Recommended Retail</h2></div>
         <div class="strip" id="retail">
@@ -107,6 +118,7 @@
         </div>
       </section>
 
+      <!-- PACKAGES -->
       <section class="section">
         <div class="hd"><h2>Packages & Membership</h2></div>
         <div class="grid">
@@ -116,31 +128,31 @@
       </section>
     </main>
 
-    <!-- Compact advisor dock -->
+    <!-- Advisor dock -->
     <div class="dock" role="search">
       <div class="advisor">
         <input id="advisorInput" placeholder="Ask a stylist… e.g., color care after balayage" />
-        <button class="btn-send" id="advisorGo" title="Ask" aria-label="Ask">Go</button>
+        <button class="btn-send" id="advisorAskBtn" title="Ask" aria-label="Ask">Go</button>
       </div>
     </div>
 
     <!-- Bottom nav -->
     <nav class="nav" role="navigation" aria-label="Bottom Navigation">
       <a class="active" href="/index.html">Home</a>
-      <a href="#" id="navBook">Book</a>
-      <a href="/chat.html">Shop</a>
-      <a href="/account.html">Account</a>
+      <a href="#" id="bookNav">Book</a>
+      <a href="/catalog.html">Shop</a>
+      <a href="/chat.html">Chat</a>
     </nav>
   </div>
 
   <!-- Booking modal -->
-  <div class="modal-bg" id="bookingModal">
+  <div class="modal-bg" id="bookingModal" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="bookingTitle">
       <div class="modal-hd" id="bookingTitle">Book an Appointment</div>
       <div class="modal-bd">
         <div class="field">
           <div class="label">Service</div>
-          <select id="svcSelect" aria-label="Service type">
+          <select id="svcSelect">
             <option value="Haircut">Haircut</option>
             <option value="Color">Color</option>
             <option value="Blowout">Blowout</option>
@@ -174,125 +186,114 @@
     </div>
   </div>
 
-<script>
-(function(){
-  const API_BASE = ''; // same-origin
+  <script>
+    const API_BASE = ''; // same-origin
 
-  // --- Advisor (quick) ---
-  const ask = async (q) => {
-    try {
-      const r = await fetch(API_BASE + '/api/chat', {
-        method:'POST', headers:{'Content-Type':'application/json','Accept':'application/json'},
-        body: JSON.stringify({ message:q })
-      });
-      const ct = (r.headers.get('content-type')||'').toLowerCase();
-      const text = await r.text();
-      if (!r.ok || !ct.includes('application/json')) {
-        alert('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.');
-        return;
-      }
-      const data = JSON.parse(text);
-      if (data.followUp && data.followUp.question){
-        alert((data.response? (data.response + '\n\n') : '') + 'Next: ' + data.followUp.question + '  → Open Shop to answer.');
-      } else {
-        alert(data.response || 'No response.');
-      }
-    } catch(e){
-      console.error(e);
-      alert('Connection issue. Try again shortly.');
+    // Services -> styles map
+    const STYLE_MAP = {
+      Haircut: [ ['Classic Bob', 55], ['Layered Cut', 60], ['Precision Pixie', 65], ['Blow-Dry + Shape', 50], ['Cut + Deep Treatment', 75], ['Kids Cut', 35] ],
+      Color:   [ ['Single Process', 95], ['Partial Highlights', 120], ['Full Highlights', 165], ['Balayage', 185], ['Gloss / Toner', 45], ['Root Touch-Up', 85] ],
+      Blowout: [ ['Smooth Finish', 40], ['Volume Blowout', 45], ['Beach Waves', 50], ['Event Style (Updo)', 85], ['Keratin Express', 160] ],
+      Nails:   [ ['Classic Manicure', 30], ['Gel Manicure', 45], ['Acrylic Fill', 40], ['Spa Pedicure', 55], ['Nail Art Add-On', 15] ],
+      Skin:    [ ['Signature Facial', 95], ['Hydrafacial', 155], ['Chemical Peel', 135], ['LED Therapy', 35], ['Microdermabrasion', 120] ],
+      Extensions: [ ['Consult (Tape-In)', 0], ['Consult (Keratin-Tip)', 0], ['Maintenance Move-Up', 140], ['Removal', 95] ],
+      Mens:    [ ['Clipper Cut', 35], ['Scissor Cut', 45], ['Beard Trim', 20], ['Gray Blend', 40], ['Hot Towel Shave', 30] ]
+    };
+
+    // Utilities
+    function money(c){ return '$' + (Number(c||0)).toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+    function openBooking(preset) {
+      const modal = document.getElementById('bookingModal'); modal.style.display = 'flex'; modal.setAttribute('aria-hidden', 'false');
+      if (preset) document.getElementById('svcSelect').value = preset;
+      const dt = new Date(Date.now() + 2 * 60 * 60 * 1000);
+      document.getElementById('dateInput').value = dt.toISOString().slice(0,10);
+      document.getElementById('timeInput').value = dt.toTimeString().slice(0,5);
+      loadStylesForService(document.getElementById('svcSelect').value);
     }
-  };
-  document.getElementById('advisorGo').addEventListener('click', ()=>{
-    const v = (document.getElementById('advisorInput').value||'').trim();
-    if (v){ ask(v); }
-  });
-  document.getElementById('advisorInput').addEventListener('keydown', (e)=>{
-    if (e.key==='Enter'){ const v = e.target.value.trim(); if (v){ ask(v); } }
-  });
+    function closeBooking(){ const modal=document.getElementById('bookingModal'); modal.style.display='none'; modal.setAttribute('aria-hidden','true'); }
 
-  // --- Services click → open booking or retail ---
-  document.getElementById('services').addEventListener('click', (e)=>{
-    const card = e.target.closest('.card'); if (!card) return;
-    const svc = card.getAttribute('data-svc');
-    if (svc === 'Retail'){ window.location.href = '/catalog.html'; return; }
-    openBooking(svc);
-  });
-  document.getElementById('bookBtn').addEventListener('click', ()=> openBooking());
-  document.getElementById('navBook').addEventListener('click', (e)=>{ e.preventDefault(); openBooking(); });
+    function loadStylesForService(svc) {
+      const list = document.getElementById('styleList'); list.innerHTML='';
+      (STYLE_MAP[svc]||[]).forEach(([name, price], i) => {
+        const id = `style_${i}`;
+        const row = document.createElement('div'); row.className = 'style-row';
+        row.innerHTML = `
+          <label for="${id}"><input type="radio" name="style" id="${id}" value="${name}" ${i===0?'checked':''}/> ${name}</label>
+          <span class="price">${price>0?('$'+price):'Consult'}</span>`;
+        list.appendChild(row);
+      });
+    }
 
-  // --- Booking modal ---
-  const STYLE_MAP = {
-    Haircut: [ ['Classic Bob', 55], ['Layered Cut', 60], ['Precision Pixie', 65], ['Blow-Dry + Shape', 50], ['Cut + Deep Treatment', 75], ['Kids Cut', 35] ],
-    Color:   [ ['Single Process', 95], ['Partial Highlights', 120], ['Full Highlights', 165], ['Balayage', 185], ['Gloss / Toner', 45], ['Root Touch-Up', 85] ],
-    Blowout: [ ['Smooth Finish', 40], ['Volume Blowout', 45], ['Beach Waves', 50], ['Event Style (Updo)', 85], ['Keratin Express', 160] ],
-    Nails:   [ ['Classic Manicure', 30], ['Gel Manicure', 45], ['Acrylic Fill', 40], ['Spa Pedicure', 55], ['Nail Art Add-On', 15] ],
-    Skin:    [ ['Signature Facial', 95], ['Hydrafacial', 155], ['Chemical Peel', 135], ['LED Therapy', 35], ['Microdermabrasion', 120] ],
-    Extensions: [ ['Consult (Tape-In)', 0], ['Consult (Keratin-Tip)', 0], ['Maintenance Move-Up', 140], ['Removal', 95] ],
-    Mens:    [ ['Clipper Cut', 35], ['Scissor Cut', 45], ['Beard Trim', 20], ['Gray Blend', 40], ['Hot Towel Shave', 30] ]
-  };
-  const fmt = (c) => (c>0? ('$'+c) : 'Consult');
+    async function submitBooking() {
+      const service = document.getElementById('svcSelect').value;
+      const styleEl = document.querySelector('input[name="style"]:checked');
+      const style = styleEl ? styleEl.value : '';
+      const pair = (STYLE_MAP[service]||[]).find(([n]) => n===style);
+      const price = pair ? pair[1] : 0;
+      const date = document.getElementById('dateInput').value;
+      const time = document.getElementById('timeInput').value;
+      const notes = document.getElementById('notesInput').value;
+      if (!date || !time) { alert('Please select a date and time.'); return; }
 
-  function loadStylesForService(svc){
-    const list = document.getElementById('styleList'); list.innerHTML='';
-    (STYLE_MAP[svc]||[]).forEach(([name, price], i)=>{
-      const id = 'style_'+i;
-      const row = document.createElement('div'); row.className='style-row';
-      row.innerHTML = '<label for="'+id+'"><input type="radio" name="style" id="'+id+'" value="'+name+'" '+(i===0?'checked':'')+'> '+name+'</label>' +
-                      '<span class="price">'+fmt(price)+'</span>';
-      list.appendChild(row);
+      try {
+        const r = await fetch(`${API_BASE}/api/bookings/create`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ service, style, price, datetimeISO: new Date(`${date}T${time}:00`).toISOString(), notes })
+        });
+        const ct = r.headers.get('content-type') || '';
+        const text = await r.text();
+        if (!r.ok || !ct.includes('application/json')) {
+          alert('Booking service unavailable. Your details are saved locally. We will confirm shortly.');
+          return;
+        }
+        const data = JSON.parse(text);
+        if (!data.success) { alert('Could not create booking.'); return; }
+        const when = new Date(`${date}T${time}:00`).toLocaleString();
+        alert(`Booking created.\n\nRef: ${data.bookingId}\n${service} — ${style || 'Consult'} (${price>0?('$'+price):'Consult'})\nWhen: ${when}`);
+        closeBooking();
+      } catch (e) { console.error(e); alert('Unable to create booking right now.'); }
+    }
+
+    async function advisorAsk() {
+      const input = document.getElementById('advisorInput');
+      const q = (input?.value || '').trim();
+      if (!q) { alert('Please enter a question.'); return; }
+
+      try {
+        const r = await fetch(`${API_BASE}/api/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({ message: q })
+        });
+        const ct = r.headers.get('content-type') || '';
+        const text = await r.text();
+        if (!r.ok || !ct.includes('application/json')) {
+          alert('Advisor temporarily unavailable. Quick tip: hydrate mid-lengths, use heat protectant, and book a gloss for shine.');
+          return;
+        }
+        const data = JSON.parse(text);
+        alert(data?.response || 'No response.');
+      } catch (e) {
+        console.error(e);
+        alert('Connection issue. Try again shortly.');
+      }
+    }
+
+    // Wire up UI events
+    document.getElementById('bookNowBtn').addEventListener('click', () => openBooking());
+    document.getElementById('bookNav').addEventListener('click', (e) => { e.preventDefault(); openBooking(); });
+    document.getElementById('cancelBooking').addEventListener('click', closeBooking);
+    document.getElementById('submitBooking').addEventListener('click', submitBooking);
+    document.getElementById('advisorAskBtn').addEventListener('click', advisorAsk);
+
+    document.getElementById('svcSelect').addEventListener('change', (e) => loadStylesForService(e.target.value));
+    document.getElementById('services').addEventListener('click', (e) => {
+      const card = e.target.closest('.card'); if (!card) return;
+      const svc = card.getAttribute('data-svc');
+      if (svc === 'Retail') { window.location.href = '/catalog.html'; return; }
+      openBooking(svc);
     });
-  }
-  function openBooking(preset){
-    const modal = document.getElementById('bookingModal');
-    modal.style.display='flex';
-    const svcSel = document.getElementById('svcSelect');
-    if (preset) svcSel.value = preset;
-    const dt = new Date(Date.now() + 2*60*60*1000);
-    document.getElementById('dateInput').value = dt.toISOString().slice(0,10);
-    document.getElementById('timeInput').value = dt.toTimeString().slice(0,5);
-    loadStylesForService(svcSel.value);
-  }
-  function closeBooking(){ document.getElementById('bookingModal').style.display='none'; }
-  document.getElementById('cancelBooking').addEventListener('click', closeBooking);
-  document.getElementById('svcSelect').addEventListener('change', (e)=> loadStylesForService(e.target.value));
-
-  async function submitBooking(){
-    const service = document.getElementById('svcSelect').value;
-    const styleEl = document.querySelector('input[name="style"]:checked');
-    const style = styleEl ? styleEl.value : '';
-    const pair = (STYLE_MAP[service]||[]).find(([n]) => n===style);
-    const price = pair ? pair[1] : 0;
-    const date = document.getElementById('dateInput').value;
-    const time = document.getElementById('timeInput').value;
-    const notes = document.getElementById('notesInput').value;
-    if (!date || !time){ alert('Please select a date and time.'); return; }
-
-    try{
-      const r = await fetch(API_BASE + '/api/bookings/create', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ service, style, price, datetimeISO: new Date(date+'T'+time+':00').toISOString(), notes })
-      });
-      const ct = (r.headers.get('content-type')||'').toLowerCase();
-      const text = await r.text();
-      if (!r.ok || !ct.includes('application/json')){
-        alert('Booking service unavailable. Your details are saved locally. We will confirm shortly.');
-        return;
-      }
-      const data = JSON.parse(text);
-      if (!data.success){ alert('Could not create booking.'); return; }
-      const when = new Date(date+'T'+time+':00').toLocaleString();
-      alert('Booking created.\n\nRef: '+data.bookingId+'\n'+service+' — '+(style || 'Consult')+' ('+(price>0?('$'+price):'Consult')+')\nWhen: '+when);
-      closeBooking();
-    } catch(e){
-      console.error(e);
-      alert('Unable to create booking right now.');
-    }
-  }
-  document.getElementById('submitBooking').addEventListener('click', submitBooking);
-
-  // If URL has #book, open modal on load
-  if (location.hash.replace('#','').toLowerCase()==='book'){ openBooking(); }
-})();
-</script>
+  </script>
 </body>
 </html>
