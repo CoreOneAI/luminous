@@ -36,6 +36,7 @@
   .nav a{text-align:center;text-decoration:none;color:#777;font-size:12px}
   .nav a.active{color:#B8860B;font-weight:800}
   .note{padding:8px 16px;color:#555;font-size:12px}
+  .ver{font-size:11px;color:#999;padding:0 16px 8px}
 </style>
 </head>
 <body>
@@ -45,6 +46,7 @@
       <div class="brand">Luminous Catalog</div>
       <div class="status" id="status">Loading…</div>
     </div>
+    <div class="ver">CATALOG VERSION: r2</div>
     <div class="search">
       <input id="q" placeholder="Search products or concerns (e.g., purple shampoo, anti-frizz serum, sensitive scalp)"/>
       <button onclick="runSearch()">Search</button>
@@ -88,12 +90,28 @@ let offset = 0;
 let activePills = new Set();
 let apiSource = '';
 
+
 function toCents(v){
   if (typeof v === 'number' && Number.isFinite(v)) return Math.round(v);
   if (typeof v === 'string'){
     const m=v.match(/([\d.,]+)/); if(m){ const n=Number(m[1].replace(/,/g,'')); if(Number.isFinite(n)) return n<1000?Math.round(n*100):Math.round(n); }
   }
   return 0;
+}
+function fmtPrice(c){ return '$'+(Number(c||0)/100).toFixed(2); }
+function sanitizeImage(u){
+  if(!u) return '/images/wooden-tray.jpg';
+  if(/^https?:\/\//i.test(u)){
+    if(/unsplash\.com\/photos\//.test(u)){
+      const id = u.split('/photos/')[1]?.split(/[\/?#]/)[0] || '';
+      if(id) return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=640&q=80`;
+    }
+    return u;
+  }
+  const m = u.match(/photo-([a-zA-Z0-9_-]+)/) || u.match(/^([a-zA-Z0-9_-]{5,})$/);
+  if(m){ const id=m[1]||m[0]; return `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=640&q=80`; }
+  if(/\.(jpg|jpeg|png|webp|gif)$/i.test(u)){ return u.startsWith('/images/')?u:`/images/${u.replace(/^\//,'')}`; }
+  return '/images/wooden-tray.jpg';
 }
 function normalize(list){
   return list.map((x,i)=>{
@@ -102,13 +120,11 @@ function normalize(list){
     const brand = x.brand || x.maker || 'Salon';
     const category = x.category || x.type || '—';
     const price = toCents(x.price ?? x.price_cents ?? x.priceCents ?? x.cost);
-    const image = x.image || x.img || x.photo || '/images/wooden-tray.jpg';
+    const image = sanitizeImage(x.image || x.img || x.photo || '');
     return { id, name, brand, category, price, image };
   });
 }
 
-function fmtPrice(cents){ return '$'+(Number(cents||0)/100).toFixed(2); }
-function status(s){ document.getElementById('status').textContent = s; }
 
 function deriveTags(item){
   const t = [];
@@ -128,120 +144,72 @@ function deriveTags(item){
   if (/copper/.test(name)) t.push('Copper');
   return t;
 }
-
 function score(item, qTokens){
-  const name = (item.name||'').toLowerCase();
-  const cat = (item.category||'').toLowerCase();
-  let s = 0;
-  qTokens.forEach(t=>{
-    if (name.includes(t)) s+=3;
-    if (cat.includes(t)) s+=2;
-  });
+  const name=(item.name||'').toLowerCase();
+  const cat=(item.category||'').toLowerCase();
+  let s=0; qTokens.forEach(t=>{ if(name.includes(t)) s+=3; if(cat.includes(t)) s+=2; });
   activePills.forEach(p=>{ if(deriveTags(item).includes(p)) s+=2; });
   return s;
 }
-
 function renderCard(it){
-  const div = document.createElement('article');
-  div.className = 'card';
-  const imgSrc = it.image || '/images/wooden-tray.jpg';
+  const div=document.createElement('article');
+  div.className='card';
+  const imgSrc = sanitizeImage(it.image);
   div.innerHTML = `
-    <img class="ph" src="${imgSrc}" alt="${(it.name||'Product')}" onerror="this.src='/images/wooden-tray.jpg'">
+    <img class="ph" src="${{imgSrc}}" alt="${{(it.name||'Product')}}" onerror="this.src='/images/wooden-tray.jpg'">
     <div class="meta">
-      <div class="name">${it.name||'Unnamed'}</div>
-      <div class="sub">${[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}</div>
-      <div class="price">${fmtPrice(it.price)}</div>
+      <div class="name">${{it.name||'Unnamed'}}</div>
+      <div class="sub">${{[it.brand||'—', it.category||'—'].filter(Boolean).join(' • ')}}</div>
+      <div class="price">${{fmtPrice(it.price)}}</div>
     </div>
     <div class="cta">
-      <button onclick='addToCart(${JSON.stringify(it).replace(/'/g,"&#39;")})' class="buy">Add to Cart</button>
-    </div>`;
+      <button class="buy" onclick='addToCart({{"id":"${"{id}"}","name":"${"{name}"}","price":${"{price}"}}})'>Add to Cart</button>
+    </div>`
+    .replace("${{imgSrc}}", imgSrc)
+    .replace("${{id}}", it.id)
+    .replace("${{name}}", (it.name||'').replace(/'/g,"&#39;"))
+    .replace("${{price}}", String(it.price||0));
   document.getElementById('grid').appendChild(div);
 }
-
-function resetGrid(){
-  document.getElementById('grid').innerHTML='';
-  offset=0;
-}
-
+function resetGrid(){ document.getElementById('grid').innerHTML=''; offset=0; }
 function renderNext(){
   const slice = filtered.slice(offset, offset+PAGE);
   slice.forEach(renderCard);
   offset += slice.length;
   document.getElementById('moreBtn').style.display = (offset < filtered.length) ? 'block' : 'none';
-  status(`Source: ${apiSource||'n/a'} • Showing ${Math.min(offset, filtered.length)} of ${filtered.length} • Cached: ${allItems.length}`);
+  document.getElementById('status').textContent = `Source: ${apiSource||'n/a'} • Showing ${Math.min(offset, filtered.length)} of ${filtered.length} • Cached: ${allItems.length}`;
 }
-
 function runSearch(){
   const q = (document.getElementById('q').value||'').trim().toLowerCase();
   const base = [...allItems];
   let out = base;
   if (q){
     const tokens = q.split(/[^a-z0-9]+/).filter(Boolean);
-    out = base.map(x => ({ x, s: score(x, tokens) }))
-              .sort((a,b)=>b.s-a.s)
-              .map(o=>o.x);
+    out = base.map(x => ({ x, s: score(x, tokens) })).sort((a,b)=>b.s-a.s).map(o=>o.x);
   }
   if (activePills.size){
-    out = out.filter(it => {
-      const tags = deriveTags(it);
-      for (const p of activePills) if (!tags.includes(p)) return false;
-      return true;
-    });
+    out = out.filter(it => { const tags = deriveTags(it); for (const p of activePills) if (!tags.includes(p)) return false; return true; });
   }
   filtered = out;
   resetGrid();
   renderNext();
 }
-
-function toggleFacet(el){
-  const key = el.getAttribute('data-k');
-  if (el.classList.contains('active')){
-    el.classList.remove('active'); activePills.delete(key);
-  } else { el.classList.add('active'); activePills.add(key); }
-  runSearch();
-}
-
-function addToCart(it){
-  try{
-    const raw = localStorage.getItem('luminous_cart');
-    const cart = raw ? JSON.parse(raw) : [];
-    cart.push({ id: it.id, name: it.name, price: it.price||0, qty:1 });
-    localStorage.setItem('luminous_cart', JSON.stringify(cart));
-    alert(`${it.name} added to cart.`);
-  }catch(e){ console.error(e); }
-}
+function toggleFacet(el){ const key = el.getAttribute('data-k'); if (el.classList.contains('active')){ el.classList.remove('active'); activePills.delete(key); } else { el.classList.add('active'); activePills.add(key); } runSearch(); }
+function addToCart(it){ try{ const raw=localStorage.getItem('luminous_cart'); const cart=raw?JSON.parse(raw):[]; cart.push({id:it.id,name:it.name,price:it.price||0,qty:1}); localStorage.setItem('luminous_cart',JSON.stringify(cart)); alert(`${{it.name}} added to cart.`); }catch(e){ console.error(e); } }
 
 async function fetchBest(){
   let api = { items: [], source: '' };
-  try{
-    const r = await fetch(`${API_BASE}/api/products?limit=5000`);
-    const d = await r.json();
-    api.items = Array.isArray(d.items) ? d.items : [];
-    api.source = d.source || 'api';
-  }catch(e){ /* ignore */ }
+  try{ const r = await fetch(`${{API_BASE}}/api/products?limit=5000`); const d = await r.json(); api.items = Array.isArray(d.items) ? d.items : []; api.source = d.source || 'api'; }catch(e){}
 
   let file = { items: [], source: '' };
-  try{
-    const r2 = await fetch('/data/products.json');
-    const j = await r2.json();
-    const arr = j.items || j.data || j.results || j.products || (Array.isArray(j)?j:[]);
-    file.items = Array.isArray(arr)?arr:[];
-    file.source = '/data/products.json';
-  }catch(e){ /* ignore */ }
+  try{ const r2 = await fetch('/data/products.json'); const j = await r2.json(); const arr = j.items || j.data || j.results || j.products || (Array.isArray(j)?j:[]); file.items = Array.isArray(arr)?arr:[]; file.source = '/data/products.json'; }catch(e){}
 
-  // Prefer the larger set (fixes "only 4 items" when API points at stub)
-  let chosen = api;
-  if (file.items.length > api.items.length) chosen = file;
-
+  let chosen = api; if (file.items.length > api.items.length) chosen = file;
   return { items: normalize(chosen.items), source: chosen.source };
 }
-
 async function boot(){
-  const best = await fetchBest();
-  allItems = best.items;
-  apiSource = best.source;
-  filtered = [...allItems];
-  renderNext(); // first 50
+  const best = await fetchBest(); allItems = best.items; apiSource = best.source; filtered = [...allItems]; renderNext();
+  document.getElementById('status').textContent = `Loaded: ${allItems.length} • Source: ${apiSource}`;
 }
 boot();
 </script>
