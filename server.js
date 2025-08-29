@@ -27,7 +27,99 @@ app.use(function(req, res, next){
     "frame-ancestors 'self'"
   ].join('; '));
   next();
-});
+}
+
+// Enhanced local product generation as fallback
+function generateLocalProducts(query, clientNeeds) {
+  const queryLower = query.toLowerCase();
+  const products = [];
+  let id = 1000;
+  
+  const productTemplates = [
+    // Hair products
+    { name: 'Sulfate-Free Shampoo', category: 'Hair', basePrice: 1800, type: 'shampoo' },
+    { name: 'Hydrating Conditioner', category: 'Hair', basePrice: 1900, type: 'conditioner' },
+    { name: 'Deep Repair Mask', category: 'Hair', basePrice: 2400, type: 'treatment' },
+    { name: 'Leave-In Treatment', category: 'Hair', basePrice: 2200, type: 'treatment' },
+    { name: 'Hair Oil Elixir', category: 'Hair', basePrice: 2800, type: 'oil' },
+    { name: 'Heat Protection Spray', category: 'Hair', basePrice: 2000, type: 'spray' },
+    { name: 'Volume Boosting Mousse', category: 'Hair', basePrice: 1750, type: 'spray' },
+    { name: 'Curl Defining Cream', category: 'Hair', basePrice: 2100, type: 'cream' },
+    
+    // Skin products
+    { name: 'Gentle Facial Cleanser', category: 'Skin', basePrice: 2200, type: 'cleanser' },
+    { name: 'Balancing Toner', category: 'Skin', basePrice: 1900, type: 'toner' },
+    { name: 'Vitamin C Serum', category: 'Skin', basePrice: 3200, type: 'serum' },
+    { name: 'Hyaluronic Moisturizer', category: 'Skin', basePrice: 2800, type: 'moisturizer' },
+    { name: 'Anti-Aging Night Cream', category: 'Skin', basePrice: 3500, type: 'cream' },
+    { name: 'Brightening Eye Cream', category: 'Skin', basePrice: 3800, type: 'cream' },
+    { name: 'Exfoliating Treatment', category: 'Skin', basePrice: 2600, type: 'treatment' },
+    { name: 'Hydrating Face Mask', category: 'Skin', basePrice: 2400, type: 'mask' },
+    
+    // Specialized products
+    { name: 'Color Protection Shampoo', category: 'Hair', basePrice: 2000, type: 'shampoo' },
+    { name: 'Clarifying Treatment', category: 'Hair', basePrice: 2300, type: 'treatment' },
+    { name: 'Scalp Therapy Serum', category: 'Hair', basePrice: 2900, type: 'serum' },
+    { name: 'Retinol Night Treatment', category: 'Skin', basePrice: 4200, type: 'serum' }
+  ];
+  
+  // Select relevant products based on query and client needs
+  const relevantProducts = productTemplates.filter(template => {
+    const matchesQuery = template.name.toLowerCase().includes(queryLower) || 
+                        template.type.toLowerCase().includes(queryLower) ||
+                        template.category.toLowerCase().includes(queryLower);
+    
+    if (clientNeeds.concerns) {
+      const concerns = clientNeeds.concerns.toLowerCase();
+      if (concerns.includes('damage') && template.name.toLowerCase().includes('repair')) return true;
+      if (concerns.includes('volume') && template.name.toLowerCase().includes('volume')) return true;
+      if (concerns.includes('color') && template.name.toLowerCase().includes('color')) return true;
+      if (concerns.includes('aging') && template.name.toLowerCase().includes('anti-aging')) return true;
+    }
+    
+    return matchesQuery || !queryLower; // Include all if no specific query
+  });
+  
+  // Generate products from templates
+  relevantProducts.forEach(template => {
+    const brands = ['Professional', 'Luxe', 'Premium', 'Salon Pro'];
+    const priceVariation = Math.random() * 500; // Add some price variation
+    
+    products.push({
+      id: `local-${id++}`,
+      name: template.name,
+      brand: brands[Math.floor(Math.random() * brands.length)],
+      category: template.category,
+      price: Math.floor(template.basePrice + priceVariation),
+      description: `Professional ${template.category.toLowerCase()} treatment designed for salon-quality results.`,
+      benefits: ['Professional Grade', 'Salon Quality', 'Long-lasting Results'],
+      usage: `Apply to ${template.category === 'Hair' ? 'hair' : 'clean skin'} as directed.`,
+      ingredients: 'Premium active ingredients',
+      suitableFor: 'All hair and skin types'
+    });
+  });
+  
+  // If we don't have enough products, add more variations
+  while (products.length < 15) {
+    const template = productTemplates[products.length % productTemplates.length];
+    const variation = products.length % 4; // Create variations
+    const variations = ['Advanced', 'Intensive', 'Ultra', 'Maximum'];
+    
+    products.push({
+      id: `local-${id++}`,
+      name: `${variations[variation]} ${template.name}`,
+      brand: 'Professional',
+      category: template.category,
+      price: template.basePrice + (variation * 200),
+      description: `${variations[variation]} strength ${template.category.toLowerCase()} treatment.`,
+      benefits: ['Professional Grade', 'Enhanced Formula', 'Proven Results'],
+      usage: `Apply as directed for best results.`,
+      ingredients: 'Advanced active ingredients',
+      suitableFor: 'Professional use recommended'
+    });
+  }
+  
+  return products.slice(0, 20); // Return up to 20 products);
 
 app.use(express.json({ limit: '1mb' }));
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
@@ -74,6 +166,64 @@ function loadBaseCatalog() {
 
 loadBaseCatalog();
 
+// Product image mapping for your uploaded images in public/images/
+const PRODUCT_IMAGES = {
+  // Skincare products
+  'serum': '/images/zen-stone-serum.jpg',
+  'moisturizer': '/images/WHITE FEMALE.jpg', 
+  'cleanser': '/images/HISPANIC BEAYTY CARE MODAL.jpg',
+  'cream': '/images/WHITE FEMALE BEAUTY CARE MODAL.jpg',
+  'toner': '/images/hero-almonds.jpg',
+  'mask': '/images/AFRICAN AMERICAN BEAUTY.jpg',
+  'treatment': '/images/zen-stone-serum.jpg',
+  'oil': '/images/hero-almonds.jpg',
+  'eye': '/images/WHITE FEMALE BEAUTY CARE MODAL.jpg',
+  'night': '/images/AFRICAN AMERICAN BEAUTY.jpg',
+  
+  // Hair products  
+  'shampoo': '/images/studio-beige.jpg',
+  'conditioner': '/images/wooden-tray.jpg',
+  'hair': '/images/studio-beige.jpg',
+  'spray': '/images/wooden-tray.jpg',
+  'volume': '/images/studio-beige.jpg',
+  'curl': '/images/wooden-tray.jpg',
+  
+  // Men's products
+  'beard': '/images/zen-stone-serum.jpg',
+  'shaving': '/images/wooden-tray.jpg',
+  'aftershave': '/images/hero-almonds.jpg',
+  'balm': '/images/studio-beige.jpg',
+  
+  // Category defaults
+  'skin': '/images/WHITE FEMALE.jpg',
+  'hair': '/images/studio-beige.jpg',
+  'men': '/images/wooden-tray.jpg',
+  
+  // Fallback
+  'default': '/images/AFRICAN AMERICAN BEAUTY.jpg'
+};
+
+function selectProductImage(productName, category) {
+  const name = productName.toLowerCase();
+  
+  // Try specific product type matching first
+  for (const [keyword, image] of Object.entries(PRODUCT_IMAGES)) {
+    if (name.includes(keyword)) {
+      return image;
+    }
+  }
+  
+  // Category-based selection
+  if (category && category.toLowerCase().includes('skin')) return '/images/WHITE FEMALE.jpg';
+  if (category && category.toLowerCase().includes('hair')) return '/images/studio-beige.jpg';
+  if (category && category.toLowerCase().includes('men')) return '/images/wooden-tray.jpg';
+  
+  // Rotate through images for variety
+  const allImages = Object.values(PRODUCT_IMAGES).filter(img => img !== '/images/default');
+  const hash = name.split('').reduce((a, b) => a + b.charCodeAt(0), 0);
+  return allImages[hash % allImages.length];
+}
+
 // AI-powered product generation
 async function generateProductsWithAI(query, clientNeeds = {}) {
   const prompt = `
@@ -81,7 +231,7 @@ You are a professional salon product expert. Based on this client request: "${qu
 
 Client details: ${JSON.stringify(clientNeeds)}
 
-Generate 8-12 realistic salon products that would be perfect for this client. Return ONLY a valid JSON array with this exact format:
+Generate EXACTLY 15-20 realistic salon products that would be perfect for this client. This is very important - you must generate at least 15 products. Return ONLY a valid JSON array with this exact format:
 
 [
   {
@@ -100,6 +250,17 @@ Generate 8-12 realistic salon products that would be perfect for this client. Re
 ]
 
 Focus on professional salon-grade products. Price should be in cents (1800 = $18.00). Make products realistic and specific to the client's needs.
+
+IMPORTANT: You must generate exactly 15-20 products. Do not generate fewer than 15 products. Create a variety of different product types including shampoos, conditioners, serums, masks, treatments, oils, sprays, creams, cleansers, toners, moisturizers, and specialized treatments.
+
+Example product types to include:
+- Shampoo, Conditioner, Deep Treatment Mask
+- Leave-in Treatment, Hair Oil, Heat Protectant
+- Facial Cleanser, Toner, Serum  
+- Moisturizer, Eye Cream, Night Treatment
+- Exfoliant, Face Mask, Spot Treatment
+- Styling products, Finishing products
+- Specialized treatments for the client's concerns
 `;
 
   // Try APIs in order of preference
@@ -114,9 +275,15 @@ Focus on professional salon-grade products. Price should be in cents (1800 = $18
       try {
         console.log(`[AI] Attempting ${api.name} API...`);
         const response = await api.func(prompt, api.key);
-        if (response && Array.isArray(response)) {
+        if (response && Array.isArray(response) && response.length >= 10) {
           console.log(`[AI] Generated ${response.length} products via ${api.name}`);
-          return response;
+          // Ensure proper image assignment
+          return response.map(product => ({
+            ...product,
+            image: selectProductImage(product.name, product.category)
+          }));
+        } else if (response && Array.isArray(response)) {
+          console.log(`[AI] ${api.name} returned ${response.length} products, trying next API...`);
         }
       } catch (error) {
         console.warn(`[AI] ${api.name} failed:`, error.message);
@@ -124,12 +291,9 @@ Focus on professional salon-grade products. Price should be in cents (1800 = $18
     }
   }
 
-  // Fallback to base catalog if all APIs fail
-  console.log('[AI] All APIs failed, using base catalog');
-  return BASE_CATALOG.filter(p => 
-    p.name.toLowerCase().includes(query.toLowerCase()) ||
-    p.category.toLowerCase().includes(query.toLowerCase())
-  ).slice(0, 8);
+  // Enhanced fallback - generate more products locally if AI fails
+  console.log('[AI] All APIs failed, using enhanced local generation');
+  return generateLocalProducts(query, clientNeeds);
 }
 
 // Anthropic API call
@@ -143,7 +307,7 @@ async function callAnthropicAPI(prompt, apiKey) {
     },
     body: JSON.stringify({
       model: 'claude-3-sonnet-20240229',
-      max_tokens: 2000,
+      max_tokens: 4000, // Increased for longer responses
       messages: [{ role: 'user', content: prompt }]
     })
   });
@@ -153,10 +317,12 @@ async function callAnthropicAPI(prompt, apiKey) {
   const data = await response.json();
   const content = data.content[0]?.text || '';
   
-  // Extract JSON from response
+  // Extract JSON from response - be more flexible with parsing
   const jsonMatch = content.match(/\[[\s\S]*\]/);
   if (jsonMatch) {
-    return JSON.parse(jsonMatch[0]);
+    const parsed = JSON.parse(jsonMatch[0]);
+    console.log(`[AI] Anthropic returned ${parsed.length} products`);
+    return parsed;
   }
   throw new Error('No valid JSON in response');
 }
@@ -172,7 +338,7 @@ async function callOpenAIAPI(prompt, apiKey) {
     body: JSON.stringify({
       model: 'gpt-3.5-turbo',
       messages: [{ role: 'user', content: prompt }],
-      max_tokens: 2000,
+      max_tokens: 4000, // Increased for longer responses
       temperature: 0.7
     })
   });
@@ -185,7 +351,9 @@ async function callOpenAIAPI(prompt, apiKey) {
   // Extract JSON from response
   const jsonMatch = content.match(/\[[\s\S]*\]/);
   if (jsonMatch) {
-    return JSON.parse(jsonMatch[0]);
+    const parsed = JSON.parse(jsonMatch[0]);
+    console.log(`[AI] OpenAI returned ${parsed.length} products`);
+    return parsed;
   }
   throw new Error('No valid JSON in response');
 }
@@ -200,7 +368,7 @@ async function callGeminiAPI(prompt, apiKey) {
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
       generationConfig: {
-        maxOutputTokens: 2000,
+        maxOutputTokens: 4000, // Increased for longer responses
         temperature: 0.7
       }
     })
@@ -214,7 +382,9 @@ async function callGeminiAPI(prompt, apiKey) {
   // Extract JSON from response
   const jsonMatch = content.match(/\[[\s\S]*\]/);
   if (jsonMatch) {
-    return JSON.parse(jsonMatch[0]);
+    const parsed = JSON.parse(jsonMatch[0]);
+    console.log(`[AI] Gemini returned ${parsed.length} products`);
+    return parsed;
   }
   throw new Error('No valid JSON in response');
 }
@@ -309,7 +479,7 @@ app.get('/api/products', async (req, res) => {
         brand: p.brand || 'Professional',
         category: p.category || 'Beauty',
         price: p.price || 0,
-        image: p.image || '/images/placeholder.jpg',
+        image: selectProductImage(p.name, p.category), // Use actual uploaded images
         description: p.description || '',
         benefits: p.benefits || [],
         usage: p.usage || '',
