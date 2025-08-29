@@ -213,6 +213,15 @@
         .product-image {
             width: 80px;
             height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            margin: 12px 0 12px 12px;
+            background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+        }
+        
+        .product-image-placeholder {
+            width: 80px;
+            height: 80px;
             background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
             display: flex;
             align-items: center;
@@ -667,7 +676,8 @@
                 
                 card.innerHTML = `
                     <div class="product-content">
-                        <div class="product-image">💆‍♀️</div>
+                        <img class="product-image" src="${product.image}" alt="${product.name}" 
+                             onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
                         <div class="product-info">
                             <div class="product-name">${product.name}</div>
                             <div class="product-meta">${meta}</div>
