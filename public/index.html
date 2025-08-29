@@ -415,6 +415,18 @@
             font-weight: 600;
             cursor: pointer;
             font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .home-btn {
+            background: #f8f9fa;
+            color: #666;
+            border: 1px solid #ddd;
+            border-radius: 16px;
+            padding: 14px 28px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
         }
         
         .status {
@@ -705,10 +717,12 @@
                     const profile = this.getClientProfile();
                     const params = new URLSearchParams({
                         q: query,
-                        limit: '20', // Request 20 products
+                        limit: '25', // Request 25 products per batch
                         offset: this.currentOffset.toString(),
                         ...profile
                     });
+                    
+                    console.log('Requesting products with params:', params.toString());
                     
                     const response = await fetch(`/api/products?${params}`);
                     
@@ -740,7 +754,9 @@
             }
             
             renderProducts(products, aiGenerated = false) {
-                products.forEach(product => {
+                console.log('Rendering products:', products.length, 'products');
+                products.forEach((product, index) => {
+                    console.log(`Product ${index + 1}:`, product.name, 'Price:', product.price, typeof product.price);
                     const card = this.createProductCard(product, aiGenerated);
                     this.grid.appendChild(card);
                 });
@@ -812,8 +828,81 @@
             }
             
             formatPrice(cents) {
-                if (typeof cents !== 'number' || cents <= 0) return '$—';
-                return '$' + (cents / 100).toFixed(2);
+                // Debug logging to check what we're getting
+                console.log('formatPrice input:', cents, typeof cents);
+                
+                if (typeof cents !== 'number' || cents <= 0) {
+                    console.log('Invalid price, returning $—');
+                    return '$—';
+                }
+                
+                const formatted = '
+            
+            updateStatus(data) {
+                const showing = this.currentOffset;
+                const total = Math.min(data.total, 100); // Cap display at 100
+                const type = data.aiGenerated ? 'AI recommendations' : 'products';
+                
+                this.status.textContent = `Showing ${showing} of ${total} ${type} for "${data.query || this.currentQuery}"`;
+                
+                // Update total to support up to 100 products
+                this.totalProducts = total;
+            }
+            
+            updateLoadMoreButton() {
+                const hasMore = this.currentOffset < this.totalProducts;
+                
+                if (hasMore) {
+                    this.loadMoreSection.innerHTML = `
+                        <button class="load-more-btn" id="loadMoreBtn">Show More Products (${this.currentOffset}/${this.totalProducts})</button>
+                    `;
+                    // Re-bind the event listener since we replaced the HTML
+                    document.getElementById('loadMoreBtn').addEventListener('click', () => this.loadMore());
+                    this.loadMoreSection.style.display = 'block';
+                } else if (this.totalProducts > 0) {
+                    // End of results - show home button
+                    this.loadMoreSection.innerHTML = `
+                        <button class="home-btn" onclick="location.reload()">🏠 Start New Search</button>
+                    `;
+                    this.loadMoreSection.style.display = 'block';
+                } else {
+                    this.loadMoreSection.style.display = 'none';
+                }
+            }
+            
+            showChatError(message) {
+                this.chatResponse.innerHTML = `<div class="error">${message}</div>`;
+            }
+            
+            showProductError(message) {
+                this.status.innerHTML = `<div class="error">Error: ${message}</div>`;
+            }
+            
+            addToCart(product) {
+                alert(`Added "${product.name}" to cart!\n\nPrice: ${this.formatPrice(product.price)}\n\n${product.description || 'Perfect for your needs!'}`);
+            }
+            
+            loadMore() {
+                this.searchProducts(this.currentQuery, false);
+            }
+        }
+        
+        // Quick suggestion function
+        function quickAsk(suggestion) {
+            const consultant = window.salonAI;
+            consultant.chatInput.value = suggestion;
+            consultant.handleAIConsultation();
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.salonAI = new UnifiedSalonAI();
+        });
+    </script>
+</body>
+</html> + (cents / 100).toFixed(2);
+                console.log('Formatted price:', formatted);
+                return formatted;
             }
             
             updateStatus(data) {
