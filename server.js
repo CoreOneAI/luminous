@@ -1,389 +1,226 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+// Luminous Salon API (no UI changes) — robust catalog loading + search
+import fs from 'fs';
+import path from 'path';
+import express from 'express';
+import cors from 'cors';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+app.use(express.json({ limit: '1mb' }));
+app.use(cors());
 
-// API Keys
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-
-app.use(function(req, res, next){
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Content-Security-Policy', [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
-    "connect-src 'self' https://api.openai.com https://generativelanguage.googleapis.com https://api.anthropic.com",
-    "font-src 'self' data:",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "frame-ancestors 'self'"
-  ].join('; '));
+app.use((req,res,next)=>{
+  res.setHeader('Content-Security-Policy',
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; " +
+    "img-src 'self' data: blob:; connect-src 'self'; font-src 'self' data:; object-src 'none'; " +
+    "base-uri 'self'; frame-ancestors 'self'; upgrade-insecure-requests"
+  );
+  res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');
+  res.setHeader('X-Content-Type-Options','nosniff');
+  res.setHeader('Access-Control-Allow-Origin','*');
   next();
 });
 
-app.use(express.json({ limit: '1mb' }));
-app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
-
-// LOAD YOUR ACTUAL PRODUCTS AND FAQS
-let SALON_PRODUCTS = [];
-let SALON_FAQS = {};
-
-function loadRealData() {
-  // Load your actual product inventory
-  try {
-    const productData = fs.readFileSync('salon_inventory.json', 'utf8');
-    SALON_PRODUCTS = JSON.parse(productData);
-    console.log(`[PRODUCTS] Loaded ${SALON_PRODUCTS.length} real products`);
-  } catch (error) {
-    console.warn('[PRODUCTS] Could not load salon_inventory.json:', error.message);
-    SALON_PRODUCTS = [];
-  }
-
-  // Load FAQ database
-  try {
-    const faqData = fs.readFileSync('faqs.json', 'utf8');
-    SALON_FAQS = JSON.parse(faqData);
-    console.log('[FAQS] Loaded salon FAQ database');
-  } catch (error) {
-    console.warn('[FAQS] Could not load faqs.json:', error.message);
-    SALON_FAQS = {};
-  }
+const STATIC_DIR = path.resolve(process.cwd(), 'public');
+if (fs.existsSync(STATIC_DIR)) {
+  app.use(express.static(STATIC_DIR, { extensions: ['html'] }));
 }
 
-loadRealData();
+let CATALOG = [];
+let INDEX = [];
+let SOURCE = 'none';
 
-// Product image mapping
-const PRODUCT_IMAGES = {
-  'shampoo': '/images/studio-beige.jpg',
-  'conditioner': '/images/wooden-tray.jpg',
-  'mask': '/images/AFRICAN AMERICAN BEAUTY.jpg',
-  'serum': '/images/zen-stone-serum.jpg',
-  'oil': '/images/hero-almonds.jpg',
-  'treatment': '/images/WHITE FEMALE BEAUTY CARE MODAL.jpg',
-  'cream': '/images/WHITE FEMALE.jpg',
-  'spray': '/images/HISPANIC BEAYTY CARE MODAL.jpg',
-  'default': '/images/AFRICAN AMERICAN BEAUTY.jpg'
+function normalizePriceCents(prod) {
+  const candidates = [prod.price_cents, prod.priceCents, prod.price, prod.msrp];
+  let v = candidates.find(x => x !== undefined && x !== null && x !== '');
+  if (typeof v === 'number') return Number.isInteger(v) && v >= 0 ? (v >= 100 ? v : Math.round(v*100)) : 0;
+  if (typeof v === 'string') {
+    const dollars = parseFloat(v.replace(/[^0-9.,-]/g,'').replace(/,/g,''));
+    if (!isNaN(dollars)) return Math.round(dollars * 100);
+  }
+  return 0;
+}
+
+function buildSearchIndexItem(p) {
+  const fields = [
+    p.name, p.brand, p.category, p.description, p.usage,
+    ...(p.tags || []), ...(p.benefits || []),
+    ...((p.traits && p.traits.hairType) || []),
+    ...((p.traits && p.traits.concerns) || []),
+    ...((p.traits && p.traits.ingredients) || [])
+  ].filter(Boolean).join(' ').toLowerCase();
+  return { ref: p, hay: fields };
+}
+
+const ALIASES = {
+  'anti-aging': ['anti aging','antiaging','fine lines','wrinkles','retinol','peptide','peptides','vitamin c','ascorbic','hyaluronic','ha','antioxidant','niacinamide','aha','bha','glycolic','lactic'],
+  'hydration': ['hydrating','hyaluronic','moisturizing','ceramide','glycerin'],
+  'brighten':  ['brightening','vitamin c','niacinamide','pigment','dark spots','spots','tone'],
+  'frizz':     ['anti-frizz','smoothing','smooth'],
+  'purple shampoo': ['toning','brass','violet','blonde','silver'],
+  'bond':      ['olaplex','bonding','bond repair','plex']
 };
 
-function selectProductImage(productName, category) {
-  const name = productName.toLowerCase();
-  for (const [keyword, image] of Object.entries(PRODUCT_IMAGES)) {
-    if (name.includes(keyword)) {
-      return image;
-    }
+function expandQuery(q) {
+  const base = (q || '').toLowerCase().trim();
+  if (!base) return [];
+  const needles = new Set([base]);
+  for (const [key, vals] of Object.entries(ALIASES)) {
+    if (base.includes(key)) vals.forEach(v => needles.add(v));
   }
-  return PRODUCT_IMAGES.default;
+  base.split(/\s+/).forEach(t => t && needles.add(t));
+  return Array.from(needles);
 }
 
-// FAQ MATCHING FUNCTION
-function findFAQMatch(userMessage) {
-  const message = userMessage.toLowerCase();
-  
-  for (const category in SALON_FAQS) {
-    const categoryData = SALON_FAQS[category];
-    
-    // Check if message matches any question
-    for (const question of categoryData.questions) {
-      const questionWords = question.toLowerCase().split(' ');
-      const messageWords = message.split(' ');
-      
-      // Simple matching - if 60% of question words are in message
-      const matchCount = questionWords.filter(word => 
-        messageWords.some(msgWord => msgWord.includes(word) || word.includes(msgWord))
-      ).length;
-      
-      if (matchCount / questionWords.length > 0.6) {
-        return {
-          question: question,
-          answer: categoryData.answers[question] || 'Let me help you with that.',
-          category: category
-        };
-      }
-    }
-  }
-  return null;
+function scoreProduct(hay, needles) {
+  let score = 0;
+  for (const n of needles) if (n && hay.includes(n)) score++;
+  return score;
 }
 
-// PRODUCT RECOMMENDATION BASED ON REAL INVENTORY
-function getRelevantProducts(query, maxProducts = 20) {
-  if (SALON_PRODUCTS.length === 0) {
-    return []; // No products loaded
+function searchCatalog(q) {
+  const needles = expandQuery(q);
+  if (!needles.length) return CATALOG.slice();
+  const scored = [];
+  for (const item of INDEX) {
+    const s = scoreProduct(item.hay, needles);
+    if (s > 0) scored.push({ s, p: item.ref });
   }
-
-  const queryLower = query.toLowerCase();
-  const scored = SALON_PRODUCTS.map(product => {
-    let score = 0;
-    
-    // Exact matches get high scores
-    if (product.name.toLowerCase().includes(queryLower)) score += 10;
-    if (product.brand.toLowerCase().includes(queryLower)) score += 8;
-    if (product.category.toLowerCase().includes(queryLower)) score += 6;
-    if (product.description.toLowerCase().includes(queryLower)) score += 5;
-    
-    // Benefit matches
-    if (product.benefits) {
-      product.benefits.forEach(benefit => {
-        if (benefit.toLowerCase().includes(queryLower)) score += 4;
-      });
-    }
-    
-    // Keyword matching
-    const keywords = ['damage', 'color', 'frizz', 'dry', 'oily', 'curl', 'straight', 'volume'];
-    keywords.forEach(keyword => {
-      if (queryLower.includes(keyword)) {
-        if (product.name.toLowerCase().includes(keyword) || 
-            product.description.toLowerCase().includes(keyword)) {
-          score += 3;
-        }
-      }
-    });
-    
-    return { product, score };
-  });
-  
-  // Return products with scores > 0, sorted by score
-  return scored
-    .filter(item => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, maxProducts)
-    .map(item => item.product);
+  scored.sort((a,b)=>
+    (b.s - a.s) ||
+    ((b.p.inStock === true) - (a.p.inStock === true)) ||
+    String(a.p.brand||'').localeCompare(String(b.p.brand||'')) ||
+    String(a.p.name||'').localeCompare(String(b.p.name||''))
+  );
+  return scored.map(x=>x.p);
 }
 
-// AI CHAT WITH REAL PRODUCTS INJECTED
-async function generateChatResponse(message) {
-  // First check if it matches an FAQ
-  const faqMatch = findFAQMatch(message);
-  if (faqMatch) {
-    return faqMatch.answer;
-  }
+function toClient(p) {
+  return {
+    id: p.id,
+    name: p.name,
+    brand: p.brand || '—',
+    category: p.category || '—',
+    price: normalizePriceCents(p),
+    image: p.image || '/images/placeholder.svg',
+    description: p.description,
+    benefits: p.benefits,
+    usage: p.usage,
+    inStock: p.inStock !== false
+  };
+}
 
-  // Get relevant products for this query
-  const relevantProducts = getRelevantProducts(message, 10);
-  
-  let productContext = '';
-  if (relevantProducts.length > 0) {
-    productContext = `
-    
-PRODUCTS AVAILABLE TO RECOMMEND:
-${relevantProducts.map(p => 
-  `- ${p.name} by ${p.brand} ($${(p.price/100).toFixed(2)}) - ${p.description}`
-).join('\n')}
+function setCatalog(products, sourceLabel) {
+  CATALOG = Array.isArray(products) ? products : [];
+  INDEX = CATALOG.map(buildSearchIndexItem);
+  SOURCE = sourceLabel;
+}
 
-Only recommend products from the list above. Include exact names and prices.`;
-  }
+function loadCatalog() {
+  const cand = [];
+  const envPath = process.env.CATALOG_PATH;
+  if (envPath) cand.push(envPath);
+  cand.push('salon_inventory.json');
+  cand.push(path.join('data','salon_inventory.json'));
+  cand.push(path.join('data','products.json'));
+  cand.push(path.join('public','data','products.json'));
 
-  const prompt = `You are a professional salon consultant. A client says: "${message}"
-
-Provide helpful, professional advice about hair care, skin care, or beauty treatments. Keep your response to 2-3 sentences, warm and professional.${productContext}`;
-
-  // Try AI APIs
-  const apis = [
-    { name: 'anthropic', key: ANTHROPIC_API_KEY, func: callAnthropicAPI },
-    { name: 'openai', key: OPENAI_API_KEY, func: callOpenAIAPI },
-    { name: 'gemini', key: GEMINI_API_KEY, func: callGeminiAPI }
-  ];
-
-  for (const api of apis) {
-    if (api.key) {
+  let loaded = false;
+  for (const rel of cand) {
+    const abs = path.isAbsolute(rel) ? rel : path.resolve(process.cwd(), rel);
+    if (fs.existsSync(abs)) {
       try {
-        const response = await api.func(prompt, api.key);
-        return response;
-      } catch (error) {
-        console.warn(`[CHAT] ${api.name} failed:`, error.message);
+        const raw = fs.readFileSync(abs, 'utf8');
+        const json = JSON.parse(raw);
+        const arr = Array.isArray(json) ? json : (json.items || json.products || []);
+        if (Array.isArray(arr)) {
+          setCatalog(arr, `disk:${abs}`);
+          console.log(`[catalog] loaded ${arr.length} from ${abs}`);
+          loaded = true; break;
+        }
+      } catch (e) {
+        console.error(`[catalog] failed to parse ${abs}:`, e.message);
       }
     }
   }
-
-  return 'I can help you find the perfect products for your needs. What specific concerns do you have with your hair or skin?';
-}
-
-// API FUNCTIONS
-async function callAnthropicAPI(prompt, apiKey) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01'
-    },
-    body: JSON.stringify({
-      model: 'claude-3-sonnet-20240229',
-      max_tokens: 300,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-
-  if (!response.ok) throw new Error(`Anthropic API error: ${response.status}`);
-  const data = await response.json();
-  return data.content[0]?.text || 'I can help you with your salon needs.';
-}
-
-async function callOpenAIAPI(prompt, apiKey) {
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${apiKey}`
-    },
-    body: JSON.stringify({
-      model: 'gpt-3.5-turbo',
-      messages: [{ role: 'user', content: prompt }],
-      max_tokens: 300,
-      temperature: 0.7
-    })
-  });
-
-  if (!response.ok) throw new Error(`OpenAI API error: ${response.status}`);
-  const data = await response.json();
-  return data.choices[0]?.message?.content || 'I can help you with your salon needs.';
-}
-
-async function callGeminiAPI(prompt, apiKey) {
-  const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: {
-        maxOutputTokens: 300,
-        temperature: 0.7
-      }
-    })
-  });
-
-  if (!response.ok) throw new Error(`Gemini API error: ${response.status}`);
-  const data = await response.json();
-  return data.candidates[0]?.content?.parts[0]?.text || 'I can help you with your salon needs.';
-}
-
-// API ROUTES
-app.get('/api/products', async (req, res) => {
-  try {
-    const query = req.query.q || '';
-    const limit = Math.min(parseInt(req.query.limit) || 20, 50);
-    const offset = Math.max(parseInt(req.query.offset) || 0, 0);
-    
-    let products = [];
-    
-    if (query.trim() && SALON_PRODUCTS.length > 0) {
-      // Use your real products
-      products = getRelevantProducts(query, 100);
-    } else {
-      // Show all products if no query
-      products = SALON_PRODUCTS.slice();
-    }
-
-    const total = products.length;
-    const paginatedProducts = products.slice(offset, offset + limit);
-
-    const response = {
-      success: true,
-      total: total,
-      offset: offset,
-      limit: limit,
-      query: query,
-      aiGenerated: false, // These are real products
-      items: paginatedProducts.map(p => ({
-        id: p.id,
-        name: p.name,
-        brand: p.brand,
-        category: p.category,
-        price: p.price,
-        image: selectProductImage(p.name, p.category),
-        description: p.description,
-        benefits: p.benefits || [],
-        usage: p.usage || '',
-        ingredients: p.ingredients || '',
-        suitableFor: p.suitableFor || 'Professional recommendation'
-      }))
-    };
-    
-    console.log(`[API] Returning ${paginatedProducts.length} of ${total} real products`);
-    res.json(response);
-    
-  } catch (error) {
-    console.error('[API] Products error:', error);
-    res.status(500).json({ 
-      success: false, 
-      error: 'Failed to load products',
-      items: []
-    });
+  if (!loaded) {
+    setCatalog([], 'none');
+    console.warn('[catalog] no catalog found; API will return empty results');
   }
-});
+}
+loadCatalog();
 
-app.post('/api/chat', async (req, res) => {
-  try {
-    const message = (req.body?.message || '').trim();
-    
-    if (!message) {
-      return res.json({ 
-        success: true, 
-        response: 'Hi! I\'m your salon AI consultant. I can help with product recommendations, hair care advice, and questions about salon services. What would you like to know?' 
-      });
-    }
-    
-    const response = await generateChatResponse(message);
-    res.json({ success: true, response });
-    
-  } catch (error) {
-    console.error('[API] Chat error:', error);
-    res.json({ 
-      success: true, 
-      response: 'I\'m here to help with your hair and beauty questions. Please try asking again.' 
-    });
-  }
-});
-
-// FAQ endpoint
-app.get('/api/faqs', (req, res) => {
-  res.json({ 
-    success: true, 
-    faqs: SALON_FAQS 
-  });
-});
-
-// Debug endpoint
-app.get('/api/debug', (req, res) => {
+app.get('/__whoami', (req,res)=>{
   res.json({
-    productCount: SALON_PRODUCTS.length,
-    faqCategories: Object.keys(SALON_FAQS).length,
-    apis: {
-      openai: !!OPENAI_API_KEY,
-      gemini: !!GEMINI_API_KEY,
-      anthropic: !!ANTHROPIC_API_KEY
-    },
-    sampleProduct: SALON_PRODUCTS[0] || null
+    running: 'server.js',
+    source: SOURCE,
+    products: { count: CATALOG.length },
+    env: { PORT: process.env.PORT || null, CATALOG_PATH: process.env.CATALOG_PATH || null }
   });
 });
 
-app.get('/healthz', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    products: SALON_PRODUCTS.length,
-    faqs: Object.keys(SALON_FAQS).length,
-    timestamp: new Date().toISOString()
+app.post('/__reload_catalog', (req,res)=>{
+  loadCatalog();
+  res.json({ ok:true, source: SOURCE, count: CATALOG.length });
+});
+
+app.get('/api/products', (req,res)=>{
+  const q = req.query.q || '';
+  const limit = Math.max(1, Math.min(100, parseInt(req.query.limit||'24',10)));
+  const offset = Math.max(0, parseInt(req.query.offset||'0',10));
+  const base = q ? searchCatalog(q) : CATALOG.slice();
+  const slice = base.slice(offset, offset+limit).map(toClient);
+  res.json({
+    success: true,
+    source: SOURCE,
+    total: base.length,
+    count: slice.length,
+    items: slice
   });
 });
 
-app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ error: 'API endpoint not found' });
+app.post('/api/chat', (req,res)=>{
+  const message = (req.body && req.body.message || '').toString().trim();
+  const items = searchCatalog(message).slice(0, 12).map(toClient);
+  let provider = 'catalog';
+  let response = 'Here are options that fit.';
+  let followUp = null;
+
+  if (!message) {
+    response = 'Hi! Ask about routines, ingredients, or products. I’ll answer and show matching items below.';
   }
-  next();
+
+  if (items.length === 0) {
+    provider = 'followup';
+    response = 'I have a quick question to tailor this for you.';
+    if (/hair|frizz|curl|blonde|brass|purple/i.test(message)) {
+      followUp = { key:'hairType', question:'Which best describes your hair? (straight / wavy / curly / coily)' };
+    } else if (/skin|aging|wrinkle|hydration|acne/i.test(message)) {
+      followUp = { key:'skinType', question:'Which best describes your skin? (oily / combination / dry / sensitive)' };
+    } else {
+      followUp = { key:'concern', question:'What’s the main goal? (hydration / frizz / volume / repair / tone)' };
+    }
+  }
+
+  res.json({ success:true, provider, response, items, followUp });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`[SERVER] Salon AI listening on port ${PORT}`);
-  console.log(`[PRODUCTS] ${SALON_PRODUCTS.length} real products loaded`);
-  console.log(`[FAQS] ${Object.keys(SALON_FAQS).length} FAQ categories loaded`);
-  console.log(`[SERVER] Ready for consultations`);
+app.post('/api/bookings/create', (req,res)=>{
+  const b = req.body || {};
+  const id = 'bk_' + Math.random().toString(36).slice(2,10);
+  res.json({ success:true, bookingId:id, echo:b });
+});
+
+app.get('/healthz', (req,res)=>res.json({ ok:true }));
+
+app.get('/', (req,res)=>{
+  if (fs.existsSync(path.join(STATIC_DIR, 'index.html'))) {
+    res.sendFile(path.join(STATIC_DIR,'index.html'));
+  } else {
+    res.type('text/plain').send('Luminous API');
+  }
+});
+
+const PORT = parseInt(process.env.PORT || '10000', 10);
+app.listen(PORT, '0.0.0.0', ()=>{
+  console.log(`Luminous listening on ${PORT}. source=${SOURCE}`);
 });

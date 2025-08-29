@@ -2,201 +2,37 @@
   {
     "id": "color-safe-shampoo",
     "name": "Color-Safe Shampoo",
-    "brand": "Professional",
     "category": "Hair",
+    "country": "USA",
     "priceCents": 1800,
-    "image": "/images/placeholder.jpg"
+    "image": "https://images.unsplash.com/photo-1582095133179-2988d1a4f5b0?q=80&w=800&auto=format&fit=crop",
+    "usage": "Massage into scalp, rinse thoroughly."
   },
   {
     "id": "bond-repair-mask",
     "name": "Bond Repair Mask",
-    "brand": "Professional", 
     "category": "Hair",
+    "country": "USA",
     "priceCents": 2400,
-    "image": "/images/placeholder.jpg"
+    "image": "https://images.unsplash.com/photo-1582095132990-7e83d90c1071?q=80&w=800&auto=format&fit=crop",
+    "usage": "Apply mid\u2011length to ends, leave 5\u201310 min."
   },
   {
     "id": "thermal-protectant",
     "name": "Thermal Protectant",
-    "brand": "Professional",
-    "category": "Hair", 
+    "category": "Hair",
+    "country": "USA",
     "priceCents": 2000,
-    "image": "/images/placeholder.jpg"
+    "image": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop",
+    "usage": "Mist on damp hair before heat styling."
   },
   {
     "id": "vitamin-c-serum",
     "name": "Vitamin C Serum",
-    "brand": "Premium",
     "category": "Skin",
+    "country": "France",
     "priceCents": 2900,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "hydrating-conditioner",
-    "name": "Hydrating Conditioner",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1900,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "anti-aging-serum", 
-    "name": "Anti-Aging Serum",
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 3200,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "curl-defining-cream",
-    "name": "Curl Defining Cream", 
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 2100,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "moisturizing-mask",
-    "name": "Moisturizing Mask",
-    "brand": "Premium", 
-    "category": "Skin",
-    "priceCents": 2700,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "volume-spray",
-    "name": "Volume Spray",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1750,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "eye-cream",
-    "name": "Eye Cream", 
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 3500,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "dry-shampoo",
-    "name": "Dry Shampoo",
-    "brand": "Professional",
-    "category": "Hair", 
-    "priceCents": 1650,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "cleansing-oil",
-    "name": "Cleansing Oil",
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 2800,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "hair-oil-treatment",
-    "name": "Hair Oil Treatment",
-    "brand": "Professional", 
-    "category": "Hair",
-    "priceCents": 2300,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "toner",
-    "name": "Toner",
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 2200,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "texturizing-paste",
-    "name": "Texturizing Paste",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1850,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "night-cream",
-    "name": "Night Cream", 
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 3100,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "leave-in-conditioner",
-    "name": "Leave-In Conditioner",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 2050,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "exfoliating-scrub",
-    "name": "Exfoliating Scrub",
-    "brand": "Premium",
-    "category": "Skin", 
-    "priceCents": 2600,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "styling-gel",
-    "name": "Styling Gel",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1700,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "sunscreen-spf30",
-    "name": "Sunscreen SPF 30",
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 2500,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "clarifying-shampoo",
-    "name": "Clarifying Shampoo", 
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1950,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "retinol-serum",
-    "name": "Retinol Serum",
-    "brand": "Premium",
-    "category": "Skin",
-    "priceCents": 3800,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "beach-wave-spray",
-    "name": "Beach Wave Spray",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 1800,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "lip-balm",
-    "name": "Lip Balm",
-    "brand": "Premium", 
-    "category": "Skin",
-    "priceCents": 1200,
-    "image": "/images/placeholder.jpg"
-  },
-  {
-    "id": "scalp-treatment",
-    "name": "Scalp Treatment",
-    "brand": "Professional",
-    "category": "Hair",
-    "priceCents": 2900,
-    "image": "/images/placeholder.jpg"
+    "image": "https://images.unsplash.com/photo-1556229010-aa3f7ff66b2c?q=80&w=800&auto=format&fit=crop",
+    "usage": "Use AM under SPF to brighten."
   }
 ]
