@@ -5,19 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>✨Luminous Beauty AI - Luminous</title>
   <style>
-/* Star before the chat title; no layout changes */
-.brand-title::before{
-  content:"";
-  display:inline-block;
-  width:1em; height:1em;
-  background:url("logo.png") no-repeat center/contain;
-  margin-right:6px;
-  vertical-align:-0.15em;
-}
+/* star before the title (expects /logo.png) */
+.brand-title::before{content:"";display:inline-block;width:1em;height:1em;background:url("/logo.png") no-repeat center/contain;margin-right:6px;vertical-align:-0.15em}
+
+/* base (unchanged) */
 *{margin:0;padding:0;box-sizing:border-box}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  background:#111;color:#333;line-height:1.4;overflow-x:hidden}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#111;color:#333;line-height:1.4;overflow-x:hidden}
 .container{max-width:414px;margin:0 auto;background:#f5f5f5;min-height:100vh;padding-bottom:100px}
 .header{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;padding:24px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15)}
 .header h1{font-size:20px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
@@ -29,11 +22,29 @@ body{
 .quick-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
 .example-btn{background:#f8f9fa;border:1px solid #B8860B;border-radius:10px;padding:12px 8px;font-size:11px;text-align:center;cursor:pointer;color:#495057;font-weight:500;transition:.2s}
 .example-btn:hover{border-color:#B8860B;color:#B8860B;transform:translateY(-1px)}
+
+/* small dropdown for Accessories */
+.dropdown{position:relative}
+.dropdown-menu{position:absolute;left:0;top:100%;margin-top:6px;background:#fff;border:1px solid #e9ecef;border-radius:10px;box-shadow:0 6px 18px rgba(0,0,0,.08);display:none;min-width:150px;overflow:hidden;z-index:20}
+.dropdown-menu button{display:block;width:100%;text-align:left;background:#fff;border:0;border-bottom:1px solid #f2f2f2;padding:10px 12px;font-size:12px;color:#444;cursor:pointer}
+.dropdown-menu button:last-child{border-bottom:0}
+.dropdown.open .dropdown-menu{display:block}
+
 .client-profile{background:#fff;border-radius:16px;padding:18px;margin-bottom:20px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05)}
 .profile-title{font-weight:700;font-size:15px;color:#222;margin-bottom:14px;text-align:center}
 .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.profile-select{padding:12px;border:1px solid #B8860B;border-radius:10px;font-size:13px;background:#fff;outline:none;color:#495057}
+.profile-select{padding:12px;border:1px solid #B8860B;border-radius:10px;font-size:13px;background:#fff;outline:none;color:#495057;cursor:pointer}
 .profile-select:focus{border-color:#B8860B;box-shadow:0 0 0 2px rgba(184,134,11,.1)}
+.panel{margin-top:12px;border:1px solid #e9ecef;border-radius:12px;background:#fff;padding:12px;display:none}
+.panel.open{display:block}
+.panel .row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.panel input,.panel select,.panel textarea{width:100%;padding:10px;border:1px solid #ddd;border-radius:10px;font-size:13px}
+.panel textarea{min-height:70px;resize:vertical}
+.panel .actions{display:flex;gap:8px;justify-content:flex-end}
+.btn{border:none;border-radius:10px;padding:10px 14px;font-weight:700;cursor:pointer}
+.btn-primary{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff}
+.btn-ghost{background:#f8f9fa;color:#666;border:1px solid #ddd}
+
 .chat-section{margin-bottom:24px}
 .chat-input-container{background:#fff;border-radius:16px;padding:6px;border:2px solid #e9ecef;box-shadow:0 4px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:8px}
 .chat-input-container:focus-within{border-color:#B8860B;box-shadow:0 4px 20px rgba(184,134,11,.15)}
@@ -46,6 +57,7 @@ body{
 .ai-status.active{display:block}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
 .chat-response{background:#fff;border-radius:16px;padding:18px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);font-size:14px;line-height:1.6;color:#333;margin-bottom:20px}
+
 .products-section{margin-top:24px}
 .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
 .section-title{font-size:17px;font-weight:700;color:#222}
@@ -69,9 +81,9 @@ body{
 .product-actions{display:flex;gap:8px}
 .details-btn{background:#f8f9fa;color:#666;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer}
 .add-btn{background:linear-gradient(135deg,#28a745,#20c997);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer}
-.load-more{text-align:center;margin:24px 0}
-.load-more-btn{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none;border-radius:16px;padding:14px 28px;font-weight:600;cursor:pointer;font-size:14px;margin-right:10px}
-.home-btn{background:#f8f9fa;color:#666;border:1px solid #ddd;border-radius:16px;padding:14px 28px;font-weight:600;cursor:pointer;font-size:14px}
+.load-more{text-align:center;margin:24px 0;display:flex;gap:10px;justify-content:center}
+.load-more-btn{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none;border-radius:16px;padding:14px 18px;font-weight:600;cursor:pointer;font-size:14px}
+.home-btn{background:#f8f9fa;color:#666;border:1px solid #ddd;border-radius:16px;padding:14px 18px;font-weight:600;cursor:pointer;font-size:14px}
 .status{text-align:center;color:#666;font-size:13px;margin-bottom:16px;padding:12px;background:#fff;border-radius:12px}
 .loading{text-align:center;color:#666;padding:40px 20px;font-size:14px}
 .error{background:#fee;color:#c33;padding:16px;border-radius:12px;margin:16px 0;font-size:13px;border:1px solid #fcc}
@@ -88,8 +100,7 @@ body{
 <body>
   <div class="container">
     <header class="header">
-      <!-- only change: add brand-title to show the star -->
-      <h1 class="brand-title">Luminous Beauty AI</h1>
+      <h1 class="brand-title">AI Salon Consultant</h1>
       <div class="tagline">Your personal beauty expert powered by AI</div>
     </header>
 
@@ -100,7 +111,18 @@ body{
         <div class="quick-examples">
           <button class="example-btn" onclick="quickAsk('repair damaged curly hair')">Repair Damage</button>
           <button class="example-btn" onclick="quickAsk('anti-aging skincare routine')">Anti-Aging</button>
-          <button class="example-btn" onclick="quickAsk('volume for fine hair')">Add Volume</button>
+
+          <!-- Accessories with dropdown -->
+          <div class="dropdown">
+            <button id="accBtn" class="example-btn" type="button">Accessories ▾</button>
+            <div class="dropdown-menu" id="accMenu">
+              <button onclick="quickAsk('combs accessories')">Combs</button>
+              <button onclick="quickAsk('brushes accessories')">Brushes</button>
+              <button onclick="quickAsk('eyeliner makeup')">Eyeliner</button>
+              <button onclick="quickAsk('lipstick makeup')">Lipstick</button>
+            </div>
+          </div>
+
           <button class="example-btn" onclick="quickAsk('acne-prone sensitive skin')">Clear Skin</button>
         </div>
       </section>
@@ -118,16 +140,42 @@ body{
             <option value="dry">Dry</option><option value="combination">Combination</option>
             <option value="sensitive">Sensitive</option>
           </select>
-          <select class="profile-select" id="concerns">
-            <option value="">Main Concerns</option><option value="damage">Damage/Breakage</option>
-            <option value="frizz">Frizz Control</option><option value="volume">Volume</option>
-            <option value="color">Color Protection</option><option value="aging">Anti-Aging</option>
-            <option value="acne">Acne</option><option value="dryness">Dryness</option>
-          </select>
-          <select class="profile-select" id="budget">
-            <option value="">Budget Range</option><option value="budget">Budget ($10-30)</option>
-            <option value="mid">Mid-Range ($30-60)</option><option value="luxury">Luxury ($60+)</option>
-          </select>
+
+          <!-- Replaces “My Concerns” -->
+          <button id="toggleAppt" class="profile-select" type="button">Appointments</button>
+          <!-- Replaces “Budget Range” -->
+          <button id="toggleMsg" class="profile-select" type="button">Send Message</button>
+        </div>
+
+        <!-- Appointments panel -->
+        <div id="apptPanel" class="panel">
+          <div class="row">
+            <select id="apptType">
+              <option value="">Appointment Type</option>
+              <option>Haircut</option><option>Color</option><option>Blowout</option>
+              <option>Nails</option><option>Pedicure</option><option>Skin</option>
+              <option>Extensions</option><option>Consult</option>
+            </select>
+            <input id="apptDate" type="date"/>
+          </div>
+          <div class="row">
+            <input id="apptTime" type="time"/>
+            <input id="apptName" placeholder="Your name (optional)"/>
+          </div>
+          <textarea id="apptNotes" placeholder="Notes: stylist preference, goals, sensitivities"></textarea>
+          <div class="actions">
+            <button class="btn btn-ghost" type="button" onclick="togglePanel('apptPanel',false)">Close</button>
+            <button class="btn btn-primary" type="button" onclick="saveAppointment()">Save Request</button>
+          </div>
+        </div>
+
+        <!-- Send Message panel -->
+        <div id="msgPanel" class="panel">
+          <textarea id="userMessage" placeholder="Type your message… (stored locally; you can wire Twilio/Firebase later)"></textarea>
+          <div class="actions">
+            <button class="btn btn-ghost" type="button" onclick="togglePanel('msgPanel',false)">Close</button>
+            <button class="btn btn-primary" type="button" onclick="saveMessage()">Save Message</button>
+          </div>
         </div>
       </section>
 
@@ -150,13 +198,55 @@ body{
         </div>
         <div class="status" id="status"></div>
         <div class="products-grid" id="productsGrid"></div>
+
+        <!-- Footer now shows BOTH buttons when more results exist -->
         <div class="load-more" id="loadMoreSection" style="display:none"></div>
       </section>
     </main>
   </div>
 
   <script>
-/* (unchanged app logic) */
+/* accessories dropdown toggle */
+(function(){
+  const btn=document.getElementById('accBtn');
+  const dd=btn?.parentElement;
+  document.addEventListener('click',e=>{
+    if(!dd) return;
+    if(dd.contains(e.target)){ dd.classList.toggle('open'); }
+    else{ dd.classList.remove('open'); }
+  });
+})();
+
+/* small helpers for panels + localStorage */
+function togglePanel(id,force){ const el=document.getElementById(id); if(!el) return; el.classList[force===false?'remove':'toggle']('open'); }
+document.getElementById('toggleAppt')?.addEventListener('click',()=>togglePanel('apptPanel'));
+document.getElementById('toggleMsg')?.addEventListener('click',()=>togglePanel('msgPanel'));
+
+function saveAppointment(){
+  const appt={
+    type:document.getElementById('apptType').value||'Consult',
+    date:document.getElementById('apptDate').value,
+    time:document.getElementById('apptTime').value,
+    name:document.getElementById('apptName').value||'',
+    notes:document.getElementById('apptNotes').value||'',
+    createdAt:new Date().toISOString()
+  };
+  if(!appt.date||!appt.time){ alert('Please select a date and time.'); return; }
+  const k='appointments'; const list=JSON.parse(localStorage.getItem(k)||'[]'); list.push(appt); localStorage.setItem(k,JSON.stringify(list));
+  alert('Appointment request saved locally. We will confirm shortly.'); togglePanel('apptPanel',false);
+}
+
+function saveMessage(){
+  const msg = (document.getElementById('userMessage').value||'').trim();
+  if(!msg){ alert('Please enter a message.'); return; }
+  const k='messages'; const list=JSON.parse(localStorage.getItem(k)||'[]');
+  list.push({ message:msg, createdAt:new Date().toISOString() });
+  localStorage.setItem(k,JSON.stringify(list));
+  alert('Message saved locally. (Hook up Twilio/Firebase later.)');
+  document.getElementById('userMessage').value=''; togglePanel('msgPanel',false);
+}
+
+/* core chat/product logic (unchanged except footer behavior) */
 class UnifiedSalonAI{
   constructor(){
     this.currentQuery='';this.currentOffset=0;this.totalProducts=0;this.isLoading=false;
@@ -170,17 +260,16 @@ class UnifiedSalonAI{
     this.productsSection=document.getElementById('productsSection');
     this.hairType=document.getElementById('hairType');
     this.skinType=document.getElementById('skinType');
-    this.concerns=document.getElementById('concerns');
-    this.budget=document.getElementById('budget');
+    /* “concerns/budget” removed; panels handle those now */
     this.bindEvents();this.showWelcomeMessage();
   }
   bindEvents(){
     this.chatBtn.addEventListener('click',()=>this.handleAIConsultation());
     this.chatInput.addEventListener('keypress',e=>{if(e.key==='Enter'&&!this.isLoading)this.handleAIConsultation();});
-    [this.hairType,this.skinType,this.concerns,this.budget].forEach(s=>s.addEventListener('change',()=>this.onProfileChange()));
+    [this.hairType,this.skinType].forEach(s=>s?.addEventListener('change',()=>this.onProfileChange()));
   }
   showWelcomeMessage(){
-    this.chatResponse.innerHTML=`<div style="text-align:center;color:#666;"><h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3><p style="margin-bottom:16px;">I'm here to give you personalized product recommendations based on your unique needs.</p><p style="font-size:13px;"><strong>Try asking:</strong></p><ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;"><li>"I have dry, damaged hair - what should I use?"</li><li>"Best anti-aging products for sensitive skin"</li><li>"Products for oily skin and acne"</li><li>"Volume routine for fine, straight hair"</li></ul></div>`;
+    this.chatResponse.innerHTML=`<div style="text-align:center;color:#666;"><h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3><p style="margin-bottom:16px;">I'm here to give you personalized product recommendations based on your unique needs.</p><p style="font-size:13px;"><strong>Try asking:</strong></p><ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;"><li>"I have dry, damaged hair - what should I use?"</li><li>"Best anti-aging products for sensitive skin"</li><li>"Accessories: combs and brushes"</li><li>"Volume routine for fine hair"</li></ul></div>`;
   }
   onProfileChange(){if(this.currentQuery){this.searchProducts(this.currentQuery,true);}}
   async handleAIConsultation(){
@@ -195,7 +284,7 @@ class UnifiedSalonAI{
     if(!r.ok)throw new Error(`HTTP ${r.status}`);const data=await r.json();
     this.chatResponse.innerHTML=`<div style="border-left:4px solid #B8860B;padding-left:16px;"><h4 style="color:#B8860B;margin-bottom:8px;font-size:14px;">AI Consultation</h4><p style="line-height:1.6;">${data.response||'Let me help you find the perfect products for your needs.'}</p></div>`;
   }
-  getClientProfile(){return{hairType:this.hairType.value,skinType:this.skinType.value,concerns:this.concerns.value,budget:this.budget.value};}
+  getClientProfile(){return{hairType:this.hairType.value,skinType:this.skinType.value};}
   async searchProducts(query,reset=false){
     if(reset){this.currentOffset=0;this.grid.innerHTML='';}
     try{
@@ -205,13 +294,13 @@ class UnifiedSalonAI{
       const data=await r.json();if(!data.success)throw new Error(data.error||'Failed to get recommendations');
       this.totalProducts=Math.min(data.total,100);this.currentOffset+=data.items.length;
       if(data.items.length===0&&reset){this.showEmptyState();}
-      else{this.renderProducts(data.items,data.aiGenerated);this.updateStatus(data);this.updateLoadMoreButton();}
+      else{this.renderProducts(data.items,data.aiGenerated);this.updateStatus(data);this.updateLoadMoreButtons();}
     }catch(e){console.error(e);this.showProductError(e.message);}
   }
   renderProducts(products,aiGen=false){products.forEach(p=>this.grid.appendChild(this.createProductCard(p,aiGen))); }
   createProductCard(p,aiGen=false){
     const card=document.createElement('div');card.className=`product-card${aiGen?' ai-generated':''}`;
-    const price=this.formatPrice(p.price);const meta=`${p.brand} • ${p.category}`;
+    const price=this.formatPrice(p.price);const meta=`${p.brand||'—'} • ${p.category||'—'}`;
     const benefits=p.benefits?.length?p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join(''):'';
     card.innerHTML=`<div class="product-content">
       <img class="product-image" src="${p.image}" alt="${p.name}" onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
@@ -240,15 +329,23 @@ class UnifiedSalonAI{
   showEmptyState(){this.grid.innerHTML=`<div class="empty-state"><h3>No products found</h3><p>Try a different search or be more specific about your needs.</p></div>`;}
   formatPrice(c){return(typeof c==='number'&&c>0)?('$'+(c/100).toFixed(2)):'$—';}
   updateStatus(d){const showing=this.currentOffset,total=Math.min(d.total,100),type=d.aiGenerated?'AI recommendations':'products';this.status.textContent=`Showing ${showing} of ${total} ${type} for "${d.query||this.currentQuery}"`;}
-  updateLoadMoreButton(){
+
+  /* NEW: show both buttons when more exist; always show Start New Search */
+  updateLoadMoreButtons(){
     const hasMore=this.currentOffset<this.totalProducts;
-    this.loadMoreSection.innerHTML=hasMore?`<button class="load-more-btn" onclick="window.salonAI.loadMore()">Show More Products (${this.currentOffset}/${this.totalProducts})</button>`:`${this.totalProducts>0?'<button class="home-btn" onclick="location.reload()">Start New Search</button>':''}`;
-    this.loadMoreSection.style.display=this.totalProducts>0?'block':'none';
+    const parts=[];
+    if(hasMore) parts.push(`<button class="load-more-btn" onclick="window.salonAI.loadMore()">Show More</button>`);
+    parts.push(`<button class="home-btn" onclick="window.salonAI.newSearch()">Start New Search</button>`);
+    this.loadMoreSection.innerHTML=parts.join('');
+    this.loadMoreSection.style.display=this.totalProducts>0?'flex':'none';
   }
+
   showChatError(m){this.chatResponse.innerHTML=`<div class="error">${m}</div>`;}
   showProductError(m){this.status.innerHTML=`<div class="error">Error: ${m}</div>`;}
   addToCart(p){alert(`Added "${p.name}" to cart!\n\nPrice: ${this.formatPrice(p.price)}\n\n${p.description||'Perfect for your needs!'}`);}
   loadMore(){this.searchProducts(this.currentQuery,false);}
+  newSearch(){ this.currentQuery=''; this.currentOffset=0; this.totalProducts=0;
+    this.grid.innerHTML=''; this.productsSection.style.display='none'; this.showWelcomeMessage(); window.scrollTo({top:0,behavior:'smooth'}); }
 }
 function quickAsk(s){const a=window.salonAI;a.chatInput.value=s;a.handleAIConsultation();}
 document.addEventListener('DOMContentLoaded',()=>{window.salonAI=new UnifiedSalonAI();});
