@@ -1,112 +1,75 @@
-// server.js — Render-safe, no-regex catch-all
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+// ---- catalog loader & helpers (ESM-safe) ----
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const app = express();
-app.disable('x-powered-by');
-app.use(express.json({ limit: '1mb' }));
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const ENV_PATH = process.env.CATALOG_PATH || 'data/products.json';
 
-// --- CSP & security headers (compatible with current UI)
-app.use((req, res, next) => {
-  res.setHeader('Content-Security-Policy', [
-    "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
-    "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
-    "connect-src 'self'",
-    "font-src 'self' data:",
-    "object-src 'none'",
-    "base-uri 'self'",
-    "frame-ancestors 'self'",
-    "upgrade-insecure-requests"
-  ].join('; '));
-  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  next();
-});
-
-// --- Static roots (case-sensitive in Linux)
-const PUBLIC_DIR = path.join(__dirname, 'public');
-app.use(express.static(PUBLIC_DIR, { extensions: ['html'] }));
-
-// Expose data & images from both /public and repo root if present
-app.use('/data', express.static(path.join(PUBLIC_DIR, 'data')));
-app.use('/data', express.static(path.join(__dirname, 'data')));
-app.use('/images', express.static(path.join(PUBLIC_DIR, 'images')));
-app.use('/images', express.static(path.join(__dirname, 'images')));
-
-// --- Health
-app.get('/healthz', (req, res) => res.json({ ok: true }));
-
-// --- Diagnostics: list candidate data paths and directory contents
-app.get('/__files', (req, res) => {
-  const candidates = [
-    path.join(PUBLIC_DIR, 'data', 'products.json'),
-    path.join(__dirname, 'data', 'products.json'),
-    path.join(PUBLIC_DIR, 'products.json'),
-    path.join(__dirname, 'products.json')
-  ];
-  const exists = candidates.map(p => ({ path: p, exists: fs.existsSync(p) }));
-  const listing = [];
-  for (const dir of [PUBLIC_DIR, path.join(PUBLIC_DIR,'data'), path.join(__dirname,'data')]) {
-    try { listing.push({ dir, ok: true, files: fs.readdirSync(dir).slice(0, 200) }); }
-    catch (e) { listing.push({ dir, ok: false, error: String(e) }); }
-  }
-  res.json({ cwd: process.cwd(), PUBLIC_DIR, candidates: exists, listing });
-});
-
-// --- Helpers
-function findProductsFile() {
-  const candidates = [
-    path.join(PUBLIC_DIR, 'data', 'products.json'),
-    path.join(__dirname, 'data', 'products.json'),
-    path.join(PUBLIC_DIR, 'products.json'),
-    path.join(__dirname, 'products.json')
-  ];
-  for (const p of candidates) { if (fs.existsSync(p)) return p; }
-  return null;
+async function readJSON(p) {
+  const txt = await fs.readFile(p, 'utf8');
+  return JSON.parse(txt);
 }
-function loadJSON(p) { try { return JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return null; } }
 
-// --- API: products
-app.get('/api/products', (req, res) => {
-  const limit = Math.max(0, Math.min(5000, Number(req.query.limit) || 150));
-  const file = findProductsFile();
-  let items = [], source = 'none';
-  if (file) {
-    const j = loadJSON(file) || {};
-    const arr = j.items || j.data || j.results || j.products || (Array.isArray(j) ? j : []);
-    items = Array.isArray(arr) ? arr.slice(0, limit) : [];
-    source = file;
+async function loadCatalog() {
+  const candidates = [
+    ENV_PATH,
+    path.join(__dirname, 'data/products.json'),
+    path.join(__dirname, 'products.json'),
+    path.join(__dirname, 'public/data/products.json'),
+  ];
+  for (const p of candidates) {
+    try {
+      const data = await readJSON(p);
+      if (Array.isArray(data) && data.length) {
+        return { items: data, source: p };
+      }
+    } catch (_) { /* try next */ }
   }
-  res.json({ success: true, source, count: items.length, items });
-});
+  // Final tiny seed to prevent 0 results (but we try to never use this)
+  const seed = [
+    { id:'color-safe-shampoo', name:'Color-Safe Shampoo', brand:'Professional', category:'Hair', priceCents:1800, image:'/images/placeholder.jpg' },
+    { id:'bond-repair-mask',   name:'Bond Repair Mask',   brand:'Professional', category:'Hair', priceCents:2400, image:'/images/placeholder.jpg' },
+    { id:'thermal-protectant', name:'Thermal Protectant', brand:'Professional', category:'Hair', priceCents:2000, image:'/images/placeholder.jpg' },
+    { id:'vitamin-c-serum',    name:'Vitamin C Serum',    brand:'Premium',      category:'Skin', priceCents:2900, image:'/images/placeholder.jpg' },
+  ];
+  return { items: seed, source: 'seed' };
+}
 
-// --- API: chat (stub with follow-up)
-app.post('/api/chat', (req, res) => {
-  const msg = (req.body && req.body.message || '').toLowerCase();
-  if (!msg) return res.status(400).json({ success:false, error:'message required' });
-  const needs = /(acne|sensitive|irritation|retinol|aha|bha|toning|purple|blue|hair color)/.test(msg);
-  if (needs && !/(oily|dry|combination|sensitive)/.test(msg)) {
-    return res.json({ success:true, provider:'followup',
-      response:'I have a quick question to tailor this for you.',
-      followUp:{ key:'skinType', question:'Which best describes your skin? (oily / combination / dry / sensitive)'} });
-  }
-  return res.json({ success:true, provider:'fallback', response:'Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard.' });
-});
+function normalizeItem(p) {
+  const priceCents =
+    Number.isFinite(p.priceCents) ? p.priceCents :
+    Number.isFinite(p.price)      ? p.price      : 0;
+  return { ...p, priceCents, price: priceCents };
+}
 
-// --- Catch-all (no regex): send index.html for non-API/diagnostic routes
-app.get('*', (req, res, next) => {
-  const p = req.path;
-  if (p.startsWith('/api/') || p === '/api' || p.startsWith('/__') || p === '/healthz') return next();
-  res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
-});
+function shuffle(arr) {
+  // small, stable-ish shuffle so users don’t see the same 4
+  return [...arr].sort(() => Math.random() - 0.5);
+}
 
-// --- Start (Render needs 0.0.0.0 + process.env.PORT)
-const PORT = Number(process.env.PORT) || 3000;
-const HOST = '0.0.0.0';
-app.listen(PORT, HOST, () => {
-  console.log(`Luminous listening on ${HOST}:${PORT}; public=${PUBLIC_DIR}`);
-});
+function buildMatcher(q) {
+  const ql = q.toLowerCase().trim();
+  if (!ql) return () => true;
+
+  const tokens = ql.split(/[\s,]+/).filter(Boolean);
+  const synonyms = {
+    purple: ['violet', 'toning'],
+    red: ['copper', 'warm'],
+    sensitive: ['gentle', 'scalp'],
+    'anti-aging': ['antiaging', 'retinol', 'vitamin a'],
+    accessories: ['brush', 'comb', 'clip', 'tweezer', 'cap', 'bobby', 'razor', 'file'],
+    shampoo: ['cleanse', 'wash'],
+    conditioner: ['condition', 'hydrating'],
+    serum: ['treatment'],
+    mask: ['masque'],
+    spray: ['mist'],
+  };
+
+  const expand = (t) => [t, ...(synonyms[t] || [])];
+
+  return (r) => {
+    const hay = `${r.name||''} ${r.brand||''} ${r.category||''} ${r.description||''} ${r.usage||''}`.toLowerCase();
+    return tokens.some(t => expand(t).some(s => hay.includes(s)));
+  };
+}
