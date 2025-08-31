@@ -150,16 +150,12 @@
           <button id="loadMoreBtn" class="load-more-btn">Show More Products</button>
           <button class="home-btn" onclick="location.reload()">Start New Search</button>
         </div>
-
-        <!-- sentinel for infinite scroll -->
-        <div id="sentinel" style="height:1px;"></div>
       </section>
     </main>
   </div>
 
 <script>
 (() => {
-  // ---------- Utilities ----------
   const qs = (sel) => document.querySelector(sel);
 
   async function fetchJSON(url) {
@@ -168,20 +164,37 @@
     return res.json();
   }
 
+  function toCentsMaybe(val) {
+    if (typeof val === 'number' && Number.isFinite(val)) return Math.round(val * 100);
+    if (typeof val === 'string') {
+      const num = parseFloat(val.replace(/[$,]/g, ''));
+      if (Number.isFinite(num)) return Math.round(num * 100);
+    }
+    return NaN;
+  }
+
   function normalizeProduct(p) {
-    const priceCents =
-      typeof p.priceCents === 'number' ? p.priceCents :
-      typeof p.price === 'number'   ? Math.round(p.price * 100) :
-      NaN;
+    let cents = NaN;
+    if (typeof p.priceCents === 'number') cents = p.priceCents;
+    else if (typeof p.priceCents === 'string') {
+      const n = parseInt(p.priceCents.replace(/\D/g, ''), 10);
+      if (Number.isFinite(n)) cents = n;
+    } else if (typeof p.price === 'number' || typeof p.price === 'string') {
+      cents = toCentsMaybe(p.price);
+    }
+
+    const desc = p.description && String(p.description).trim()
+      ? String(p.description).trim()
+      : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
 
     return {
       id: p.id || '',
       name: p.name || 'Product',
       brand: p.brand || '—',
       category: p.category || '—',
-      priceCents,
+      priceCents: Number.isFinite(cents) ? cents : NaN,
       image: p.image || '/images/placeholder.jpg',
-      description: p.description || '',
+      description: desc,
       usage: p.usage || '',
       ingredients: p.ingredients || '',
       benefits: Array.isArray(p.benefits) ? p.benefits : []
@@ -189,56 +202,80 @@
   }
 
   function formatCents(cents) {
-    if (!Number.isFinite(cents) || cents <= 0) return '$—';
-    return '$' + (cents / 100).toFixed(2);
+    return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
+  }
+
+  function expandQueryTokens(q) {
+    const tokens = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
+    if (tokens.includes('accessories')) {
+      tokens.push('brush','comb','tweezer','clipper','nail','bobby','shower','cap','lipstick','eyeliner');
+    }
+    return tokens;
   }
 
   function matchesQuery(p, q) {
-    if (!q) return true;
+    const toks = expandQueryTokens(q);
+    if (!toks.length) return true;
     const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
-    return q.toLowerCase().split(/\s+/).every(tok => hay.includes(tok));
+    return toks.every(tok => hay.includes(tok));
   }
 
-  // ---------- Catalog fetcher with fallback ----------
-  async function getProducts({ q, offset, limit, profile }) {
-    // 1) Try API
+  function uniqById(arr) {
+    const seen = new Set();
+    const out = [];
+    for (const x of arr) {
+      if (!x || !x.id) continue;
+      if (seen.has(x.id)) continue;
+      seen.add(x.id);
+      out.push(x);
+    }
+    return out;
+    }
+
+  // Merge API and static catalog, filter & page
+  async function fetchMerged({ q, offset, limit, profile }) {
+    let apiItems = [];
+    let staticItems = [];
+
+    // Try API first, but do not “lock” to it
     try {
       const params = new URLSearchParams({
         q: q || '',
-        offset: String(offset || 0),
-        limit: String(limit || 25),
+        offset: String(0),
+        limit: String(100), // pull a generous page; we’ll page locally
         ...profile
       });
       const apiData = await fetchJSON(`/api/products?${params.toString()}`);
-      const items = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
-      const total = Number.isFinite(apiData.total) ? apiData.total
-                  : Number.isFinite(apiData.count) ? apiData.count
-                  : items.length;
-      if (items.length) return { items, total, aiGenerated: !!apiData.aiGenerated, query: apiData.query || q };
-      // fall through to static if API returns empty
+      apiItems = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
     } catch (e) {
-      console.warn('API products failed, falling back to static catalog:', e.message);
+      console.warn('API failed, will rely on static catalog:', e.message);
     }
 
-    // 2) Fallback to static JSON (public)
-    const all = await fetchJSON('/data/products.json');  // you confirmed this exists
-    const arr = Array.isArray(all) ? all : (Array.isArray(all.items) ? all.items : []);
-    const normalized = arr.map(normalizeProduct).filter(p => matchesQuery(p, q));
-    const slice = normalized.slice(offset, offset + limit);
-    return { items: slice, total: normalized.length, aiGenerated: false, query: q };
+    // Always include static fallback
+    try {
+      const raw = await fetchJSON('/data/products.json');
+      const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
+      staticItems = arr.map(normalizeProduct);
+    } catch (e) {
+      console.warn('Static catalog missing:', e.message);
+    }
+
+    // Merge, filter, page
+    const merged = uniqById([...apiItems, ...staticItems]).filter(p => matchesQuery(p, q));
+    const total = merged.length;
+    const slice = merged.slice(offset, offset + limit);
+    const aiGenerated = apiItems.length > 0; // just for the badge
+    return { items: slice, total, aiGenerated, query: q };
   }
 
-  // ---------- App ----------
   class UnifiedSalonAI {
     constructor() {
-      // State
       this.currentQuery = '';
       this.currentOffset = 0;
       this.totalProducts = 0;
       this.pageSize = 25;
       this.isLoading = false;
 
-      // Elements (existing DOM)
       this.chatInput = qs('#chatInput');
       this.chatBtn = qs('#chatBtn');
       this.chatResponse = qs('#chatResponse');
@@ -248,7 +285,6 @@
       this.loadMoreSection = qs('#loadMoreSection');
       this.productsSection = qs('#productsSection');
 
-      // Profile
       this.hairType = qs('#hairType');
       this.skinType = qs('#skinType');
       this.concerns = qs('#concerns');
@@ -264,8 +300,7 @@
         if (e.key === 'Enter' && !this.isLoading) this.handleAIConsultation();
       });
       this.loadMoreSection?.addEventListener('click', (e) => {
-        const btn = e.target.closest('#loadMoreBtn');
-        if (btn) this.loadMore();
+        if (e.target.closest('#loadMoreBtn')) this.loadMore();
       });
 
       [this.hairType, this.skinType, this.concerns, this.budget].forEach(sel => {
@@ -308,7 +343,7 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      // Chat should never block product rendering
+      // Chat should never block products
       this.safeChat(message);
 
       this.currentQuery = message;
@@ -331,7 +366,6 @@
         const data = await res.json();
         this.renderChat(data?.response);
       } catch {
-        // Use a neutral, non-blocking fallback
         this.renderChat(null);
       }
     }
@@ -356,7 +390,7 @@
         if (this.status) this.status.textContent = 'Finding matching products...';
 
         const { items, total, aiGenerated, query: echoed } =
-          await getProducts({
+          await fetchMerged({
             q: query,
             offset: this.currentOffset,
             limit: this.pageSize,
@@ -390,7 +424,6 @@
       const div = document.createElement('div');
       div.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
       const price = formatCents(product.priceCents);
-
       const benefits = product.benefits?.length
         ? `<div class="product-benefits">${product.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>`
         : '';
@@ -448,10 +481,13 @@
           <button class="load-more-btn" id="loadMoreBtn">
             Show More Products (${this.currentOffset}/${this.totalProducts})
           </button>
+          <button class="home-btn" onclick="location.reload()">Start New Search</button>
         `;
       } else if (this.totalProducts > 0) {
         this.loadMoreSection.style.display = 'block';
-        this.loadMoreSection.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+        this.loadMoreSection.innerHTML = `
+          <button class="home-btn" onclick="location.reload()">Start New Search</button>
+        `;
       } else {
         this.loadMoreSection.style.display = 'none';
       }
@@ -460,7 +496,6 @@
     loadMore() { this.searchProducts(this.currentQuery, false); }
   }
 
-  // expose quickAsk() used by your example buttons
   window.quickAsk = (text) => {
     const app = window.salonAI;
     if (!app) return;
