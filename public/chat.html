@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Luminous • Chat</title>
+  <meta name="theme-color" content="#2C2C2C">
+  <style>
+    :root{--ink:#111;--muted:#666;}
+    body{margin:0;background:#f8f8f8;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;}
+    .wrap{max-width:420px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;}
+    header{padding:14px 16px;border-bottom:1px solid #eee;background:#fff;font-weight:800}
+    main{padding:12px; flex:1}
+    #status{font-size:12px;color:var(--muted);margin:4px 2px 8px}
+    #productsGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .product-card{background:#fff;border:1px solid #eee;border-radius:12px;overflow:hidden;box-shadow:0 1px 6px rgba(0,0,0,.04)}
+    .product-image{width:100%;height:130px;object-fit:cover;display:block;background:#fafafa}
+    .product-info{padding:10px}
+    .product-name{font-weight:700;font-size:13px;margin-bottom:4px}
+    .product-meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+    .product-description{font-size:11px;color:#444;margin-bottom:6px}
+    .product-footer{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .product-price{font-weight:800;font-size:13px}
+    .add-btn{border:none;background:#111;color:#fff;font-weight:700;border-radius:10px;padding:8px 10px;cursor:pointer}
+    .controls{display:flex;gap:8px;margin:12px 0}
+    .load-more-btn,.home-btn{border:1px solid #ddd;background:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:700}
+    .empty-state{background:#fff;border:1px dashed #ddd;border-radius:12px;padding:16px;text-align:center}
+    .dock{position:sticky;bottom:0;background:#fff;border-top:1px solid #eee;padding:10px}
+    .dock-inner{display:flex;gap:8px}
+    #chatInput{flex:1;border:1px solid #ddd;border-radius:12px;padding:10px;font-size:14px}
+    #chatBtn{border:none;border-radius:12px;padding:10px 14px;background:#111;color:#fff;font-weight:800}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>Chat with a Stylist</header>
+    <main>
+      <div id="status"></div>
+      <div id="productsGrid" aria-live="polite"></div>
+      <div id="loadMoreSection" class="controls"></div>
+    </main>
+
+    <div class="dock">
+      <div class="dock-inner">
+        <input id="chatInput" placeholder="Search or ask e.g. “purple shampoo”" />
+        <button id="chatBtn">Go</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (() => {
+    const API = '/api/products';
+    const PAGE_SIZE = 24;
+    const PLACEHOLDER_IMG = '/images/placeholder.jpg';
+
+    const $ = (s) => document.querySelector(s);
+    const chatInput = $('#chatInput');
+    const chatBtn   = $('#chatBtn');
+    const productsGrid = $('#productsGrid');
+    const statusEl     = $('#status');
+    const loadMoreEl   = $('#loadMoreSection');
+
+    let lastQuery = '';
+    let results   = [];
+    let page      = 1;
+
+    const esc = (s='') => s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    const money = (c) => (typeof c === 'number' && c > 0) ? '$' + (c/100).toFixed(2) : '$—';
+    const buildQuery = (q, limit) => `${API}?q=${encodeURIComponent(q||'')}&limit=${limit}`;
+
+    async function fetchProducts(q, limit) {
+      const url = buildQuery(q, limit);
+      const r = await fetch(url, { cache: 'no-store' });
+      if (!r.ok) throw new Error('API error: ' + r.status);
+      const data = await r.json();
+      return Array.isArray(data?.items) ? data.items : [];
+    }
+
+    function clearUI() {
+      productsGrid.innerHTML = '';
+      loadMoreEl.innerHTML = '';
+      statusEl.textContent = '';
+    }
+
+    function renderCards(items) {
+      const frag = document.createDocumentFragment();
+      for (const p of items) {
+        const meta = [p.brand || '—', p.category || '—'].filter(Boolean).join(' • ');
+        const img  = p.image || PLACEHOLDER_IMG;
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = \`
+          <img class="product-image" src="\${esc(img)}" alt="\${esc(p.name||'')}" loading="lazy" onerror="this.src='\${PLACEHOLDER_IMG}'">
+          <div class="product-info">
+            <div class="product-name">\${esc(p.name || 'Product')}</div>
+            <div class="product-meta">\${esc(meta)}</div>
+            \${p.description ? \`<div class="product-description">\${esc(p.description)}</div>\` : ''}
+            <div class="product-footer">
+              <div class="product-price">\${money(p.priceCents)}</div>
+              <button class="add-btn" data-id="\${esc(p.id||'')}">Add to Cart</button>
+            </div>
+          </div>\`;
+        card.querySelector('.add-btn').addEventListener('click', () => {
+          alert(\`Added "\${p.name}" — \${money(p.priceCents)}\`);
+        });
+        frag.appendChild(card);
+      }
+      productsGrid.appendChild(frag);
+    }
+
+    function updateStatus(total, q) {
+      const showing = productsGrid.children.length;
+      statusEl.textContent = total ? \`Showing \${showing} of \${total} products\${q ? \` for "\${q}"\` : ''}\`
+                                  : 'No products found';
+    }
+
+    function renderControls(hasMore) {
+      const parts = [];
+      if (hasMore) parts.push('<button id="btnMore" class="load-more-btn">Show More</button>');
+      parts.push('<button id="btnNew" class="home-btn">Start New Search</button>');
+      loadMoreEl.innerHTML = parts.join(' ');
+      document.getElementById('btnMore')?.addEventListener('click', async () => {
+        page += 1;
+        const next = await fetchProducts(lastQuery, PAGE_SIZE * page);
+        results = next;
+        renderCards(results.slice((page-1)*PAGE_SIZE, page*PAGE_SIZE));
+        updateStatus(results.length, lastQuery);
+        renderControls(PAGE_SIZE * page < results.length);
+      });
+      document.getElementById('btnNew')?.addEventListener('click', () => {
+        lastQuery = '';
+        page = 1;
+        results = [];
+        clearUI();
+        if (chatInput) { chatInput.value = ''; chatInput.focus(); }
+      });
+    }
+
+    async function runSearch(q) {
+      lastQuery = q;
+      page = 1;
+      clearUI();
+      results = await fetchProducts(q, PAGE_SIZE * page);
+      if (!results.length) {
+        productsGrid.innerHTML = '<div class="empty-state"><h3>No products found</h3><p>Try a brand, concern, or category (e.g. “purple shampoo”, “retinol”).</p></div>';
+        updateStatus(0, q);
+        renderControls(false);
+        return;
+      }
+      renderCards(results.slice(0, PAGE_SIZE));
+      updateStatus(results.length, q);
+      renderControls(PAGE_SIZE < results.length);
+    }
+
+    chatBtn.addEventListener('click', () => {
+      const q = (chatInput.value || '').trim();
+      if (!q) return alert('Enter a search');
+      runSearch(q);
+    });
+    chatInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        const q = (chatInput.value || '').trim();
+        if (!q) return;
+        runSearch(q);
+      }
+    });
+  })();
+  </script>
+</body>
+</html>

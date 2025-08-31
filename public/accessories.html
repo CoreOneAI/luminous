@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+  <title>Luminous • Accessories</title>
+  <link rel='icon' href='/favicon.svg' type='image/svg+xml'>
+  <link rel='stylesheet' href='/assets/ui.css'>
+</head>
+<body>
+  <div class='page'>
+    <header class='header'>
+      <div class='brand'>Luminous • Shop</div>
+      <button class='iconbtn' id='cartBtn' title='Cart'>
+        <svg class='svg' viewBox='0 0 24 24' fill='none' stroke='#333' stroke-width='1.5'><path d='M6 6h15l-1.5 9h-12z'/><circle cx='9' cy='20' r='1.5'/><circle cx='17' cy='20' r='1.5'/></svg>
+        <span class='badge' id='cartCount'>0</span>
+      </button>
+    </header>
+    <div class='hd'><h1>Tools & Accessories</h1></div>
+
+    <div class="controls">
+      <input id="searchInput" class="input" placeholder="Search brand, concern, or category" />
+      <button class="btn" id="searchBtn">Search</button>
+    </div>
+<div class='pills'><div class='pill' data-cat='Tools'>Tools</div><div class='pill' data-cat='Brush'>Brush</div><div class='pill' data-cat='Dryer'>Dryer</div><div class='pill' data-cat='Iron'>Iron</div><div class='pill' data-cat='Roller'>Roller</div><div class='pill' data-cat='Gua Sha'>Gua Sha</div></div>
+    <main class='main'>
+      <div id='grid' class='grid' aria-live='polite'></div>
+    </main>
+    <nav class='nav'>
+      <a href='/index.html'>Home</a>
+      <a href='#' onclick="location.href='/index.html#book';return false;">Book</a>
+      <a class='active' href='/catalog.html'>Shop</a>
+      <a href='/account.html'>Account</a>
+    </nav>
+  </div>
+  <div class='drawer' id='drawer'>
+    <h3>Your Cart</h3>
+    <div id='cartItems'></div>
+    <div class='total' id='cartTotal'>$0.00</div>
+  </div>
+  <script src='/assets/shop.js'></script>
+  <script>document.addEventListener('DOMContentLoaded',function(){window.initCatalogPage({mode:'accessories'});});</script>
+</body>
+</html>

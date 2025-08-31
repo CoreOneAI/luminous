@@ -1,38 +1,58 @@
-[
-  {
-    "id": "color-safe-shampoo",
-    "name": "Color-Safe Shampoo",
-    "category": "Hair",
-    "country": "USA",
-    "priceCents": 1800,
-    "image": "https://images.unsplash.com/photo-1582095133179-2988d1a4f5b0?q=80&w=800&auto=format&fit=crop",
-    "usage": "Massage into scalp, rinse thoroughly."
-  },
-  {
-    "id": "bond-repair-mask",
-    "name": "Bond Repair Mask",
-    "category": "Hair",
-    "country": "USA",
-    "priceCents": 2400,
-    "image": "https://images.unsplash.com/photo-1582095132990-7e83d90c1071?q=80&w=800&auto=format&fit=crop",
-    "usage": "Apply mid\u2011length to ends, leave 5\u201310 min."
-  },
-  {
-    "id": "thermal-protectant",
-    "name": "Thermal Protectant",
-    "category": "Hair",
-    "country": "USA",
-    "priceCents": 2000,
-    "image": "https://images.unsplash.com/photo-1556228720-195a672e8a03?q=80&w=800&auto=format&fit=crop",
-    "usage": "Mist on damp hair before heat styling."
-  },
-  {
-    "id": "vitamin-c-serum",
-    "name": "Vitamin C Serum",
-    "category": "Skin",
-    "country": "France",
-    "priceCents": 2900,
-    "image": "https://images.unsplash.com/photo-1556229010-aa3f7ff66b2c?q=80&w=800&auto=format&fit=crop",
-    "usage": "Use AM under SPF to brighten."
+// ---- /api/products ----
+app.get('/api/products', async (req, res) => {
+  try {
+    const { items, source } = await loadCatalog();
+    const all = items.map(normalizeItem);
+
+    const q = String(req.query.q ?? '').trim();
+    const limit = Math.min(parseInt(req.query.limit || '25', 10) || 25, 100);
+    const offset = Math.max(parseInt(req.query.offset || '0', 10) || 0, 0);
+
+    // Optional profile signals (not mandatory)
+    const hairType = String(req.query.hairType || '');
+    const skinType = String(req.query.skinType || '');
+    const concerns = String(req.query.concerns || '');
+    const budget   = String(req.query.budget || '');
+
+    let filtered = all;
+
+    if (q) {
+      const match = buildMatcher(q);
+      filtered = all.filter(match);
+
+      // widen by category hint if still empty
+      if (filtered.length === 0) {
+        const catHint = (q.match(/shampoo|conditioner|mask|spray|serum|oil|toner|treatment|accessories/i) || [])[0];
+        if (catHint) filtered = all.filter(r => (r.category || '').toLowerCase().includes(catHint.toLowerCase()));
+      }
+    }
+
+    // Gentle profile nudges (never zero-out the list)
+    if (filtered.length > 0 && concerns) {
+      const c = concerns.toLowerCase();
+      const bias = filtered.filter(r =>
+        [r.name, r.description, r.category].filter(Boolean).join(' ').toLowerCase().includes(c)
+      );
+      if (bias.length >= 6) filtered = bias; // only narrow when it keeps variety
+    }
+
+    // If we truly found nothing, show a *varied* sample (not the same 4)
+    if (filtered.length === 0) {
+      filtered = shuffle(all).slice(0, Math.min(12, all.length));
+    }
+
+    const total = filtered.length;
+    const page  = filtered.slice(offset, offset + limit);
+
+    res.json({
+      success: true,
+      source,
+      query: q,
+      total,
+      items: page
+    });
+  } catch (err) {
+    console.error('[api/products] error', err);
+    res.status(500).json({ success:false, error:'Failed to load catalog' });
   }
-]
+});
