@@ -157,52 +157,119 @@
     </main>
   </div>
 
-  <script>
+<script>
 (() => {
+  // ---------- Utilities ----------
+  const qs = (sel) => document.querySelector(sel);
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
+    if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
+    return res.json();
+  }
+
+  function normalizeProduct(p) {
+    const priceCents =
+      typeof p.priceCents === 'number' ? p.priceCents :
+      typeof p.price === 'number'   ? Math.round(p.price * 100) :
+      NaN;
+
+    return {
+      id: p.id || '',
+      name: p.name || 'Product',
+      brand: p.brand || '—',
+      category: p.category || '—',
+      priceCents,
+      image: p.image || '/images/placeholder.jpg',
+      description: p.description || '',
+      usage: p.usage || '',
+      ingredients: p.ingredients || '',
+      benefits: Array.isArray(p.benefits) ? p.benefits : []
+    };
+  }
+
+  function formatCents(cents) {
+    if (!Number.isFinite(cents) || cents <= 0) return '$—';
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  function matchesQuery(p, q) {
+    if (!q) return true;
+    const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
+    return q.toLowerCase().split(/\s+/).every(tok => hay.includes(tok));
+  }
+
+  // ---------- Catalog fetcher with fallback ----------
+  async function getProducts({ q, offset, limit, profile }) {
+    // 1) Try API
+    try {
+      const params = new URLSearchParams({
+        q: q || '',
+        offset: String(offset || 0),
+        limit: String(limit || 25),
+        ...profile
+      });
+      const apiData = await fetchJSON(`/api/products?${params.toString()}`);
+      const items = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
+      const total = Number.isFinite(apiData.total) ? apiData.total
+                  : Number.isFinite(apiData.count) ? apiData.count
+                  : items.length;
+      if (items.length) return { items, total, aiGenerated: !!apiData.aiGenerated, query: apiData.query || q };
+      // fall through to static if API returns empty
+    } catch (e) {
+      console.warn('API products failed, falling back to static catalog:', e.message);
+    }
+
+    // 2) Fallback to static JSON (public)
+    const all = await fetchJSON('/data/products.json');  // you confirmed this exists
+    const arr = Array.isArray(all) ? all : (Array.isArray(all.items) ? all.items : []);
+    const normalized = arr.map(normalizeProduct).filter(p => matchesQuery(p, q));
+    const slice = normalized.slice(offset, offset + limit);
+    return { items: slice, total: normalized.length, aiGenerated: false, query: q };
+  }
+
+  // ---------- App ----------
   class UnifiedSalonAI {
     constructor() {
+      // State
       this.currentQuery = '';
       this.currentOffset = 0;
       this.totalProducts = 0;
-      this.pageSize = 25; // keep your 25-per batch
+      this.pageSize = 25;
       this.isLoading = false;
 
-      // Elements
-      this.chatInput = document.getElementById('chatInput');
-      this.chatBtn = document.getElementById('chatBtn');
-      this.chatResponse = document.getElementById('chatResponse');
-      this.aiStatus = document.getElementById('aiStatus');
-      this.status = document.getElementById('status');
-      this.grid = document.getElementById('productsGrid');
-      this.loadMoreSection = document.getElementById('loadMoreSection');
-      this.loadMoreBtn = document.getElementById('loadMoreBtn');
-      this.productsSection = document.getElementById('productsSection');
+      // Elements (existing DOM)
+      this.chatInput = qs('#chatInput');
+      this.chatBtn = qs('#chatBtn');
+      this.chatResponse = qs('#chatResponse');
+      this.aiStatus = qs('#aiStatus');
+      this.status = qs('#status');
+      this.grid = qs('#productsGrid');
+      this.loadMoreSection = qs('#loadMoreSection');
+      this.productsSection = qs('#productsSection');
 
       // Profile
-      this.hairType = document.getElementById('hairType');
-      this.skinType = document.getElementById('skinType');
-      this.concerns = document.getElementById('concerns');
-      this.budget = document.getElementById('budget');
+      this.hairType = qs('#hairType');
+      this.skinType = qs('#skinType');
+      this.concerns = qs('#concerns');
+      this.budget = qs('#budget');
 
       this.bindEvents();
       this.showWelcomeMessage();
     }
 
     bindEvents() {
-      if (this.chatBtn) {
-        this.chatBtn.addEventListener('click', () => this.handleAIConsultation());
-      }
-      if (this.chatInput) {
-        this.chatInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter' && !this.isLoading) this.handleAIConsultation();
-        });
-      }
-      if (this.loadMoreBtn) {
-        this.loadMoreBtn.addEventListener('click', () => this.loadMore());
-      }
+      this.chatBtn?.addEventListener('click', () => this.handleAIConsultation());
+      this.chatInput?.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !this.isLoading) this.handleAIConsultation();
+      });
+      this.loadMoreSection?.addEventListener('click', (e) => {
+        const btn = e.target.closest('#loadMoreBtn');
+        if (btn) this.loadMore();
+      });
 
       [this.hairType, this.skinType, this.concerns, this.budget].forEach(sel => {
-        if (sel) sel.addEventListener('change', () => this.onProfileChange());
+        sel?.addEventListener('change', () => this.currentQuery && this.searchProducts(this.currentQuery, true));
       });
     }
 
@@ -214,17 +281,22 @@
           <p style="margin-bottom: 16px;">I'm here to give you personalized product recommendations based on your unique needs.</p>
           <p style="font-size: 13px;"><strong>Try asking:</strong></p>
           <ul style="text-align: left; font-size: 12px; margin-top: 8px; padding-left: 20px;">
-            <li>"I have dry, damaged hair - what should I use?"</li>
-            <li>"Best anti-aging products for sensitive skin"</li>
-            <li>"Products for oily skin and acne"</li>
-            <li>"Volume routine for fine, straight hair"</li>
+            <li>"shampoo for color-treated hair"</li>
+            <li>"vitamin c serum"</li>
+            <li>"bond repair routine"</li>
+            <li>"anti-aging for sensitive skin"</li>
           </ul>
         </div>
       `;
     }
 
-    onProfileChange() {
-      if (this.currentQuery) this.searchProducts(this.currentQuery, true);
+    getProfile() {
+      return {
+        hairType: this.hairType?.value || '',
+        skinType: this.skinType?.value || '',
+        concerns: this.concerns?.value || '',
+        budget: this.budget?.value || ''
+      };
     }
 
     async handleAIConsultation() {
@@ -236,37 +308,30 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      try {
-        // Try chat, but DO NOT block products if chat fails
-        await this.safeChatResponse(message);
+      // Chat should never block product rendering
+      this.safeChat(message);
 
-        // Always search products
-        this.currentQuery = message;
-        await this.searchProducts(message, true);
+      this.currentQuery = message;
+      await this.searchProducts(message, true);
 
-        if (this.chatInput) this.chatInput.value = '';
-      } catch (err) {
-        console.error('Consultation error:', err);
-        this.showChatError('I had trouble processing that. Please try again.');
-      } finally {
-        this.isLoading = false;
-        if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
-        this.aiStatus?.classList.remove('active');
-      }
+      if (this.chatInput) this.chatInput.value = '';
+      this.isLoading = false;
+      if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
+      this.aiStatus?.classList.remove('active');
     }
 
-    async safeChatResponse(message) {
+    async safeChat(message) {
       try {
         const res = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message })
         });
-        if (!res.ok) throw new Error(`chat ${res.status}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         this.renderChat(data?.response);
       } catch {
-        // Graceful fallback if /api/chat doesn’t exist or fails
+        // Use a neutral, non-blocking fallback
         this.renderChat(null);
       }
     }
@@ -281,124 +346,88 @@
       `;
     }
 
-    getClientProfile() {
-      return {
-        hairType: this.hairType?.value || '',
-        skinType: this.skinType?.value || '',
-        concerns: this.concerns?.value || '',
-        budget: this.budget?.value || ''
-      };
-    }
-
     async searchProducts(query, reset = false) {
       if (reset) {
         this.currentOffset = 0;
-        if (this.grid) this.grid.innerHTML = '';
+        this.grid && (this.grid.innerHTML = '');
       }
 
       try {
-        if (this.status) this.status.textContent = 'AI is generating your personalized product recommendations...';
-        const profile = this.getClientProfile();
-        const params = new URLSearchParams({
-          q: query,
-          limit: String(this.pageSize),
-          offset: String(this.currentOffset),
-          ...profile
-        });
+        if (this.status) this.status.textContent = 'Finding matching products...';
 
-        const res = await fetch(`/api/products?${params.toString()}`);
-        if (!res.ok) throw new Error(`products ${res.status}`);
-        const data = await res.json();
+        const { items, total, aiGenerated, query: echoed } =
+          await getProducts({
+            q: query,
+            offset: this.currentOffset,
+            limit: this.pageSize,
+            profile: this.getProfile()
+          });
 
-        const items = Array.isArray(data?.items) ? data.items : [];
-        // total may be absent → fallback to count; else estimate
-        const total = (Number.isFinite(data?.total) ? data.total
-                    : Number.isFinite(data?.count) ? data.count
-                    : (this.currentOffset + items.length + (items.length === this.pageSize ? this.pageSize : 0)));
-
-        this.totalProducts = Math.max(Number(total) || 0, this.currentOffset + items.length);
-        this.currentOffset += items.length;
-
-        if (items.length === 0 && reset) {
+        if (!items.length && reset) {
           this.showEmptyState();
-        } else {
-          this.renderProducts(items, !!data?.aiGenerated);
-          this.updateStatus({ total: this.totalProducts, query: data?.query || query, aiGenerated: !!data?.aiGenerated });
-          this.updateLoadMoreButton(items.length);
+          this.totalProducts = 0;
+          this.updateLoadMore(false);
+          return;
         }
+
+        items.forEach(p => this.grid.appendChild(this.card(p, aiGenerated)));
+        this.currentOffset += items.length;
+        this.totalProducts = total;
+
+        const type = aiGenerated ? 'AI recommendations' : 'products';
+        if (this.status) {
+          this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${echoed || query}"`;
+        }
+
+        this.updateLoadMore(this.currentOffset < total);
       } catch (err) {
-        console.error('Products error:', err);
-        this.showProductError(err.message || 'Failed to load products');
+        console.error('Product search failed:', err);
+        if (this.status) this.status.innerHTML = `<div class="error">Error: ${err.message}</div>`;
       }
     }
 
-    renderProducts(products, aiGenerated = false) {
-      if (!this.grid) return;
-      products.forEach(p => this.grid.appendChild(this.createProductCard(p, aiGenerated)));
-    }
+    card(product, aiGenerated = false) {
+      const div = document.createElement('div');
+      div.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
+      const price = formatCents(product.priceCents);
 
-    createProductCard(product, aiGenerated = false) {
-      const card = document.createElement('div');
-      card.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
-
-      const cents = this.getPriceCents(product);
-      const priceText = this.formatCents(cents);
-      const meta = `${product.brand ?? '—'} • ${product.category ?? '—'}`;
-
-      const benefits = Array.isArray(product.benefits) && product.benefits.length
-        ? product.benefits.map(b => `<span class="benefit-tag">${b}</span>`).join('')
+      const benefits = product.benefits?.length
+        ? `<div class="product-benefits">${product.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>`
         : '';
 
-      const safeImg = (product.image || '').replace(/"/g, '&quot;');
-
-      card.innerHTML = `
+      div.innerHTML = `
         <div class="product-content">
-          ${safeImg
-            ? `<img class="product-image" src="${safeImg}" alt="${product.name || 'Product'}" referrerpolicy="no-referrer"
-                 onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">`
-            : `<div class="product-image-placeholder">💆‍♀️</div>`}
+          <img class="product-image" loading="lazy" referrerpolicy="no-referrer"
+               src="${(product.image || '').replace(/"/g,'&quot;')}"
+               alt="${(product.name || 'Product').replace(/"/g,'&quot;')}"
+               onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
           <div class="product-info">
-            <div class="product-name">${product.name || 'Product'}</div>
-            <div class="product-meta">${meta}</div>
+            <div class="product-name">${product.name}</div>
+            <div class="product-meta">${product.brand} • ${product.category}</div>
             ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
-            ${benefits ? `<div class="product-benefits">${benefits}</div>` : ''}
+            ${benefits}
             <div class="product-footer">
-              <div class="product-price">${priceText}</div>
+              <div class="product-price">${price}</div>
               <div class="product-actions">
                 ${product.description ? '<button class="details-btn">Details</button>' : ''}
-                <button class="add-btn" data-id="${product.id || ''}">Add to Cart</button>
+                <button class="add-btn" data-id="${product.id}">Add to Cart</button>
               </div>
             </div>
           </div>
         </div>
       `;
 
-      const detailsBtn = card.querySelector('.details-btn');
-      if (detailsBtn) detailsBtn.addEventListener('click', () => this.showProductDetails(product));
-
-      const addBtn = card.querySelector('.add-btn');
-      if (addBtn) addBtn.addEventListener('click', () => this.addToCart(product));
-
-      return card;
+      div.querySelector('.details-btn')?.addEventListener('click', () => this.showDetails(product));
+      div.querySelector('.add-btn')?.addEventListener('click', () => alert(`Added "${product.name}" to cart (${formatCents(product.priceCents)})`));
+      return div;
     }
 
-    getPriceCents(product) {
-      if (typeof product?.priceCents === 'number') return product.priceCents;
-      if (typeof product?.price === 'number') return Math.round(product.price * 100);
-      return NaN;
-    }
-
-    formatCents(cents) {
-      if (!Number.isFinite(cents) || cents <= 0) return '$—';
-      return '$' + (cents / 100).toFixed(2);
-    }
-
-    showProductDetails(product) {
+    showDetails(p) {
       const lines = [];
-      if (product.usage) lines.push(`Usage: ${product.usage}`);
-      if (product.ingredients) lines.push(`Key Ingredients: ${product.ingredients}`);
-      if (product.suitableFor) lines.push(`Perfect For: ${product.suitableFor}`);
-      alert(`${product.name || 'Product'}\n\n${lines.join('\n\n') || (product.description || 'Professional salon product designed for optimal results.')}`);
+      if (p.usage) lines.push(`Usage: ${p.usage}`);
+      if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
+      if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
+      alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
     }
 
     showEmptyState() {
@@ -411,57 +440,38 @@
       `;
     }
 
-    showChatError(message) {
-      if (!this.chatResponse) return;
-      this.chatResponse.innerHTML = `<div class="error">${message}</div>`;
-    }
-
-    showProductError(message) {
-      if (this.status) this.status.innerHTML = `<div class="error">Error: ${message}</div>`;
-    }
-
-    updateStatus(data) {
-      const showing = this.currentOffset;
-      const total = Math.min(Number(data.total) || showing, 100);
-      const type = data.aiGenerated ? 'AI recommendations' : 'products';
-      if (this.status) {
-        this.status.textContent = `Showing ${showing} of ${total} ${type} for "${data.query || this.currentQuery}"`;
-      }
-      this.totalProducts = total;
-    }
-
-    updateLoadMoreButton(lastBatchCount) {
-      const hasMore = lastBatchCount === this.pageSize || this.currentOffset < this.totalProducts;
+    updateLoadMore(hasMore) {
       if (!this.loadMoreSection) return;
-
       if (hasMore) {
+        this.loadMoreSection.style.display = 'block';
         this.loadMoreSection.innerHTML = `
-          <button class="load-more-btn" id="loadMoreBtn">Show More Products (${this.currentOffset}/${this.totalProducts})</button>
+          <button class="load-more-btn" id="loadMoreBtn">
+            Show More Products (${this.currentOffset}/${this.totalProducts})
+          </button>
         `;
-        const btn = document.getElementById('loadMoreBtn');
-        if (btn) btn.addEventListener('click', () => this.loadMore());
-        this.loadMoreSection.style.display = 'block';
       } else if (this.totalProducts > 0) {
-        this.loadMoreSection.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
         this.loadMoreSection.style.display = 'block';
+        this.loadMoreSection.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
       } else {
         this.loadMoreSection.style.display = 'none';
       }
     }
 
-    addToCart(product) {
-      const cents = this.getPriceCents(product);
-      alert(`Added "${product.name || 'Product'}" to cart!\n\nPrice: ${this.formatCents(cents)}\n\n${product.description || 'Perfect for your needs!'}`);
-    }
-
     loadMore() { this.searchProducts(this.currentQuery, false); }
   }
+
+  // expose quickAsk() used by your example buttons
+  window.quickAsk = (text) => {
+    const app = window.salonAI;
+    if (!app) return;
+    app.chatInput.value = text;
+    app.handleAIConsultation();
+  };
 
   window.addEventListener('DOMContentLoaded', () => {
     window.salonAI = new UnifiedSalonAI();
   });
 })();
 </script>
-
 </body>
 </html>
