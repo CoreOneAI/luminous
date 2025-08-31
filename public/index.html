@@ -158,281 +158,310 @@
   </div>
 
   <script>
-    class UnifiedSalonAI {
-      constructor(){
-        this.currentQuery = '';
-        this.currentOffset = 0;
-        this.totalProducts = 0;
-        this.isLoading = false;
+(() => {
+  class UnifiedSalonAI {
+    constructor() {
+      this.currentQuery = '';
+      this.currentOffset = 0;
+      this.totalProducts = 0;
+      this.pageSize = 25; // keep your 25-per batch
+      this.isLoading = false;
 
-        // Elements
-        this.chatInput = document.getElementById('chatInput');
-        this.chatBtn = document.getElementById('chatBtn');
-        this.chatResponse = document.getElementById('chatResponse');
-        this.aiStatus = document.getElementById('aiStatus');
-        this.status = document.getElementById('status');
-        this.grid = document.getElementById('productsGrid');
-        this.loadMoreSection = document.getElementById('loadMoreSection');
-        this.loadMoreBtn = document.getElementById('loadMoreBtn');
-        this.productsSection = document.getElementById('productsSection');
+      // Elements
+      this.chatInput = document.getElementById('chatInput');
+      this.chatBtn = document.getElementById('chatBtn');
+      this.chatResponse = document.getElementById('chatResponse');
+      this.aiStatus = document.getElementById('aiStatus');
+      this.status = document.getElementById('status');
+      this.grid = document.getElementById('productsGrid');
+      this.loadMoreSection = document.getElementById('loadMoreSection');
+      this.loadMoreBtn = document.getElementById('loadMoreBtn');
+      this.productsSection = document.getElementById('productsSection');
 
-        // Profile
-        this.hairType = document.getElementById('hairType');
-        this.skinType = document.getElementById('skinType');
-        this.concerns = document.getElementById('concerns');
-        this.budget = document.getElementById('budget');
+      // Profile
+      this.hairType = document.getElementById('hairType');
+      this.skinType = document.getElementById('skinType');
+      this.concerns = document.getElementById('concerns');
+      this.budget = document.getElementById('budget');
 
-        this.bindEvents();
-        this.showWelcomeMessage();
-        this.setupInfiniteScroll();
-      }
+      this.bindEvents();
+      this.showWelcomeMessage();
+    }
 
-      bindEvents(){
+    bindEvents() {
+      if (this.chatBtn) {
         this.chatBtn.addEventListener('click', () => this.handleAIConsultation());
+      }
+      if (this.chatInput) {
         this.chatInput.addEventListener('keypress', (e) => {
           if (e.key === 'Enter' && !this.isLoading) this.handleAIConsultation();
         });
+      }
+      if (this.loadMoreBtn) {
         this.loadMoreBtn.addEventListener('click', () => this.loadMore());
-        [this.hairType, this.skinType, this.concerns, this.budget].forEach(select => {
-          select.addEventListener('change', () => this.currentQuery && this.searchProducts(this.currentQuery, true));
-        });
       }
 
-      showWelcomeMessage(){
-        this.chatResponse.innerHTML = `
-          <div style="text-align:center;color:#666;">
-            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations based on your unique needs.</p>
-            <p style="font-size:13px;"><strong>Try asking:</strong></p>
-            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-              <li>"I have dry, damaged hair - what should I use?"</li>
-              <li>"Best anti-aging products for sensitive skin"</li>
-              <li>"Products for oily skin and acne"</li>
-              <li>"Accessories for daily hair care"</li>
-            </ul>
-          </div>
-        `;
+      [this.hairType, this.skinType, this.concerns, this.budget].forEach(sel => {
+        if (sel) sel.addEventListener('change', () => this.onProfileChange());
+      });
+    }
+
+    showWelcomeMessage() {
+      if (!this.chatResponse) return;
+      this.chatResponse.innerHTML = `
+        <div style="text-align: center; color: #666;">
+          <h3 style="color: #333; margin-bottom: 12px;">Welcome to Your AI Salon</h3>
+          <p style="margin-bottom: 16px;">I'm here to give you personalized product recommendations based on your unique needs.</p>
+          <p style="font-size: 13px;"><strong>Try asking:</strong></p>
+          <ul style="text-align: left; font-size: 12px; margin-top: 8px; padding-left: 20px;">
+            <li>"I have dry, damaged hair - what should I use?"</li>
+            <li>"Best anti-aging products for sensitive skin"</li>
+            <li>"Products for oily skin and acne"</li>
+            <li>"Volume routine for fine, straight hair"</li>
+          </ul>
+        </div>
+      `;
+    }
+
+    onProfileChange() {
+      if (this.currentQuery) this.searchProducts(this.currentQuery, true);
+    }
+
+    async handleAIConsultation() {
+      const message = (this.chatInput?.value || '').trim();
+      if (!message || this.isLoading) return;
+
+      this.isLoading = true;
+      if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
+      this.aiStatus?.classList.add('active');
+      if (this.productsSection) this.productsSection.style.display = 'block';
+
+      try {
+        // Try chat, but DO NOT block products if chat fails
+        await this.safeChatResponse(message);
+
+        // Always search products
+        this.currentQuery = message;
+        await this.searchProducts(message, true);
+
+        if (this.chatInput) this.chatInput.value = '';
+      } catch (err) {
+        console.error('Consultation error:', err);
+        this.showChatError('I had trouble processing that. Please try again.');
+      } finally {
+        this.isLoading = false;
+        if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
+        this.aiStatus?.classList.remove('active');
       }
+    }
 
-      async handleAIConsultation(){
-        const message = (this.chatInput.value || '').trim();
-        if (!message || this.isLoading) return;
-
-        this.isLoading = true;
-        this.chatBtn.disabled = true;
-        this.chatBtn.textContent = '...';
-        this.aiStatus.classList.add('active');
-        this.productsSection.style.display = 'block';
-
-        try{
-          await this.getChatResponse(message);
-          this.currentQuery = message;
-          await this.searchProducts(message, true);
-          this.chatInput.value = '';
-        }catch(err){
-          console.error(err);
-          this.showChatError('I had trouble processing that. Please try again.');
-        }finally{
-          this.isLoading = false;
-          this.chatBtn.disabled = false;
-          this.chatBtn.textContent = 'Ask AI';
-          this.aiStatus.classList.remove('active');
-        }
-      }
-
-      async getChatResponse(message){
-        const r = await fetch('/api/chat', {
-          method:'POST',
-          headers:{'Content-Type':'application/json'},
+    async safeChatResponse(message) {
+      try {
+        const res = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message })
         });
-        const data = await r.json().catch(() => ({}));
-        this.chatResponse.innerHTML = `
-          <div style="border-left:4px solid #B8860B;padding-left:16px;">
-            <h4 style="color:#B8860B;margin-bottom:8px;font-size:14px;">AI Consultation</h4>
-            <p style="line-height:1.6;">${data?.response || 'Let me help you find the perfect products for your needs.'}</p>
-          </div>
-        `;
+        if (!res.ok) throw new Error(`chat ${res.status}`);
+        const data = await res.json();
+        this.renderChat(data?.response);
+      } catch {
+        // Graceful fallback if /api/chat doesn’t exist or fails
+        this.renderChat(null);
+      }
+    }
+
+    renderChat(text) {
+      if (!this.chatResponse) return;
+      this.chatResponse.innerHTML = `
+        <div style="border-left: 4px solid #B8860B; padding-left: 16px;">
+          <h4 style="color: #B8860B; margin-bottom: 8px; font-size: 14px;">AI Consultation</h4>
+          <p style="line-height: 1.6;">${text || 'Let me help you find the perfect products for your needs.'}</p>
+        </div>
+      `;
+    }
+
+    getClientProfile() {
+      return {
+        hairType: this.hairType?.value || '',
+        skinType: this.skinType?.value || '',
+        concerns: this.concerns?.value || '',
+        budget: this.budget?.value || ''
+      };
+    }
+
+    async searchProducts(query, reset = false) {
+      if (reset) {
+        this.currentOffset = 0;
+        if (this.grid) this.grid.innerHTML = '';
       }
 
-      getClientProfile(){
-        return {
-          hairType: this.hairType.value,
-          skinType: this.skinType.value,
-          concerns: this.concerns.value,
-          budget: this.budget.value
-        };
-      }
-
-      async searchProducts(query, reset=false){
-        if (reset){
-          this.currentOffset = 0;
-          this.grid.innerHTML = '';
-        }
-        try{
-          this.status.textContent = 'AI is generating your personalized product recommendations...';
-
-          const profile = this.getClientProfile();
-          const params = new URLSearchParams({
-            q: query,
-            limit: '25',
-            offset: String(this.currentOffset),
-            ...profile
-          });
-
-          const r = await fetch(`/api/products?${params}`);
-          if (!r.ok) throw new Error(`HTTP ${r.status}`);
-          const raw = await r.json();
-
-          // Normalize API fields (works with either total/count and price/priceCents)
-          const items = Array.isArray(raw.items) ? raw.items : [];
-          const total = (typeof raw.total === 'number') ? raw.total
-                       : (typeof raw.count === 'number') ? raw.count
-                       : items.length;
-
-          this.totalProducts = total;
-          this.currentOffset += items.length;
-
-          if (items.length === 0 && reset){
-            this.showEmptyState();
-          }else{
-            this.renderProducts(items, !!raw.aiGenerated);
-            this.updateStatus({
-              total,
-              itemsLength: this.currentOffset,
-              query: raw.query || this.currentQuery,
-              aiGenerated: !!raw.aiGenerated
-            });
-            this.updateLoadMoreButton();
-          }
-        }catch(err){
-          console.error(err);
-          this.showProductError(err.message || 'Unable to load products.');
-        }
-      }
-
-      renderProducts(products, aiGenerated=false){
-        products.forEach(p => {
-          const card = this.createProductCard(p, aiGenerated);
-          this.grid.appendChild(card);
+      try {
+        if (this.status) this.status.textContent = 'AI is generating your personalized product recommendations...';
+        const profile = this.getClientProfile();
+        const params = new URLSearchParams({
+          q: query,
+          limit: String(this.pageSize),
+          offset: String(this.currentOffset),
+          ...profile
         });
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (!res.ok) throw new Error(`products ${res.status}`);
+        const data = await res.json();
+
+        const items = Array.isArray(data?.items) ? data.items : [];
+        // total may be absent → fallback to count; else estimate
+        const total = (Number.isFinite(data?.total) ? data.total
+                    : Number.isFinite(data?.count) ? data.count
+                    : (this.currentOffset + items.length + (items.length === this.pageSize ? this.pageSize : 0)));
+
+        this.totalProducts = Math.max(Number(total) || 0, this.currentOffset + items.length);
+        this.currentOffset += items.length;
+
+        if (items.length === 0 && reset) {
+          this.showEmptyState();
+        } else {
+          this.renderProducts(items, !!data?.aiGenerated);
+          this.updateStatus({ total: this.totalProducts, query: data?.query || query, aiGenerated: !!data?.aiGenerated });
+          this.updateLoadMoreButton(items.length);
+        }
+      } catch (err) {
+        console.error('Products error:', err);
+        this.showProductError(err.message || 'Failed to load products');
       }
+    }
 
-      createProductCard(product, aiGenerated=false){
-        const card = document.createElement('div');
-        card.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
+    renderProducts(products, aiGenerated = false) {
+      if (!this.grid) return;
+      products.forEach(p => this.grid.appendChild(this.createProductCard(p, aiGenerated)));
+    }
 
-        // robust price handling
-        const cents = (typeof product.priceCents === 'number') ? product.priceCents
-                    : (typeof product.price === 'number') ? product.price
-                    : 0;
-        const price = this.formatPrice(cents);
-        const meta = [product.brand || '—', product.category || '—'].join(' • ');
+    createProductCard(product, aiGenerated = false) {
+      const card = document.createElement('div');
+      card.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
 
-        const benefits = Array.isArray(product.benefits) && product.benefits.length
-          ? `<div class="product-benefits">${product.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>`
-          : '';
+      const cents = this.getPriceCents(product);
+      const priceText = this.formatCents(cents);
+      const meta = `${product.brand ?? '—'} • ${product.category ?? '—'}`;
 
-        card.innerHTML = `
-          <div class="product-content">
-            ${product.image ? `
-              <img class="product-image" loading="lazy" src="${product.image}" alt="${product.name}"
-                   onerror="this.outerHTML='<div class=&quot;product-image-placeholder&quot;>💆‍♀️</div>'">`
-              : `<div class="product-image-placeholder">💆‍♀️</div>`
-            }
-            <div class="product-info">
-              <div class="product-name">${product.name || 'Product'}</div>
-              <div class="product-meta">${meta}</div>
-              ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
-              ${benefits}
-              <div class="product-footer">
-                <div class="product-price">${price}</div>
-                <div class="product-actions">
-                  ${product.description ? '<button class="details-btn">Details</button>' : ''}
-                  <button class="add-btn" data-id="${product.id || ''}">Add to Cart</button>
-                </div>
+      const benefits = Array.isArray(product.benefits) && product.benefits.length
+        ? product.benefits.map(b => `<span class="benefit-tag">${b}</span>`).join('')
+        : '';
+
+      const safeImg = (product.image || '').replace(/"/g, '&quot;');
+
+      card.innerHTML = `
+        <div class="product-content">
+          ${safeImg
+            ? `<img class="product-image" src="${safeImg}" alt="${product.name || 'Product'}" referrerpolicy="no-referrer"
+                 onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">`
+            : `<div class="product-image-placeholder">💆‍♀️</div>`}
+          <div class="product-info">
+            <div class="product-name">${product.name || 'Product'}</div>
+            <div class="product-meta">${meta}</div>
+            ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
+            ${benefits ? `<div class="product-benefits">${benefits}</div>` : ''}
+            <div class="product-footer">
+              <div class="product-price">${priceText}</div>
+              <div class="product-actions">
+                ${product.description ? '<button class="details-btn">Details</button>' : ''}
+                <button class="add-btn" data-id="${product.id || ''}">Add to Cart</button>
               </div>
             </div>
           </div>
+        </div>
+      `;
+
+      const detailsBtn = card.querySelector('.details-btn');
+      if (detailsBtn) detailsBtn.addEventListener('click', () => this.showProductDetails(product));
+
+      const addBtn = card.querySelector('.add-btn');
+      if (addBtn) addBtn.addEventListener('click', () => this.addToCart(product));
+
+      return card;
+    }
+
+    getPriceCents(product) {
+      if (typeof product?.priceCents === 'number') return product.priceCents;
+      if (typeof product?.price === 'number') return Math.round(product.price * 100);
+      return NaN;
+    }
+
+    formatCents(cents) {
+      if (!Number.isFinite(cents) || cents <= 0) return '$—';
+      return '$' + (cents / 100).toFixed(2);
+    }
+
+    showProductDetails(product) {
+      const lines = [];
+      if (product.usage) lines.push(`Usage: ${product.usage}`);
+      if (product.ingredients) lines.push(`Key Ingredients: ${product.ingredients}`);
+      if (product.suitableFor) lines.push(`Perfect For: ${product.suitableFor}`);
+      alert(`${product.name || 'Product'}\n\n${lines.join('\n\n') || (product.description || 'Professional salon product designed for optimal results.')}`);
+    }
+
+    showEmptyState() {
+      if (!this.grid) return;
+      this.grid.innerHTML = `
+        <div class="empty-state">
+          <h3>No products found</h3>
+          <p>Try a different search or be more specific about your needs.</p>
+        </div>
+      `;
+    }
+
+    showChatError(message) {
+      if (!this.chatResponse) return;
+      this.chatResponse.innerHTML = `<div class="error">${message}</div>`;
+    }
+
+    showProductError(message) {
+      if (this.status) this.status.innerHTML = `<div class="error">Error: ${message}</div>`;
+    }
+
+    updateStatus(data) {
+      const showing = this.currentOffset;
+      const total = Math.min(Number(data.total) || showing, 100);
+      const type = data.aiGenerated ? 'AI recommendations' : 'products';
+      if (this.status) {
+        this.status.textContent = `Showing ${showing} of ${total} ${type} for "${data.query || this.currentQuery}"`;
+      }
+      this.totalProducts = total;
+    }
+
+    updateLoadMoreButton(lastBatchCount) {
+      const hasMore = lastBatchCount === this.pageSize || this.currentOffset < this.totalProducts;
+      if (!this.loadMoreSection) return;
+
+      if (hasMore) {
+        this.loadMoreSection.innerHTML = `
+          <button class="load-more-btn" id="loadMoreBtn">Show More Products (${this.currentOffset}/${this.totalProducts})</button>
         `;
-
-        const detailsBtn = card.querySelector('.details-btn');
-        if (detailsBtn){
-          detailsBtn.addEventListener('click', () => this.showProductDetails(product));
-        }
-        card.querySelector('.add-btn').addEventListener('click', () => this.addToCart(product));
-        return card;
-      }
-
-      showProductDetails(product){
-        const lines = [];
-        if (product.usage) lines.push(`Usage: ${product.usage}`);
-        if (product.ingredients) lines.push(`Key Ingredients: ${product.ingredients}`);
-        if (product.suitableFor) lines.push(`Perfect For: ${product.suitableFor}`);
-        alert(`${product.name}\n\n${lines.join('\n\n') || product.description || 'Professional salon product designed for optimal results.'}`);
-      }
-
-      showEmptyState(){
-        this.grid.innerHTML = `
-          <div class="empty-state">
-            <h3>No products found</h3>
-            <p>Try a different search or be more specific about your needs.</p>
-          </div>
-        `;
-      }
-
-      formatPrice(cents){
-        const n = Number(cents);
-        if (!Number.isFinite(n) || n <= 0) return '$—';
-        return '$' + (n/100).toFixed(2);
-      }
-
-      updateStatus({ total, itemsLength, query, aiGenerated }){
-        const type = aiGenerated ? 'AI recommendations' : 'products';
-        const capped = Math.min(total, 100);
-        this.status.textContent = `Showing ${itemsLength} of ${capped} ${type} for "${query || this.currentQuery}"`;
-        this.totalProducts = capped;
-      }
-
-      updateLoadMoreButton(){
-        const hasMore = this.currentOffset < this.totalProducts;
-        this.loadMoreSection.style.display = this.totalProducts > 0 ? 'block' : 'none';
-        this.loadMoreBtn.style.display = hasMore ? 'inline-block' : 'none';
-      }
-
-      addToCart(product){
-        const cents = (product.priceCents ?? product.price ?? 0);
-        alert(`Added "${product.name}" to cart!\n\nPrice: ${this.formatPrice(cents)}\n\n${product.description || 'Perfect for your needs!'}`);
-      }
-
-      loadMore(){
-        if (this.isLoading) return;
-        this.searchProducts(this.currentQuery, false);
-      }
-
-      setupInfiniteScroll(){
-        const sentinel = document.getElementById('sentinel');
-        if (!('IntersectionObserver' in window) || !sentinel) return;
-        const io = new IntersectionObserver(entries => {
-          entries.forEach(e => {
-            if (e.isIntersecting && this.currentOffset < this.totalProducts && !this.isLoading && this.currentQuery){
-              this.loadMore();
-            }
-          });
-        }, { rootMargin: '200px 0px' });
-        io.observe(sentinel);
+        const btn = document.getElementById('loadMoreBtn');
+        if (btn) btn.addEventListener('click', () => this.loadMore());
+        this.loadMoreSection.style.display = 'block';
+      } else if (this.totalProducts > 0) {
+        this.loadMoreSection.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+        this.loadMoreSection.style.display = 'block';
+      } else {
+        this.loadMoreSection.style.display = 'none';
       }
     }
 
-    function quickAsk(suggestion){
-      const c = window.salonAI;
-      c.chatInput.value = suggestion;
-      c.handleAIConsultation();
+    addToCart(product) {
+      const cents = this.getPriceCents(product);
+      alert(`Added "${product.name || 'Product'}" to cart!\n\nPrice: ${this.formatCents(cents)}\n\n${product.description || 'Perfect for your needs!'}`);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      window.salonAI = new UnifiedSalonAI();
-    });
-  </script>
+    loadMore() { this.searchProducts(this.currentQuery, false); }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    window.salonAI = new UnifiedSalonAI();
+  });
+})();
+</script>
+
 </body>
 </html>
