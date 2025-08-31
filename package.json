@@ -1,23 +1,20 @@
 {
-  "name": "luminous-salon",
+  "name": "luminous",
   "version": "1.0.0",
   "private": true,
-  "description": "Luminous Salon — unified static + API server",
+  "description": "Luminous Beauty AI - minimal server + catalog importer",
   "type": "module",
-  "main": "server.js",
+  "engines": { "node": "22.x" },
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
-  },
-  "engines": {
-    "node": ">=20"
+    "dev": "node --watch server.js",
+    "import:catalog": "node ./bin/import-catalog.mjs ./data/Louminous Product List-1.xlsx ./public/data/products.json",
+    "check:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\""
   },
   "dependencies": {
-<<<<<<< Updated upstream
-    "express": "^4.19.2"
-=======
+    "cors": "^2.8.5",
     "express": "^4.19.2",
+    "morgan": "^1.10.0",
     "xlsx": "^0.18.5"
->>>>>>> Stashed changes
   }
 }
