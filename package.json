@@ -10,6 +10,7 @@
   "dependencies": {
     "express": "^4.19.2",
     "cors": "^2.8.5",
+    "helmet": "^7.1.0",
     "openai": "^4.47.1",
     "@anthropic-ai/sdk": "^0.20.1",
     "@google/generative-ai": "^0.11.0"
