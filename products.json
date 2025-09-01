@@ -1,482 +1,2525 @@
 [
   {
-    "id": "1-stainless-steel-toe-nail-clippers",
-    "name": "1. Stainless Steel Toe Nail Clippers",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2-glass-nail-file",
-    "name": "2. Glass Nail File",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3-cuticle-nipper",
-    "name": "3. Cuticle Nipper",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4-nail-brush",
-    "name": "4. Nail Brush",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5-nail-hardening-treatment",
-    "name": "5. Nail Hardening Treatment",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6-quick-dry-top-coat",
-    "name": "6. Quick-Dry Top Coat",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7-cuticle-oil-pen",
-    "name": "7. Cuticle Oil Pen",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8-nail-polish-corrector-pen",
-    "name": "8. Nail Polish Corrector Pen",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9-disposable-emery-boards",
-    "name": "9. Disposable Emery Boards",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10-nail-clipper-with-built-in-file",
-    "name": "10. Nail Clipper with Built-in File",
-    "brand": "—",
-    "category": "Nail Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "1-overnight-peeling-foot-mask",
-    "name": "1. Overnight Peeling Foot Mask",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2-foot-deodorizing-spray",
-    "name": "2. Foot Deodorizing Spray",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3-pumice-stone-or-foot-file",
-    "name": "3. Pumice Stone or Foot File",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4-cooling-gel-foot-mask",
-    "name": "4. Cooling Gel Foot Mask",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5-athlete-s-foot-prevention-spray",
-    "name": "5. Athlete's Foot Prevention Spray",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6-massaging-foot-roller",
-    "name": "6. Massaging Foot Roller",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7-moisturizing-foot-soak-packets",
-    "name": "7. Moisturizing Foot Soak Packets",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8-blister-prevention-stick",
-    "name": "8. Blister Prevention Stick",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9-bunion-relief-pads",
-    "name": "9. Bunion Relief Pads",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10-tea-tree-oil-foot-cream",
-    "name": "10. Tea Tree Oil Foot Cream",
-    "brand": "—",
-    "category": "Foot Care",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "1-electric-facial-trimmer",
-    "name": "1. Electric Facial Trimmer",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2-waxing-strips-for-face",
-    "name": "2. Waxing Strips for Face",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3-tweezer-with-led-light",
-    "name": "3. Tweezer with LED Light",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4-coarse-hair-tweezers",
-    "name": "4. Coarse Hair Tweezers",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5-ingrown-hair-treatment",
-    "name": "5. Ingrown Hair Treatment",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6-mini-hair-scissors",
-    "name": "6. Mini Hair Scissors",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7-hair-removal-cream-mini",
-    "name": "7. Hair Removal Cream Mini",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8-calming-post-wax-gel",
-    "name": "8. Calming Post-Wax Gel",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9-tweezer-travel-case",
-    "name": "9. Tweezer Travel Case",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10-single-blade-razor",
-    "name": "10. Single-Blade Razor",
-    "brand": "—",
-    "category": "Hair Removal",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "1-gel-based-hydrating-mask",
-    "name": "1. Gel-based Hydrating Mask",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2-clay-mask-packet",
-    "name": "2. Clay Mask Packet",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3-overnight-hydrating-sleeping-mask",
-    "name": "3. Overnight Hydrating Sleeping Mask",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4-vitamin-c-antioxidant-serum",
-    "name": "4. Vitamin C Antioxidant Serum",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5-aha-night-serum",
-    "name": "5. AHA Night Serum",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6-hydrating-toner-mist",
-    "name": "6. Hydrating Toner Mist",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7-soothing-centella-asiatica-cream",
-    "name": "7. Soothing Centella Asiatica Cream",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8-lip-sleeping-mask-mini",
-    "name": "8. Lip Sleeping Mask Mini",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9-micellar-water-travel-size",
-    "name": "9. Micellar Water (Travel Size)",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10-makeup-remover-wipes-for-waterproof-makeup",
-    "name": "10. Makeup Remover Wipes for Waterproof Makeup",
-    "brand": "—",
-    "category": "Skincare",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "1-aloe-vera-gel-98-100",
-    "name": "1. Aloe Vera Gel (98-100%)",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2-hydrating-facial-spray",
-    "name": "2. Hydrating Facial Spray",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3-cooling-under-eye-gel-patches",
-    "name": "3. Cooling Under-Eye Gel Patches",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4-soothing-after-sun-lotion-with-oatmeal",
-    "name": "4. Soothing After-Sun Lotion with Oatmeal",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5-gel-ice-pack-flexible",
-    "name": "5. Gel Ice Pack (Flexible)",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6-cooling-leg-foot-gel",
-    "name": "6. Cooling Leg & Foot Gel",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7-electrolyte-lip-balm",
-    "name": "7. Electrolyte Lip Balm",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8-thermal-spring-water-spray",
-    "name": "8. Thermal Spring Water Spray",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9-refreshing-body-powder",
-    "name": "9. Refreshing Body Powder",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10-cucumber-slices",
-    "name": "10. Cucumber Slices",
-    "brand": "—",
-    "category": "Hydrating & Cooling",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye Bright Shade #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "1-silicone-travel-bottles-set",
-    "name": "1. Silicone Travel Bottles Set",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "2-clear-tsa-approved-toiletry-bag",
-    "name": "2. Clear TSA-Approved Toiletry Bag",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "3-hanging-toiletry-bag",
-    "name": "3. Hanging Toiletry Bag",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "4-mini-perfume-roll-on",
-    "name": "4. Mini Perfume Roll-On",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "5-stackable-pill-organizer",
-    "name": "5. Stackable Pill Organizer",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "6-travel-jewelry-case",
-    "name": "6. Travel Jewelry Case",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "7-mini-first-aid-kit",
-    "name": "7. Mini First Aid Kit",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "8-waterproof-dry-bag",
-    "name": "8. Waterproof Dry Bag",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "9-reusable-zip-top-bags-various-sizes",
-    "name": "9. Reusable Zip-Top Bags (Various Sizes)",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
+    "name": "Hair Dye - Gray Coverage #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "10-travel-sized-sewing-kit",
-    "name": "10. Travel-Sized Sewing Kit",
-    "brand": "—",
-    "category": "Travel Sizes & Pouches",
-    "priceCents": 0,
-    "image": "/images/placeholder.jpg"
-  }
-]
+    "name": "Hair Dye - Gray Coverage #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Brush or Comb #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Student Kit Item #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #9",
+    "brand": "Specialty Beauty Product Categories",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #32",
+    "brand": "Specialty Beauty Product Categories",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Frank Body Coffee Scrub",
+    "brand": "Frank Body",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Ego QV Gentle Wash",
+    "brand": "Ego QV",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Himalaya Purifying Neem Face Wash",
+    "brand": "Himalaya",
+    "category": "Bodycare",
+    "instructions": "Use twice daily on wet face, massage and rinse off.",
+    "priceCents": 1000
+  },
+  {
+    "name": "Collistar Talasso-Scrub",
+    "brand": "Collistar",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4000
+  },
+  {
+    "name": "Moroccan Black Soap",
+    "brand": "Moroccan",
+    "category": "Bodycare",
+    "instructions": "Apply in steam bath, scrub with a kessa glove, rinse.",
+    "priceCents": 1800
+  },
+  {
+    "name": "Clicks Exfoliating Facial Scrub",
+    "brand": "Clicks",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Hair Styling Tool #1",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #2",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #3",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #4",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #5",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #6",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #7",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #8",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #9",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #10",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #11",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #12",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #13",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #14",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #15",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #16",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #17",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #18",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #19",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #20",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #21",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #22",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #23",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #24",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #25",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #26",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #27",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #28",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #29",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #30",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #31",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #32",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #33",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #34",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #35",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #36",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #37",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #38",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #39",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #40",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #41",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #42",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #43",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #44",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #45",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #46",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #47",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #48",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #49",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Hair Styling Tool #50",
+    "brand": "Salon Tools & Accessories",
+    "category": "Hair Styling Tools",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Barber Tool #1",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #2",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #3",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #4",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #5",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #6",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #7",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #8",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #9",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #10",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #11",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #12",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #13",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #14",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #15",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #16",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #17",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #18",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #19",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #20",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #21",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #22",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #23",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #24",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #25",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #26",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #27",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #28",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #29",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #30",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #31",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #32",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #33",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #34",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #35",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #36",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #37",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #38",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #39",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #40",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #41",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #42",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #43",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #44",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #45",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #46",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #47",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #48",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #49",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Barber Tool #50",
+    "brand": "Salon Tools & Accessories",
+    "category": "Barber Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Nail Accessory #1",
+    "brand": "Salon Tools & Accessories",
+    "category": "Nail Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Nail Accessory #2",
+    "brand": "Salon Tools & Accessories",
+    "category": "Nail Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Nail Accessory #3",
+    "brand": "Salon Tools & Accessories",
+    "category": "Nail Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Nail Accessory #4",
+    "brand": "Salon Tools & Accessories",
+    "category": "Nail Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Nail Accessory #5",
+    "brand": "Salon Tools & Accessories",
+    "category": "Nail Supplies",
+    "instructions": "Use in salon or personal care setting as per professional guidance.",
+    "priceCents": 150
