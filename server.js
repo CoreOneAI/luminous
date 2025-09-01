@@ -1,232 +1,102 @@
-// server.js  —  Node >=18, package.json has "type":"module"
-import express from "express";
-import path from "path";
-import fs from "fs/promises";
-import { createReadStream } from "fs";
-import url from "url";
+// server.js - Unified AI Salon API
 
+// 1. Import necessary libraries
+const express = require('express');
+const cors = require('cors');
+const { OpenAI } = require('openai');
+const { Anthropic } = require('@anthropic-ai/sdk');
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+// 2. Initialize Express app and middleware
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-// ----- Paths / ENV -----
-const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
-const PUBLIC_DIR = path.join(ROOT, "public");
-const PORT = process.env.PORT || 3000;
-const CATALOG_ENV = process.env.CATALOG_PATH || ""; // e.g. "products.json" or "data/products.json"
+// 3. Load API keys from environment variables
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// Try these in order if CATALOG_PATH not set
-const FALLBACK_CATALOGS = [
-  "data/products.json",
-  "public/data/products.json",
-  "products.json",
-  "salon_inventory.json",
-  "public/salon_inventory.json",
-];
-
-let CATALOG_PATH_IN_USE = null;
-
-// ----- Utilities -----
-async function fileExists(p) {
-  try { await fs.access(p); return true; } catch { return false; }
+// 4. Initialize AI clients based on available keys
+let aiClient;
+let aiModel;
+if (OPENAI_API_KEY) {
+  aiClient = new OpenAI({ apiKey: OPENAI_API_KEY });
+  aiModel = 'openai';
+} else if (ANTHROPIC_API_KEY) {
+  aiClient = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+  aiModel = 'anthropic';
+} else if (GEMINI_API_KEY) {
+  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+  aiClient = genAI.getGenerativeModel({ model: "gemini-pro" });
+  aiModel = 'gemini';
+} else {
+  console.error("No AI API key found. AI chat functionality will not work.");
 }
 
-function toCents(val) {
-  if (typeof val === "number" && Number.isFinite(val)) {
-    return val >= 1000 ? Math.round(val) : Math.round(val * 100);
-  }
-  if (typeof val === "string") {
-    const n = parseFloat(val.replace(/[$,]/g, ""));
-    if (Number.isFinite(n)) return Math.round(n * 100);
-  }
-  return NaN;
+// 5. Load product data from a static file (products.json or similar)
+// We'll assume a local file for this example.
+const productsData = require('./products.json');
+
+// Helper function to handle product data and filtering
+function getProducts(query, profile) {
+    // Implement the filtering logic we discussed previously, using the query and profile data
+    // This function will return an array of filtered products.
+    // Example:
+    // return productsData.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
 }
 
-function normalizeProduct(p) {
-  // Shallow copy + trims
-  const clean = { ...p };
-  ["name", "brand", "category", "description"].forEach(k => {
-    if (typeof clean[k] === "string") clean[k] = clean[k].trim();
-  });
-
-  // Price normalization -> priceCents
-  let cents = Number.isFinite(clean.priceCents) ? clean.priceCents : NaN;
-  if (!Number.isFinite(cents) || cents <= 0) {
-    for (const key of ["price", "Price", "priceUSD", "msrp", "salePrice"]) {
-      if (clean[key] !== undefined && clean[key] !== null) {
-        const maybe = toCents(clean[key]);
-        if (Number.isFinite(maybe) && maybe > 0) { cents = maybe; break; }
-      }
-    }
-  }
-  if (Number.isFinite(cents) && cents > 0) clean.priceCents = cents;
-  else delete clean.priceCents;
-
-  // Ensure category/brand defaults for display
-  if (!clean.category) clean.category = "—";
-  if (!clean.brand) clean.brand = "—";
-
-  // Image fallback
-  if (!clean.image) clean.image = "/images/placeholder.jpg";
-
-  return clean;
-}
-
-function pickCatalogArray(raw) {
-  // Accept either an array or an object with common array keys
-  if (Array.isArray(raw)) return raw;
-  if (raw && Array.isArray(raw.items)) return raw.items;
-  if (raw && Array.isArray(raw.products)) return raw.products;
-  return [];
-}
-
-// In-memory cache
-let catalog = [];
-let catalogStamp = 0;
-
-async function resolveCatalogPath() {
-  if (CATALOG_ENV) {
-    const abs = path.isAbsolute(CATALOG_ENV) ? CATALOG_ENV : path.join(ROOT, CATALOG_ENV);
-    if (await fileExists(abs)) return abs;
-  }
-  for (const rel of FALLBACK_CATALOGS) {
-    const abs = path.join(ROOT, rel);
-    if (await fileExists(abs)) return abs;
-  }
-  return null;
-}
-
-async function loadCatalog(force = false) {
-  const p = await resolveCatalogPath();
-  CATALOG_PATH_IN_USE = p;
-  if (!p) {
-    catalog = [];
-    catalogStamp = Date.now();
-    console.warn("[catalog] No catalog file found.");
-    return;
+// 6. The Unified API Endpoint
+app.post('/api/unified-service', async (req, res) => {
+  const { message, profile } = req.body;
+  
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' });
   }
 
-  // Optionally skip reload if not forced and file unchanged. Simple: reload always (cheap + robust)
   try {
-    const buf = await fs.readFile(p, "utf8");
-    const json = JSON.parse(buf);
-    const arr = pickCatalogArray(json).map(normalizeProduct).filter(Boolean);
-    catalog = arr;
-    catalogStamp = Date.now();
-    console.log(`[catalog] Loaded ${arr.length} items from ${p}`);
-  } catch (err) {
-    console.error(`[catalog] Failed to read ${p}:`, err.message);
-    catalog = [];
-    catalogStamp = Date.now();
+    // Logic to determine if the query is a product search or a general question
+    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products'];
+    const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+    let chatResponseText;
+    let products = [];
+
+    if (isProductSearch) {
+      // It's a product search: find products and provide a brief chat summary
+      products = getProducts(message, profile);
+      chatResponseText = `Based on your request, here are some professional salon products for you.`;
+    } else {
+      // It's a general question: call the AI model for a response
+      // This is where you will add your AI API call logic.
+      // Example for OpenAI:
+      // const completion = await aiClient.chat.completions.create({
+      //   messages: [{ role: "user", content: `You are an expert salon consultant. ${message}` }],
+      //   model: "gpt-3.5-turbo",
+      // });
+      // chatResponseText = completion.choices[0].message.content;
+      
+      // For now, we'll use a placeholder response
+      chatResponseText = "I'm sorry, I can only provide recommendations for products at this time. Please ask about a product or a type of product.";
+    }
+
+    // Return the combined response
+    res.json({
+      chatResponse: chatResponseText,
+      products: products,
+    });
+
+  } catch (error) {
+    console.error('Error processing unified request:', error);
+    res.status(500).json({
+      chatResponse: "I'm sorry, an error occurred while processing your request. Please try again later.",
+      products: [],
+    });
   }
-}
-
-// Simple text search across fields
-function productMatches(p, tokens) {
-  if (!tokens || tokens.length === 0) return true;
-  const hay = [
-    p.name, p.brand, p.category, p.description,
-    ...(Array.isArray(p.tags) ? p.tags : []),
-    ...(Array.isArray(p.benefits) ? p.benefits : []),
-    ...(typeof p.ingredients === "string" ? [p.ingredients] : [])
-  ].filter(Boolean).join(" ").toLowerCase();
-
-  return tokens.every(t => hay.includes(t));
-}
-
-function filterByProfile(p, q) {
-  // Optional “profile” filters from query string. Keep gentle guards (no-ops if empty)
-  // hairType/skinType/concerns are often stored in tags or suitableFor
-  const need = [];
-  if (q.hairType) need.push(q.hairType.toLowerCase());
-  if (q.skinType) need.push(q.skinType.toLowerCase());
-  if (q.concerns) need.push(q.concerns.toLowerCase());
-
-  if (need.length) {
-    const bag = [
-      p.category, p.description, p.suitableFor,
-      ...(Array.isArray(p.tags) ? p.tags.join(" ") : []),
-      ...(Array.isArray(p.benefits) ? p.benefits.join(" ") : []),
-    ].filter(Boolean).join(" ").toLowerCase();
-    if (!need.every(tok => bag.includes(tok))) return false;
-  }
-
-  // budget: budget ($10-30), mid ($30-60), luxury ($60+)
-  if (q.budget && p.priceCents) {
-    const dollars = p.priceCents / 100;
-    if (q.budget === "budget" && !(dollars >= 10 && dollars <= 30)) return false;
-    if (q.budget === "mid"    && !(dollars > 30 && dollars <= 60)) return false;
-    if (q.budget === "luxury" && !(dollars > 60)) return false;
-  }
-
-  return true;
-}
-
-// ----- API: Products -----
-app.get("/api/products", async (req, res) => {
-  await loadCatalog(); // cheap reload each request so updates show without redeploy
-
-  const { q = "", limit = "12", offset = "0" } = req.query;
-
-  const lim = Math.max(1, Math.min(100, parseInt(limit, 10) || 12));
-  const off = Math.max(0, parseInt(offset, 10) || 0);
-
-  const tokens = String(q).toLowerCase().split(/\s+/).filter(Boolean);
-
-  let results = catalog.filter(p => productMatches(p, tokens))
-                       .filter(p => filterByProfile(p, req.query));
-
-  // Stable order: by name, then id (prevents the “same 4” perception)
-  results = results.sort((a, b) => (a.name || "").localeCompare(b.name || "") || (a.id || "").localeCompare(b.id || ""));
-
-  const total = results.length;
-  const items = results.slice(off, off + lim);
-
-  res.json({
-    success: true,
-    source: CATALOG_PATH_IN_USE || "memory",
-    count: items.length,
-    total,
-    query: q,
-    items
-  });
 });
 
-// ----- API: Chat (minimal echo; keeps your frontend happy) -----
-app.post("/api/chat", async (req, res) => {
-  const msg = (req.body?.message || "").trim();
-  // Keep it short and neutral; your UI provides the rest
-  const reply = msg
-    ? `Got it — I’ll tailor picks for “${msg}”.`
-    : "Tell me your goal (e.g., 'purple shampoo', 'anti-aging serum').";
-  res.json({ success: true, response: reply });
-});
-
-// ----- Debug helpers -----
-app.get("/__whoami", (req, res) => {
-  res.json({
-    ok: true,
-    node: process.version,
-    env: process.env.NODE_ENV || "development",
-    port: PORT,
-    catalogPath: CATALOG_PATH_IN_USE
-  });
-});
-
-app.get("/healthz", (req, res) => res.type("text/plain").send("ok"));
-
-// ----- Static files -----
-app.use(express.static(PUBLIC_DIR, { index: "index.html", extensions: ["html"] }));
-
-// Do NOT add a wildcard SPA catch-all that steals /api or /data routes.
-// Keep root route explicit for index if needed:
-app.get("/", (req, res) => {
-  const indexPath = path.join(PUBLIC_DIR, "index.html");
-  createReadStream(indexPath).pipe(res);
-});
-
-// ----- Start -----
-await loadCatalog(true);
+// 7. Start the server
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  const src = CATALOG_PATH_IN_USE || "none";
-  console.log(`Luminous listening on ${PORT}. catalog=${src}`);
+  console.log(`Server is running on port ${PORT}`);
 });
