@@ -3,11 +3,11 @@
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet'; // Import helmet for security headers
+import helmet from 'helmet';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import fs from 'fs'; // Use synchronous file system module
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -23,17 +23,17 @@ app.use(helmet({
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"], // Allow resources from the same origin
-      imgSrc: ["'self'", "data:", "https://images.unsplash.com"], // Allow images from self, data URIs, and Unsplash
-      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for simplicity
-      scriptSrc: ["'self'"], // Allow scripts from the same origin
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
     },
   },
 }));
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the project root directory
-app.use(express.static(__dirname));
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
 // 3. Load API keys from environment variables
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
