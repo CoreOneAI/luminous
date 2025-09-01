@@ -364,7 +364,6 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      // Send the message to the new unified API
       try {
         const response = await fetch('/api/unified-service', {
           method: 'POST',
@@ -373,7 +372,6 @@
         });
         const data = await response.json();
         
-        // Render both chat response and products
         this.renderChat(data.chatResponse);
         this.currentQuery = message;
         this.search(message, true, data.products);
