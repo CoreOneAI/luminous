@@ -364,27 +364,32 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      this.safeChat(message);
-      this.currentQuery = message;
-      await this.search(message, true);
+      // Send the message to the new unified API
+      try {
+        const response = await fetch('/api/unified-service', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message, profile: this.profile() })
+        });
+        const data = await response.json();
+        
+        // Render both chat response and products
+        this.renderChat(data.chatResponse);
+        this.currentQuery = message;
+        this.search(message, true, data.products);
+
+      } catch (err) {
+        console.error('Unified API request failed:', err);
+        this.renderChat('I'm sorry, I could not connect to the service. Please try again.');
+        this.empty();
+      }
 
       if (this.chatInput) this.chatInput.value = '';
       this.isLoading = false;
       if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
       this.aiStatus?.classList.remove('active');
     }
-
-    async safeChat(message) {
-      try {
-        const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message }) });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const data = await res.json();
-        this.renderChat(data?.response);
-      } catch {
-        this.renderChat(null);
-      }
-    }
-
+    
     renderChat(text) {
       if (!this.chatResponse) return;
       this.chatResponse.innerHTML = `
@@ -393,39 +398,53 @@
           <p style="line-height:1.6;">${text || 'Let me help you find the perfect products for your needs.'}</p>
         </div>`;
     }
-
-    async search(query, reset=false) {
+    
+    async search(query, reset=false, productsFromApi = []) {
       if (reset) { this.currentOffset = 0; this.grid && (this.grid.innerHTML=''); }
 
       try {
         if (this.status) this.status.textContent = 'Finding matching products...';
 
-        const { items, total, aiGenerated, query: echoed } =
-          await fetchMerged({ q: query, offset: this.currentOffset, limit: this.pageSize, profile: this.profile() });
+        const apiItems = productsFromApi.map(normalizeProduct);
+        const staticItems = await fetchStaticCatalog();
+        
+        const base = uniqById([...apiItems, ...staticItems]);
+        const tokens = expandQueryTokens(query);
+        let filtered = base.filter(p => matchesStrictAll(p, tokens));
 
-        if (!items.length && reset) {
+        if (!filtered.length) {
+          filtered = base.filter(p => matchesAny(p, tokens));
+        }
+        if (!filtered.length && base.length) {
+          filtered = base.slice();
+        }
+
+        const total = filtered.length;
+        const slice = filtered.slice(this.currentOffset, this.currentOffset + this.pageSize);
+        const aiGenerated = apiItems.length > 0;
+        
+        if (!slice.length && reset) {
           this.empty();
           this.totalProducts = 0;
           this.updateMore(false);
           return;
         }
 
-        items.forEach(p => this.grid.appendChild(this.card(p, aiGenerated)));
-        this.currentOffset += items.length;
+        slice.forEach(p => this.grid.appendChild(this.card(p, aiGenerated)));
+        this.currentOffset += slice.length;
         this.totalProducts = total;
 
         const type = aiGenerated ? 'AI recommendations' : 'products';
         if (this.status) {
-          this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${echoed || query}"`;
+          this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${query}"`;
         }
-
         this.updateMore(this.currentOffset < total);
       } catch (err) {
         console.error('Product search failed:', err);
         if (this.status) this.status.innerHTML = `<div class="error">Error: ${err.message}</div>`;
       }
     }
-
+    
     card(p, ai=false) {
       const div = document.createElement('div');
       div.className = `product-card${ai ? ' ai-generated' : ''}`;
