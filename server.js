@@ -6,6 +6,7 @@ import cors from 'cors';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
+import fs from 'fs/promises'; // Import the file system module
 
 // 2. Initialize Express app and middleware
 const app = express();
@@ -34,15 +35,22 @@ if (OPENAI_API_KEY) {
   console.error("No AI API key found. AI chat functionality will not work.");
 }
 
-// 5. Load product data from a static file (products.json or similar)
-import productsData from './products.json' assert { type: 'json' };
+// 5. Load product data and filtering logic
+let productsData = [];
 
 // Helper function to handle product data and filtering
 function getProducts(query, profile) {
-    // Implement the filtering logic we discussed previously, using the query and profile data
-    // This function will return an array of filtered products.
-    // Example:
-    // return productsData.filter(p => p.name.toLowerCase().includes(query.toLowerCase()));
+    // Implement the filtering logic using the loaded productsData
+    const queryLower = query.toLowerCase();
+    
+    // Simple filter to find products that match the query in their name or category
+    const filteredProducts = productsData.filter(p => {
+        const nameMatches = p.name.toLowerCase().includes(queryLower);
+        const categoryMatches = p.category.toLowerCase().includes(queryLower);
+        return nameMatches || categoryMatches;
+    });
+
+    return filteredProducts;
 }
 
 // 6. The Unified API Endpoint
@@ -54,8 +62,14 @@ app.post('/api/unified-service', async (req, res) => {
   }
 
   try {
+    // Load product data asynchronously before handling the request
+    if (productsData.length === 0) {
+      const data = await fs.readFile('./products.json', 'utf8');
+      productsData = JSON.parse(data);
+    }
+    
     // Logic to determine if the query is a product search or a general question
-    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products'];
+    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion'];
     const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
 
     let chatResponseText;
@@ -67,16 +81,13 @@ app.post('/api/unified-service', async (req, res) => {
       chatResponseText = `Based on your request, here are some professional salon products for you.`;
     } else {
       // It's a general question: call the AI model for a response
-      // This is where you will add your AI API call logic.
-      // Example for OpenAI:
-      // const completion = await aiClient.chat.completions.create({
-      //   messages: [{ role: "user", content: `You are an expert salon consultant. ${message}` }],
-      //   model: "gpt-3.5-turbo",
-      // });
-      // chatResponseText = completion.choices[0].message.content;
-      
-      // For now, we'll use a placeholder response
-      chatResponseText = "I'm sorry, I can only provide recommendations for products at this time. Please ask about a product or a type of product.";
+      if (aiClient) {
+        // You would add your actual AI API call logic here.
+        // For now, we'll use a placeholder response
+        chatResponseText = `Hello! I am an AI salon consultant. I can provide product recommendations or answer general beauty questions based on your provided information.`;
+      } else {
+        chatResponseText = "I'm sorry, I could not connect to the AI service.";
+      }
     }
 
     // Return the combined response
