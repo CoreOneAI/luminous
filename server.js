@@ -1,253 +1,232 @@
-// server.js  (ESM, no UI changes needed)
+// server.js  —  Node >=18, package.json has "type":"module"
 import express from "express";
-import fs from "fs";
 import path from "path";
-import crypto from "crypto";
-import { fileURLToPath } from "url";
+import fs from "fs/promises";
+import { createReadStream } from "fs";
+import url from "url";
 
-// --- paths / app ---
-const __filename = fileURLToPath(import.meta.url);
-const __dirname  = path.dirname(__filename);
 const app = express();
+app.use(express.json());
 
-app.use(express.json({ limit: "1mb" }));
+// ----- Paths / ENV -----
+const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
+const PUBLIC_DIR = path.join(ROOT, "public");
+const PORT = process.env.PORT || 3000;
+const CATALOG_ENV = process.env.CATALOG_PATH || ""; // e.g. "products.json" or "data/products.json"
 
-// --- security headers / CSP (allow Unsplash images) ---
-const CSP = [
-  "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
-  "style-src 'self' 'unsafe-inline'",
-  "img-src 'self' data: blob: https://images.unsplash.com https://plus.unsplash.com",
-  "connect-src 'self'",
-  "font-src 'self' data:",
-  "object-src 'none'",
-  "base-uri 'self'",
-  "frame-ancestors 'self'",
-  "upgrade-insecure-requests"
-].join("; ");
-
-app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", CSP);
-  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
-  res.setHeader("X-Content-Type-Options", "nosniff");
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  next();
-});
-
-// --- static files ---
-const PUBLIC_DIR = path.join(__dirname, "public");
-app.use(express.static(PUBLIC_DIR, { extensions: ["html"] }));
-
-// --- catalog loading / normalization ---
-const CANDIDATES = [
-  process.env.CATALOG_PATH,            // e.g. "salon_inventory.json" or "products.json"
-  "public/data/products.json",
+// Try these in order if CATALOG_PATH not set
+const FALLBACK_CATALOGS = [
   "data/products.json",
-  "products.json"
-].filter(Boolean);
+  "public/data/products.json",
+  "products.json",
+  "salon_inventory.json",
+  "public/salon_inventory.json",
+];
 
-let CATALOG = [];
-let CATALOG_SOURCE = null;
+let CATALOG_PATH_IN_USE = null;
 
-function fileExists(p) {
-  try { return p && fs.existsSync(p) && fs.statSync(p).isFile(); } catch { return false; }
+// ----- Utilities -----
+async function fileExists(p) {
+  try { await fs.access(p); return true; } catch { return false; }
 }
-function resolveCatalog() {
-  for (const rel of CANDIDATES) {
-    const abs = path.resolve(process.cwd(), rel);
-    if (fileExists(abs)) return { abs, rel };
+
+function toCents(val) {
+  if (typeof val === "number" && Number.isFinite(val)) {
+    return val >= 1000 ? Math.round(val) : Math.round(val * 100);
+  }
+  if (typeof val === "string") {
+    const n = parseFloat(val.replace(/[$,]/g, ""));
+    if (Number.isFinite(n)) return Math.round(n * 100);
+  }
+  return NaN;
+}
+
+function normalizeProduct(p) {
+  // Shallow copy + trims
+  const clean = { ...p };
+  ["name", "brand", "category", "description"].forEach(k => {
+    if (typeof clean[k] === "string") clean[k] = clean[k].trim();
+  });
+
+  // Price normalization -> priceCents
+  let cents = Number.isFinite(clean.priceCents) ? clean.priceCents : NaN;
+  if (!Number.isFinite(cents) || cents <= 0) {
+    for (const key of ["price", "Price", "priceUSD", "msrp", "salePrice"]) {
+      if (clean[key] !== undefined && clean[key] !== null) {
+        const maybe = toCents(clean[key]);
+        if (Number.isFinite(maybe) && maybe > 0) { cents = maybe; break; }
+      }
+    }
+  }
+  if (Number.isFinite(cents) && cents > 0) clean.priceCents = cents;
+  else delete clean.priceCents;
+
+  // Ensure category/brand defaults for display
+  if (!clean.category) clean.category = "—";
+  if (!clean.brand) clean.brand = "—";
+
+  // Image fallback
+  if (!clean.image) clean.image = "/images/placeholder.jpg";
+
+  return clean;
+}
+
+function pickCatalogArray(raw) {
+  // Accept either an array or an object with common array keys
+  if (Array.isArray(raw)) return raw;
+  if (raw && Array.isArray(raw.items)) return raw.items;
+  if (raw && Array.isArray(raw.products)) return raw.products;
+  return [];
+}
+
+// In-memory cache
+let catalog = [];
+let catalogStamp = 0;
+
+async function resolveCatalogPath() {
+  if (CATALOG_ENV) {
+    const abs = path.isAbsolute(CATALOG_ENV) ? CATALOG_ENV : path.join(ROOT, CATALOG_ENV);
+    if (await fileExists(abs)) return abs;
+  }
+  for (const rel of FALLBACK_CATALOGS) {
+    const abs = path.join(ROOT, rel);
+    if (await fileExists(abs)) return abs;
   }
   return null;
 }
-function normalizeItem(r = {}) {
-  const price = (typeof r.price === "number") ? r.price
-             : (typeof r.priceCents === "number") ? r.priceCents
-             : 0;
-  return {
-    id: r.id || r.sku || r.SKU || String(Math.random()).slice(2),
-    name: r.name || r.title || "Product",
-    brand: r.brand || r.Brand || "—",
-    category: r.category || r.Category || "—",
-    price,                                      // cents; UI expects product.price
-    image: r.image || r.Image || "/images/placeholder.jpg",
-    description: r.description || r.Description || "",
-    usage: r.usage || r.Usage || "",
-    keywords: (r.keywords || r.tags || r.Tags || "").toString().toLowerCase()
-  };
-}
-function loadCatalog() {
-  const found = resolveCatalog();
-  if (!found) {
-    CATALOG = [];
-    CATALOG_SOURCE = "NONE";
-    console.warn("[catalog] no file found, returning empty catalog");
+
+async function loadCatalog(force = false) {
+  const p = await resolveCatalogPath();
+  CATALOG_PATH_IN_USE = p;
+  if (!p) {
+    catalog = [];
+    catalogStamp = Date.now();
+    console.warn("[catalog] No catalog file found.");
     return;
   }
-  const json = JSON.parse(fs.readFileSync(found.abs, "utf8"));
-  const arr = Array.isArray(json) ? json : (json.items || []);
-  CATALOG = arr.map(normalizeItem);
-  CATALOG_SOURCE = found.rel;
-  console.log(`[catalog] loaded ${CATALOG.length} items from ${found.rel}`);
-}
-loadCatalog();
 
-// --- search helpers (strict by default) ---
-const SYNONYMS = {
-  shampoo: ["shampoo", "cleanser", "clarifying"],
-  serum: ["serum", "treatment", "essence"],
-  mask: ["mask", "masque", "treatment"],
-  conditioner: ["conditioner"],
-  spray: ["spray", "mist"],
-  purple: ["purple", "violet", "toning"],
-  red: ["red", "copper", "warm"]
-};
-function expandTokens(q) {
-  const base = q.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
-  const bag = new Set(base);
-  for (const t of base) {
-    const syns = SYNONYMS[t];
-    if (syns) syns.forEach(s => bag.add(s));
+  // Optionally skip reload if not forced and file unchanged. Simple: reload always (cheap + robust)
+  try {
+    const buf = await fs.readFile(p, "utf8");
+    const json = JSON.parse(buf);
+    const arr = pickCatalogArray(json).map(normalizeProduct).filter(Boolean);
+    catalog = arr;
+    catalogStamp = Date.now();
+    console.log(`[catalog] Loaded ${arr.length} items from ${p}`);
+  } catch (err) {
+    console.error(`[catalog] Failed to read ${p}:`, err.message);
+    catalog = [];
+    catalogStamp = Date.now();
   }
-  return Array.from(bag);
-}
-function scoreProduct(p, tokens) {
-  const brand = (p.brand || "").toLowerCase();
-  const name  = (p.name || "").toLowerCase();
-  const cat   = (p.category || "").toLowerCase();
-  const desc  = (p.description || "").toLowerCase();
-  const keys  = (p.keywords || "").toLowerCase();
-  let s = 0;
-  for (const t of tokens) {
-    if (cat.includes(t))  s += 3;
-    if (name.includes(t)) s += 2;
-    if (brand.includes(t))s += 1;
-    if (desc.includes(t)) s += 0.5;
-    if (keys.includes(t)) s += 0.5;
-  }
-  return s;
-}
-function paginate(arr, offset = 0, limit = 24) {
-  const start = Math.max(0, offset|0);
-  const end   = start + Math.max(1, limit|0);
-  return arr.slice(start, end);
 }
 
-// --- /api/products (strict, deterministic) ---
-app.get("/api/products", (req, res) => {
-  const q       = (req.query.q || "").trim();
-  const limit   = Math.min(100, Math.max(1, parseInt(req.query.limit || "24", 10)));
-  const offset  = Math.max(0, parseInt(req.query.offset || "0", 10));
-  const strict  = req.query.strict !== "0";       // strict by default
-  const fallback= req.query.fallback === "1";     // explicit only
+// Simple text search across fields
+function productMatches(p, tokens) {
+  if (!tokens || tokens.length === 0) return true;
+  const hay = [
+    p.name, p.brand, p.category, p.description,
+    ...(Array.isArray(p.tags) ? p.tags : []),
+    ...(Array.isArray(p.benefits) ? p.benefits : []),
+    ...(typeof p.ingredients === "string" ? [p.ingredients] : [])
+  ].filter(Boolean).join(" ").toLowerCase();
 
-  let items = CATALOG;
+  return tokens.every(t => hay.includes(t));
+}
 
-  if (q) {
-    const tokens = expandTokens(q);
-    items = CATALOG
-      .map(p => ({ p, s: scoreProduct(p, tokens) }))
-      .filter(x => x.s >= 1)
-      .sort((a, b) => b.s - a.s)
-      .map(x => x.p);
+function filterByProfile(p, q) {
+  // Optional “profile” filters from query string. Keep gentle guards (no-ops if empty)
+  // hairType/skinType/concerns are often stored in tags or suitableFor
+  const need = [];
+  if (q.hairType) need.push(q.hairType.toLowerCase());
+  if (q.skinType) need.push(q.skinType.toLowerCase());
+  if (q.concerns) need.push(q.concerns.toLowerCase());
+
+  if (need.length) {
+    const bag = [
+      p.category, p.description, p.suitableFor,
+      ...(Array.isArray(p.tags) ? p.tags.join(" ") : []),
+      ...(Array.isArray(p.benefits) ? p.benefits.join(" ") : []),
+    ].filter(Boolean).join(" ").toLowerCase();
+    if (!need.every(tok => bag.includes(tok))) return false;
   }
 
-  if (q && items.length === 0 && strict && !fallback) {
-    return res.json({
-      success: true,
-      source: CATALOG_SOURCE,
-      total: 0,
-      count: 0,
-      query: q,
-      items: [],
-      message: "No matches. Try a synonym (e.g., “clarifying” for shampoo, “treatment” for serum)."
-    });
+  // budget: budget ($10-30), mid ($30-60), luxury ($60+)
+  if (q.budget && p.priceCents) {
+    const dollars = p.priceCents / 100;
+    if (q.budget === "budget" && !(dollars >= 10 && dollars <= 30)) return false;
+    if (q.budget === "mid"    && !(dollars > 30 && dollars <= 60)) return false;
+    if (q.budget === "luxury" && !(dollars > 60)) return false;
   }
 
-  if ((!q && items.length === 0) || (q && items.length === 0 && fallback)) {
-    items = CATALOG.slice(); // stable “featured” when empty or explicit fallback
-  }
+  return true;
+}
 
-  const total = items.length;
-  const page  = paginate(items, offset, limit);
+// ----- API: Products -----
+app.get("/api/products", async (req, res) => {
+  await loadCatalog(); // cheap reload each request so updates show without redeploy
+
+  const { q = "", limit = "12", offset = "0" } = req.query;
+
+  const lim = Math.max(1, Math.min(100, parseInt(limit, 10) || 12));
+  const off = Math.max(0, parseInt(offset, 10) || 0);
+
+  const tokens = String(q).toLowerCase().split(/\s+/).filter(Boolean);
+
+  let results = catalog.filter(p => productMatches(p, tokens))
+                       .filter(p => filterByProfile(p, req.query));
+
+  // Stable order: by name, then id (prevents the “same 4” perception)
+  results = results.sort((a, b) => (a.name || "").localeCompare(b.name || "") || (a.id || "").localeCompare(b.id || ""));
+
+  const total = results.length;
+  const items = results.slice(off, off + lim);
 
   res.json({
     success: true,
-    source: CATALOG_SOURCE,
+    source: CATALOG_PATH_IN_USE || "memory",
+    count: items.length,
     total,
-    count: page.length,
     query: q,
-    items: page
+    items
   });
 });
 
-// --- /api/chat (simple, deterministic fallback) ---
-app.post("/api/chat", (req, res) => {
-  const msg = ((req.body && req.body.message) || "").toLowerCase();
-
-  // tiny intent hints, but products always come from /api/products
-  if (/acne|breakout/.test(msg)) {
-    return res.json({
-      success: true,
-      provider: "followup",
-      response: "I have a quick question to tailor this for you.",
-      followUp: {
-        key: "skinType",
-        question: "Which best describes your skin? (oily / combination / dry / sensitive)"
-      }
-    });
-  }
-
-  if (/purple.*shampoo|blonde|toning/.test(msg)) {
-    return res.json({
-      success: true,
-      provider: "fallback",
-      response: "Try a purple toning shampoo to neutralize brassiness. I’ll show matches below."
-    });
-  }
-
-  // neutral guidance
-  return res.json({
-    success: true,
-    provider: "fallback",
-    response: "Quick guidance:\n• Book: Blowout or Hydration Facial.\n• Retail: color-safe shampoo, bond mask, thermal protectant.\n• Tip: finish with heat guard."
-  });
+// ----- API: Chat (minimal echo; keeps your frontend happy) -----
+app.post("/api/chat", async (req, res) => {
+  const msg = (req.body?.message || "").trim();
+  // Keep it short and neutral; your UI provides the rest
+  const reply = msg
+    ? `Got it — I’ll tailor picks for “${msg}”.`
+    : "Tell me your goal (e.g., 'purple shampoo', 'anti-aging serum').";
+  res.json({ success: true, response: reply });
 });
 
-// --- /api/bookings/create (stub) ---
-app.post("/api/bookings/create", (req, res) => {
-  const bookingId = crypto.randomBytes(5).toString("hex");
-  res.json({ success: true, bookingId });
-});
-
-// --- diagnostics / health ---
+// ----- Debug helpers -----
 app.get("/__whoami", (req, res) => {
   res.json({
-    running: "server.js",
-    catalogSource: CATALOG_SOURCE,
-    catalogCount: CATALOG.length,
-    routes: [
-      "GET /api/products",
-      "POST /api/chat",
-      "POST /api/bookings/create",
-      "GET /__whoami",
-      "GET /healthz",
-      "static /public/*"
-    ]
+    ok: true,
+    node: process.version,
+    env: process.env.NODE_ENV || "development",
+    port: PORT,
+    catalogPath: CATALOG_PATH_IN_USE
   });
 });
-app.get("/healthz", (req, res) => res.type("text").send("ok"));
 
-// --- root (serve your root index.html if present) ---
+app.get("/healthz", (req, res) => res.type("text/plain").send("ok"));
+
+// ----- Static files -----
+app.use(express.static(PUBLIC_DIR, { index: "index.html", extensions: ["html"] }));
+
+// Do NOT add a wildcard SPA catch-all that steals /api or /data routes.
+// Keep root route explicit for index if needed:
 app.get("/", (req, res) => {
-  // serve /index.html from project root if it exists; otherwise fall back to /public/index.html
-  const rootIndex = path.join(__dirname, "index.html");
-  if (fileExists(rootIndex)) return res.sendFile(rootIndex);
-  return res.sendFile(path.join(PUBLIC_DIR, "index.html"));
+  const indexPath = path.join(PUBLIC_DIR, "index.html");
+  createReadStream(indexPath).pipe(res);
 });
 
-// --- start ---
-const PORT = Number(process.env.PORT) || 3000;
-const HOST = "0.0.0.0";
-app.listen(PORT, HOST, () => {
-  console.log(`Luminous listening on ${PORT}. catalog=${CATALOG_SOURCE}`);
+// ----- Start -----
+await loadCatalog(true);
+app.listen(PORT, () => {
+  const src = CATALOG_PATH_IN_USE || "none";
+  console.log(`Luminous listening on ${PORT}. catalog=${src}`);
 });
