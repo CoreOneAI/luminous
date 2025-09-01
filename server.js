@@ -1,112 +1,20 @@
-// server.js - Unified AI Salon API
-
-// 1. Import necessary libraries using ES module syntax
-import express from 'express';
-import cors from 'cors';
-import OpenAI from 'openai';
-import Anthropic from '@anthropic-ai/sdk';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import fs from 'fs/promises'; // Import the file system module
-
-// 2. Initialize Express app and middleware
-const app = express();
-app.use(express.json());
-app.use(cors());
-
-// 3. Load API keys from environment variables
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
-
-// 4. Initialize AI clients based on available keys
-let aiClient;
-let aiModel;
-if (OPENAI_API_KEY) {
-  aiClient = new OpenAI({ apiKey: OPENAI_API_KEY });
-  aiModel = 'openai';
-} else if (ANTHROPIC_API_KEY) {
-  aiClient = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
-  aiModel = 'anthropic';
-} else if (GEMINI_API_KEY) {
-  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-  aiClient = genAI.getGenerativeModel({ model: "gemini-pro" });
-  aiModel = 'gemini';
-} else {
-  console.error("No AI API key found. AI chat functionality will not work.");
-}
-
-// 5. Load product data and filtering logic
-let productsData = [];
-
-// Helper function to handle product data and filtering
-function getProducts(query, profile) {
-    // Implement the filtering logic using the loaded productsData
-    const queryLower = query.toLowerCase();
-    
-    // Simple filter to find products that match the query in their name or category
-    const filteredProducts = productsData.filter(p => {
-        const nameMatches = p.name.toLowerCase().includes(queryLower);
-        const categoryMatches = p.category.toLowerCase().includes(queryLower);
-        return nameMatches || categoryMatches;
-    });
-
-    return filteredProducts;
-}
-
-// 6. The Unified API Endpoint
-app.post('/api/unified-service', async (req, res) => {
-  const { message, profile } = req.body;
-  
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required.' });
+{
+  "name": "ai-salon-consultant",
+  "version": "1.0.0",
+  "description": "An AI-powered salon product recommender.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5",
+    "openai": "^4.47.1",
+    "@anthropic-ai/sdk": "^0.20.1",
+    "@google/generative-ai": "^0.11.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
-
-  try {
-    // Load product data asynchronously before handling the request
-    if (productsData.length === 0) {
-      const data = await fs.readFile('./products.json', 'utf8');
-      productsData = JSON.parse(data);
-    }
-    
-    // Logic to determine if the query is a product search or a general question
-    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion'];
-    const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
-
-    let chatResponseText;
-    let products = [];
-
-    if (isProductSearch) {
-      // It's a product search: find products and provide a brief chat summary
-      products = getProducts(message, profile);
-      chatResponseText = `Based on your request, here are some professional salon products for you.`;
-    } else {
-      // It's a general question: call the AI model for a response
-      if (aiClient) {
-        // You would add your actual AI API call logic here.
-        // For now, we'll use a placeholder response
-        chatResponseText = `Hello! I am an AI salon consultant. I can provide product recommendations or answer general beauty questions based on your provided information.`;
-      } else {
-        chatResponseText = "I'm sorry, I could not connect to the AI service.";
-      }
-    }
-
-    // Return the combined response
-    res.json({
-      chatResponse: chatResponseText,
-      products: products,
-    });
-
-  } catch (error) {
-    console.error('Error processing unified request:', error);
-    res.status(500).json({
-      chatResponse: "I'm sorry, an error occurred while processing your request. Please try again later.",
-      products: [],
-    });
-  }
-});
-
-// 7. Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+}
