@@ -3,11 +3,17 @@
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet'; // Import helmet for security headers
+import helmet from 'helmet';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get the directory name for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // 2. Initialize Express app and middleware
 const app = express();
@@ -16,15 +22,18 @@ const app = express();
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"], // Allow resources from the same origin
-      imgSrc: ["'self'", "data:", "https://images.unsplash.com"], // Allow images from self, data URIs, and Unsplash
-      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for simplicity (not best practice, but fixes your current issue)
-      scriptSrc: ["'self'"], // Allow scripts from the same origin
+      defaultSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
+      styleSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'"],
     },
   },
 }));
 app.use(express.json());
 app.use(cors());
+
+// Serve static files from the project root directory
+app.use(express.static(__dirname));
 
 // 3. Load API keys from environment variables
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
@@ -51,7 +60,7 @@ if (OPENAI_API_KEY) {
 // 5. Load product data synchronously on startup
 let productsData = [];
 try {
-  const data = fs.readFileSync('./products.json', 'utf8');
+  const data = fs.readFileSync(path.join(__dirname, 'products.json'), 'utf8');
   productsData = JSON.parse(data);
   console.log('Products data loaded successfully.');
 } catch (error) {
@@ -62,7 +71,6 @@ try {
 function getProducts(query, profile) {
   const queryLower = query.toLowerCase();
   
-  // A simple filter to find products that match the query in their name or category
   const filteredProducts = productsData.filter(p => {
     const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
     const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
@@ -81,7 +89,6 @@ app.post('/api/unified-service', async (req, res) => {
   }
 
   try {
-    // Logic to determine if the query is a product search or a general question
     const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion'];
     const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
 
@@ -89,20 +96,16 @@ app.post('/api/unified-service', async (req, res) => {
     let products = [];
 
     if (isProductSearch) {
-      // It's a product search: find products and provide a brief chat summary
       products = getProducts(message, profile);
       chatResponseText = `Based on your request, here are some professional salon products for you.`;
     } else {
-      // It's a general question: call the AI model for a response
       if (aiClient) {
-        // Placeholder for your actual AI API call logic
         chatResponseText = `Hello! I am an AI salon consultant. I can provide product recommendations or answer general beauty questions based on your provided information.`;
       } else {
         chatResponseText = "I'm sorry, I could not connect to the AI service.";
       }
     }
 
-    // Return the combined response
     res.json({
       chatResponse: chatResponseText,
       products: products,
@@ -117,9 +120,9 @@ app.post('/api/unified-service', async (req, res) => {
   }
 });
 
-// 7. Serve the index.html file
+// 7. Serve the index.html file for the root path
 app.get('/', (req, res) => {
-  res.sendFile('/opt/render/project/src/index.html');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // 8. Start the server
