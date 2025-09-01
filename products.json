@@ -1,19 +1,38 @@
-[
   {
-    "name": "Hair Dye Bright Shade #1",
-    "brand": "Specialty Beauty Product Categories",
+    "name": "Hair Dye - Vampire Red",
+    "brand": "Manic Panic",
     "category": "Bright Color",
-    "instructions": "Use as directed by product instructions or under professional supervision.",
-    "priceCents": 2500
+    "instructions": "Apply to pre-lightened hair. Leave on for 30 minutes. Rinse with cool water until it runs clear.",
+    "priceCents": 1999
   },
   {
-    "name": "Hair Dye Bright Shade #2",
-    "brand": "Specialty Beauty Product Categories",
+    "name": "Hair Dye - Poseidon",
+    "brand": "Arctic Fox",
     "category": "Bright Color",
-    "instructions": "Use as directed by product instructions or under professional supervision.",
-    "priceCents": 2500
+    "instructions": "Apply to pre-lightened hair. Leave on for 30+ minutes for deeper color. Rinse with cool water.",
+    "priceCents": 2199
   },
   {
+    "name": "Hair Dye - Neon Tangerine",
+    "brand": "Pravana",
+    "category": "Bright Color",
+    "instructions": "For professional use only. Apply to pre-lightened hair. Process according to manufacturer instructions.",
+    "priceCents": 3299
+  },
+  {
+    "name": "Hair Dye - Atomic Pink",
+    "brand": "Splat",
+    "category": "Bright Color",
+    "instructions": "Kit includes bleach. Follow included instructions carefully. Perform a patch test first.",
+    "priceCents": 1799
+  },
+  {
+    "name": "Hair Dye - Purple",
+    "brand": "L'Oreal Colorista",
+    "category": "Bright Color",
+    "instructions": "Apply evenly to pre-lightened hair. Process for 15-30 minutes. Rinse with cool water.",
+    "priceCents": 1699
+  }
     "name": "Hair Dye Bright Shade #3",
     "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
