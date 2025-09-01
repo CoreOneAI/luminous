@@ -1,4 +1,42 @@
 // ---- /api/products ----
+
+// Helper function to shuffle an array
+function shuffle(array) {
+  let currentIndex = array.length, randomIndex;
+  while (currentIndex !== 0) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex--;
+    [array[currentIndex], array[randomIndex]] = [
+      array[randomIndex], array[currentIndex]];
+  }
+  return array;
+}
+
+// Helper function to normalize product data
+function normalizeItem(p) {
+  const price = typeof p.priceCents === 'number'
+    ? p.priceCents
+    : parseFloat(String(p.price || '0').replace(/[^0-9.]/g, '')) * 100;
+  return {
+    ...p,
+    priceCents: Math.round(price),
+    name: p.name || 'Product',
+    description: p.description || `Professional ${p.category || 'beauty'} product.`,
+    brand: p.brand || '—',
+    category: p.category || '—'
+  };
+}
+
+// Helper function to build a case-insensitive, whole-word matcher
+function buildMatcher(query) {
+  const tokens = String(query || '').toLowerCase().trim().split(/\s+/).filter(Boolean);
+  if (tokens.length === 0) return () => true;
+  return (p) => {
+    const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
+    return tokens.every(token => hay.includes(token));
+  };
+}
+
 app.get('/api/products', async (req, res) => {
   try {
     const { items, source } = await loadCatalog();
@@ -22,7 +60,7 @@ app.get('/api/products', async (req, res) => {
 
       // widen by category hint if still empty
       if (filtered.length === 0) {
-        const catHint = (q.match(/shampoo|conditioner|mask|spray|serum|oil|toner|treatment|accessories/i) || [])[0];
+        const catHint = (q.match(/shampoo|conditioner|mask|spray|serum|oil|toner|treatment|accessories|cleanser/i) || [])[0];
         if (catHint) filtered = all.filter(r => (r.category || '').toLowerCase().includes(catHint.toLowerCase()));
       }
     }
