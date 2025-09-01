@@ -18,14 +18,15 @@ const __dirname = path.dirname(__filename);
 // 2. Initialize Express app and middleware
 const app = express();
 
-// Use helmet middleware to set security headers, including a basic CSP
+// Use helmet middleware to set security headers, including a more permissive CSP for inline scripts
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"], // Allow resources from the same origin
+      defaultSrc: ["'self'"],
       imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'"], // Allow inline scripts and event handlers
+      scriptSrcAttr: ["'unsafe-inline'"], // This is a new directive for inline handlers like onclick
     },
   },
 }));
