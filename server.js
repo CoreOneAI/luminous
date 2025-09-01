@@ -3,11 +3,11 @@
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
 import cors from 'cors';
-import helmet from 'helmet';
+import helmet from 'helmet'; // Import helmet for security headers
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import fs from 'fs';
+import fs from 'fs'; // Use synchronous file system module
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -22,10 +22,10 @@ const app = express();
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
-      defaultSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      scriptSrc: ["'self'"],
+      defaultSrc: ["'self'"], // Allow resources from the same origin
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com"], // Allow images from self, data URIs, and Unsplash
+      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for simplicity
+      scriptSrc: ["'self'"], // Allow scripts from the same origin
     },
   },
 }));
