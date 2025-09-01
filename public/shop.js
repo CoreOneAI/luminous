@@ -39,10 +39,7 @@ function renderGrid(el, items){
       <div class="title">${safeName}</div>
       <div class="meta">${meta}</div>
       <div class="price">${price}</div>
-      <button class="btn" onclick='addToCart(${JSON.stringify({"id":"__ID__", "name":"__NAME__", "priceCents":"__PRICE__"})}
-        .replace("__ID__", String(p.id||""))
-        .replace("__NAME__", safeName)
-        .replace("__PRICE__", String(p.priceCents||0)))'>Add to Cart</button>
+      <button class="btn" onclick='addToCart(${JSON.stringify({id: p.id, name: p.name, priceCents: p.priceCents})})'>Add to Cart</button>
     </article>`;
   }).join('');
 }
