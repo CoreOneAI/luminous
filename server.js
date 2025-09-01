@@ -1,11 +1,11 @@
 // server.js - Unified AI Salon API
 
-// 1. Import necessary libraries
-const express = require('express');
-const cors = require('cors');
-const { OpenAI } = require('openai');
-const { Anthropic } = require('@anthropic-ai/sdk');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+// 1. Import necessary libraries using ES module syntax
+import express from 'express';
+import cors from 'cors';
+import OpenAI from 'openai';
+import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 // 2. Initialize Express app and middleware
 const app = express();
@@ -35,8 +35,7 @@ if (OPENAI_API_KEY) {
 }
 
 // 5. Load product data from a static file (products.json or similar)
-// We'll assume a local file for this example.
-const productsData = require('./products.json');
+import productsData from './products.json' assert { type: 'json' };
 
 // Helper function to handle product data and filtering
 function getProducts(query, profile) {
