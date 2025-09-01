@@ -206,18 +206,24 @@
   }
 
   function expandQueryTokens(q) {
-    const tokens = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
-    if (tokens.includes('accessories')) {
-      tokens.push('brush','comb','tweezer','clipper','nail','bobby','shower','cap','lipstick','eyeliner');
+    const t = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
+    // A few helpful expansions so “accessories” isn’t a dead end
+    if (t.includes('accessories')) {
+      t.push('brush','comb','tweezer','clip','clipper','nail','bobby','shower','cap','lipstick','eyeliner','liner');
     }
-    return tokens;
+    return t;
   }
 
-  function matchesQuery(p, q) {
-    const toks = expandQueryTokens(q);
-    if (!toks.length) return true;
+  function matchesStrictAll(p, tokens) {
+    if (!tokens.length) return true;
     const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
-    return toks.every(tok => hay.includes(tok));
+    return tokens.every(tok => hay.includes(tok));
+  }
+
+  function matchesAny(p, tokens) {
+    if (!tokens.length) return true;
+    const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
+    return tokens.some(tok => hay.includes(tok));
   }
 
   function uniqById(arr) {
@@ -230,42 +236,59 @@
       out.push(x);
     }
     return out;
-    }
+  }
 
-  // Merge API and static catalog, filter & page
+  async function fetchStaticCatalog() {
+    const STATIC_URLS = ['/data/products.json', '/products.json', '/public/data/products.json'];
+    for (const url of STATIC_URLS) {
+      try {
+        const raw = await fetchJSON(url);
+        const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
+        console.log('[catalog] loaded', url, 'count=', arr.length);
+        return arr.map(normalizeProduct);
+      } catch (e) {
+        console.warn('[catalog] not at', url, e.message);
+      }
+    }
+    return [];
+  }
+
   async function fetchMerged({ q, offset, limit, profile }) {
     let apiItems = [];
     let staticItems = [];
 
-    // Try API first, but do not “lock” to it
+    // API (best effort)
     try {
       const params = new URLSearchParams({
         q: q || '',
-        offset: String(0),
-        limit: String(100), // pull a generous page; we’ll page locally
+        offset: '0',
+        limit: '100',
         ...profile
       });
       const apiData = await fetchJSON(`/api/products?${params.toString()}`);
       apiItems = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
+      console.log('[api] items=', apiItems.length);
     } catch (e) {
-      console.warn('API failed, will rely on static catalog:', e.message);
+      console.warn('[api] failed:', e.message);
     }
 
-    // Always include static fallback
-    try {
-      const raw = await fetchJSON('/data/products.json');
-      const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
-      staticItems = arr.map(normalizeProduct);
-    } catch (e) {
-      console.warn('Static catalog missing:', e.message);
-    }
+    // Static
+    staticItems = await fetchStaticCatalog();
 
-    // Merge, filter, page
-    const merged = uniqById([...apiItems, ...staticItems]).filter(p => matchesQuery(p, q));
-    const total = merged.length;
-    const slice = merged.slice(offset, offset + limit);
-    const aiGenerated = apiItems.length > 0; // just for the badge
-    return { items: slice, total, aiGenerated, query: q };
+    // Merge, filter
+    const base = uniqById([...apiItems, ...staticItems]);
+    const tokens = expandQueryTokens(q);
+    let filtered = base.filter(p => matchesStrictAll(p, tokens));
+
+    // Fallback: any-word match
+    if (!filtered.length) filtered = base.filter(p => matchesAny(p, tokens));
+    // Final fallback: show top items so we never render “No products found”
+    if (!filtered.length && base.length) filtered = base.slice();
+
+    const total = filtered.length;
+    const slice = filtered.slice(offset, offset + limit);
+    const aiGenerated = apiItems.length > 0;
+    return { items: slice, total, aiGenerated, query: q, hadFallback: (slice.length && slice.length < base.length && !matchesStrictAll(slice[0]||{}, tokens)) };
   }
 
   class UnifiedSalonAI {
@@ -290,42 +313,40 @@
       this.concerns = qs('#concerns');
       this.budget = qs('#budget');
 
-      this.bindEvents();
-      this.showWelcomeMessage();
+      this.bind();
+      this.welcome();
     }
 
-    bindEvents() {
-      this.chatBtn?.addEventListener('click', () => this.handleAIConsultation());
-      this.chatInput?.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !this.isLoading) this.handleAIConsultation();
+    bind() {
+      this.chatBtn?.addEventListener('click', () => this.handleAsk());
+      this.chatInput?.addEventListener('keypress', e => {
+        if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
       });
-      this.loadMoreSection?.addEventListener('click', (e) => {
+      this.loadMoreSection?.addEventListener('click', e => {
         if (e.target.closest('#loadMoreBtn')) this.loadMore();
       });
-
-      [this.hairType, this.skinType, this.concerns, this.budget].forEach(sel => {
-        sel?.addEventListener('change', () => this.currentQuery && this.searchProducts(this.currentQuery, true));
+      [this.hairType,this.skinType,this.concerns,this.budget].forEach(s => {
+        s?.addEventListener('change', () => this.currentQuery && this.search(this.currentQuery, true));
       });
     }
 
-    showWelcomeMessage() {
+    welcome() {
       if (!this.chatResponse) return;
       this.chatResponse.innerHTML = `
-        <div style="text-align: center; color: #666;">
-          <h3 style="color: #333; margin-bottom: 12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom: 16px;">I'm here to give you personalized product recommendations based on your unique needs.</p>
-          <p style="font-size: 13px;"><strong>Try asking:</strong></p>
-          <ul style="text-align: left; font-size: 12px; margin-top: 8px; padding-left: 20px;">
-            <li>"shampoo for color-treated hair"</li>
-            <li>"vitamin c serum"</li>
-            <li>"bond repair routine"</li>
-            <li>"anti-aging for sensitive skin"</li>
+        <div style="text-align:center;color:#666;">
+          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+          <p style="font-size:13px;"><strong>Try:</strong></p>
+          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+            <li>"shampoo"</li>
+            <li>"serum"</li>
+            <li>"bond repair"</li>
+            <li>"accessories"</li>
           </ul>
-        </div>
-      `;
+        </div>`;
     }
 
-    getProfile() {
+    profile() {
       return {
         hairType: this.hairType?.value || '',
         skinType: this.skinType?.value || '',
@@ -334,7 +355,7 @@
       };
     }
 
-    async handleAIConsultation() {
+    async handleAsk() {
       const message = (this.chatInput?.value || '').trim();
       if (!message || this.isLoading) return;
 
@@ -343,11 +364,9 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      // Chat should never block products
       this.safeChat(message);
-
       this.currentQuery = message;
-      await this.searchProducts(message, true);
+      await this.search(message, true);
 
       if (this.chatInput) this.chatInput.value = '';
       this.isLoading = false;
@@ -357,11 +376,7 @@
 
     async safeChat(message) {
       try {
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
+        const res = await fetch('/api/chat', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ message }) });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         this.renderChat(data?.response);
@@ -373,34 +388,25 @@
     renderChat(text) {
       if (!this.chatResponse) return;
       this.chatResponse.innerHTML = `
-        <div style="border-left: 4px solid #B8860B; padding-left: 16px;">
-          <h4 style="color: #B8860B; margin-bottom: 8px; font-size: 14px;">AI Consultation</h4>
-          <p style="line-height: 1.6;">${text || 'Let me help you find the perfect products for your needs.'}</p>
-        </div>
-      `;
+        <div style="border-left:4px solid #B8860B;padding-left:16px;">
+          <h4 style="color:#B8860B;margin-bottom:8px;font-size:14px;">AI Consultation</h4>
+          <p style="line-height:1.6;">${text || 'Let me help you find the perfect products for your needs.'}</p>
+        </div>`;
     }
 
-    async searchProducts(query, reset = false) {
-      if (reset) {
-        this.currentOffset = 0;
-        this.grid && (this.grid.innerHTML = '');
-      }
+    async search(query, reset=false) {
+      if (reset) { this.currentOffset = 0; this.grid && (this.grid.innerHTML=''); }
 
       try {
         if (this.status) this.status.textContent = 'Finding matching products...';
 
         const { items, total, aiGenerated, query: echoed } =
-          await fetchMerged({
-            q: query,
-            offset: this.currentOffset,
-            limit: this.pageSize,
-            profile: this.getProfile()
-          });
+          await fetchMerged({ q: query, offset: this.currentOffset, limit: this.pageSize, profile: this.profile() });
 
         if (!items.length && reset) {
-          this.showEmptyState();
+          this.empty();
           this.totalProducts = 0;
-          this.updateLoadMore(false);
+          this.updateMore(false);
           return;
         }
 
@@ -413,49 +419,44 @@
           this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${echoed || query}"`;
         }
 
-        this.updateLoadMore(this.currentOffset < total);
+        this.updateMore(this.currentOffset < total);
       } catch (err) {
         console.error('Product search failed:', err);
         if (this.status) this.status.innerHTML = `<div class="error">Error: ${err.message}</div>`;
       }
     }
 
-    card(product, aiGenerated = false) {
+    card(p, ai=false) {
       const div = document.createElement('div');
-      div.className = `product-card${aiGenerated ? ' ai-generated' : ''}`;
-      const price = formatCents(product.priceCents);
-      const benefits = product.benefits?.length
-        ? `<div class="product-benefits">${product.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>`
-        : '';
-
+      div.className = `product-card${ai ? ' ai-generated' : ''}`;
+      const price = formatCents(p.priceCents);
+      const benefits = p.benefits?.length ? `<div class="product-benefits">${p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>` : '';
       div.innerHTML = `
         <div class="product-content">
           <img class="product-image" loading="lazy" referrerpolicy="no-referrer"
-               src="${(product.image || '').replace(/"/g,'&quot;')}"
-               alt="${(product.name || 'Product').replace(/"/g,'&quot;')}"
+               src="${(p.image||'').replace(/"/g,'&quot;')}"
+               alt="${(p.name||'Product').replace(/"/g,'&quot;')}"
                onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
           <div class="product-info">
-            <div class="product-name">${product.name}</div>
-            <div class="product-meta">${product.brand} • ${product.category}</div>
-            ${product.description ? `<div class="product-description">${product.description}</div>` : ''}
+            <div class="product-name">${p.name}</div>
+            <div class="product-meta">${p.brand} • ${p.category}</div>
+            ${p.description ? `<div class="product-description">${p.description}</div>` : ''}
             ${benefits}
             <div class="product-footer">
               <div class="product-price">${price}</div>
               <div class="product-actions">
-                ${product.description ? '<button class="details-btn">Details</button>' : ''}
-                <button class="add-btn" data-id="${product.id}">Add to Cart</button>
+                ${p.description ? '<button class="details-btn">Details</button>' : ''}
+                <button class="add-btn" data-id="${p.id}">Add to Cart</button>
               </div>
             </div>
           </div>
-        </div>
-      `;
-
-      div.querySelector('.details-btn')?.addEventListener('click', () => this.showDetails(product));
-      div.querySelector('.add-btn')?.addEventListener('click', () => alert(`Added "${product.name}" to cart (${formatCents(product.priceCents)})`));
+        </div>`;
+      div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
+      div.querySelector('.add-btn')?.addEventListener('click', () => alert(`Added "${p.name}" to cart (${formatCents(p.priceCents)})`));
       return div;
     }
 
-    showDetails(p) {
+    details(p) {
       const lines = [];
       if (p.usage) lines.push(`Usage: ${p.usage}`);
       if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
@@ -463,44 +464,41 @@
       alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
     }
 
-    showEmptyState() {
+    empty() {
       if (!this.grid) return;
       this.grid.innerHTML = `
         <div class="empty-state">
           <h3>No products found</h3>
           <p>Try a different search or be more specific about your needs.</p>
-        </div>
-      `;
+        </div>`;
     }
 
-    updateLoadMore(hasMore) {
-      if (!this.loadMoreSection) return;
+    updateMore(hasMore) {
+      const box = this.loadMoreSection;
+      if (!box) return;
       if (hasMore) {
-        this.loadMoreSection.style.display = 'block';
-        this.loadMoreSection.innerHTML = `
+        box.style.display = 'block';
+        box.innerHTML = `
           <button class="load-more-btn" id="loadMoreBtn">
             Show More Products (${this.currentOffset}/${this.totalProducts})
           </button>
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>
-        `;
+          <button class="home-btn" onclick="location.reload()">Start New Search</button>`;
       } else if (this.totalProducts > 0) {
-        this.loadMoreSection.style.display = 'block';
-        this.loadMoreSection.innerHTML = `
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>
-        `;
+        box.style.display = 'block';
+        box.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
       } else {
-        this.loadMoreSection.style.display = 'none';
+        box.style.display = 'none';
       }
     }
 
-    loadMore() { this.searchProducts(this.currentQuery, false); }
+    loadMore() { this.search(this.currentQuery, false); }
   }
 
   window.quickAsk = (text) => {
     const app = window.salonAI;
     if (!app) return;
     app.chatInput.value = text;
-    app.handleAIConsultation();
+    app.handleAsk();
   };
 
   window.addEventListener('DOMContentLoaded', () => {
