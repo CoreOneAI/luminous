@@ -81,10 +81,10 @@
         <div class="welcome-title">Welcome to Your Personal Salon</div>
         <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
         <div class="quick-examples">
-          <button class="example-btn" onclick="quickAsk('repair damaged curly hair')">Repair Damage</button>
-          <button class="example-btn" onclick="quickAsk('anti-aging skincare routine')">Anti-Aging</button>
-          <button class="example-btn" onclick="quickAsk('accessories')">Accessories</button>
-          <button class="example-btn" onclick="quickAsk('acne-prone sensitive skin')">Clear Skin</button>
+          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
+          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
+          <button class="example-btn" data-query="accessories">Accessories</button>
+          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
         </div>
       </section>
 
@@ -148,7 +148,7 @@
 
         <div id="loadMoreSection" class="load-more" style="display:none;">
           <button id="loadMoreBtn" class="load-more-btn">Show More Products</button>
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>
+          <button id="homeBtn" class="home-btn">Start New Search</button>
         </div>
       </section>
     </main>
@@ -157,6 +157,7 @@
 <script>
 (() => {
   const qs = (sel) => document.querySelector(sel);
+  const qsa = (sel) => document.querySelectorAll(sel);
 
   async function fetchJSON(url) {
     const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -207,7 +208,6 @@
 
   function expandQueryTokens(q) {
     const t = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
-    // A few helpful expansions so “accessories” isn’t a dead end
     if (t.includes('accessories')) {
       t.push('brush','comb','tweezer','clip','clipper','nail','bobby','shower','cap','lipstick','eyeliner','liner');
     }
@@ -257,7 +257,6 @@
     let apiItems = [];
     let staticItems = [];
 
-    // API (best effort)
     try {
       const params = new URLSearchParams({
         q: q || '',
@@ -272,18 +271,18 @@
       console.warn('[api] failed:', e.message);
     }
 
-    // Static
     staticItems = await fetchStaticCatalog();
 
-    // Merge, filter
     const base = uniqById([...apiItems, ...staticItems]);
     const tokens = expandQueryTokens(q);
     let filtered = base.filter(p => matchesStrictAll(p, tokens));
 
-    // Fallback: any-word match
-    if (!filtered.length) filtered = base.filter(p => matchesAny(p, tokens));
-    // Final fallback: show top items so we never render “No products found”
-    if (!filtered.length && base.length) filtered = base.slice();
+    if (!filtered.length) {
+      filtered = base.filter(p => matchesAny(p, tokens));
+    }
+    if (!filtered.length && base.length) {
+      filtered = base.slice();
+    }
 
     const total = filtered.length;
     const slice = filtered.slice(offset, offset + limit);
@@ -307,7 +306,7 @@
       this.grid = qs('#productsGrid');
       this.loadMoreSection = qs('#loadMoreSection');
       this.productsSection = qs('#productsSection');
-
+      
       this.hairType = qs('#hairType');
       this.skinType = qs('#skinType');
       this.concerns = qs('#concerns');
@@ -324,9 +323,13 @@
       });
       this.loadMoreSection?.addEventListener('click', e => {
         if (e.target.closest('#loadMoreBtn')) this.loadMore();
+        if (e.target.closest('#homeBtn')) this.startNewSearch();
       });
       [this.hairType,this.skinType,this.concerns,this.budget].forEach(s => {
         s?.addEventListener('change', () => this.currentQuery && this.search(this.currentQuery, true));
+      });
+      qsa('.example-btn').forEach(btn => {
+          btn.addEventListener('click', () => this.quickAsk(btn.dataset.query));
       });
     }
 
@@ -378,7 +381,7 @@
 
       } catch (err) {
         console.error('Unified API request failed:', err);
-        this.renderChat('I'm sorry, I could not connect to the service. Please try again.');
+        this.renderChat("I'm sorry, I could not connect to the service. Please try again.");
         this.empty();
       }
 
@@ -499,24 +502,42 @@
           <button class="load-more-btn" id="loadMoreBtn">
             Show More Products (${this.currentOffset}/${this.totalProducts})
           </button>
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+          <button id="homeBtn" class="home-btn">Start New Search</button>`;
       } else if (this.totalProducts > 0) {
         box.style.display = 'block';
-        box.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+        box.innerHTML = `<button id="homeBtn" class="home-btn">Start New Search</button>`;
       } else {
         box.style.display = 'none';
       }
     }
 
     loadMore() { this.search(this.currentQuery, false); }
-  }
+    
+    startNewSearch() {
+        this.currentQuery = '';
+        this.currentOffset = 0;
+        this.grid.innerHTML = '';
+        this.loadMoreSection.style.display = 'none';
+        this.status.textContent = '';
+        this.chatResponse.innerHTML = `
+            <div style="text-align:center;color:#666;">
+                <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+                <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+                <p style="font-size:13px;"><strong>Try:</strong></p>
+                <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+                    <li>"shampoo"</li>
+                    <li>"serum"</li>
+                    <li>"bond repair"</li>
+                    <li>"accessories"</li>
+                </ul>
+            </div>`;
+    }
 
-  window.quickAsk = (text) => {
-    const app = window.salonAI;
-    if (!app) return;
-    app.chatInput.value = text;
-    app.handleAsk();
-  };
+    quickAsk(text) {
+        this.chatInput.value = text;
+        this.handleAsk();
+    }
+  }
 
   window.addEventListener('DOMContentLoaded', () => {
     window.salonAI = new UnifiedSalonAI();
