@@ -3,13 +3,26 @@
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet'; // Import helmet for security headers
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import fs from 'fs'; // Use synchronous file system module
+import fs from 'fs';
 
 // 2. Initialize Express app and middleware
 const app = express();
+
+// Use helmet middleware to set security headers, including a basic CSP
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"], // Allow resources from the same origin
+      imgSrc: ["'self'", "data:", "https://images.unsplash.com"], // Allow images from self, data URIs, and Unsplash
+      styleSrc: ["'self'", "'unsafe-inline'"], // Allow inline styles for simplicity (not best practice, but fixes your current issue)
+      scriptSrc: ["'self'"], // Allow scripts from the same origin
+    },
+  },
+}));
 app.use(express.json());
 app.use(cors());
 
@@ -104,7 +117,12 @@ app.post('/api/unified-service', async (req, res) => {
   }
 });
 
-// 7. Start the server
+// 7. Serve the index.html file
+app.get('/', (req, res) => {
+  res.sendFile('/opt/render/project/src/index.html');
+});
+
+// 8. Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
