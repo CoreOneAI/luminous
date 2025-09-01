@@ -6,7 +6,7 @@ import cors from 'cors';
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import fs from 'fs/promises'; // Import the file system module
+import fs from 'fs'; // Use synchronous file system module
 
 // 2. Initialize Express app and middleware
 const app = express();
@@ -35,22 +35,28 @@ if (OPENAI_API_KEY) {
   console.error("No AI API key found. AI chat functionality will not work.");
 }
 
-// 5. Load product data and filtering logic
+// 5. Load product data synchronously on startup
 let productsData = [];
+try {
+  const data = fs.readFileSync('./products.json', 'utf8');
+  productsData = JSON.parse(data);
+  console.log('Products data loaded successfully.');
+} catch (error) {
+  console.error('Failed to load products.json:', error);
+}
 
 // Helper function to handle product data and filtering
 function getProducts(query, profile) {
-    // Implement the filtering logic using the loaded productsData
-    const queryLower = query.toLowerCase();
-    
-    // Simple filter to find products that match the query in their name or category
-    const filteredProducts = productsData.filter(p => {
-        const nameMatches = p.name.toLowerCase().includes(queryLower);
-        const categoryMatches = p.category.toLowerCase().includes(queryLower);
-        return nameMatches || categoryMatches;
-    });
+  const queryLower = query.toLowerCase();
+  
+  // A simple filter to find products that match the query in their name or category
+  const filteredProducts = productsData.filter(p => {
+    const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+    const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+    return nameMatches || categoryMatches;
+  });
 
-    return filteredProducts;
+  return filteredProducts;
 }
 
 // 6. The Unified API Endpoint
@@ -62,12 +68,6 @@ app.post('/api/unified-service', async (req, res) => {
   }
 
   try {
-    // Load product data asynchronously before handling the request
-    if (productsData.length === 0) {
-      const data = await fs.readFile('./products.json', 'utf8');
-      productsData = JSON.parse(data);
-    }
-    
     // Logic to determine if the query is a product search or a general question
     const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion'];
     const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
@@ -82,8 +82,7 @@ app.post('/api/unified-service', async (req, res) => {
     } else {
       // It's a general question: call the AI model for a response
       if (aiClient) {
-        // You would add your actual AI API call logic here.
-        // For now, we'll use a placeholder response
+        // Placeholder for your actual AI API call logic
         chatResponseText = `Hello! I am an AI salon consultant. I can provide product recommendations or answer general beauty questions based on your provided information.`;
       } else {
         chatResponseText = "I'm sorry, I could not connect to the AI service.";
