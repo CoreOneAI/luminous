@@ -18,11 +18,7 @@
     .quick-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
     .example-btn{background:#f8f9fa;border:1px solid #e9ecef;border-radius:10px;padding:12px 8px;font-size:11px;text-align:center;cursor:pointer;color:#495057;font-weight:500;transition:all .2s ease}
     .example-btn:hover{border-color:#B8860B;color:#B8860B;transform:translateY(-1px)}
-    .client-profile{background:#fff;border-radius:16px;padding:18px;margin-bottom:20px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05)}
-    .profile-title{font-weight:700;font-size:15px;color:#222;margin-bottom:14px;text-align:center}
-    .profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .profile-select{padding:12px;border:1px solid #ddd;border-radius:10px;font-size:13px;background:#fff;outline:none;color:#495057}
-    .profile-select:focus{border-color:#B8860B;box-shadow:0 0 0 2px rgba(184,134,11,.1)}
+    .client-profile{display:none;}
     .chat-section{margin-bottom:24px}
     .chat-input-container{background:#fff;border-radius:16px;padding:6px;border:2px solid #e9ecef;box-shadow:0 4px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:8px}
     .chat-input-container:focus-within{border-color:#B8860B;box-shadow:0 4px 20px rgba(184,134,11,.15)}
@@ -35,6 +31,7 @@
     .ai-status.active{display:block}
     @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
     .chat-response{background:#fff;border-radius:16px;padding:18px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);font-size:14px;line-height:1.6;color:#333;margin-bottom:20px}
+    .chat-paragraph { white-space: pre-wrap; margin-bottom: 1em; }
     .products-section{margin-top:24px}
     .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
     .section-title{font-size:17px;font-weight:700;color:#222}
@@ -66,7 +63,32 @@
     .empty-state{text-align:center;padding:40px 20px;color:#666}
     .empty-state h3{font-size:16px;margin-bottom:8px;color:#333}
     .empty-state p{font-size:13px;line-height:1.5}
-    @media (max-width:380px){.container{max-width:100%}.profile-grid{grid-template-columns:1fr}.quick-examples{grid-template-columns:1fr}}
+    .footer-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+    }
+    .footer-nav a {
+      text-decoration: none;
+      color: #666;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .footer-nav svg {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 4px;
+    }
+    @media (max-width:380px){.container{max-width:100%}.quick-examples{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -88,7 +110,7 @@
         </div>
       </section>
 
-      <section class="client-profile">
+      <section class="client-profile" style="display:none;">
         <div class="profile-title">Tell Me About Yourself</div>
         <div class="profile-grid">
           <select class="profile-select" id="hairType">
@@ -152,6 +174,32 @@
         </div>
       </section>
     </main>
+    <div class="footer-nav">
+        <a href="#home">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.47 3.829a1.5 1.5 0 0 1 1.06 0l7.5 4.33a1.5 1.5 0 0 1 .75 1.296v9.141a1.5 1.5 0 0 1-.75 1.296l-7.5 4.33a1.5 1.5 0 0 1-1.06 0l-7.5-4.33a1.5 1.5 0 0 1-.75-1.296V9.455a1.5 1.5 0 0 1 .75-1.296l7.5-4.33Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Home
+        </a>
+        <a href="#profile">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0a4.5 4.5 0 0 1-9 0Zm-.75 9a.75.75 0 0 0-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5Zm12.75 0a.75.75 0 0 0-.75.75v2.25a.75.75 0 0 0 .75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5ZM4.783 14.283a.75.75 0 0 1 1.061 0l.974.975a.75.75 0 1 1-1.06 1.06l-.975-.975a.75.75 0 0 1 0-1.06ZM19.217 14.283a.75.75 0 0 1 0 1.06l-.974.975a.75.75 0 0 1-1.06-1.06l.975-.975a.75.75 0 0 1 1.06 0ZM7.87 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM15.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM9.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM13.847 14.847a.75.75 0 1 1 1.06-1.06l.975.975a.75.75 0 0 1-1.06 1.06l-.975-.975ZM18.5 17.25a.75.75 0 0 1-.75.75H6.25a.75.75 0 0 1 0-1.5h11.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            Profile
+        </a>
+        <a href="#appointments">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+            </svg>
+            Appointments
+        </a>
+        <a href="#basket">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c.427-.275.524-.46.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
+            </svg>
+            Basket
+        </a>
+    </div>
   </div>
 
 <script>
@@ -197,60 +245,13 @@
       image: p.image || '/images/placeholder.jpg',
       description: desc,
       usage: p.usage || '',
-      ingredients: p.ingredients || '',
+      instructions: p.instructions || '',
       benefits: Array.isArray(p.benefits) ? p.benefits : []
     };
   }
 
   function formatCents(cents) {
     return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
-  }
-
-  function expandQueryTokens(q) {
-    const t = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
-    if (t.includes('accessories')) {
-      t.push('brush','comb','tweezer','clip','clipper','nail','bobby','shower','cap','lipstick','eyeliner','liner');
-    }
-    return t;
-  }
-
-  function matchesStrictAll(p, tokens) {
-    if (!tokens.length) return true;
-    const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
-    return tokens.every(tok => hay.includes(tok));
-  }
-
-  function matchesAny(p, tokens) {
-    if (!tokens.length) return true;
-    const hay = `${p.name} ${p.brand} ${p.category} ${p.description}`.toLowerCase();
-    return tokens.some(tok => hay.includes(tok));
-  }
-
-  function uniqById(arr) {
-    const seen = new Set();
-    const out = [];
-    for (const x of arr) {
-      if (!x || !x.id) continue;
-      if (seen.has(x.id)) continue;
-      seen.add(x.id);
-      out.push(x);
-    }
-    return out;
-  }
-
-  async function fetchStaticCatalog() {
-    const STATIC_URLS = ['/data/products.json', '/products.json', '/public/data/products.json'];
-    for (const url of STATIC_URLS) {
-      try {
-        const raw = await fetchJSON(url);
-        const arr = Array.isArray(raw) ? raw : (Array.isArray(raw.items) ? raw.items : []);
-        console.log('[catalog] loaded', url, 'count=', arr.length);
-        return arr.map(normalizeProduct);
-      } catch (e) {
-        console.warn('[catalog] not at', url, e.message);
-      }
-    }
-    return [];
   }
 
   async function fetchUnifiedService(message, profile) {
@@ -265,9 +266,6 @@
   class UnifiedSalonAI {
     constructor() {
       this.currentQuery = '';
-      this.currentOffset = 0;
-      this.totalProducts = 0;
-      this.pageSize = 25;
       this.isLoading = false;
 
       this.chatInput = qs('#chatInput');
@@ -276,14 +274,9 @@
       this.aiStatus = qs('#aiStatus');
       this.status = qs('#status');
       this.grid = qs('#productsGrid');
-      this.loadMoreSection = qs('#loadMoreSection');
       this.productsSection = qs('#productsSection');
+      this.loadMoreSection = qs('#loadMoreSection');
       
-      this.hairType = qs('#hairType');
-      this.skinType = qs('#skinType');
-      this.concerns = qs('#concerns');
-      this.budget = qs('#budget');
-
       this.bind();
       this.welcome();
     }
@@ -292,13 +285,6 @@
       this.chatBtn?.addEventListener('click', () => this.handleAsk());
       this.chatInput?.addEventListener('keypress', e => {
         if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
-      });
-      this.loadMoreSection?.addEventListener('click', e => {
-        if (e.target.closest('#loadMoreBtn')) this.loadMore();
-        if (e.target.closest('#homeBtn')) this.startNewSearch();
-      });
-      [this.hairType,this.skinType,this.concerns,this.budget].forEach(s => {
-        s?.addEventListener('change', () => this.currentQuery && this.handleAsk(this.currentQuery));
       });
       qsa('.example-btn').forEach(btn => {
           btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
@@ -322,12 +308,7 @@
     }
 
     profile() {
-      return {
-        hairType: this.hairType?.value || '',
-        skinType: this.skinType?.value || '',
-        concerns: this.concerns?.value || '',
-        budget: this.budget?.value || ''
-      };
+      return {}; // Profile section is removed, so we return an empty object
     }
 
     async handleAsk(message = this.chatInput?.value) {
@@ -359,16 +340,28 @@
     
     renderChat(text) {
       if (!this.chatResponse) return;
-      this.chatResponse.innerHTML = `
-        <div style="border-left:4px solid #B8860B;padding-left:16px;">
-          <h4 style="color:#B8860B;margin-bottom:8px;font-size:14px;">AI Consultation</h4>
-          <p style="line-height:1.6;">${text || 'Let me help you find the perfect products for your needs.'}</p>
-        </div>`;
+      
+      const chatContainer = qs('#chatResponse');
+      chatContainer.innerHTML = '';
+      
+      const paragraphs = text.split('\n\n');
+      let i = 0;
+      
+      const typeWriter = () => {
+          if (i < paragraphs.length) {
+              const p = document.createElement('p');
+              p.className = 'chat-paragraph';
+              p.textContent = paragraphs[i];
+              chatContainer.appendChild(p);
+              i++;
+              setTimeout(typeWriter, 50); // Adjust speed here
+          }
+      };
+
+      typeWriter();
     }
-    
+
     renderProducts(products) {
-      this.currentOffset = products.length;
-      this.totalProducts = products.length;
       this.grid.innerHTML = '';
       
       products.forEach(p => this.grid.appendChild(this.card(normalizeProduct(p))));
@@ -376,12 +369,12 @@
       if (this.status) {
         this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
       }
-      this.updateMore(false);
+      this.loadMoreSection.style.display = 'none';
     }
     
-    card(p, ai=false) {
+    card(p) {
       const div = document.createElement('div');
-      div.className = `product-card${ai ? ' ai-generated' : ''}`;
+      div.className = `product-card`;
       const price = formatCents(p.priceCents);
       const benefits = p.benefits?.length ? `<div class="product-benefits">${p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>` : '';
       div.innerHTML = `
@@ -399,13 +392,11 @@
               <div class="product-price">${price}</div>
               <div class="product-actions">
                 <button class="details-btn">Details</button>
-                <button class="add-btn" data-id="${p.id}">Add to Cart</button>
               </div>
             </div>
           </div>
         </div>`;
       div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
-      div.querySelector('.add-btn')?.addEventListener('click', () => alert(`Added "${p.name}" to cart (${formatCents(p.priceCents)})`));
       return div;
     }
 
@@ -425,35 +416,6 @@
           <h3>No products found</h3>
           <p>Try a different search or be more specific about your needs.</p>
         </div>`;
-    }
-
-    updateMore(hasMore) {
-      const box = this.loadMoreSection;
-      if (!box) return;
-      if (hasMore) {
-        box.style.display = 'block';
-        box.innerHTML = `
-          <button class="load-more-btn" id="loadMoreBtn">
-            Show More Products (${this.currentOffset}/${this.totalProducts})
-          </button>
-          <button id="homeBtn" class="home-btn">Start New Search</button>`;
-      } else if (this.totalProducts > 0) {
-        box.style.display = 'block';
-        box.innerHTML = `<button id="homeBtn" class="home-btn">Start New Search</button>`;
-      } else {
-        box.style.display = 'none';
-      }
-    }
-
-    loadMore() { /* This functionality is now handled by the unified API, so this is no longer needed */ }
-    
-    startNewSearch() {
-        this.currentQuery = '';
-        this.currentOffset = 0;
-        this.grid.innerHTML = '';
-        this.loadMoreSection.style.display = 'none';
-        this.status.textContent = '';
-        this.welcome();
     }
   }
 
