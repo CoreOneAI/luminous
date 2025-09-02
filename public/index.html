@@ -215,11 +215,11 @@
     return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
   }
 
-  async function fetchUnifiedService(message, profile) {
+  async function fetchUnifiedService(message) {
     const response = await fetch('/api/unified-service', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message, profile: profile })
+        body: JSON.stringify({ message: message })
     });
     return await response.json();
   }
@@ -236,7 +236,6 @@
       this.status = qs('#status');
       this.grid = qs('#productsGrid');
       this.productsSection = qs('#productsSection');
-      this.loadMoreSection = qs('#loadMoreSection');
       this.welcomeSection = qs('.welcome-section');
       
       this.homeNavBtn = qs('#homeNavBtn');
@@ -281,10 +280,6 @@
             </div>`;
     }
 
-    profile() {
-      return {};
-    }
-
     async handleAsk(message = this.chatInput?.value) {
       if (!message || this.isLoading) return;
 
@@ -294,12 +289,12 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        const data = await fetchUnifiedService(message, this.profile());
+        const data = await fetchUnifiedService(message);
         
         this.renderChat(data.chatResponse);
 
         if (data.products && data.products.length > 0) {
-            this.renderProducts(data.products);
+            this.renderProducts(data.products, message);
         } else {
             this.empty();
         }
@@ -339,16 +334,15 @@
       typeWriter();
     }
 
-    renderProducts(products) {
+    renderProducts(products, query) {
       this.productsSection.style.display = 'block';
       this.grid.innerHTML = '';
       
       products.forEach(p => this.grid.appendChild(this.card(normalizeProduct(p))));
       
       if (this.status) {
-        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
+        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${query}"`;
       }
-      this.loadMoreSection.style.display = 'none';
     }
     
     card(p) {
