@@ -474,6 +474,8 @@
     { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700 },
     { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500 },
     { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500 },
+    { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900 },
+    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000 },
     { "name": "Disposable Tanning Mitt", "brand": "St. Tropez", "category": "Accessories", "instructions": "Use with self-tanning products to ensure a streak-free application.", "priceCents": 1000 },
     { "name": "Makeup Remover Wipes", "brand": "Neutrogena", "category": "Accessories", "instructions": "Use to quickly and gently remove makeup.", "priceCents": 800 },
     { "name": "Foundation Brush", "brand": "Real Techniques", "category": "Accessories", "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.", "priceCents": 1200 },
@@ -481,24 +483,27 @@
     { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500 }
   ];
 
-  function getProducts(query) {
-    const queryLower = query.toLowerCase();
-    
-    const relevantProducts = productsData.filter(p => {
-      const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
-      const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
-      const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
-      const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
-      return nameMatches || brandMatches || categoryMatches || instructionsMatches;
-    });
+  function normalizeProduct(p) {
+    let cents = p.priceCents;
+    const desc = p.description && String(p.description).trim()
+      ? String(p.description).trim()
+      : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
 
-    return relevantProducts.slice(0, 25);
+    return {
+      id: p.id || '',
+      name: p.name || 'Product',
+      brand: p.brand || '—',
+      category: p.category || '—',
+      priceCents: cents,
+      image: p.image || '/images/placeholder.jpg',
+      description: desc,
+      instructions: p.instructions || '',
+      benefits: Array.isArray(p.benefits) ? p.benefits : []
+    };
   }
 
-  async function getAIResponse(prompt) {
-    // This function will handle the AI response based on the message.
-    // For now, we will return a hardcoded response to fix the UI first.
-    return "Thank you for your question. Here are some product recommendations.";
+  function formatCents(cents) {
+    return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
   }
 
   class UnifiedSalonAI {
@@ -574,21 +579,19 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        // We'll get a hardcoded response for now to focus on the UI
-        const chatResponse = "Thank you for your question. Here are some product recommendations.";
-        const products = getProducts(message);
+        const data = await fetchUnifiedService(message);
         
-        this.renderChat(chatResponse);
+        this.renderChat(data.chatResponse);
         
-        if (products.length > 0) {
-            this.renderProducts(products);
+        if (data.products && data.products.length > 0) {
+            this.renderProducts(data.products);
         } else {
             this.empty();
         }
 
       } catch (err) {
-        console.error('Front-end logic failed:', err);
-        this.renderChat("An error occurred while processing your request. Please try again.");
+        console.error('Unified API request failed:', err);
+        this.renderChat("I'm sorry, I could not connect to the service. Please try again.");
         this.empty();
       }
 
@@ -604,10 +607,20 @@
       const chatContainer = qs('#chatResponse');
       chatContainer.innerHTML = '';
       
-      const p = document.createElement('p');
-      p.className = 'chat-paragraph';
-      p.textContent = text;
-      chatContainer.appendChild(p);
+      const paragraphs = text.split('\n\n');
+      let i = 0;
+      
+      const typeWriter = () => {
+          if (i < paragraphs.length) {
+              const p = document.createElement('p');
+              p.className = 'chat-paragraph';
+              p.textContent = paragraphs[i];
+              chatContainer.appendChild(p);
+              i++;
+              setTimeout(typeWriter, 50);
+          }
+      };
+      typeWriter();
     }
 
     renderProducts(products) {
@@ -618,6 +631,10 @@
           products.forEach(p => this.grid.appendChild(this.card(p)));
       } else {
           this.empty();
+      }
+      
+      if (this.status) {
+        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
       }
     }
     
