@@ -344,7 +344,6 @@
         height: 20px;
         margin-bottom: 4px;
     }
-    @media (max-width:380px){.container{max-width:100%}.quick-examples{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -495,53 +494,27 @@
     { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000 }
   ];
 
-  function getProducts(query) {
-    const queryLower = query.toLowerCase();
-    
-    const relevantProducts = productsData.filter(p => {
-      const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
-      const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
-      const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
-      const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
-      return nameMatches || brandMatches || categoryMatches || instructionsMatches;
-    });
+  function normalizeProduct(p) {
+    let cents = p.priceCents;
+    const desc = p.description && String(p.description).trim()
+      ? String(p.description).trim()
+      : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
 
-    return relevantProducts.slice(0, 25);
+    return {
+      id: p.id || '',
+      name: p.name || 'Product',
+      brand: p.brand || '—',
+      category: p.category || '—',
+      priceCents: cents,
+      image: p.image || '/images/placeholder.jpg',
+      description: desc,
+      instructions: p.instructions || '',
+      benefits: Array.isArray(p.benefits) ? p.benefits : []
+    };
   }
 
-  async function getAIResponse(prompt) {
-    if (!aiClient) {
-      return "I'm sorry, the AI service is not available.";
-    }
-
-    const userPrompt = `You are an expert salon consultant. The user asked: "${prompt}". Please provide a brief and helpful answer, limited to 100 words.`;
-
-    try {
-      let response;
-      switch (aiModel) {
-        case 'openai':
-          response = await aiClient.chat.completions.create({
-            model: "gpt-3.5-turbo",
-            messages: [{ role: "user", content: userPrompt }],
-          });
-          return response.choices[0].message.content;
-        case 'anthropic':
-          response = await aiClient.messages.create({
-            model: "claude-3-opus-20240229",
-            max_tokens: 150,
-            messages: [{ role: "user", content: userPrompt }],
-          });
-          return response.content[0].text;
-        case 'gemini':
-          const result = await aiClient.generateContent(userPrompt);
-          return result.response.text();
-        default:
-          return "I'm sorry, the AI model is not configured.";
-      }
-    } catch (error) {
-      console.error(`AI API call failed with model ${aiModel}:`, error);
-      return "I'm sorry, I could not process your request with the AI. Please try again later.";
-    }
+  function formatCents(cents) {
+    return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
   }
 
   class UnifiedSalonAI {
@@ -617,19 +590,31 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        const data = await fetchUnifiedService(message);
+        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging'];
+        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+        let chatResponse = '';
+        let products = [];
         
-        this.renderChat(data.chatResponse);
-        
-        if (data.products && data.products.length > 0) {
-            this.renderProducts(data.products);
+        if (isProductSearch) {
+          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
+          
+          if (matchingProducts.length > 0) {
+            products = matchingProducts.slice(0, 25);
+            chatResponse = `Here are some products that match your search.`;
+          } else {
+            chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
+          }
         } else {
-            this.empty();
+          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
         }
+        
+        this.renderChat(chatResponse);
+        this.renderProducts(products);
 
       } catch (err) {
-        console.error('Unified API request failed:', err);
-        this.renderChat("I'm sorry, I could not connect to the service. Please try again.");
+        console.error('Front-end logic failed:', err);
+        this.renderChat("An error occurred while processing your request. Please try again.");
         this.empty();
       }
 
@@ -645,27 +630,21 @@
       const chatContainer = qs('#chatResponse');
       chatContainer.innerHTML = '';
       
-      const paragraphs = text.split('\n\n');
-      let i = 0;
-      
-      const typeWriter = () => {
-          if (i < paragraphs.length) {
-              const p = document.createElement('p');
-              p.className = 'chat-paragraph';
-              p.textContent = paragraphs[i];
-              chatContainer.appendChild(p);
-              i++;
-              setTimeout(typeWriter, 50);
-          }
-      };
-      typeWriter();
+      const p = document.createElement('p');
+      p.className = 'chat-paragraph';
+      p.textContent = text;
+      chatContainer.appendChild(p);
     }
 
     renderProducts(products) {
       this.productsSection.style.display = 'block';
       this.grid.innerHTML = '';
       
-      products.forEach(p => this.grid.appendChild(this.card(p)));
+      if (products.length > 0) {
+          products.forEach(p => this.grid.appendChild(this.card(p)));
+      } else {
+          this.empty();
+      }
       
       if (this.status) {
         this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
@@ -716,7 +695,7 @@
           <h3>No products found</h3>
           <p>Try a different search or be more specific about your needs.</p>
         </div>`;
-      this.productsSection.style.display = 'block'; // Make sure the section is visible to show the empty state
+      this.productsSection.style.display = 'block';
     }
     
     startNewSearch() {
