@@ -483,27 +483,24 @@
     { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500 }
   ];
 
-  function normalizeProduct(p) {
-    let cents = p.priceCents;
-    const desc = p.description && String(p.description).trim()
-      ? String(p.description).trim()
-      : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
+  function getProducts(query) {
+    const queryLower = query.toLowerCase();
+    
+    const relevantProducts = productsData.filter(p => {
+      const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+      const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
+      const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+      const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
+      return nameMatches || brandMatches || categoryMatches || instructionsMatches;
+    });
 
-    return {
-      id: p.id || '',
-      name: p.name || 'Product',
-      brand: p.brand || '—',
-      category: p.category || '—',
-      priceCents: cents,
-      image: p.image || '/images/placeholder.jpg',
-      description: desc,
-      instructions: p.instructions || '',
-      benefits: Array.isArray(p.benefits) ? p.benefits : []
-    };
+    return relevantProducts.slice(0, 25);
   }
 
-  function formatCents(cents) {
-    return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
+  async function getAIResponse(prompt) {
+    // This function will handle the AI response based on the message.
+    // For now, we will return a hardcoded response to fix the UI first.
+    return "Thank you for your question. Here are some product recommendations.";
   }
 
   class UnifiedSalonAI {
@@ -579,19 +576,32 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        const data = await fetchUnifiedService(message);
+        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging', 'accessories'];
+        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+        let chatResponse = '';
+        let products = [];
         
-        this.renderChat(data.chatResponse);
-        
-        if (data.products && data.products.length > 0) {
-            this.renderProducts(data.products);
+        if (isProductSearch) {
+          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
+          
+          if (matchingProducts.length > 0) {
+            products = matchingProducts.slice(0, 25);
+            chatResponse = `Here are some products that match your search.`;
+          } else {
+            chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
+          }
         } else {
-            this.empty();
+          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
+          products = [];
         }
+        
+        this.renderChat(chatResponse);
+        this.renderProducts(products);
 
       } catch (err) {
-        console.error('Unified API request failed:', err);
-        this.renderChat("I'm sorry, I could not connect to the service. Please try again.");
+        console.error('Front-end logic failed:', err);
+        this.renderChat("An error occurred while processing your request. Please try again.");
         this.empty();
       }
 
@@ -607,20 +617,10 @@
       const chatContainer = qs('#chatResponse');
       chatContainer.innerHTML = '';
       
-      const paragraphs = text.split('\n\n');
-      let i = 0;
-      
-      const typeWriter = () => {
-          if (i < paragraphs.length) {
-              const p = document.createElement('p');
-              p.className = 'chat-paragraph';
-              p.textContent = paragraphs[i];
-              chatContainer.appendChild(p);
-              i++;
-              setTimeout(typeWriter, 50);
-          }
-      };
-      typeWriter();
+      const p = document.createElement('p');
+      p.className = 'chat-paragraph';
+      p.textContent = text;
+      chatContainer.appendChild(p);
     }
 
     renderProducts(products) {
@@ -631,10 +631,6 @@
           products.forEach(p => this.grid.appendChild(this.card(p)));
       } else {
           this.empty();
-      }
-      
-      if (this.status) {
-        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
       }
     }
     
