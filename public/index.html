@@ -428,15 +428,6 @@
   const qs = (sel) => document.querySelector(sel);
   const qsa = (sel) => document.querySelectorAll(sel);
 
-  async function fetchUnifiedService(message) {
-    const response = await fetch('/api/unified-service', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-    });
-    return await response.json();
-  }
-
   const productsData = [
     { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199 },
     { "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon", "brand": "Arctic Fox", "category": "Bright Color", "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.", "priceCents": 2299 },
@@ -491,231 +482,143 @@
     { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500 },
     { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500 },
     { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900 },
-    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000 }
-  ];
-
-  function normalizeProduct(p) {
-    let cents = p.priceCents;
-    const desc = p.description && String(p.description).trim()
-      ? String(p.description).trim()
-      : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
-
-    return {
-      id: p.id || '',
-      name: p.name || 'Product',
-      brand: p.brand || '—',
-      category: p.category || '—',
-      priceCents: cents,
-      image: p.image || '/images/placeholder.jpg',
-      description: desc,
-      instructions: p.instructions || '',
-      benefits: Array.isArray(p.benefits) ? p.benefits : []
-    };
+    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000
+  },
+  // Adding products for the "accessories" and other missing categories
+  {
+    "name": "Disposable Tanning Mitt",
+    "brand": "St. Tropez",
+    "category": "Accessories",
+    "instructions": "Use with self-tanning products to ensure a streak-free application.",
+    "priceCents": 1000
+  },
+  {
+    "name": "Makeup Remover Wipes",
+    "brand": "Neutrogena",
+    "category": "Accessories",
+    "instructions": "Use to quickly and gently remove makeup.",
+    "priceCents": 800
+  },
+  {
+    "name": "Foundation Brush",
+    "brand": "Real Techniques",
+    "category": "Accessories",
+    "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.",
+    "priceCents": 1200
+  },
+  {
+    "name": "Blending Sponge",
+    "brand": "Beautyblender",
+    "category": "Accessories",
+    "instructions": "Use damp to apply and blend foundation, concealer, and other face products.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Heated Eyelash Curler",
+    "brand": "Panasonic",
+    "category": "Accessories",
+    "instructions": "Gently curl eyelashes for a long-lasting lift.",
+    "priceCents": 2500
   }
+];
 
-  function formatCents(cents) {
-    return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
-  }
-
-  class UnifiedSalonAI {
-    constructor() {
-      this.currentQuery = '';
-      this.isLoading = false;
-      this.chatInput = qs('#chatInput');
-      this.chatBtn = qs('#chatBtn');
-      this.chatResponse = qs('#chatResponse');
-      this.aiStatus = qs('#aiStatus');
-      this.status = qs('#status');
-      this.grid = qs('#productsGrid');
-      this.productsSection = qs('#productsSection');
-      this.welcomeSection = qs('.welcome-section');
-      this.homeNavBtn = qs('#homeNavBtn');
-      this.profileNavBtn = qs('#profileNavBtn');
-      this.appointmentsNavBtn = qs('#appointmentsNavBtn');
-      this.basketNavBtn = qs('#basketNavBtn');
-      this.exampleBtns = qsa('.example-btn');
-      this.bind();
-      this.welcome();
-    }
-
-    bind() {
-      this.chatBtn?.addEventListener('click', () => this.handleAsk());
-      this.chatInput?.addEventListener('keypress', e => {
-        if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
-      });
-      this.homeNavBtn?.addEventListener('click', () => this.startNewSearch());
-      this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
-      this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
-      this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
-
-      this.exampleBtns.forEach(btn => {
-          btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
-      });
-      
-      this.grid.addEventListener('click', e => {
-          const detailsBtn = e.target.closest('.details-btn');
-          if (detailsBtn) {
-              const card = e.target.closest('.product-card');
-              const productName = card.querySelector('.product-name').textContent;
-              const product = productsData.find(p => p.name === productName);
-              this.details(product);
-          }
-      });
-    }
-
-    welcome() {
-      this.productsSection.style.display = 'none';
-      this.welcomeSection.style.display = 'block';
-      this.chatResponse.innerHTML = `
-        <div style="text-align:center;color:#666;">
-          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-          <p style="font-size:13px;"><strong>Try:</strong></p>
-          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-            <li>"shampoo"</li>
-            <li>"serum"</li>
-            <li>"bond repair"</li>
-            <li>"accessories"</li>
-          </ul>
-        </div>`;
-    }
-
-    async handleAsk(message = this.chatInput?.value) {
-      if (!message || this.isLoading) return;
-      this.currentQuery = message;
-
-      this.isLoading = true;
-      if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
-      this.aiStatus?.classList.add('active');
-      this.welcomeSection.style.display = 'none';
-
-      try {
-        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging'];
-        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
-
-        let chatResponse = '';
-        let products = [];
-        
-        if (isProductSearch) {
-          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
-          
-          if (matchingProducts.length > 0) {
-            products = matchingProducts.slice(0, 25);
-            chatResponse = `Here are some products that match your search.`;
-          } else {
-            chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
-          }
-        } else {
-          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
-        }
-        
-        this.renderChat(chatResponse);
-        this.renderProducts(products);
-
-      } catch (err) {
-        console.error('Front-end logic failed:', err);
-        this.renderChat("An error occurred while processing your request. Please try again.");
-        this.empty();
-      }
-
-      if (this.chatInput) this.chatInput.value = '';
-      this.isLoading = false;
-      if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
-      this.aiStatus?.classList.remove('active');
-    }
-    
-    renderChat(text) {
-      if (!this.chatResponse) return;
-      
-      const chatContainer = qs('#chatResponse');
-      chatContainer.innerHTML = '';
-      
-      const p = document.createElement('p');
-      p.className = 'chat-paragraph';
-      p.textContent = text;
-      chatContainer.appendChild(p);
-    }
-
-    renderProducts(products) {
-      this.productsSection.style.display = 'block';
-      this.grid.innerHTML = '';
-      
-      if (products.length > 0) {
-          products.forEach(p => this.grid.appendChild(this.card(p)));
-      } else {
-          this.empty();
-      }
-      
-      if (this.status) {
-        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
-      }
-    }
-    
-    card(p) {
-      const div = document.createElement('div');
-      div.className = `product-card`;
-      const price = formatCents(p.priceCents);
-      const benefits = p.benefits?.length ? `<div class="product-benefits">${p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>` : '';
-      div.innerHTML = `
-        <div class="product-content">
-          <img class="product-image" loading="lazy" referrerpolicy="no-referrer"
-               src="${(p.image||'').replace(/"/g,'&quot;')}"
-               alt="${(p.name||'Product').replace(/"/g,'&quot;')}"
-               onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-meta">${p.brand} • ${p.category}</div>
-            ${p.description ? `<div class="product-description">${p.description}</div>` : ''}
-            ${benefits}
-            <div class="product-footer">
-              <div class="product-price">${price}</div>
-              <div class="product-actions">
-                <button class="details-btn">Details</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-      div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
-      return div;
-    }
-
-    details(p) {
-      const lines = [];
-      if (p.usage) lines.push(`Usage: ${p.usage}`);
-      if (p.instructions) lines.push(`Instructions: ${p.instructions}`);
-      if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
-      if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
-      alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
-    }
-
-    empty() {
-      if (!this.grid) return;
-      this.grid.innerHTML = `
-        <div class="empty-state">
-          <h3>No products found</h3>
-          <p>Try a different search or be more specific about your needs.</p>
-        </div>`;
-      this.productsSection.style.display = 'block';
-    }
-    
-    startNewSearch() {
-        window.scrollTo(0, 0);
-        this.currentQuery = '';
-        this.grid.innerHTML = '';
-        this.productsSection.style.display = 'none';
-        this.status.textContent = '';
-        this.welcome();
-    }
-    
-    showComingSoon(feature) {
-        alert(`${feature} functionality is coming soon!`);
-    }
-  }
-
-  window.addEventListener('DOMContentLoaded', () => {
-    window.salonAI = new UnifiedSalonAI();
+// Helper function for a more sophisticated product search
+function getProducts(query) {
+  const queryLower = query.toLowerCase();
+  
+  const relevantProducts = productsData.filter(p => {
+    const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+    const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
+    const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+    const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
+    return nameMatches || brandMatches || categoryMatches || instructionsMatches;
   });
-})();
-</script>
-</body>
-</html>
+
+  return relevantProducts.slice(0, 25);
+}
+
+// Helper function to call the AI based on the active model
+async function getAIResponse(prompt) {
+  if (!aiClient) {
+    return "I'm sorry, the AI service is not available.";
+  }
+
+  const userPrompt = `You are an expert salon consultant. The user asked: "${prompt}". Please provide a brief and helpful answer, limited to 100 words.`;
+
+  try {
+    let response;
+    switch (aiModel) {
+      case 'openai':
+        response = await aiClient.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: userPrompt }],
+        });
+        return response.choices[0].message.content;
+      case 'anthropic':
+        response = await aiClient.messages.create({
+          model: "claude-3-opus-20240229",
+          max_tokens: 150,
+          messages: [{ role: "user", content: userPrompt }],
+        });
+        return response.content[0].text;
+      case 'gemini':
+        const result = await aiClient.generateContent(userPrompt);
+        return result.response.text();
+      default:
+        return "I'm sorry, the AI model is not configured.";
+    }
+  } catch (error) {
+    console.error(`AI API call failed with model ${aiModel}:`, error);
+    return "I'm sorry, I could not process your request with the AI. Please try again later.";
+  }
+}
+
+// 6. The Unified API Endpoint
+app.post('/api/unified-service', async (req, res) => {
+  const { message } = req.body;
+  
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' });
+  }
+
+  try {
+    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging', 'accessories'];
+    const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+    let chatResponseText = '';
+    let products = [];
+    
+    if (isProductSearch) {
+      products = getProducts(message);
+      const productNames = products.map(p => p.name).join(', ');
+      chatResponseText = await getAIResponse(`The user is searching for products related to "${message}". Based on this, please provide a brief and helpful summary of the products they're looking for, mentioning some of the available items like: ${productNames}.`);
+      chatResponseText += `\n\nHere are some relevant products to get you started.`;
+    } else {
+      chatResponseText = await getAIResponse(`The user asked: "${message}". Please provide a detailed and helpful answer, limited to 100 words.`);
+      products = productsData.slice(0, 25);
+    }
+    
+    res.json({
+      chatResponse: chatResponseText,
+      products: products,
+    });
+
+  } catch (error) {
+    console.error('Error processing unified request:', error);
+    res.status(500).json({
+      chatResponse: "I'm sorry, an error occurred while processing your request. Please try again later.",
+      products: [],
+    });
+  }
+});
+
+// 7. Serve the index.html file for the root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 8. Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
