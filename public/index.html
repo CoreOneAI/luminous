@@ -12,13 +12,7 @@
     .header h1{font-size:20px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
     .header .tagline{font-size:12px;opacity:.9}
     .main{padding:20px 16px}
-    .welcome-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);text-align:center}
-    .welcome-title{font-size:18px;font-weight:700;color:#222;margin-bottom:8px}
-    .welcome-text{font-size:14px;color:#666;margin-bottom:16px;line-height:1.5}
-    .quick-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-    .example-btn{background:#f8f9fa;border:1px solid #e9ecef;border-radius:10px;padding:12px 8px;font-size:11px;text-align:center;cursor:pointer;color:#495057;font-weight:500;transition:all .2s ease}
-    .example-btn:hover{border-color:#B8860B;color:#B8860B;transform:translateY(-1px)}
-    .client-profile{display:none;}
+    .welcome-section{display:none;}
     .chat-section{margin-bottom:24px}
     .chat-input-container{background:#fff;border-radius:16px;padding:6px;border:2px solid #e9ecef;box-shadow:0 4px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:8px}
     .chat-input-container:focus-within{border-color:#B8860B;box-shadow:0 4px 20px rgba(184,134,11,.15)}
@@ -99,53 +93,6 @@
     </header>
 
     <main class="main">
-      <section class="welcome-section">
-        <div class="welcome-title">Welcome to Your Personal Salon</div>
-        <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
-        <div class="quick-examples">
-          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
-          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
-          <button class="example-btn" data-query="accessories">Accessories</button>
-          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
-        </div>
-      </section>
-
-      <section class="client-profile" style="display:none;">
-        <div class="profile-title">Tell Me About Yourself</div>
-        <div class="profile-grid">
-          <select class="profile-select" id="hairType">
-            <option value="">Hair Type</option>
-            <option value="straight">Straight</option>
-            <option value="wavy">Wavy</option>
-            <option value="curly">Curly</option>
-            <option value="coily">Coily/Kinky</option>
-          </select>
-          <select class="profile-select" id="skinType">
-            <option value="">Skin Type</option>
-            <option value="oily">Oily</option>
-            <option value="dry">Dry</option>
-            <option value="combination">Combination</option>
-            <option value="sensitive">Sensitive</option>
-          </select>
-          <select class="profile-select" id="concerns">
-            <option value="">Main Concerns</option>
-            <option value="damage">Damage/Breakage</option>
-            <option value="frizz">Frizz Control</option>
-            <option value="volume">Volume</option>
-            <option value="color">Color Protection</option>
-            <option value="aging">Anti-Aging</option>
-            <option value="acne">Acne</option>
-            <option value="dryness">Dryness</option>
-          </select>
-          <select class="profile-select" id="budget">
-            <option value="">Budget Range</option>
-            <option value="budget">Budget ($10-30)</option>
-            <option value="mid">Mid-Range ($30-60)</option>
-            <option value="luxury">Luxury ($60+)</option>
-          </select>
-        </div>
-      </section>
-
       <section class="chat-section">
         <div class="chat-input-container">
           <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
@@ -155,7 +102,17 @@
         <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
 
         <div id="chatResponse" class="chat-response">
-          Hi! I'm your AI salon consultant. Tell me about your hair, skin, or beauty concerns, and I'll recommend the perfect professional products tailored specifically for you.
+          <div style="text-align:center;color:#666;">
+            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+            <p style="font-size:13px;"><strong>Try:</strong></p>
+            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+              <li>"shampoo"</li>
+              <li>"serum"</li>
+              <li>"bond repair"</li>
+              <li>"accessories"</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -164,38 +121,35 @@
           <div class="section-title">Your Recommendations</div>
           <div class="ai-badge">AI Generated</div>
         </div>
-
         <div id="status" class="status"></div>
         <div id="productsGrid" class="products-grid"></div>
-
         <div id="loadMoreSection" class="load-more" style="display:none;">
-          <button id="loadMoreBtn" class="load-more-btn">Show More Products</button>
           <button id="homeBtn" class="home-btn">Start New Search</button>
         </div>
       </section>
     </main>
     <div class="footer-nav">
-        <a href="#home">
+        <a href="#" id="homeNavBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M11.47 3.829a1.5 1.5 0 0 1 1.06 0l7.5 4.33a1.5 1.5 0 0 1 .75 1.296v9.141a1.5 1.5 0 0 1-.75 1.296l-7.5 4.33a1.5 1.5 0 0 1-1.06 0l-7.5-4.33a1.5 1.5 0 0 1-.75-1.296V9.455a1.5 1.5 0 0 1 .75-1.296l7.5-4.33Z" stroke="currentColor" stroke-width="1.5"/>
             </svg>
             Home
         </a>
-        <a href="#profile">
+        <a href="#" id="profileNavBtn">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0a4.5 4.5 0 0 1-9 0Zm-.75 9a.75.75 0 0 0-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5Zm12.75 0a.75.75 0 0 0-.75.75v2.25a.75.75 0 0 0 .75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5ZM4.783 14.283a.75.75 0 0 1 1.061 0l.974.975a.75.75 0 1 1-1.06 1.06l-.975-.975a.75.75 0 0 1 0-1.06ZM19.217 14.283a.75.75 0 0 1 0 1.06l-.974.975a.75.75 0 0 1-1.06-1.06l.975-.975a.75.75 0 0 1 1.06 0ZM7.87 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM15.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM9.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM13.847 14.847a.75.75 0 1 1 1.06-1.06l.975.975a.75.75 0 0 1-1.06 1.06l-.975-.975ZM18.5 17.25a.75.75 0 0 1-.75.75H6.25a.75.75 0 0 1 0-1.5h11.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" stroke="currentColor" stroke-width="1.5"/>
               </svg>
             Profile
         </a>
-        <a href="#appointments">
+        <a href="#" id="appointmentsNavBtn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
             </svg>
             Appointments
         </a>
-        <a href="#basket">
+        <a href="#" id="basketNavBtn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c.427-.275.524-.46.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c-.427.275-.524-.46-.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
             </svg>
             Basket
         </a>
@@ -246,6 +200,7 @@
       description: desc,
       usage: p.usage || '',
       instructions: p.instructions || '',
+      ingredients: p.ingredients || '',
       benefits: Array.isArray(p.benefits) ? p.benefits : []
     };
   }
@@ -276,7 +231,13 @@
       this.grid = qs('#productsGrid');
       this.productsSection = qs('#productsSection');
       this.loadMoreSection = qs('#loadMoreSection');
+      this.profileSection = qs('.client-profile');
       
+      this.homeNavBtn = qs('#homeNavBtn');
+      this.profileNavBtn = qs('#profileNavBtn');
+      this.appointmentsNavBtn = qs('#appointmentsNavBtn');
+      this.basketNavBtn = qs('#basketNavBtn');
+
       this.bind();
       this.welcome();
     }
@@ -286,6 +247,11 @@
       this.chatInput?.addEventListener('keypress', e => {
         if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
       });
+      this.homeNavBtn?.addEventListener('click', () => this.startNewSearch());
+      this.profileNavBtn?.addEventListener('click', () => this.showProfile());
+      this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
+      this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
+
       qsa('.example-btn').forEach(btn => {
           btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
       });
@@ -354,7 +320,7 @@
               p.textContent = paragraphs[i];
               chatContainer.appendChild(p);
               i++;
-              setTimeout(typeWriter, 50); // Adjust speed here
+              setTimeout(typeWriter, 50);
           }
       };
 
@@ -416,6 +382,23 @@
           <h3>No products found</h3>
           <p>Try a different search or be more specific about your needs.</p>
         </div>`;
+    }
+    
+    startNewSearch() {
+        window.scrollTo(0, 0);
+        this.currentQuery = '';
+        this.grid.innerHTML = '';
+        this.productsSection.style.display = 'none';
+        this.status.textContent = '';
+        this.welcome();
+    }
+    
+    showProfile() {
+        alert("My Profile functionality is coming soon!");
+    }
+    
+    showComingSoon(feature) {
+        alert(`${feature} functionality is coming soon!`);
     }
   }
 
