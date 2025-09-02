@@ -17,6 +17,7 @@ const __dirname = path.dirname(__filename);
 
 // 2. Initialize Express app and middleware
 const app = express();
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -31,7 +32,6 @@ app.use(helmet({
 app.use(express.json());
 app.use(cors());
 
-// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, 'public')));
 
 // 3. Load API keys from environment variables
@@ -68,18 +68,18 @@ try {
 
 // Helper function for a more sophisticated product search
 function getProducts(query, profile) {
-    const queryLower = query.toLowerCase();
-    
-    // A simple filter to find products that match the query in their name, brand, category, or instructions
-    const filteredProducts = productsData.filter(p => {
-        const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
-        const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
-        const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
-        const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
-        return nameMatches || brandMatches || categoryMatches || instructionsMatches;
-    });
+  const queryLower = query.toLowerCase();
+  
+  // Fuzzy search: find products that match the query in their name, brand, category, or instructions
+  const filteredProducts = productsData.filter(p => {
+    const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+    const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
+    const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+    const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
+    return nameMatches || brandMatches || categoryMatches || instructionsMatches;
+  });
 
-    return filteredProducts;
+  return filteredProducts;
 }
 
 // Helper function to call the AI based on the active model
@@ -125,7 +125,7 @@ app.post('/api/unified-service', async (req, res) => {
   }
 
   try {
-    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'oil'];
+    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye'];
     const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
 
     let chatResponseText;
@@ -134,20 +134,20 @@ app.post('/api/unified-service', async (req, res) => {
     if (isProductSearch) {
       // It's a product search: find products and get a chat summary
       products = getProducts(message, profile);
+      
       const productNames = products.map(p => p.name).join(', ');
       const prompt = `You are an expert salon consultant. The user asked for products related to "${message}". Based on the available products: ${productNames}, provide a brief and friendly introductory message.`;
       chatResponseText = await getAIResponse(prompt);
       
     } else {
-      // It's a general question: get a full AI response
+      // It's a general question: get a full AI response and a general product list
       const prompt = `You are an expert salon consultant. The user asked: "${message}". The available products are: ${JSON.stringify(productsData)}. Please provide a detailed and helpful answer, potentially mentioning some of the available products if relevant.`;
       chatResponseText = await getAIResponse(prompt);
       
       // If the response is a general question, we still want to show a broad range of products
-      products = productsData.slice(0, 50); // Show a general selection if no specific products were requested
+      products = productsData.slice(0, 25);
     }
 
-    // Return the combined response
     res.json({
       chatResponse: chatResponseText,
       products: products,
