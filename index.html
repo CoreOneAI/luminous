@@ -81,10 +81,10 @@
         <div class="welcome-title">Welcome to Your Personal Salon</div>
         <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
         <div class="quick-examples">
-          <button class="example-btn" onclick="quickAsk('repair damaged curly hair')">Repair Damage</button>
-          <button class="example-btn" onclick="quickAsk('anti-aging skincare routine')">Anti-Aging</button>
-          <button class="example-btn" onclick="quickAsk('accessories')">Accessories</button>
-          <button class="example-btn" onclick="quickAsk('acne-prone sensitive skin')">Clear Skin</button>
+          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
+          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
+          <button class="example-btn" data-query="accessories">Accessories</button>
+          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
         </div>
       </section>
 
@@ -148,7 +148,7 @@
 
         <div id="loadMoreSection" class="load-more" style="display:none;">
           <button id="loadMoreBtn" class="load-more-btn">Show More Products</button>
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>
+          <button id="homeBtn" class="home-btn">Start New Search</button>
         </div>
       </section>
     </main>
@@ -157,6 +157,7 @@
 <script>
 (() => {
   const qs = (sel) => document.querySelector(sel);
+  const qsa = (sel) => document.querySelectorAll(sel);
 
   async function fetchJSON(url) {
     const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
@@ -207,7 +208,6 @@
 
   function expandQueryTokens(q) {
     const t = (q || '').toLowerCase().split(/\s+/).filter(Boolean);
-    // A few helpful expansions so “accessories” isn’t a dead end
     if (t.includes('accessories')) {
       t.push('brush','comb','tweezer','clip','clipper','nail','bobby','shower','cap','lipstick','eyeliner','liner');
     }
@@ -253,42 +253,13 @@
     return [];
   }
 
-  async function fetchMerged({ q, offset, limit, profile }) {
-    let apiItems = [];
-    let staticItems = [];
-
-    // API (best effort)
-    try {
-      const params = new URLSearchParams({
-        q: q || '',
-        offset: offset,
-        limit: limit,
-        ...profile
-      });
-      const apiData = await fetchJSON(`/api/products?${params.toString()}`);
-      apiItems = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
-      console.log('[api] items=', apiItems.length);
-    } catch (e) {
-      console.warn('[api] failed:', e.message);
-    }
-
-    // Static
-    staticItems = await fetchStaticCatalog();
-
-    // Merge, filter
-    const base = uniqById([...apiItems, ...staticItems]);
-    const tokens = expandQueryTokens(q);
-    let filtered = base.filter(p => matchesStrictAll(p, tokens));
-
-    // Fallback: any-word match
-    if (!filtered.length) filtered = base.filter(p => matchesAny(p, tokens));
-    // Final fallback: show top items so we never render “No products found”
-    if (!filtered.length && base.length) filtered = base.slice();
-
-    const total = filtered.length;
-    const slice = filtered.slice(offset, offset + limit);
-    const aiGenerated = apiItems.length > 0;
-    return { items: slice, total, aiGenerated, query: q, hadFallback: (slice.length && slice.length < base.length && !matchesStrictAll(slice[0]||{}, tokens)) };
+  async function fetchUnifiedService(message, profile) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message, profile: profile })
+    });
+    return await response.json();
   }
 
   class UnifiedSalonAI {
@@ -307,7 +278,7 @@
       this.grid = qs('#productsGrid');
       this.loadMoreSection = qs('#loadMoreSection');
       this.productsSection = qs('#productsSection');
-
+      
       this.hairType = qs('#hairType');
       this.skinType = qs('#skinType');
       this.concerns = qs('#concerns');
@@ -324,9 +295,13 @@
       });
       this.loadMoreSection?.addEventListener('click', e => {
         if (e.target.closest('#loadMoreBtn')) this.loadMore();
+        if (e.target.closest('#homeBtn')) this.startNewSearch();
       });
       [this.hairType,this.skinType,this.concerns,this.budget].forEach(s => {
-        s?.addEventListener('change', () => this.currentQuery && this.search(this.currentQuery, true));
+        s?.addEventListener('change', () => this.currentQuery && this.handleAsk(this.currentQuery));
+      });
+      qsa('.example-btn').forEach(btn => {
+          btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
       });
     }
 
@@ -355,8 +330,7 @@
       };
     }
 
-    async handleAsk() {
-      const message = (this.chatInput?.value || '').trim();
+    async handleAsk(message = this.chatInput?.value) {
       if (!message || this.isLoading) return;
 
       this.isLoading = true;
@@ -364,23 +338,16 @@
       this.aiStatus?.classList.add('active');
       if (this.productsSection) this.productsSection.style.display = 'block';
 
-      // Send the message to the new unified API
       try {
-        const response = await fetch('/api/unified-service', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: message, profile: this.profile() })
-        });
-        const data = await response.json();
+        const data = await fetchUnifiedService(message, this.profile());
         
-        // Render both chat response and products
         this.renderChat(data.chatResponse);
         this.currentQuery = message;
-        this.search(message, true, data.products);
+        this.renderProducts(data.products);
 
       } catch (err) {
         console.error('Unified API request failed:', err);
-        this.renderChat('I'm sorry, I could not connect to the service. Please try again.');
+        this.renderChat("I'm sorry, I could not connect to the service. Please try again.");
         this.empty();
       }
 
@@ -399,50 +366,17 @@
         </div>`;
     }
     
-    async search(query, reset=false, productsFromApi = []) {
-      if (reset) { this.currentOffset = 0; this.grid && (this.grid.innerHTML=''); }
-
-      try {
-        if (this.status) this.status.textContent = 'Finding matching products...';
-
-        const apiItems = productsFromApi.map(normalizeProduct);
-        const staticItems = await fetchStaticCatalog();
-        
-        const base = uniqById([...apiItems, ...staticItems]);
-        const tokens = expandQueryTokens(query);
-        let filtered = base.filter(p => matchesStrictAll(p, tokens));
-
-        if (!filtered.length) {
-          filtered = base.filter(p => matchesAny(p, tokens));
-        }
-        if (!filtered.length && base.length) {
-          filtered = base.slice();
-        }
-
-        const total = filtered.length;
-        const slice = filtered.slice(this.currentOffset, this.currentOffset + this.pageSize);
-        const aiGenerated = apiItems.length > 0;
-        
-        if (!slice.length && reset) {
-          this.empty();
-          this.totalProducts = 0;
-          this.updateMore(false);
-          return;
-        }
-
-        slice.forEach(p => this.grid.appendChild(this.card(p, aiGenerated)));
-        this.currentOffset += slice.length;
-        this.totalProducts = total;
-
-        const type = aiGenerated ? 'AI recommendations' : 'products';
-        if (this.status) {
-          this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${query}"`;
-        }
-        this.updateMore(this.currentOffset < total);
-      } catch (err) {
-        console.error('Product search failed:', err);
-        if (this.status) this.status.innerHTML = `<div class="error">Error: ${err.message}</div>`;
+    renderProducts(products) {
+      this.currentOffset = products.length;
+      this.totalProducts = products.length;
+      this.grid.innerHTML = '';
+      
+      products.forEach(p => this.grid.appendChild(this.card(normalizeProduct(p))));
+      
+      if (this.status) {
+        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
       }
+      this.updateMore(false);
     }
     
     card(p, ai=false) {
@@ -464,7 +398,7 @@
             <div class="product-footer">
               <div class="product-price">${price}</div>
               <div class="product-actions">
-                ${p.description ? '<button class="details-btn">Details</button>' : ''}
+                <button class="details-btn">Details</button>
                 <button class="add-btn" data-id="${p.id}">Add to Cart</button>
               </div>
             </div>
@@ -478,6 +412,7 @@
     details(p) {
       const lines = [];
       if (p.usage) lines.push(`Usage: ${p.usage}`);
+      if (p.instructions) lines.push(`Instructions: ${p.instructions}`);
       if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
       if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
       alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
@@ -501,24 +436,26 @@
           <button class="load-more-btn" id="loadMoreBtn">
             Show More Products (${this.currentOffset}/${this.totalProducts})
           </button>
-          <button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+          <button id="homeBtn" class="home-btn">Start New Search</button>`;
       } else if (this.totalProducts > 0) {
         box.style.display = 'block';
-        box.innerHTML = `<button class="home-btn" onclick="location.reload()">Start New Search</button>`;
+        box.innerHTML = `<button id="homeBtn" class="home-btn">Start New Search</button>`;
       } else {
         box.style.display = 'none';
       }
     }
 
-    loadMore() { this.search(this.currentQuery, false); }
+    loadMore() { /* This functionality is now handled by the unified API, so this is no longer needed */ }
+    
+    startNewSearch() {
+        this.currentQuery = '';
+        this.currentOffset = 0;
+        this.grid.innerHTML = '';
+        this.loadMoreSection.style.display = 'none';
+        this.status.textContent = '';
+        this.welcome();
+    }
   }
-
-  window.quickAsk = (text) => {
-    const app = window.salonAI;
-    if (!app) return;
-    app.chatInput.value = text;
-    app.handleAsk();
-  };
 
   window.addEventListener('DOMContentLoaded', () => {
     window.salonAI = new UnifiedSalonAI();
