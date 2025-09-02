@@ -5,64 +5,321 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>AI Salon Consultant - Luminous</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#111;color:#333;line-height:1.4;overflow-x:hidden}
-    .container{max-width:414px;margin:0 auto;background:#f8f8f8;min-height:100vh;padding-bottom:100px}
-    .header{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;padding:24px 16px;text-align:center;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(0,0,0,.15)}
-    .header h1{font-size:20px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
-    .header .tagline{font-size:12px;opacity:.9}
-    .main{padding:20px 16px}
-    .welcome-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);text-align:center}
-    .welcome-title{font-size:18px;font-weight:700;color:#222;margin-bottom:8px}
-    .welcome-text{font-size:14px;color:#666;margin-bottom:16px;line-height:1.5}
-    .quick-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
-    .example-btn{background:#f8f9fa;border:1px solid #e9ecef;border-radius:10px;padding:12px 8px;font-size:11px;text-align:center;cursor:pointer;color:#495057;font-weight:500;transition:all .2s ease}
-    .example-btn:hover{border-color:#B8860B;color:#B8860B;transform:translateY(-1px)}
-    .client-profile{display:none;}
-    .chat-section{margin-bottom:24px}
-    .chat-input-container{background:#fff;border-radius:16px;padding:6px;border:2px solid #e9ecef;box-shadow:0 4px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:8px}
-    .chat-input-container:focus-within{border-color:#B8860B;box-shadow:0 0 0 2px rgba(184,134,11,.1)}
-    .chat-input{flex:1;padding:16px;border:none;font-size:15px;outline:none;background:transparent;color:#333}
-    .chat-input::placeholder{color:#999}
-    .chat-btn{padding:12px 16px;background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:14px;min-width:60px;transition:all .2s ease}
-    .chat-btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 4px 12px rgba(184,134,11,.3)}
-    .chat-btn:disabled{opacity:.6;cursor:not-allowed}
-    .ai-status{background:linear-gradient(135deg,#e7f3ff,#f0f8ff);color:#06c;padding:12px 16px;border-radius:12px;font-size:13px;margin:16px 0;text-align:center;border:1px solid #cce7ff;display:none;animation:pulse 2s infinite}
-    .ai-status.active{display:block}
-    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
-    .chat-response{background:#fff;border-radius:16px;padding:18px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);font-size:14px;line-height:1.6;color:#333;margin-bottom:20px}
-    .chat-paragraph { white-space: pre-wrap; margin-bottom: 1em; }
-    .products-section{margin-top:24px}
-    .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
-    .section-title{font-size:17px;font-weight:700;color:#222}
-    .ai-badge{background:#e7f3ff;color:#06c;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;border:1px solid #cce7ff}
-    .products-grid{display:grid;grid-template-columns:1fr;gap:12px;margin-bottom:20px}
-    .product-card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.08);border:1px solid #f0f0f0;transition:all .3s ease}
-    .product-card:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(0,0,0,.12)}
-    .product-card.ai-generated{border-left:4px solid #B8860B}
-    .product-content{display:grid;grid-template-columns:100px 1fr;gap:16px}
-    .product-image{width:100px;height:100px;border-radius:12px;object-fit:cover;margin:16px 0 16px 16px}
-    .product-image-placeholder{width:100px;height:100px;background:linear-gradient(135deg,#f0f0f0,#e8e8e8);display:flex;align-items:center;justify-content:center;color:#999;font-size:24px;margin:16px 0 16px 16px;border-radius:12px}
-    .product-info{padding:16px 16px 16px 0}
-    .product-name{font-weight:700;font-size:15px;color:#222;margin-bottom:4px;line-height:1.3}
-    .product-meta{font-size:12px;color:#666;margin-bottom:8px}
-    .product-description{font-size:12px;color:#555;line-height:1.4;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .product-benefits{margin-bottom:10px;display:none}
-    .product-benefits.visible{display:block}
-    .benefit-tag{display:inline-block;background:#f0f8ff;color:#06c;padding:2px 6px;border-radius:4px;font-size:10px;margin:1px;border:1px solid #cce7ff}
-    .product-footer{display:flex;justify-content:space-between;align-items:center}
-    .product-price{font-weight:700;color:#B8860B;font-size:16px}
-    .product-actions{display:flex;gap:8px}
-    .details-btn{background:#f8f9fa;color:#666;border:1px solid #ddd;border-radius:8px;padding:6px 10px;font-size:11px;font-weight:600;cursor:pointer}
-    .add-btn{background:linear-gradient(135deg,#28a745,#20c997);color:#fff;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer}
-    .load-more{text-align:center;margin:24px 0}
-    .load-more-btn{background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none;border-radius:16px;padding:14px 18px;font-weight:600;cursor:pointer;font-size:14px}
-    .home-btn{background:#f8f9fa;color:#666;border:1px solid #ddd;border-radius:16px;padding:14px 18px;font-weight:600;cursor:pointer;font-size:14px;margin-left:8px}
-    .status{text-align:center;color:#666;font-size:13px;margin-bottom:16px;padding:12px;background:#fff;border-radius:12px}
-    .error{background:#fee;color:#c33;padding:16px;border-radius:12px;margin:16px 0;font-size:13px;border:1px solid #fcc}
-    .empty-state{text-align:center;padding:40px 20px;color:#666}
-    .empty-state h3{font-size:16px;margin-bottom:8px;color:#333}
-    .empty-state p{font-size:13px;line-height:1.5}
+    :root {
+      --primary-color: #B8860B;
+      --secondary-color: #DAA520;
+      --ink: #111;
+      --muted: #666;
+      --light-gray: #f8f8f8;
+      --border-color: #eee;
+    }
+    body {
+      margin: 0;
+      background: var(--light-gray);
+      color: var(--ink);
+      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 414px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      padding: 24px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.15);
+    }
+    header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+    header .tagline {
+      font-size: 12px;
+      opacity: .9;
+    }
+    main {
+      flex: 1;
+      padding: 20px 16px;
+    }
+    .welcome-section, .chat-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+    }
+    .welcome-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .welcome-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .quick-examples {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .example-btn {
+      background: var(--light-gray);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 8px;
+      font-size: 11px;
+      text-align: center;
+      cursor: pointer;
+      color: #495057;
+      font-weight: 500;
+      transition: all .2s ease;
+    }
+    .example-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      transform: translateY(-1px);
+    }
+    .chat-input-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 6px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-input-container:focus-within {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 20px rgba(184,134,11,.15);
+    }
+    .chat-input {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+    }
+    .chat-input::placeholder {
+      color: #999;
+    }
+    .chat-btn {
+      padding: 12px 16px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      min-width: 60px;
+      transition: all .2s ease;
+    }
+    .chat-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184,134,11,.3);
+    }
+    .chat-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .ai-status {
+      background: linear-gradient(135deg, #e7f3ff, #f0f8ff);
+      color: #06c;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin: 16px 0;
+      text-align: center;
+      border: 1px solid #cce7ff;
+      display: none;
+      animation: pulse 2s infinite;
+    }
+    .ai-status.active {
+      display: block;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .7; }
+    }
+    .chat-response {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .chat-paragraph {
+      white-space: pre-wrap;
+      margin-bottom: 1em;
+      
+    }
+    .products-section {
+      margin-top: 24px;
+      padding: 0 16px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .ai-badge {
+      background: #e7f3ff;
+      color: #06c;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #cce7ff;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      border: 1px solid #f0f0f0;
+      transition: all .3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+    .product-content {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+    }
+    .product-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin: 16px 0 16px 16px;
+    }
+    .product-image-placeholder {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 24px;
+      margin: 16px 0 16px 16px;
+      border-radius: 12px;
+    }
+    .product-info {
+      padding: 16px 16px 16px 0;
+    }
+    .product-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .product-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .product-description {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-benefits {
+      margin-bottom: 10px;
+      display: none;
+    }
+    .product-benefits.visible {
+      display: block;
+    }
+    .benefit-tag {
+      display: inline-block;
+      background: #f0f8ff;
+      color: #06c;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      margin: 1px;
+      border: 1px solid #cce7ff;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .product-price {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 16px;
+    }
+    .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .details-btn {
+      background: var(--light-gray);
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
     .footer-nav {
       position: fixed;
       bottom: 0;
@@ -88,7 +345,6 @@
         height: 20px;
         margin-bottom: 4px;
     }
-    @media (max-width:380px){.container{max-width:100%}.quick-examples{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -115,9 +371,7 @@
           <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
           <button id="chatBtn" class="chat-btn">Ask AI</button>
         </div>
-
         <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
-
         <div id="chatResponse" class="chat-response">
           <div style="text-align:center;color:#666;">
             <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
@@ -140,6 +394,9 @@
         </div>
         <div id="status" class="status"></div>
         <div id="productsGrid" class="products-grid"></div>
+        <div id="loadMoreSection" class="load-more" style="display:none;">
+          <button id="homeBtn" class="home-btn">Start New Search</button>
+        </div>
       </section>
     </main>
     <div class="footer-nav">
@@ -175,29 +432,20 @@
   const qs = (sel) => document.querySelector(sel);
   const qsa = (sel) => document.querySelectorAll(sel);
 
-  async function fetchJSON(url) {
-    const res = await fetch(url, { headers: { 'Accept': 'application/json' } });
-    if (!res.ok) throw new Error(`${url} -> HTTP ${res.status}`);
-    return res.json();
-  }
-
-  function toCentsMaybe(val) {
-    if (typeof val === 'number' && Number.isFinite(val)) return Math.round(val * 100);
-    if (typeof val === 'string') {
-      const num = parseFloat(val.replace(/[$,]/g, ''));
-      if (Number.isFinite(num)) return Math.round(num * 100);
-    }
-    return NaN;
+  async function fetchUnifiedService(message) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+    });
+    return await response.json();
   }
 
   function normalizeProduct(p) {
-    let cents = NaN;
-    if (typeof p.priceCents === 'number') cents = p.priceCents;
-    else if (typeof p.priceCents === 'string') {
-      const n = parseInt(p.priceCents.replace(/\D/g, ''), 10);
-      if (Number.isFinite(n)) cents = n;
-    } else if (typeof p.price === 'number' || typeof p.price === 'string') {
-      cents = toCentsMaybe(p.price);
+    let cents = Number.isFinite(p.priceCents) ? p.priceCents : NaN;
+    if (!Number.isFinite(cents) && p.price) {
+      const num = parseFloat(String(p.price).replace(/[$,]/g, ''));
+      if (Number.isFinite(num)) cents = Math.round(num * 100);
     }
 
     const desc = p.description && String(p.description).trim()
@@ -212,7 +460,6 @@
       priceCents: Number.isFinite(cents) ? cents : NaN,
       image: p.image || '/images/placeholder.jpg',
       description: desc,
-      usage: p.usage || '',
       instructions: p.instructions || '',
       benefits: Array.isArray(p.benefits) ? p.benefits : []
     };
@@ -222,20 +469,10 @@
     return (Number.isFinite(cents) && cents > 0) ? ('$' + (cents / 100).toFixed(2)) : '$—';
   }
 
-  async function fetchUnifiedService(message) {
-    const response = await fetch('/api/unified-service', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-    });
-    return await response.json();
-  }
-
   class UnifiedSalonAI {
     constructor() {
       this.currentQuery = '';
       this.isLoading = false;
-
       this.chatInput = qs('#chatInput');
       this.chatBtn = qs('#chatBtn');
       this.chatResponse = qs('#chatResponse');
@@ -244,13 +481,11 @@
       this.grid = qs('#productsGrid');
       this.productsSection = qs('#productsSection');
       this.welcomeSection = qs('.welcome-section');
-      
       this.homeNavBtn = qs('#homeNavBtn');
       this.profileNavBtn = qs('#profileNavBtn');
       this.appointmentsNavBtn = qs('#appointmentsNavBtn');
       this.basketNavBtn = qs('#basketNavBtn');
       this.exampleBtns = qsa('.example-btn');
-
       this.bind();
       this.welcome();
     }
@@ -271,20 +506,20 @@
     }
 
     welcome() {
-      this.productsSection.style.display = 'none';
-      this.welcomeSection.style.display = 'block';
-      this.chatResponse.innerHTML = `
-        <div style="text-align:center;color:#666;">
-          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-          <p style="font-size:13px;"><strong>Try:</strong></p>
-          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-            <li>"shampoo"</li>
-            <li>"serum"</li>
-            <li>"bond repair"</li>
-            <li>"accessories"</li>
-          </ul>
-        </div>`;
+        this.productsSection.style.display = 'none';
+        this.welcomeSection.style.display = 'block';
+        this.chatResponse.innerHTML = `
+            <div style="text-align:center;color:#666;">
+            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+            <p style="font-size:13px;"><strong>Try:</strong></p>
+            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+                <li>"shampoo"</li>
+                <li>"serum"</li>
+                <li>"bond repair"</li>
+                <li>"accessories"</li>
+            </ul>
+            </div>`;
     }
 
     async handleAsk(message = this.chatInput?.value) {
@@ -299,7 +534,7 @@
         const data = await fetchUnifiedService(message);
         
         this.renderChat(data.chatResponse);
-
+        
         if (data.products && data.products.length > 0) {
             this.renderProducts(data.products, message);
         } else {
@@ -337,7 +572,6 @@
               setTimeout(typeWriter, 50);
           }
       };
-
       typeWriter();
     }
 
