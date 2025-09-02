@@ -1,4 +1,4 @@
-// server.js - Unified AI Salon API (Final Version)
+// server.js - Unified AI Salon API
 
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
@@ -39,21 +39,28 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// 4. Initialize AI clients and determine the active model
+// 4. Initialize AI clients with error handling
 let aiClient;
 let aiModel;
-if (OPENAI_API_KEY) {
-  aiClient = new OpenAI({ apiKey: OPENAI_API_KEY });
-  aiModel = 'openai';
-} else if (ANTHROPIC_API_KEY) {
-  aiClient = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
-  aiModel = 'anthropic';
-} else if (GEMINI_API_KEY) {
-  const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-  aiClient = genAI.getGenerativeModel({ model: "gemini-pro" });
-  aiModel = 'gemini';
-} else {
-  console.error("No AI API key found. AI chat functionality will not work.");
+try {
+  if (OPENAI_API_KEY) {
+    aiClient = new OpenAI({ apiKey: OPENAI_API_KEY });
+    aiModel = 'openai';
+    console.log('OpenAI client initialized.');
+  } else if (ANTHROPIC_API_KEY) {
+    aiClient = new Anthropic({ apiKey: ANTHROPIC_API_KEY });
+    aiModel = 'anthropic';
+    console.log('Anthropic client initialized.');
+  } else if (GEMINI_API_KEY) {
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    aiClient = genAI.getGenerativeModel({ model: "gemini-pro" });
+    aiModel = 'gemini';
+    console.log('Gemini client initialized.');
+  } else {
+    console.error("No AI API key found. AI chat functionality will not work.");
+  }
+} catch (e) {
+  console.error("Failed to initialize an AI client:", e.message);
 }
 
 // 5. Product Data is now EMBEDDED within the server file to prevent loading issues
@@ -387,4 +394,108 @@ const productsData = [
     "instructions": "Use as directed for beauty/wellness care",
     "priceCents": 900
   }
-]
+];
+
+// Helper function for a more sophisticated product search
+function getProducts(query, profile) {
+  const queryLower = query.toLowerCase();
+  
+  // Fuzzy search: find products that match the query in their name, brand, category, or instructions
+  const filteredProducts = productsData.filter(p => {
+    const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+    const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
+    const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+    const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
+    return nameMatches || brandMatches || categoryMatches || instructionsMatches;
+  });
+
+  return filteredProducts;
+}
+
+// Helper function to call the AI based on the active model
+async function getAIResponse(prompt) {
+  if (!aiClient) {
+    return "I'm sorry, the AI service is not available.";
+  }
+
+  try {
+    let response;
+    switch (aiModel) {
+      case 'openai':
+        response = await aiClient.chat.completions.create({
+          model: "gpt-3.5-turbo",
+          messages: [{ role: "user", content: prompt }],
+        });
+        return response.choices[0].message.content;
+      case 'anthropic':
+        response = await aiClient.messages.create({
+          model: "claude-3-opus-20240229",
+          max_tokens: 1024,
+          messages: [{ role: "user", content: prompt }],
+        });
+        return response.content[0].text;
+      case 'gemini':
+        const result = await aiClient.generateContent(prompt);
+        return result.response.text();
+      default:
+        return "I'm sorry, the AI model is not configured.";
+    }
+  } catch (error) {
+    console.error(`AI API call failed with model ${aiModel}:`, error);
+    return "I'm sorry, I could not process your request with the AI. Please try again later.";
+  }
+}
+
+// 6. The Unified API Endpoint
+app.post('/api/unified-service', async (req, res) => {
+  const { message, profile } = req.body;
+  
+  if (!message) {
+    return res.status(400).json({ error: 'Message is required.' });
+  }
+
+  try {
+    const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye'];
+    const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
+    let chatResponseText;
+    let products = [];
+
+    if (isProductSearch) {
+      products = getProducts(message, profile);
+      
+      const productNames = products.map(p => p.name).join(', ');
+      const prompt = `You are an expert salon consultant. The user asked for products related to "${message}". Based on the available products: ${productNames}, provide a brief and friendly introductory message.`;
+      chatResponseText = await getAIResponse(prompt);
+      
+    } else {
+      const prompt = `You are an expert salon consultant. The user asked: "${message}". Please provide a detailed and helpful answer.`;
+      chatResponseText = await getAIResponse(prompt);
+      
+      products = productsData.slice(0, 25);
+    }
+
+    res.json({
+      chatResponse: chatResponseText,
+      products: products,
+    });
+
+  } catch (error) {
+    console.error('Error processing unified request:', error);
+    res.status(500).json({
+      chatResponse: "I'm sorry, an error occurred while processing your request. Please try again later.",
+      products: [],
+    });
+  }
+});
+
+// 7. Serve the index.html file for the root path
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// 8. Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
