@@ -1,206 +1,3530 @@
 [
   {
-    "id": "1",
-    "name": "Manic Panic Amplified - Vampire Red",
-    "brand": "Manic Panic",
+    "name": "Hair Dye Bright Shade #1",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.",
-    "priceCents": 2199
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "2",
-    "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon",
-    "brand": "Arctic Fox",
+    "name": "Hair Dye Bright Shade #2",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.",
-    "priceCents": 2299
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "3",
-    "name": "Pravana ChromaSilk Vivids - Neon Tangerine",
-    "brand": "Pravana",
+    "name": "Hair Dye Bright Shade #3",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "For professional use only. Apply to pre-lightened hair. Process for 20-45 minutes under heat or as desired. Rinse with cool water.",
-    "priceCents": 3499
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "4",
-    "name": "Splat Rebellious Colors - Atomic Pink",
-    "brand": "Splat",
+    "name": "Hair Dye Bright Shade #4",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Kit includes bleaching system. Follow included instructions carefully. Perform a patch test 48 hours prior to application.",
-    "priceCents": 1899
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "5",
-    "name": "L'Oreal Colorista Semi-Permanent - Purple",
-    "brand": "L'Oreal",
+    "name": "Hair Dye Bright Shade #5",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Shake well. Apply to pre-lightened hair. Leave for 15-30 minutes. Rinse with cold water. Lasts 4-10 shampoos.",
-    "priceCents": 1599
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "6",
-    "name": "Good Dye Young Semi-Permanent - Ex-Girl",
-    "brand": "Good Dye Young",
+    "name": "Hair Dye Bright Shade #6",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to light blonde hair for best results. Leave on for 15-30 minutes. Rinse with cold water. Conditions while it colors.",
-    "priceCents": 2399
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "7",
-    "name": "Joico Color Intensity - Sapphire Blue",
-    "brand": "Joico",
+    "name": "Hair Dye Bright Shade #7",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional formula. Apply to pre-lightened hair. Process for 20-35 minutes. Rinse and style. Provides intense shine.",
-    "priceCents": 2799
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "8",
-    "name": "Lime Crime Unicorn Hair - Sext",
-    "brand": "Lime Crime",
+    "name": "Hair Dye Bright Shade #8",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to blonde hair for true color. Wear gloves. Process for 20-40 minutes. Rinse with cool water. Vegan.",
-    "priceCents": 2599
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "9",
-    "name": "Adore Creative Image - Paprika",
-    "brand": "Adore",
+    "name": "Hair Dye Bright Shade #9",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Alcohol-free, conditioning formula. Apply to clean, damp hair. Do not rinse out. Style as usual. For subtle tint on dark hair or vibrant color on light hair.",
-    "priceCents": 1399
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "10",
-    "name": "Pulp Riot Semi-Permanent - Fireball",
-    "brand": "Pulp Riot",
+    "name": "Hair Dye Bright Shade #10",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.",
-    "priceCents": 3799
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "11",
-    "name": "Schwarzkopf Igora Vibrance - 0-88 Royal Blue",
-    "brand": "Schwarzkopf",
+    "name": "Hair Dye Bright Shade #11",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional salon product. Can be mixed with conditioner for a pastel or used direct for high impact. Process for 20 minutes.",
-    "priceCents": 3299
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "12",
-    "name": "Directions Semi-Permanent - Alpine Green",
-    "brand": "Directions",
+    "name": "Hair Dye Bright Shade #12",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to bleached hair. Leave for 15-30 minutes. Rinse with cool water. Famous for its bold, long-lasting pigment.",
-    "priceCents": 1499
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "13",
-    "name": "Arctic Fox - Purple Rain",
-    "brand": "Arctic Fox",
+    "name": "Hair Dye Bright Shade #13",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to pre-lightened hair. Can be mixed with conditioner for a lighter shade. Leave on for 30+ minutes. 100% vegan.",
-    "priceCents": 2299
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "14",
-    "name": "Manic Panic Classic - Electric Lizard",
-    "brand": "Manic Panic",
+    "name": "Hair Dye Bright Shade #14",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to platinum blonde hair for a vibrant neon green. Wear gloves. Process for 30 minutes. Rinse with cool water.",
-    "priceCents": 1999
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "15",
-    "name": "Pravana ChromaSilk Vivids - Green",
-    "brand": "Pravana",
+    "name": "Hair Dye Bright Shade #15",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional use only. Apply to pre-lightened hair. For best results, process under a dryer for 25-30 minutes.",
-    "priceCents": 3499
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "16",
-    "name": "Splat - Blue Envy",
-    "brand": "Splat",
+    "name": "Hair Dye Bright Shade #16",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Complete kit with bleach. Ensure hair is untreated 24 hours before application. Follow all safety instructions on the box.",
-    "priceCents": 1899
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "17",
-    "name": "L'Oreal Colorista Washout - Burgundy",
-    "brand": "L'Oreal",
+    "name": "Hair Dye Bright Shade #17",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Temporary color. Apply to dry hair. Leave for 10-20 minutes. Washes out in 1-2 shampoos. Perfect for trying a new look.",
-    "priceCents": 1499
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "18",
-    "name": "Good Dye Young - Blue Ruin",
-    "brand": "Good Dye Young",
+    "name": "Hair Dye Bright Shade #18",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to light blonde hair. For a deeper blue, leave on for up to 45 minutes. Rinse with cold water. Conditions hair.",
-    "priceCents": 2399
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "19",
-    "name": "Joico Color Intensity - Rose",
-    "brand": "Joico",
+    "name": "Hair Dye Bright Shade #19",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional formula. Provides rich, long-lasting pink color with a high-shine finish. Apply to pre-lightened hair.",
-    "priceCents": 2799
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "20",
-    "name": "Lime Crime Unicorn Hair - Chocolate Cherry",
-    "brand": "Lime Crime",
+    "name": "Hair Dye Bright Shade #20",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Deep burgundy shade. Apply to light brown or lighter hair for best results. Process for 20-40 minutes. Vegan and cruelty-free.",
-    "priceCents": 2599
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
   },
   {
-    "id": "21",
-    "name": "Clairol Professional Pure White Wella Color Charm",
-    "brand": "Wella",
+    "name": "Hair Dye Bright Shade #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye Bright Shade #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Bright Color",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #1",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "For professional use. Mix with developer. Apply to regrowth first, then pull through to ends. Process for up to 45 minutes. Covers 100% gray.",
-    "priceCents": 1299
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "22",
-    "name": "L'Oreal Excellence Creme - Natural Black",
-    "brand": "L'Oreal",
+    "name": "Hair Dye - Gray Coverage #2",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "Apply to dry, unwashed hair. Use applicator bottle for precise application to roots. Process for 30 minutes. Rinse thoroughly.",
-    "priceCents": 1599
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
   },
   {
-    "id": "23",
-    "name": "Garnier Nutrisse Nourishing Color Creme - Soft Black",
+    "name": "Hair Dye - Gray Coverage #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Dye - Gray Coverage #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Gray Coverage",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Hair Rollers - Volume Curls #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Hair Rollers",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Brush or Comb #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #6",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #27",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Brush or Comb #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Brushes & Combs",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Student Kit Item #1",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #2",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #3",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #4",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #5",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #6",
+    "brand": "Specialty Beauty Product Categories",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #7",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #8",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #9",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #10",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #11",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #12",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #13",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #14",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #15",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #16",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #17",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
+    "priceCents": 5000
+  },
+  {
+    "name": "Student Kit Item #18",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #19",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #20",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #21",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #22",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #23",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #24",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #25",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #26",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #27",
+    "brand": "Specialty Beauty Product Categories",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #28",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #29",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #30",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #31",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #32",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #33",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #34",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #35",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #36",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #37",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #38",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #39",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #40",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #41",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #42",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #43",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #44",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #45",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #46",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #47",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #48",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #49",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Student Kit Item #50",
+    "brand": "Specialty Beauty Product Categories",
+    "category": "Beauty Student Supplies",
+    "instructions": "Use as directed by product instructions or under professional supervision."
+  },
+  {
+    "name": "Tanning Product #1",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #2",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #3",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #4",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #5",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #6",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #7",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #8",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #9",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #10",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #11",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #12",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #13",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #14",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #15",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #16",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #17",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #18",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #19",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #20",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #21",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #22",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #23",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #24",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #25",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #26",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #27",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #28",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #29",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #30",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #31",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #32",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #33",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #34",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #35",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #36",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #37",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #38",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #39",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #40",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #41",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #42",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #43",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #44",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #45",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #46",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #47",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #48",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #49",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Tanning Product #50",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Tanning",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #1",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #2",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #3",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #4",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #5",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #6",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #7",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #8",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #9",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #10",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #11",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #12",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #13",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #14",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #15",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #16",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #17",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #18",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #19",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #20",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #21",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #22",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #23",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #24",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #25",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #26",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #27",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #28",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #29",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #30",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #31",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #32",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #33",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #34",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #35",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #36",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #37",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #38",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #39",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #40",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #41",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #42",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #43",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #44",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #45",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #46",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #47",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #48",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #49",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "False Eyelash Set #50",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Eyelashes",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #1",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #2",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #3",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #4",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #5",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #6",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #7",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #8",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #9",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #10",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #11",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #12",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #13",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #14",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #15",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #16",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #17",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #18",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #19",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #20",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #21",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #22",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #23",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #24",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #25",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #26",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #27",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #28",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #29",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #30",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #31",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #32",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #33",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #34",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #35",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #36",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #37",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #38",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #39",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #40",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #41",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #42",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #43",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #44",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #45",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #46",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #47",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #48",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #49",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Lipstick or Gloss #50",
+    "brand": "Tanning, Eyelashes, and Lip Products",
+    "category": "Lipsticks & Glosses",
+    "instructions": "Use according to product guidelines for safe and effective results."
+  },
+  {
+    "name": "Pechoin Herbal Moisturizing Cream",
+    "brand": "Pechoin",
+    "category": "Skincare",
+    "instructions": "Apply after toner for daily hydration.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Herborist T'ai Chi Masks",
+    "brand": "Herborist",
+    "category": "Skincare",
+    "instructions": "Apply black mask first, then white, leave each for 10 mins.",
+    "priceCents": 3500
+  },
+  {
+    "name": "Inoherb Hydrating Toner",
+    "brand": "Inoherb",
+    "category": "Skincare",
+    "instructions": "Apply with hands or cotton pad post-cleansing.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Korres Greek Yoghurt Foaming Cleanser",
+    "brand": "Korres",
+    "category": "Skincare",
+    "instructions": "Massage onto damp skin, rinse off.",
+    "priceCents": 2800
+  },
+  {
+    "name": "Apivita Bee Radiant Age Defense Serum",
+    "brand": "Apivita",
+    "category": "Skincare",
+    "instructions": "Use daily before moisturizer on clean skin.",
+    "priceCents": 5500
+  },
+  {
+    "name": "Korres Wild Rose Sleeping Facial",
+    "brand": "Korres",
+    "category": "Other",
+    "instructions": "Apply nightly, leave on overnight.",
+    "priceCents": 4000
+  },
+  {
+    "name": "Apivita Wine Elixir Eye Cream",
+    "brand": "Apivita",
+    "category": "Skincare",
+    "instructions": "Tap gently around eyes morning/evening.",
+    "priceCents": 4500
+  },
+  {
+    "name": "Forest Essentials Soundarya Radiance Cream",
+    "brand": "Forest Essentials",
+    "category": "Skincare",
+    "instructions": "Apply after cleansing and toning, twice daily.",
+    "priceCents": 6000
+  },
+  {
+    "name": "Himalaya Purifying Neem Face Wash",
+    "brand": "Himalaya",
+    "category": "Bodycare",
+    "instructions": "Use twice daily on wet face, massage and rinse off.",
+    "priceCents": 800
+  },
+  {
+    "name": "Kama Ayurveda Kumkumadi Miraculous Beauty Fluid",
+    "brand": "Kama Ayurveda",
+    "category": "Other",
+    "instructions": "Apply 2-3 drops at night on cleansed skin.",
+    "priceCents": 7500
+  },
+  {
+    "name": "Biotique Bio Morning Nectar Lotion",
+    "brand": "Biotique",
+    "category": "Skincare",
+    "instructions": "Use after bathing, apply over body.",
+    "priceCents": 1200
+  },
+  {
+    "name": "100% Pure Argan Oil",
+    "brand": "100% Pure",
+    "category": "Wellness",
+    "instructions": "Apply to face, body, or hair as needed.",
+    "priceCents": 3000
+  },
+  {
+    "name": "Ghassoul Clay Mask",
+    "brand": "Moroccan",
+    "category": "Skincare",
+    "instructions": "Mix with water, apply on skin for 10-15 min, rinse thoroughly.",
+    "priceCents": 2000
+  },
+  {
+    "name": "Moroccan Black Soap",
+    "brand": "Moroccan",
+    "category": "Bodycare",
+    "instructions": "Apply in steam bath, scrub with a kessa glove, rinse.",
+    "priceCents": 1800
+  },
+  {
+    "name": "Elixir of Argan Hair Serum",
+    "brand": "Elixir of Argan",
+    "category": "Skincare",
+    "instructions": "Apply to damp hair for shine and frizz control.",
+    "priceCents": 3500
+  },
+  {
+    "name": "Foreo Luna Facial Cleansing Brush",
+    "brand": "Foreo",
+    "category": "Other",
+    "instructions": "Use with cleanser for 1 minute, rinse device and face.",
+    "priceCents": 15000
+  },
+  {
+    "name": "L:A Bruket No. 155 Face Cream",
+    "brand": "L:A Bruket",
+    "category": "Skincare",
+    "instructions": "Apply daily to clean skin morning and evening.",
+    "priceCents": 4800
+  },
+  {
+    "name": "Estelle & Thild Biocleanse Micellar Water",
+    "brand": "Estelle & Thild",
+    "category": "Other",
+    "instructions": "Apply with cotton pad, no rinse needed.",
+    "priceCents": 2500
+  },
+  {
+    "name": "Oriflame Optimals Even Out Night Cream",
+    "brand": "Oriflame",
+    "category": "Skincare",
+    "instructions": "Apply nightly on clean face.",
+    "priceCents": 3000
+  },
+  {
+    "name": "La Prairie Skin Caviar Luxe Cream",
+    "brand": "La Prairie",
+    "category": "Skincare",
+    "instructions": "Apply morning/evening after serum.",
+    "priceCents": 50000
+  },
+  {
+    "name": "Valmont Prime Renewing Pack",
+    "brand": "Valmont",
+    "category": "Other",
+    "instructions": "Apply as mask for 20 minutes or leave overnight.",
+    "priceCents": 20000
+  },
+  {
+    "name": "Mavala Nail Hardener",
+    "brand": "Mavala",
+    "category": "Nail Care",
+    "instructions": "Apply once or twice a week on clean nails.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Skincode Essentials 24h Cell Energizer Cream",
+    "brand": "Skincode",
+    "category": "Skincare",
+    "instructions": "Use morning and night on face.",
+    "priceCents": 6500
+  },
+  {
+    "name": "Snail White Whipp Soap",
+    "brand": "Snail White",
+    "category": "Nail Care",
+    "instructions": "Lather and apply to face, rinse well.",
+    "priceCents": 1000
+  },
+  {
+    "name": "Namu Life Snail White Cream",
+    "brand": "Namu Life",
+    "category": "Skincare",
+    "instructions": "Apply twice daily to face and neck.",
+    "priceCents": 3500
+  },
+  {
+    "name": "Mistine Acne Clear Toner",
+    "brand": "Mistine",
+    "category": "Skincare",
+    "instructions": "Apply with cotton pad after cleansing.",
+    "priceCents": 1200
+  },
+  {
+    "name": "Scentio Milk Plus Whitening Q10 Lotion",
+    "brand": "Scentio",
+    "category": "Skincare",
+    "instructions": "Apply daily after showering.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Dalan d'Olive Hand & Body Cream",
+    "brand": "Dalan d'Olive",
+    "category": "Skincare",
+    "instructions": "Apply generously on dry skin areas.",
+    "priceCents": 800
+  },
+  {
+    "name": "Gulsha Rose Water",
+    "brand": "Gulsha",
+    "category": "Other",
+    "instructions": "Use as toner or facial mist throughout the day.",
+    "priceCents": 2800
+  },
+  {
+    "name": "Eyüp Sabri Tuncer Cologne",
+    "brand": "Eyüp Sabri Tuncer",
+    "category": "Other",
+    "instructions": "Splash onto hands or body for freshness.",
+    "priceCents": 1500
+  },
+  {
+    "name": "Haci Sakir Olive Oil Soap",
+    "brand": "Haci Sakir",
+    "category": "Wellness",
+    "instructions": "Use daily for face and body cleansing.",
+    "priceCents": 500
+  },
+  {
+    "name": "Jurlique Rosewater Balancing Mist",
+    "brand": "Jurlique",
+    "category": "Fragrance",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Bondi Sands Self Tanning Foam",
+    "brand": "Bondi Sands",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Lucas Papaw Ointment",
+    "brand": "Lucas Papaw",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "ModelCo Highlighting Shimmer",
+    "brand": "ModelCo",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Aesop Parsley Seed Serum",
+    "brand": "Aesop",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 6000
+  },
+  {
+    "name": "Sukin Foaming Facial Cleanser",
+    "brand": "Sukin",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Endota Spa Hydration Mask",
+    "brand": "Endota Spa",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4500
+  },
+  {
+    "name": "Essano Rosehip Oil",
+    "brand": "Essano",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Bio Extratus Shampoo",
+    "brand": "Bio Extratus",
+    "category": "Haircare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Quem Disse, Berenice? Lipstick",
+    "brand": "Quem Disse, Berenice?",
+    "category": "Lip Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Risqué Nail Polish",
+    "brand": "Risqué",
+    "category": "Nail Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "Natura Ekos Castanha Body Lotion",
+    "brand": "Natura Ekos",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Granado Pink Cuticle Cream",
+    "brand": "Granado",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "O Boticário Lily Essence Perfume",
+    "brand": "O Boticário",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 5000
+  },
+  {
+    "name": "Avon Renew Vitamin C Serum",
+    "brand": "Avon Renew",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Haskell Bamboo Hair Mask",
+    "brand": "Haskell",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2200
+  },
+  {
+    "name": "L'Occitane au Brésil Mandacaru Cream",
+    "brand": "L'Occitane au Brésil",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
+  },
+  {
+    "name": "Skala Expert Hair Cream",
+    "brand": "Skala Expert",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Bioderma Sensibio H2O Micellar Water",
+    "brand": "Bioderma",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "La Roche-Posay Thermal Spring Water",
+    "brand": "La Roche-Posay",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Caudalie Beauty Elixir",
+    "brand": "Caudalie",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4800
+  },
+  {
+    "name": "Embryolisse Lait-Crème Concentré",
+    "brand": "Embryolisse",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2800
+  },
+  {
+    "name": "Vichy Mineral 89",
+    "brand": "Vichy",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
+  },
+  {
+    "name": "L'Oréal Revitalift Serum",
+    "brand": "L'Oréal",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Avène Hydrance Aqua Cream-in-Gel",
+    "brand": "Avène",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
+  },
+  {
+    "name": "Yves Rocher Pure Calmille Cream",
+    "brand": "Yves Rocher",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Nuxe Huile Prodigieuse Dry Oil",
+    "brand": "Nuxe",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4000
+  },
+  {
+    "name": "Guerlain Abeille Royale Youth Watery Oil",
+    "brand": "Guerlain",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 10000
+  },
+  {
+    "name": "Lavera Basis Sensitiv Shampoo",
+    "brand": "Lavera",
+    "category": "Haircare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Weleda Skin Food",
+    "brand": "Weleda",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Sebamed Clear Face Gel",
+    "brand": "Sebamed",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Annayake Cleansing Milk",
+    "brand": "Annayake",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Nivea Soft Cream",
+    "brand": "Nivea",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "Dr. Hauschka Rose Day Cream",
+    "brand": "Dr. Hauschka",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4500
+  },
+  {
+    "name": "Alverde Natural Cosmetics Hand Cream",
+    "brand": "Alverde",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 700
+  },
+  {
+    "name": "Eubos Sensitive Skin Lotion",
+    "brand": "Eubos",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Balea Q10 Anti-Wrinkle Cream",
+    "brand": "Balea",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "Kneipp Herbal Bath Oil",
+    "brand": "Kneipp",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Collistar Talasso-Scrub",
+    "brand": "Collistar",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4000
+  },
+  {
+    "name": "Deborah Milano Lipstick",
+    "brand": "Deborah Milano",
+    "category": "Lip Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Kiko Milano Smart Nail Lacquer",
+    "brand": "Kiko Milano",
+    "category": "Nail Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "LErbolario Iris Bath Foam",
+    "brand": "LErbolario",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Diego Dalla Palma Brow Pencil",
+    "brand": "Diego Dalla Palma",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Pupa Vamp Mascara",
+    "brand": "Pupa",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Labo Transdermic Skincare",
+    "brand": "Labo Transdermic",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 5000
+  },
+  {
+    "name": "Guam Seaweed Mud",
+    "brand": "Guam",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4500
+  },
+  {
+    "name": "Bottega Verde Face Serum with Hyaluronic Acid",
+    "brand": "Bottega Verde",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
+  },
+  {
+    "name": "Natura House Foot Cream",
+    "brand": "Natura House",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Shiseido Ultimune Power Infusing Concentrate",
+    "brand": "Shiseido",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 7500
+  },
+  {
+    "name": "Majolica Majorca Lash Expander Mascara",
+    "brand": "Majolica Majorca",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Senka Perfect Whip Foam",
+    "brand": "Senka",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "SK-II Facial Treatment Essence",
+    "brand": "SK-II",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 12000
+  },
+  {
+    "name": "Hada Labo Gokujyun Lotion",
+    "brand": "Hada Labo",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Canmake Cream Cheek",
+    "brand": "Canmake",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 900
+  },
+  {
+    "name": "Saborino Morning Face Mask",
+    "brand": "Saborino",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Biore UV Aqua Rich Watery Essence",
+    "brand": "Biore",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1300
+  },
+  {
+    "name": "DHC Deep Cleansing Oil",
+    "brand": "DHC",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Kose Softymo Cleansing Oil",
+    "brand": "Kose Softymo",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Clicks Exfoliating Facial Scrub",
+    "brand": "Clicks",
+    "category": "Bodycare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Oh So Heavenly Foot Scrub",
+    "brand": "Oh So Heavenly",
+    "category": "Footcare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "Himalaya Herbals Neem Face Pack (local favorite)",
+    "brand": "Himalaya Herbals",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 900
+  },
+  {
+    "name": "Sorbet Hydrating Face Mask",
+    "brand": "Sorbet",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "African Extracts Rooibos Toner",
+    "brand": "African Extracts",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Annique Rooibos Day Cream",
+    "brand": "Annique",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2200
+  },
+  {
+    "name": "Dis-Chem Vitamin C Serum",
+    "brand": "Dis-Chem",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Lip Ice Lip Balm",
+    "brand": "Lip Ice",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 500
+  },
+  {
+    "name": "Bio-Oil Skincare Oil",
+    "brand": "Bio-Oil",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Justine Tissue Oil",
+    "brand": "Justine",
+    "category": "Wellness",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Etude House Tint",
+    "brand": "Etude House",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Holika Holika Aloe Soothing Gel",
+    "brand": "Holika Holika",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Cosrx Acne Pimple Master Patch",
+    "brand": "Cosrx",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "Laneige Water Sleeping Mask",
+    "brand": "Laneige",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2800
+  },
+  {
+    "name": "Innisfree Green Tea Seed Serum",
+    "brand": "Innisfree",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2200
+  },
+  {
+    "name": "Sulwhasoo First Care Activating Serum",
+    "brand": "Sulwhasoo",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 6500
+  },
+  {
+    "name": "Dr. Jart+ Cicapair Cream",
+    "brand": "Dr. Jart+",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4800
+  },
+  {
+    "name": "Missha Time Revolution Essence",
+    "brand": "Missha",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4000
+  },
+  {
+    "name": "The Face Shop Rice Water Bright Cleanser",
+    "brand": "The Face Shop",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "Banila Co Clean It Zero Balm",
+    "brand": "Banila Co",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2000
+  },
+  {
+    "name": "Yves Rocher Spanish Rose Perfume",
+    "brand": "Yves Rocher",
+    "category": "Fragrance",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2800
+  },
+  {
+    "name": "Deliplus Makeup Remover Wipes",
+    "brand": "Deliplus",
+    "category": "Lip Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "ISDIN Fotoprotector Fusion Water",
+    "brand": "ISDIN",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2500
+  },
+  {
+    "name": "Babaria Aloe Vera Gel",
+    "brand": "Babaria",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1200
+  },
+  {
+    "name": "Garnier SkinActive Micellar Water",
     "brand": "Garnier",
-    "category": "Gray Coverage",
-    "instructions": "Includes a nourishing cream conditioner with avocado oil. Apply to regrowth. Process for 25 minutes. Rinse until water runs clear.",
-    "priceCents": 1399
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
   },
   {
-    "id": "24",
-    "name": "Revlon Colorsilk - Medium Brown",
-    "brand": "Revlon",
-    "category": "Gray Coverage",
-    "instructions": "Ammonia-free formula. Mix color and developer. Apply to hair. Process for 25 minutes. Rinse and shampoo.",
-    "priceCents": 899
+    "name": "MartiDerm Ampoules",
+    "brand": "MartiDerm",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 4500
   },
   {
-    "id": "25",
-    "name": "Schwarzkopf Keratin Color - Dark Blonde",
-    "brand": "Schwarzkopf",
-    "category": "Gray Coverage",
-    "instructions": "With keratin. Gently covers gray while caring for hair. Apply to roots. Process for 30 minutes. Rinse with water, then shampoo.",
-    "priceCents": 1699
+    "name": "Lullage AcneXpert Serum",
+    "brand": "Lullage",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
   },
   {
-    "id": "26",
+    "name": "Nenuco Body Lotion",
+    "brand": "Nenuco",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "Bella Aurora Anti-Stain Cream",
+    "brand": "Bella Aurora",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2200
+  },
+  {
+    "name": "La Chinata Lip Balm",
+    "brand": "La Chinata",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 600
+  },
+  {
+    "name": "Essie Nail Polish",
+    "brand": "Essie",
+    "category": "Nail Care",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 900
+  },
+  {
+    "name": "Neutrogena Hydro Boost Gel",
+    "brand": "Neutrogena",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1800
+  },
+  {
+    "name": "Fenty Beauty Pro Filtr Foundation",
+    "brand": "Fenty Beauty",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3500
+  },
+  {
+    "name": "Maybelline Great Lash Mascara",
+    "brand": "Maybelline",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1000
+  },
+  {
+    "name": "e.l.f. Poreless Putty Primer",
+    "brand": "e.l.f.",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 800
+  },
+  {
+    "name": "Anastasia Beverly Hills Brow Wiz",
+    "brand": "Anastasia Beverly Hills",
+    "category": "Other",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 2300
+  },
+  {
+    "name": "CeraVe Moisturizing Cream",
+    "brand": "CeraVe",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 1500
+  },
+  {
+    "name": "Tatcha The Water Cream",
+    "brand": "Tatcha",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 6800
+  },
+  {
+    "name": "Drunk Elephant Vitamin C Serum",
+    "brand": "Drunk Elephant",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 7800
+  },
+  {
+    "name": "Olay Regenerist Micro-Sculpting Cream",
+    "brand": "Olay",
+    "category": "Skincare",
+    "instructions": "Use as directed for beauty/wellness care",
+    "priceCents": 3000
+  },
+  {
+    "name": "Andis GTX-EXO II Cordless Li Trimmer #561752",
+    "brand": "Andis",
+    "category": "Styling Tools",
+    "instructions": "Professional trimmer for barbers.",
+    "priceCents": 22999
+  },
+  {
     "name": "Olaplex No. 3 Hair Perfector",
     "brand": "Olaplex",
     "category": "Hair Repair",
@@ -208,7 +3532,6 @@
     "priceCents": 3000
   },
   {
-    "id": "27",
     "name": "K18 Leave-In Molecular Repair Hair Mask",
     "brand": "K18",
     "category": "Hair Repair",
@@ -216,7 +3539,6 @@
     "priceCents": 7500
   },
   {
-    "id": "28",
     "name": "Living Proof Triple Bond Complex",
     "brand": "Living Proof",
     "category": "Hair Repair",
@@ -224,7 +3546,6 @@
     "priceCents": 4500
   },
   {
-    "id": "29",
     "name": "Redken Acidic Bonding Concentrate",
     "brand": "Redken",
     "category": "Hair Repair",
@@ -232,11 +3553,24 @@
     "priceCents": 3000
   },
   {
-    "id": "30",
     "name": "Pureology Hydrate Shampoo",
     "brand": "Pureology",
-    "category": "Shampoo",
+    "category": "Hair Repair",
     "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.",
     "priceCents": 2900
+  },
+  {
+    "name": "Kerastase Resistance Ciment Thermique",
+    "brand": "Kerastase",
+    "category": "Hair Repair",
+    "instructions": "Apply to towel-dried hair. Style with a blow dryer or heat tool. Protects from heat and strengthens hair fiber.",
+    "priceCents": 3800
+  },
+  {
+    "name": "Moroccanoil Treatment Oil",
+    "brand": "Moroccanoil",
+    "category": "Hair Repair",
+    "instructions": "Apply a small amount to clean, towel-dried hair, from mid-length to ends. Blow-dry or let dry naturally. Conditions and adds shine.",
+    "priceCents": 4400
   }
 ]
