@@ -1,4 +1,4 @@
-// server.js - Unified AI Salon API (Final Version)
+// server.js - Unified AI Salon API
 
 // 1. Import necessary libraries using ES module syntax
 import express from 'express';
