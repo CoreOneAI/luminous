@@ -12,7 +12,13 @@
     .header h1{font-size:20px;font-weight:800;letter-spacing:.5px;margin-bottom:4px}
     .header .tagline{font-size:12px;opacity:.9}
     .main{padding:20px 16px}
-    .welcome-section{display:none;}
+    .welcome-section{background:#fff;border-radius:16px;padding:20px;margin-bottom:20px;border:1px solid #eee;box-shadow:0 4px 12px rgba(0,0,0,.05);text-align:center}
+    .welcome-title{font-size:18px;font-weight:700;color:#222;margin-bottom:8px}
+    .welcome-text{font-size:14px;color:#666;margin-bottom:16px;line-height:1.5}
+    .quick-examples{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:16px}
+    .example-btn{background:#f8f9fa;border:1px solid #e9ecef;border-radius:10px;padding:12px 8px;font-size:11px;text-align:center;cursor:pointer;color:#495057;font-weight:500;transition:all .2s ease}
+    .example-btn:hover{border-color:#B8860B;color:#B8860B;transform:translateY(-1px)}
+    .client-profile{display:none;}
     .chat-section{margin-bottom:24px}
     .chat-input-container{background:#fff;border-radius:16px;padding:6px;border:2px solid #e9ecef;box-shadow:0 4px 12px rgba(0,0,0,.05);display:flex;align-items:center;gap:8px}
     .chat-input-container:focus-within{border-color:#B8860B;box-shadow:0 4px 20px rgba(184,134,11,.15)}
@@ -93,6 +99,53 @@
     </header>
 
     <main class="main">
+      <section class="welcome-section">
+        <div class="welcome-title">Welcome to Your Personal Salon</div>
+        <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
+        <div class="quick-examples">
+          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
+          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
+          <button class="example-btn" data-query="accessories">Accessories</button>
+          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
+        </div>
+      </section>
+
+      <section class="client-profile" style="display:none;">
+        <div class="profile-title">Tell Me About Yourself</div>
+        <div class="profile-grid">
+          <select class="profile-select" id="hairType">
+            <option value="">Hair Type</option>
+            <option value="straight">Straight</option>
+            <option value="wavy">Wavy</option>
+            <option value="curly">Curly</option>
+            <option value="coily">Coily/Kinky</option>
+          </select>
+          <select class="profile-select" id="skinType">
+            <option value="">Skin Type</option>
+            <option value="oily">Oily</option>
+            <option value="dry">Dry</option>
+            <option value="combination">Combination</option>
+            <option value="sensitive">Sensitive</option>
+          </select>
+          <select class="profile-select" id="concerns">
+            <option value="">Main Concerns</option>
+            <option value="damage">Damage/Breakage</option>
+            <option value="frizz">Frizz Control</option>
+            <option value="volume">Volume</option>
+            <option value="color">Color Protection</option>
+            <option value="aging">Anti-Aging</option>
+            <option value="acne">Acne</option>
+            <option value="dryness">Dryness</option>
+          </select>
+          <select class="profile-select" id="budget">
+            <option value="">Budget Range</option>
+            <option value="budget">Budget ($10-30)</option>
+            <option value="mid">Mid-Range ($30-60)</option>
+            <option value="luxury">Luxury ($60+)</option>
+          </select>
+        </div>
+      </section>
+
       <section class="chat-section">
         <div class="chat-input-container">
           <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
@@ -102,17 +155,7 @@
         <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
 
         <div id="chatResponse" class="chat-response">
-          <div style="text-align:center;color:#666;">
-            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-            <p style="font-size:13px;"><strong>Try:</strong></p>
-            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-              <li>"shampoo"</li>
-              <li>"serum"</li>
-              <li>"bond repair"</li>
-              <li>"accessories"</li>
-            </ul>
-          </div>
+          Hi! I'm your AI salon consultant. Tell me about your hair, skin, or beauty concerns, and I'll recommend the perfect professional products tailored specifically for you.
         </div>
       </section>
 
@@ -248,7 +291,7 @@
         if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
       });
       this.homeNavBtn?.addEventListener('click', () => this.startNewSearch());
-      this.profileNavBtn?.addEventListener('click', () => this.showProfile());
+      this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
       this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
       this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
 
@@ -274,7 +317,7 @@
     }
 
     profile() {
-      return {}; // Profile section is removed, so we return an empty object
+      return {};
     }
 
     async handleAsk(message = this.chatInput?.value) {
@@ -283,14 +326,18 @@
       this.isLoading = true;
       if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
       this.aiStatus?.classList.add('active');
-      if (this.productsSection) this.productsSection.style.display = 'block';
+      this.productsSection.style.display = 'none';
 
       try {
         const data = await fetchUnifiedService(message, this.profile());
         
         this.renderChat(data.chatResponse);
-        this.currentQuery = message;
-        this.renderProducts(data.products);
+
+        if (data.products && data.products.length > 0) {
+            this.renderProducts(data.products);
+        } else {
+            this.empty();
+        }
 
       } catch (err) {
         console.error('Unified API request failed:', err);
@@ -328,6 +375,7 @@
     }
 
     renderProducts(products) {
+      this.productsSection.style.display = 'block';
       this.grid.innerHTML = '';
       
       products.forEach(p => this.grid.appendChild(this.card(normalizeProduct(p))));
@@ -391,10 +439,6 @@
         this.productsSection.style.display = 'none';
         this.status.textContent = '';
         this.welcome();
-    }
-    
-    showProfile() {
-        alert("My Profile functionality is coming soon!");
     }
     
     showComingSoon(feature) {
