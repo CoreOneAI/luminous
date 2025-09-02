@@ -110,42 +110,6 @@
         </div>
       </section>
 
-      <section class="client-profile" style="display:none;">
-        <div class="profile-title">Tell Me About Yourself</div>
-        <div class="profile-grid">
-          <select class="profile-select" id="hairType">
-            <option value="">Hair Type</option>
-            <option value="straight">Straight</option>
-            <option value="wavy">Wavy</option>
-            <option value="curly">Curly</option>
-            <option value="coily">Coily/Kinky</option>
-          </select>
-          <select class="profile-select" id="skinType">
-            <option value="">Skin Type</option>
-            <option value="oily">Oily</option>
-            <option value="dry">Dry</option>
-            <option value="combination">Combination</option>
-            <option value="sensitive">Sensitive</option>
-          </select>
-          <select class="profile-select" id="concerns">
-            <option value="">Main Concerns</option>
-            <option value="damage">Damage/Breakage</option>
-            <option value="frizz">Frizz Control</option>
-            <option value="volume">Volume</option>
-            <option value="color">Color Protection</option>
-            <option value="aging">Anti-Aging</option>
-            <option value="acne">Acne</option>
-            <option value="dryness">Dryness</option>
-          </select>
-          <select class="profile-select" id="budget">
-            <option value="">Budget Range</option>
-            <option value="budget">Budget ($10-30)</option>
-            <option value="mid">Mid-Range ($30-60)</option>
-            <option value="luxury">Luxury ($60+)</option>
-          </select>
-        </div>
-      </section>
-
       <section class="chat-section">
         <div class="chat-input-container">
           <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
@@ -243,7 +207,6 @@
       description: desc,
       usage: p.usage || '',
       instructions: p.instructions || '',
-      ingredients: p.ingredients || '',
       benefits: Array.isArray(p.benefits) ? p.benefits : []
     };
   }
@@ -274,12 +237,13 @@
       this.grid = qs('#productsGrid');
       this.productsSection = qs('#productsSection');
       this.loadMoreSection = qs('#loadMoreSection');
-      this.profileSection = qs('.client-profile');
+      this.welcomeSection = qs('.welcome-section');
       
       this.homeNavBtn = qs('#homeNavBtn');
       this.profileNavBtn = qs('#profileNavBtn');
       this.appointmentsNavBtn = qs('#appointmentsNavBtn');
       this.basketNavBtn = qs('#basketNavBtn');
+      this.exampleBtns = qsa('.example-btn');
 
       this.bind();
       this.welcome();
@@ -295,25 +259,26 @@
       this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
       this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
 
-      qsa('.example-btn').forEach(btn => {
+      this.exampleBtns.forEach(btn => {
           btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
       });
     }
 
     welcome() {
-      if (!this.chatResponse) return;
-      this.chatResponse.innerHTML = `
-        <div style="text-align:center;color:#666;">
-          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-          <p style="font-size:13px;"><strong>Try:</strong></p>
-          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-            <li>"shampoo"</li>
-            <li>"serum"</li>
-            <li>"bond repair"</li>
-            <li>"accessories"</li>
-          </ul>
-        </div>`;
+        this.productsSection.style.display = 'none';
+        this.welcomeSection.style.display = 'block';
+        this.chatResponse.innerHTML = `
+            <div style="text-align:center;color:#666;">
+            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+            <p style="font-size:13px;"><strong>Try:</strong></p>
+            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+                <li>"shampoo"</li>
+                <li>"serum"</li>
+                <li>"bond repair"</li>
+                <li>"accessories"</li>
+            </ul>
+            </div>`;
     }
 
     profile() {
@@ -326,7 +291,7 @@
       this.isLoading = true;
       if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
       this.aiStatus?.classList.add('active');
-      this.productsSection.style.display = 'none';
+      this.welcomeSection.style.display = 'none';
 
       try {
         const data = await fetchUnifiedService(message, this.profile());
