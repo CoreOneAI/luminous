@@ -132,7 +132,6 @@ app.post('/api/unified-service', async (req, res) => {
     let products = [];
 
     if (isProductSearch) {
-      // It's a product search: find products and get a chat summary
       products = getProducts(message, profile);
       
       const productNames = products.map(p => p.name).join(', ');
@@ -140,11 +139,9 @@ app.post('/api/unified-service', async (req, res) => {
       chatResponseText = await getAIResponse(prompt);
       
     } else {
-      // It's a general question: get a full AI response and a general product list
       const prompt = `You are an expert salon consultant. The user asked: "${message}". The available products are: ${JSON.stringify(productsData)}. Please provide a detailed and helpful answer, potentially mentioning some of the available products if relevant.`;
       chatResponseText = await getAIResponse(prompt);
       
-      // If the response is a general question, we still want to show a broad range of products
       products = productsData.slice(0, 25);
     }
 
