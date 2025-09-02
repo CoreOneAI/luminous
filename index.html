@@ -119,7 +119,17 @@
         <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
 
         <div id="chatResponse" class="chat-response">
-          Hi! I'm your AI salon consultant. Tell me about your hair, skin, or beauty concerns, and I'll recommend the perfect professional products tailored specifically for you.
+          <div style="text-align:center;color:#666;">
+            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+            <p style="font-size:13px;"><strong>Try:</strong></p>
+            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+              <li>"shampoo"</li>
+              <li>"serum"</li>
+              <li>"bond repair"</li>
+              <li>"accessories"</li>
+            </ul>
+          </div>
         </div>
       </section>
 
@@ -264,20 +274,20 @@
     }
 
     welcome() {
-        this.productsSection.style.display = 'none';
-        this.welcomeSection.style.display = 'block';
-        this.chatResponse.innerHTML = `
-            <div style="text-align:center;color:#666;">
-            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-            <p style="font-size:13px;"><strong>Try:</strong></p>
-            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-                <li>"shampoo"</li>
-                <li>"serum"</li>
-                <li>"bond repair"</li>
-                <li>"accessories"</li>
-            </ul>
-            </div>`;
+      this.productsSection.style.display = 'none';
+      this.welcomeSection.style.display = 'block';
+      this.chatResponse.innerHTML = `
+        <div style="text-align:center;color:#666;">
+          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+          <p style="font-size:13px;"><strong>Try:</strong></p>
+          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+            <li>"shampoo"</li>
+            <li>"serum"</li>
+            <li>"bond repair"</li>
+            <li>"accessories"</li>
+          </ul>
+        </div>`;
     }
 
     async handleAsk(message = this.chatInput?.value) {
