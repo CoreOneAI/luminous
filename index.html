@@ -54,13 +54,14 @@
       flex: 1;
       padding: 20px 16px;
     }
-    .welcome-section, .chat-section {
+    .welcome-section {
       background: #fff;
       border-radius: 16px;
       padding: 20px;
       margin-bottom: 20px;
       border: 1px solid var(--border-color);
       box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      text-align: center;
     }
     .welcome-title {
       font-size: 18px;
@@ -176,11 +177,9 @@
     .chat-paragraph {
       white-space: pre-wrap;
       margin-bottom: 1em;
-      
     }
     .products-section {
       margin-top: 24px;
-      padding: 0 16px;
     }
     .section-header {
       display: flex;
@@ -321,7 +320,7 @@
       cursor: pointer;
     }
     .footer-nav {
-      position: fixed;
+      position: sticky;
       bottom: 0;
       left: 0;
       width: 100%;
@@ -441,13 +440,34 @@
     return await response.json();
   }
 
-  function normalizeProduct(p) {
-    let cents = Number.isFinite(p.priceCents) ? p.priceCents : NaN;
-    if (!Number.isFinite(cents) && p.price) {
-      const num = parseFloat(String(p.price).replace(/[$,]/g, ''));
-      if (Number.isFinite(num)) cents = Math.round(num * 100);
-    }
+  // NOTE: This product data is now embedded in the client for reliability.
+  const productsData = [
+    { "name": "Hair Dye Bright Shade #1", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 2199 },
+    { "name": "Hair Dye Bright Shade #2", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 2299 },
+    { "name": "Hair Dye Bright Shade #3", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 3499 },
+    { "name": "Hair Dye Bright Shade #4", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 1899 },
+    { "name": "Hair Dye Bright Shade #5", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 1599 },
+    { "name": "Hair Dye Bright Shade #6", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 2399 },
+    { "name": "Hair Dye Bright Shade #7", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 2799 },
+    { "name": "Hair Dye Bright Shade #8", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 2599 },
+    { "name": "Hair Dye Bright Shade #9", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 1399 },
+    { "name": "Hair Dye Bright Shade #10", "brand": "Specialty Beauty Product Categories", "category": "Bright Color", "instructions": "Use as directed by product instructions or under professional supervision.", "priceCents": 3799 },
+    { "name": "Olaplex No. 3 Hair Perfector", "brand": "Olaplex", "category": "Hair Repair", "instructions": "Apply to damp hair, comb through. Leave on for a minimum of 10 minutes. Rinse, shampoo, and condition. Repairs and strengthens hair.", "priceCents": 3000 },
+    { "name": "K18 Leave-In Molecular Repair Hair Mask", "brand": "K18", "category": "Hair Repair", "instructions": "Shampoo, do not condition. Towel dry hair. Apply mask. Wait 4 minutes. Do not rinse out. Style as usual. Repairs damage in 4 minutes.", "priceCents": 7500 },
+    { "name": "Living Proof Triple Bond Complex", "brand": "Living Proof", "category": "Hair Repair", "instructions": "Apply to clean, damp hair from roots to ends. Wait 10 minutes. Rinse. Repairs all types of hair damage.", "priceCents": 4500 },
+    { "name": "Redken Acidic Bonding Concentrate", "brand": "Redken", "category": "Hair Repair", "instructions": "Apply after shampooing. Leave on for 5-10 minutes. Rinse thoroughly. Provides ultimate strength and conditioning on damaged hair.", "priceCents": 3000 },
+    { "name": "Pureology Hydrate Shampoo", "brand": "Pureology", "category": "Hair Repair", "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.", "priceCents": 2900 },
+    { "name": "Kerastase Resistance Ciment Thermique", "brand": "Kerastase", "category": "Hair Repair", "instructions": "Apply to towel-dried hair. Style with a blow dryer or heat tool. Protects from heat and strengthens hair fiber.", "priceCents": 3800 },
+    { "name": "Moroccanoil Treatment Oil", "brand": "Moroccanoil", "category": "Hair Repair", "instructions": "Apply a small amount to clean, towel-dried hair, from mid-length to ends. Blow-dry or let dry naturally. Conditions and adds shine.", "priceCents": 4400 },
+    { "name": "Glycolic Acid Exfoliator", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Use once daily in the evening. Apply to a cotton pad and sweep across face. Do not rinse.", "priceCents": 1200 },
+    { "name": "Retinol Serum 1%", "brand": "Paula's Choice", "category": "Anti-Aging", "instructions": "Apply a pea-sized amount in the evening after cleansing. Follow with a moisturizer. Use sunscreen during the day.", "priceCents": 5500 },
+    { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700 },
+    { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500 },
+    { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500 }
+  ];
 
+  function normalizeProduct(p) {
+    let cents = p.priceCents;
     const desc = p.description && String(p.description).trim()
       ? String(p.description).trim()
       : `Professional ${String(p.category || 'beauty').toLowerCase()} — ${String(p.name || 'product')}.`;
@@ -457,7 +477,7 @@
       name: p.name || 'Product',
       brand: p.brand || '—',
       category: p.category || '—',
-      priceCents: Number.isFinite(cents) ? cents : NaN,
+      priceCents: cents,
       image: p.image || '/images/placeholder.jpg',
       description: desc,
       instructions: p.instructions || '',
@@ -499,27 +519,26 @@
       this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
       this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
       this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
-
       this.exampleBtns.forEach(btn => {
           btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
       });
     }
 
     welcome() {
-        this.productsSection.style.display = 'none';
-        this.welcomeSection.style.display = 'block';
-        this.chatResponse.innerHTML = `
-            <div style="text-align:center;color:#666;">
-            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-            <p style="font-size:13px;"><strong>Try:</strong></p>
-            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-                <li>"shampoo"</li>
-                <li>"serum"</li>
-                <li>"bond repair"</li>
-                <li>"accessories"</li>
-            </ul>
-            </div>`;
+      this.productsSection.style.display = 'none';
+      this.welcomeSection.style.display = 'block';
+      this.chatResponse.innerHTML = `
+        <div style="text-align:center;color:#666;">
+          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+          <p style="font-size:13px;"><strong>Try:</strong></p>
+          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+            <li>"shampoo"</li>
+            <li>"serum"</li>
+            <li>"bond repair"</li>
+            <li>"accessories"</li>
+          </ul>
+        </div>`;
     }
 
     async handleAsk(message = this.chatInput?.value) {
@@ -531,7 +550,12 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        const data = await fetchUnifiedService(message);
+        const response = await fetch('/api/unified-service', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message })
+        });
+        const data = await response.json();
         
         this.renderChat(data.chatResponse);
         
