@@ -1,5 +1,6 @@
 [
   {
+    "id": "1",
     "name": "Manic Panic Amplified - Vampire Red",
     "brand": "Manic Panic",
     "category": "Bright Color",
@@ -7,6 +8,7 @@
     "priceCents": 2199
   },
   {
+    "id": "2",
     "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon",
     "brand": "Arctic Fox",
     "category": "Bright Color",
@@ -14,6 +16,7 @@
     "priceCents": 2299
   },
   {
+    "id": "3",
     "name": "Pravana ChromaSilk Vivids - Neon Tangerine",
     "brand": "Pravana",
     "category": "Bright Color",
@@ -21,6 +24,7 @@
     "priceCents": 3499
   },
   {
+    "id": "4",
     "name": "Splat Rebellious Colors - Atomic Pink",
     "brand": "Splat",
     "category": "Bright Color",
@@ -28,6 +32,7 @@
     "priceCents": 1899
   },
   {
+    "id": "5",
     "name": "L'Oreal Colorista Semi-Permanent - Purple",
     "brand": "L'Oreal",
     "category": "Bright Color",
@@ -35,6 +40,7 @@
     "priceCents": 1599
   },
   {
+    "id": "6",
     "name": "Good Dye Young Semi-Permanent - Ex-Girl",
     "brand": "Good Dye Young",
     "category": "Bright Color",
@@ -42,6 +48,7 @@
     "priceCents": 2399
   },
   {
+    "id": "7",
     "name": "Joico Color Intensity - Sapphire Blue",
     "brand": "Joico",
     "category": "Bright Color",
@@ -49,6 +56,7 @@
     "priceCents": 2799
   },
   {
+    "id": "8",
     "name": "Lime Crime Unicorn Hair - Sext",
     "brand": "Lime Crime",
     "category": "Bright Color",
@@ -56,6 +64,7 @@
     "priceCents": 2599
   },
   {
+    "id": "9",
     "name": "Adore Creative Image - Paprika",
     "brand": "Adore",
     "category": "Bright Color",
@@ -63,6 +72,7 @@
     "priceCents": 1399
   },
   {
+    "id": "10",
     "name": "Pulp Riot Semi-Permanent - Fireball",
     "brand": "Pulp Riot",
     "category": "Bright Color",
@@ -70,6 +80,7 @@
     "priceCents": 3799
   },
   {
+    "id": "11",
     "name": "Schwarzkopf Igora Vibrance - 0-88 Royal Blue",
     "brand": "Schwarzkopf",
     "category": "Bright Color",
@@ -77,6 +88,7 @@
     "priceCents": 3299
   },
   {
+    "id": "12",
     "name": "Directions Semi-Permanent - Alpine Green",
     "brand": "Directions",
     "category": "Bright Color",
@@ -84,6 +96,7 @@
     "priceCents": 1499
   },
   {
+    "id": "13",
     "name": "Arctic Fox - Purple Rain",
     "brand": "Arctic Fox",
     "category": "Bright Color",
@@ -91,6 +104,7 @@
     "priceCents": 2299
   },
   {
+    "id": "14",
     "name": "Manic Panic Classic - Electric Lizard",
     "brand": "Manic Panic",
     "category": "Bright Color",
@@ -98,6 +112,7 @@
     "priceCents": 1999
   },
   {
+    "id": "15",
     "name": "Pravana ChromaSilk Vivids - Green",
     "brand": "Pravana",
     "category": "Bright Color",
@@ -105,6 +120,7 @@
     "priceCents": 3499
   },
   {
+    "id": "16",
     "name": "Splat - Blue Envy",
     "brand": "Splat",
     "category": "Bright Color",
@@ -112,6 +128,7 @@
     "priceCents": 1899
   },
   {
+    "id": "17",
     "name": "L'Oreal Colorista Washout - Burgundy",
     "brand": "L'Oreal",
     "category": "Bright Color",
@@ -119,6 +136,7 @@
     "priceCents": 1499
   },
   {
+    "id": "18",
     "name": "Good Dye Young - Blue Ruin",
     "brand": "Good Dye Young",
     "category": "Bright Color",
@@ -126,6 +144,7 @@
     "priceCents": 2399
   },
   {
+    "id": "19",
     "name": "Joico Color Intensity - Rose",
     "brand": "Joico",
     "category": "Bright Color",
@@ -133,6 +152,7 @@
     "priceCents": 2799
   },
   {
+    "id": "20",
     "name": "Lime Crime Unicorn Hair - Chocolate Cherry",
     "brand": "Lime Crime",
     "category": "Bright Color",
@@ -140,6 +160,7 @@
     "priceCents": 2599
   },
   {
+    "id": "21",
     "name": "Clairol Professional Pure White Wella Color Charm",
     "brand": "Wella",
     "category": "Gray Coverage",
@@ -147,6 +168,7 @@
     "priceCents": 1299
   },
   {
+    "id": "22",
     "name": "L'Oreal Excellence Creme - Natural Black",
     "brand": "L'Oreal",
     "category": "Gray Coverage",
@@ -154,6 +176,7 @@
     "priceCents": 1599
   },
   {
+    "id": "23",
     "name": "Garnier Nutrisse Nourishing Color Creme - Soft Black",
     "brand": "Garnier",
     "category": "Gray Coverage",
@@ -161,6 +184,7 @@
     "priceCents": 1399
   },
   {
+    "id": "24",
     "name": "Revlon Colorsilk - Medium Brown",
     "brand": "Revlon",
     "category": "Gray Coverage",
@@ -168,10 +192,51 @@
     "priceCents": 899
   },
   {
+    "id": "25",
     "name": "Schwarzkopf Keratin Color - Dark Blonde",
     "brand": "Schwarzkopf",
     "category": "Gray Coverage",
     "instructions": "With keratin. Gently covers gray while caring for hair. Apply to roots. Process for 30 minutes. Rinse with water, then shampoo.",
     "priceCents": 1699
+  },
+  {
+    "id": "26",
+    "name": "Olaplex No. 3 Hair Perfector",
+    "brand": "Olaplex",
+    "category": "Hair Repair",
+    "instructions": "Apply to damp hair, comb through. Leave on for a minimum of 10 minutes. Rinse, shampoo, and condition. Repairs and strengthens hair.",
+    "priceCents": 3000
+  },
+  {
+    "id": "27",
+    "name": "K18 Leave-In Molecular Repair Hair Mask",
+    "brand": "K18",
+    "category": "Hair Repair",
+    "instructions": "Shampoo, do not condition. Towel dry hair. Apply mask. Wait 4 minutes. Do not rinse out. Style as usual. Repairs damage in 4 minutes.",
+    "priceCents": 7500
+  },
+  {
+    "id": "28",
+    "name": "Living Proof Triple Bond Complex",
+    "brand": "Living Proof",
+    "category": "Hair Repair",
+    "instructions": "Apply to clean, damp hair from roots to ends. Wait 10 minutes. Rinse. Repairs all types of hair damage.",
+    "priceCents": 4500
+  },
+  {
+    "id": "29",
+    "name": "Redken Acidic Bonding Concentrate",
+    "brand": "Redken",
+    "category": "Hair Repair",
+    "instructions": "Apply after shampooing. Leave on for 5-10 minutes. Rinse thoroughly. Provides ultimate strength and conditioning on damaged hair.",
+    "priceCents": 3000
+  },
+  {
+    "id": "30",
+    "name": "Pureology Hydrate Shampoo",
+    "brand": "Pureology",
+    "category": "Shampoo",
+    "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.",
+    "priceCents": 2900
   }
 ]
