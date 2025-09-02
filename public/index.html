@@ -253,41 +253,13 @@
     return [];
   }
 
-  async function fetchMerged({ q, offset, limit, profile }) {
-    let apiItems = [];
-    let staticItems = [];
-
-    try {
-      const params = new URLSearchParams({
-        q: q || '',
-        offset: offset,
-        limit: limit,
-        ...profile
-      });
-      const apiData = await fetchJSON(`/api/products?${params.toString()}`);
-      apiItems = Array.isArray(apiData.items) ? apiData.items.map(normalizeProduct) : [];
-      console.log('[api] items=', apiItems.length);
-    } catch (e) {
-      console.warn('[api] failed:', e.message);
-    }
-
-    staticItems = await fetchStaticCatalog();
-
-    const base = uniqById([...apiItems, ...staticItems]);
-    const tokens = expandQueryTokens(q);
-    let filtered = base.filter(p => matchesStrictAll(p, tokens));
-
-    if (!filtered.length) {
-      filtered = base.filter(p => matchesAny(p, tokens));
-    }
-    if (!filtered.length && base.length) {
-      filtered = base.slice();
-    }
-
-    const total = filtered.length;
-    const slice = filtered.slice(offset, offset + limit);
-    const aiGenerated = apiItems.length > 0;
-    return { items: slice, total, aiGenerated, query: q, hadFallback: (slice.length && slice.length < base.length && !matchesStrictAll(slice[0]||{}, tokens)) };
+  async function fetchUnifiedService(message, profile) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message, profile: profile })
+    });
+    return await response.json();
   }
 
   class UnifiedSalonAI {
@@ -326,10 +298,10 @@
         if (e.target.closest('#homeBtn')) this.startNewSearch();
       });
       [this.hairType,this.skinType,this.concerns,this.budget].forEach(s => {
-        s?.addEventListener('change', () => this.currentQuery && this.search(this.currentQuery, true));
+        s?.addEventListener('change', () => this.currentQuery && this.handleAsk(this.currentQuery));
       });
       qsa('.example-btn').forEach(btn => {
-          btn.addEventListener('click', () => this.quickAsk(btn.dataset.query));
+          btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
       });
     }
 
@@ -358,8 +330,7 @@
       };
     }
 
-    async handleAsk() {
-      const message = (this.chatInput?.value || '').trim();
+    async handleAsk(message = this.chatInput?.value) {
       if (!message || this.isLoading) return;
 
       this.isLoading = true;
@@ -368,16 +339,11 @@
       if (this.productsSection) this.productsSection.style.display = 'block';
 
       try {
-        const response = await fetch('/api/unified-service', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: message, profile: this.profile() })
-        });
-        const data = await response.json();
+        const data = await fetchUnifiedService(message, this.profile());
         
         this.renderChat(data.chatResponse);
         this.currentQuery = message;
-        this.search(message, true, data.products);
+        this.renderProducts(data.products);
 
       } catch (err) {
         console.error('Unified API request failed:', err);
@@ -400,50 +366,17 @@
         </div>`;
     }
     
-    async search(query, reset=false, productsFromApi = []) {
-      if (reset) { this.currentOffset = 0; this.grid && (this.grid.innerHTML=''); }
-
-      try {
-        if (this.status) this.status.textContent = 'Finding matching products...';
-
-        const apiItems = productsFromApi.map(normalizeProduct);
-        const staticItems = await fetchStaticCatalog();
-        
-        const base = uniqById([...apiItems, ...staticItems]);
-        const tokens = expandQueryTokens(query);
-        let filtered = base.filter(p => matchesStrictAll(p, tokens));
-
-        if (!filtered.length) {
-          filtered = base.filter(p => matchesAny(p, tokens));
-        }
-        if (!filtered.length && base.length) {
-          filtered = base.slice();
-        }
-
-        const total = filtered.length;
-        const slice = filtered.slice(this.currentOffset, this.currentOffset + this.pageSize);
-        const aiGenerated = apiItems.length > 0;
-        
-        if (!slice.length && reset) {
-          this.empty();
-          this.totalProducts = 0;
-          this.updateMore(false);
-          return;
-        }
-
-        slice.forEach(p => this.grid.appendChild(this.card(p, aiGenerated)));
-        this.currentOffset += slice.length;
-        this.totalProducts = total;
-
-        const type = aiGenerated ? 'AI recommendations' : 'products';
-        if (this.status) {
-          this.status.textContent = `Showing ${this.currentOffset} of ${Math.min(total, 100)} ${type} for "${query}"`;
-        }
-        this.updateMore(this.currentOffset < total);
-      } catch (err) {
-        console.error('Product search failed:', err);
-        if (this.status) this.status.innerHTML = `<div class="error">Error: ${err.message}</div>`;
+    renderProducts(products) {
+      this.currentOffset = products.length;
+      this.totalProducts = products.length;
+      this.grid.innerHTML = '';
+      
+      products.forEach(p => this.grid.appendChild(this.card(normalizeProduct(p))));
+      
+      if (this.status) {
+        this.status.textContent = `Showing ${products.length} of ${products.length} products for "${this.currentQuery}"`;
       }
+      this.updateMore(false);
     }
     
     card(p, ai=false) {
@@ -465,7 +398,7 @@
             <div class="product-footer">
               <div class="product-price">${price}</div>
               <div class="product-actions">
-                ${p.description ? '<button class="details-btn">Details</button>' : ''}
+                <button class="details-btn">Details</button>
                 <button class="add-btn" data-id="${p.id}">Add to Cart</button>
               </div>
             </div>
@@ -479,6 +412,7 @@
     details(p) {
       const lines = [];
       if (p.usage) lines.push(`Usage: ${p.usage}`);
+      if (p.instructions) lines.push(`Instructions: ${p.instructions}`);
       if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
       if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
       alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
@@ -511,7 +445,7 @@
       }
     }
 
-    loadMore() { this.search(this.currentQuery, false); }
+    loadMore() { /* This functionality is now handled by the unified API, so this is no longer needed */ }
     
     startNewSearch() {
         this.currentQuery = '';
@@ -519,23 +453,7 @@
         this.grid.innerHTML = '';
         this.loadMoreSection.style.display = 'none';
         this.status.textContent = '';
-        this.chatResponse.innerHTML = `
-            <div style="text-align:center;color:#666;">
-                <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-                <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-                <p style="font-size:13px;"><strong>Try:</strong></p>
-                <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-                    <li>"shampoo"</li>
-                    <li>"serum"</li>
-                    <li>"bond repair"</li>
-                    <li>"accessories"</li>
-                </ul>
-            </div>`;
-    }
-
-    quickAsk(text) {
-        this.chatInput.value = text;
-        this.handleAsk();
+        this.welcome();
     }
   }
 
