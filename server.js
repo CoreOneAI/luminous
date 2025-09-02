@@ -39,7 +39,7 @@ const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
-// 4. Initialize AI clients and determine the active model
+// 4. Initialize AI clients with error handling
 let aiClient;
 let aiModel;
 try {
@@ -66,178 +66,178 @@ try {
 // 5. Product Data is now EMBEDDED within the server file to prevent loading issues
 const productsData = [
   {
-    "name": "Manic Panic Amplified - Vampire Red",
-    "brand": "Manic Panic",
+    "name": "Hair Dye Bright Shade #1",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2199
   },
   {
-    "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon",
-    "brand": "Arctic Fox",
+    "name": "Hair Dye Bright Shade #2",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2299
   },
   {
-    "name": "Pravana ChromaSilk Vivids - Neon Tangerine",
-    "brand": "Pravana",
+    "name": "Hair Dye Bright Shade #3",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "For professional use only. Apply to pre-lightened hair. Process for 20-45 minutes under heat or as desired. Rinse with cool water.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 3499
   },
   {
-    "name": "Splat Rebellious Colors - Atomic Pink",
-    "brand": "Splat",
+    "name": "Hair Dye Bright Shade #4",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Kit includes bleaching system. Follow included instructions carefully. Perform a patch test 48 hours prior to application.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1899
   },
   {
-    "name": "L'Oreal Colorista Semi-Permanent - Purple",
-    "brand": "L'Oreal",
+    "name": "Hair Dye Bright Shade #5",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Shake well. Apply to pre-lightened hair. Leave for 15-30 minutes. Rinse with cold water. Lasts 4-10 shampoos.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1599
   },
   {
-    "name": "Good Dye Young Semi-Permanent - Ex-Girl",
-    "brand": "Good Dye Young",
+    "name": "Hair Dye Bright Shade #6",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to light blonde hair for best results. Leave on for 15-30 minutes. Rinse with cold water. Conditions while it colors.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2399
   },
   {
-    "name": "Joico Color Intensity - Sapphire Blue",
-    "brand": "Joico",
+    "name": "Hair Dye Bright Shade #7",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional formula. Provides intense shine. Apply to pre-lightened hair. Process for 20-35 minutes. Rinse and style.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2799
   },
   {
-    "name": "Lime Crime Unicorn Hair - Sext",
-    "brand": "Lime Crime",
+    "name": "Hair Dye Bright Shade #8",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to blonde hair for true color. Wear gloves. Process for 20-40 minutes. Rinse with cool water. Vegan.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2599
   },
   {
-    "name": "Adore Creative Image - Paprika",
-    "brand": "Adore",
+    "name": "Hair Dye Bright Shade #9",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Alcohol-free, conditioning formula. Apply to clean, damp hair. Do not rinse out. Style as usual. For subtle tint on dark hair or vibrant color on light hair.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1399
   },
   {
-    "name": "Pulp Riot Semi-Permanent - Fireball",
-    "brand": "Pulp Riot",
+    "name": "Hair Dye Bright Shade #10",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 3799
   },
   {
-    "name": "Schwarzkopf Igora Vibrance - 0-88 Royal Blue",
-    "brand": "Schwarzkopf",
+    "name": "Hair Dye Bright Shade #11",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional salon product. Can be mixed with conditioner for a pastel or used direct for high impact. Process for 20 minutes.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 3299
   },
   {
-    "name": "Directions Semi-Permanent - Alpine Green",
-    "brand": "Directions",
+    "name": "Hair Dye Bright Shade #12",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to bleached hair. Leave for 15-30 minutes. Rinse with cool water. Famous for its bold, long-lasting pigment.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1499
   },
   {
-    "name": "Arctic Fox - Purple Rain",
-    "brand": "Arctic Fox",
+    "name": "Hair Dye Bright Shade #13",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to pre-lightened hair. Can be mixed with conditioner for a lighter shade. Leave on for 30+ minutes. 100% vegan.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2299
   },
   {
-    "name": "Manic Panic Classic - Electric Lizard",
-    "brand": "Manic Panic",
+    "name": "Hair Dye Bright Shade #14",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to platinum blonde hair for a vibrant neon green. Wear gloves. Process for 30 minutes. Rinse with cool water.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1999
   },
   {
-    "name": "Pravana ChromaSilk Vivids - Green",
-    "brand": "Pravana",
+    "name": "Hair Dye Bright Shade #15",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional use only. Apply to pre-lightened hair. For best results, process under a dryer for 25-30 minutes.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 3499
   },
   {
-    "name": "Splat - Blue Envy",
-    "brand": "Splat",
+    "name": "Hair Dye Bright Shade #16",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Complete kit with bleach. Ensure hair is untreated 24 hours before application. Follow all safety instructions on the box.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1899
   },
   {
-    "name": "L'Oreal Colorista Washout - Burgundy",
-    "brand": "L'Oreal",
+    "name": "Hair Dye Bright Shade #17",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Temporary color. Apply to dry hair. Leave for 10-20 minutes. Washes out in 1-2 shampoos. Perfect for trying a new look.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1499
   },
   {
-    "name": "Good Dye Young - Blue Ruin",
-    "brand": "Good Dye Young",
+    "name": "Hair Dye Bright Shade #18",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Apply to light blonde hair. For a deeper blue, leave on for up to 45 minutes. Rinse with cold water. Conditions hair.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2399
   },
   {
-    "name": "Joico Color Intensity - Rose",
-    "brand": "Joico",
+    "name": "Hair Dye Bright Shade #19",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Professional formula. Provides rich, long-lasting pink color with a high-shine finish. Apply to pre-lightened hair.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2799
   },
   {
-    "name": "Lime Crime Unicorn Hair - Chocolate Cherry",
-    "brand": "Lime Crime",
+    "name": "Hair Dye Bright Shade #20",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Bright Color",
-    "instructions": "Deep burgundy shade. Apply to light brown or lighter hair for best results. Process for 20-40 minutes. Vegan and cruelty-free.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 2599
   },
   {
-    "name": "Clairol Professional Pure White Wella Color Charm",
-    "brand": "Wella",
+    "name": "Hair Dye - Gray Coverage #1",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "For professional use. Mix with developer. Apply to regrowth first, then pull through to ends. Process for up to 45 minutes. Covers 100% gray.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1299
   },
   {
-    "name": "L'Oreal Excellence Creme - Natural Black",
-    "brand": "L'Oreal",
+    "name": "Hair Dye - Gray Coverage #2",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "Apply to dry, unwashed hair. Use applicator bottle for precise application to roots. Process for 30 minutes. Rinse thoroughly.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1599
   },
   {
-    "name": "Garnier Nutrisse Nourishing Color Creme - Soft Black",
-    "brand": "Garnier",
+    "name": "Hair Dye - Gray Coverage #3",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "Includes a nourishing cream conditioner with avocado oil. Apply to regrowth. Process for 25 minutes. Rinse until water runs clear.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1399
   },
   {
-    "name": "Revlon Colorsilk - Medium Brown",
-    "brand": "Revlon",
+    "name": "Hair Dye - Gray Coverage #4",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "Ammonia-free formula. Mix color and developer. Apply to hair. Process for 25 minutes. Rinse and shampoo.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 899
   },
   {
-    "name": "Schwarzkopf Keratin Color - Dark Blonde",
-    "brand": "Schwarzkopf",
+    "name": "Hair Dye - Gray Coverage #5",
+    "brand": "Specialty Beauty Product Categories",
     "category": "Gray Coverage",
-    "instructions": "With keratin. Gently covers gray while caring for hair. Apply to roots. Process for 30 minutes. Rinse with water, then shampoo.",
+    "instructions": "Use as directed by product instructions or under professional supervision.",
     "priceCents": 1699
   },
   {
@@ -446,20 +446,18 @@ const productsData = [
 ];
 
 // Helper function for a more sophisticated product search
-function getProducts(query, profile) {
+function getProducts(query) {
   const queryLower = query.toLowerCase();
-  const productSearch = productsData.filter(p => {
+  
+  const relevantProducts = productsData.filter(p => {
     const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
     const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
     const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
     const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
     return nameMatches || brandMatches || categoryMatches || instructionsMatches;
   });
-  
-  if (productSearch.length === 0) {
-    return productsData.slice(0, 25);
-  }
-  return productSearch.slice(0, 25);
+
+  return relevantProducts.slice(0, 25);
 }
 
 // Helper function to call the AI based on the active model
@@ -468,24 +466,26 @@ async function getAIResponse(prompt) {
     return "I'm sorry, the AI service is not available.";
   }
 
+  const userPrompt = `You are an expert salon consultant. The user asked: "${prompt}". Please provide a brief and helpful answer, limited to 100 words.`;
+
   try {
     let response;
     switch (aiModel) {
       case 'openai':
         response = await aiClient.chat.completions.create({
           model: "gpt-3.5-turbo",
-          messages: [{ role: "user", content: prompt }],
+          messages: [{ role: "user", content: userPrompt }],
         });
         return response.choices[0].message.content;
       case 'anthropic':
         response = await aiClient.messages.create({
           model: "claude-3-opus-20240229",
-          max_tokens: 1024,
-          messages: [{ role: "user", content: prompt }],
+          max_tokens: 150,
+          messages: [{ role: "user", content: userPrompt }],
         });
         return response.content[0].text;
       case 'gemini':
-        const result = await aiClient.generateContent(prompt);
+        const result = await aiClient.generateContent(userPrompt);
         return result.response.text();
       default:
         return "I'm sorry, the AI model is not configured.";
@@ -498,7 +498,7 @@ async function getAIResponse(prompt) {
 
 // 6. The Unified API Endpoint
 app.post('/api/unified-service', async (req, res) => {
-  const { message, profile } = req.body;
+  const { message } = req.body;
   
   if (!message) {
     return res.status(400).json({ error: 'Message is required.' });
@@ -508,30 +508,16 @@ app.post('/api/unified-service', async (req, res) => {
     const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'products', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging'];
     const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
 
-    let chatResponseText;
+    let chatResponseText = await getAIResponse(message);
     let products = [];
-
+    
     if (isProductSearch) {
-      products = getProducts(message, profile);
-      
-      const productNames = products.map(p => p.name).join(', ');
-      const prompt = `You are an expert salon consultant. The user asked for products related to "${message}". Based on the available products: ${productNames}, provide a brief and friendly introductory message.`;
-      chatResponseText = await getAIResponse(prompt);
-      
-    } else {
-      const prompt = `You are an expert salon consultant. The user asked: "${message}". Please provide a detailed and helpful answer.`;
-      chatResponseText = await getAIResponse(prompt);
-      
-      products = productsData.slice(0, 25);
+      products = getProducts(message);
+      chatResponseText += `\n\nHere are some relevant products to get you started.`;
     }
 
-    // Process the chat response to add typewriter effect
-    let processedResponse = chatResponseText;
-    const paragraphs = processedResponse.split(/\n\s*\n/).filter(p => p.trim().length > 0);
-    processedResponse = paragraphs.map(p => `<p class="chat-paragraph">${p}</p>`).join('');
-
     res.json({
-      chatResponse: processedResponse,
+      chatResponse: chatResponseText,
       products: products,
     });
 
