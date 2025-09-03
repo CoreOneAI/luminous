@@ -428,6 +428,15 @@
   const qs = (sel) => document.querySelector(sel);
   const qsa = (sel) => document.querySelectorAll(sel);
 
+  async function fetchUnifiedService(message) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+    });
+    return await response.json();
+  }
+
   const productsData = [
     { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199, "image": "q89266q8926.jpg" },
     { "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon", "brand": "Arctic Fox", "category": "Bright Color", "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.", "priceCents": 2299, "image": "xmmaulx.jpg" },
@@ -451,33 +460,32 @@
     { "name": "Pureology Hydrate Shampoo", "brand": "Pureology", "category": "Hair Repair", "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.", "priceCents": 2900, "image": "foleozfol.jpg" },
     { "name": "Kerastase Resistance Ciment Thermique", "brand": "Kerastase", "category": "Hair Repair", "instructions": "Apply to towel-dried hair. Style with a blow dryer or heat tool. Protects from heat and strengthens hair fiber.", "priceCents": 3800, "image": "plvpakplvpakplvp.jpg" },
     { "name": "Moroccanoil Treatment Oil", "brand": "Moroccanoil", "category": "Hair Repair", "instructions": "Apply a small amount to clean, towel-dried hair, from mid-length to ends. Blow-dry or let dry naturally. Conditions and adds shine.", "priceCents": 4400, "image": "q89266q8926.jpg" },
-    { "name": "Andis GTX-EXO II Cordless Li Trimmer #561752", "brand": "Andis", "category": "Styling Tools", "instructions": "Professional trimmer for barbers.", "priceCents": 22999, "image": "xmmaulx.jpg" },
-    { "name": "Sukin Foaming Facial Cleanser", "brand": "Sukin", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1200, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Endota Spa Hydration Mask", "brand": "Endota Spa", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 4500, "image": "w7tu8vw.jpg" },
-    { "name": "Aesop Parsley Seed Serum", "brand": "Aesop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6000, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Korres Greek Yoghurt Foaming Cleanser", "brand": "Korres", "category": "Skincare", "instructions": "Massage onto damp skin, rinse off.", "priceCents": 2800, "image": "foleozfol.jpg" },
-    { "name": "Bioderma Sensibio H2O Micellar Water", "brand": "Bioderma", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 2000, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "CeraVe Moisturizing Cream", "brand": "CeraVe", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1500, "image": "q89266q8926.jpg" },
-    { "name": "The Face Shop Rice Water Bright Cleanser", "brand": "The Face Shop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1000, "image": "xmmaulx.jpg" },
-    { "name": "Tatcha The Water Cream", "brand": "Tatcha", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6800, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Drunk Elephant Vitamin C Serum", "brand": "Drunk Elephant", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 7800, "image": "w7tu8vw.jpg" },
-    { "name": "Olay Regenerist Micro-Sculpting Cream", "brand": "Olay", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 3000, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Nivea Soft Cream", "brand": "Nivea", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "foleozfol.jpg" },
-    { "name": "Mavala Nail Hardener", "brand": "Mavala", "category": "Nail Care", "instructions": "Apply once or twice a week on clean nails.", "priceCents": 1500, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Risqué Nail Polish", "brand": "Risqué", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "q89266q8926.jpg" },
-    { "name": "Essie Nail Polish", "brand": "Essie", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 900, "image": "xmmaulx.jpg" },
-    { "name": "Glycolic Acid Exfoliator", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Use once daily in the evening. Apply to a cotton pad and sweep across face. Do not rinse.", "priceCents": 1200, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Retinol Serum 1%", "brand": "Paula's Choice", "category": "Anti-Aging", "instructions": "Apply a pea-sized amount in the evening after cleansing. Follow with a moisturizer. Use sunscreen during the day.", "priceCents": 5500, "image": "w7tu8vw.jpg" },
-    { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500, "image": "foleozfol.jpg" },
-    { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900, "image": "q89266q8926.jpg" },
-    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000, "image": "xmmaulx.jpg" },
-    { "name": "Disposable Tanning Mitt", "brand": "St. Tropez", "category": "Accessories", "instructions": "Use with self-tanning products to ensure a streak-free application.", "priceCents": 1000, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Makeup Remover Wipes", "brand": "Neutrogena", "category": "Accessories", "instructions": "Use to quickly and gently remove makeup.", "priceCents": 800, "image": "w7tu8vw.jpg" },
-    { "name": "Foundation Brush", "brand": "Real Techniques", "category": "Accessories", "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.", "priceCents": 1200, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Blending Sponge", "brand": "Beautyblender", "category": "Accessories", "instructions": "Use damp to apply and blend foundation, concealer, and other face products.", "priceCents": 2000, "image": "foleozfol.jpg" },
-    { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500, "image": "plvpakplvpakplvp.jpg" }
+    { "name": "Sukin Foaming Facial Cleanser", "brand": "Sukin", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1200, "image": "xmmaulx.jpg" },
+    { "name": "Endota Spa Hydration Mask", "brand": "Endota Spa", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 4500, "image": "6ol6t96ol6t96ol6.jpg" },
+    { "name": "Aesop Parsley Seed Serum", "brand": "Aesop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6000, "image": "w7tu8vw.jpg" },
+    { "name": "Korres Greek Yoghurt Foaming Cleanser", "brand": "Korres", "category": "Skincare", "instructions": "Massage onto damp skin, rinse off.", "priceCents": 2800, "image": "3gtwh3gtwh3g.jpg" },
+    { "name": "Bioderma Sensibio H2O Micellar Water", "brand": "Bioderma", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 2000, "image": "foleozfol.jpg" },
+    { "name": "CeraVe Moisturizing Cream", "brand": "CeraVe", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1500, "image": "plvpakplvpakplvp.jpg" },
+    { "name": "The Face Shop Rice Water Bright Cleanser", "brand": "The Face Shop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1000, "image": "q89266q8926.jpg" },
+    { "name": "Tatcha The Water Cream", "brand": "Tatcha", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6800, "image": "xmmaulx.jpg" },
+    { "name": "Drunk Elephant Vitamin C Serum", "brand": "Drunk Elephant", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 7800, "image": "6ol6t96ol6t96ol6.jpg" },
+    { "name": "Olay Regenerist Micro-Sculpting Cream", "brand": "Olay", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 3000, "image": "w7tu8vw.jpg" },
+    { "name": "Nivea Soft Cream", "brand": "Nivea", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "3gtwh3gtwh3g.jpg" },
+    { "name": "Mavala Nail Hardener", "brand": "Mavala", "category": "Nail Care", "instructions": "Apply once or twice a week on clean nails.", "priceCents": 1500, "image": "foleozfol.jpg" },
+    { "name": "Risqué Nail Polish", "brand": "Risqué", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "plvpakplvpakplvp.jpg" },
+    { "name": "Essie Nail Polish", "brand": "Essie", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 900, "image": "q89266q8926.jpg" },
+    { "name": "Glycolic Acid Exfoliator", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Use once daily in the evening. Apply to a cotton pad and sweep across face. Do not rinse.", "priceCents": 1200, "image": "xmmaulx.jpg" },
+    { "name": "Retinol Serum 1%", "brand": "Paula's Choice", "category": "Anti-Aging", "instructions": "Apply a pea-sized amount in the evening after cleansing. Follow with a moisturizer. Use sunscreen during the day.", "priceCents": 5500, "image": "6ol6t96ol6t96ol6.jpg" },
+    { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700, "image": "w7tu8vw.jpg" },
+    { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500, "image": "3gtwh3gtwh3g.jpg" },
+    { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500, "image": "foleozfol.jpg" },
+    { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900, "image": "plvpakplvpakplvp.jpg" },
+    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000, "image": "q89266q8926.jpg" },
+    { "name": "Disposable Tanning Mitt", "brand": "St. Tropez", "category": "Accessories", "instructions": "Use with self-tanning products to ensure a streak-free application.", "priceCents": 1000, "image": "xmmaulx.jpg" },
+    { "name": "Makeup Remover Wipes", "brand": "Neutrogena", "category": "Accessories", "instructions": "Use to quickly and gently remove makeup.", "priceCents": 800, "image": "6ol6t96ol6t96ol6.jpg" },
+    { "name": "Foundation Brush", "brand": "Real Techniques", "category": "Accessories", "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.", "priceCents": 1200, "image": "w7tu8vw.jpg" },
+    { "name": "Blending Sponge", "brand": "Beautyblender", "category": "Accessories", "instructions": "Use damp to apply and blend foundation, concealer, and other face products.", "priceCents": 2000, "image": "3gtwh3gtwh3g.jpg" },
+    { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500, "image": "foleozfol.jpg" }
   ];
 
   function getProducts(query) {
@@ -492,12 +500,6 @@
     });
 
     return relevantProducts.slice(0, 25);
-  }
-
-  async function getAIResponse(prompt) {
-    // This function will handle the AI response based on the message.
-    // For now, we will return a hardcoded response to fix the UI first.
-    return "Thank you for your question. Here are some product recommendations.";
   }
 
   class UnifiedSalonAI {
