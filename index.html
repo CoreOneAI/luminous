@@ -182,6 +182,10 @@
       margin-top: 24px;
       display: none;
     }
+    .appointments-section {
+      margin-top: 24px;
+      display: none;
+    }
     .section-header {
       display: flex;
       justify-content: space-between;
@@ -208,6 +212,12 @@
       gap: 12px;
       margin-bottom: 20px;
     }
+    .appointments-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
     .product-card {
       background: #fff;
       border-radius: 16px;
@@ -216,7 +226,15 @@
       border: 1px solid #f0f0f0;
       transition: all .3s ease;
     }
-    .product-card:hover {
+    .appointment-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      border: 1px solid #f0f0f0;
+      transition: all .3s ease;
+    }
+    .product-card:hover, .appointment-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 8px 25px rgba(0,0,0,.12);
     }
@@ -247,6 +265,9 @@
     .product-info {
       padding: 16px 16px 16px 0;
     }
+    .appointment-info {
+      padding: 8px 0;
+    }
     .product-name {
       font-weight: 700;
       font-size: 15px;
@@ -254,8 +275,19 @@
       margin-bottom: 4px;
       line-height: 1.3;
     }
+    .appointment-service {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
     .product-meta {
       font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .appointment-meta {
+      font-size: 13px;
       color: var(--muted);
       margin-bottom: 8px;
     }
@@ -291,12 +323,22 @@
       justify-content: space-between;
       align-items: center;
     }
+    .appointment-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
     .product-price {
       font-weight: 700;
       color: var(--primary-color);
       font-size: 16px;
     }
     .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .appointment-actions {
       display: flex;
       gap: 8px;
     }
@@ -310,6 +352,16 @@
       font-weight: 600;
       cursor: pointer;
     }
+    .cancel-btn {
+      background: #ffebee;
+      color: #d32f2f;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
     .add-btn {
       background: linear-gradient(135deg, #28a745, #20c997);
       color: #fff;
@@ -317,6 +369,16 @@
       border-radius: 8px;
       padding: 6px 12px;
       font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .book-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -344,6 +406,76 @@
         width: 20px;
         height: 20px;
         margin-bottom: 4px;
+    }
+    .footer-nav a.active {
+      color: var(--primary-color);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
     }
   </style>
 </head>
@@ -395,9 +527,55 @@
         <div id="status" class="status"></div>
         <div id="productsGrid" class="products-grid"></div>
       </section>
+
+      <section id="appointmentsSection" class="appointments-section">
+        <div class="section-header">
+          <div class="section-title">Your Appointments</div>
+          <button id="newAppointmentBtn" class="book-btn">New Appointment</button>
+        </div>
+        <div id="appointmentsGrid" class="appointments-grid"></div>
+      </section>
     </main>
+
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Schedule New Appointment</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <form id="appointmentForm">
+          <div class="form-group">
+            <label class="form-label">Service Type</label>
+            <select class="form-select" id="serviceType" required>
+              <option value="">Select a service</option>
+              <option value="Hair">Hair Styling/Cut</option>
+              <option value="Nails">Manicure/Pedicure</option>
+              <option value="Spa">Spa Treatment</option>
+              <option value="Facial">Facial Treatment</option>
+              <option value="Massage">Massage</option>
+              <option value="Barber">Barber Service</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-input" id="appointmentDate" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time</label>
+            <input type="time" class="form-input" id="appointmentTime" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Special Requests (Optional)</label>
+            <textarea class="form-textarea" id="specialRequests"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Schedule Appointment</button>
+        </form>
+      </div>
+    </div>
+
     <div class="footer-nav">
-        <a href="#" id="homeNavBtn">
+        <a href="#" id="homeNavBtn" class="active">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
               <path d="M11.47 3.829a1.5 1.5 0 0 1 1.06 0l7.5 4.33a1.5 1.5 0 0 1 .75 1.296v9.141a1.5 1.5 0 0 1-.75 1.296l-7.5 4.33a1.5 1.5 0 0 1-1.06 0l-7.5-4.33a1.5 1.5 0 0 1-.75-1.296V9.455a1.5 1.5 0 0 1 .75-1.296l7.5-4.33Z" stroke="currentColor" stroke-width="1.5"/>
             </svg>
@@ -434,14 +612,46 @@
     return '$' + (cents / 100).toFixed(2);
   }
 
-  async function fetchUnifiedService(message) {
-    const response = await fetch('/api/unified-service', {
+  // Function to call the AI API
+  async function getAIResponse(message) {
+    try {
+      const response = await fetch('/api/ai-chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-    });
-    return await response.json();
+        body: JSON.stringify({ message })
+      });
+      
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+      
+      const data = await response.json();
+      return data.response || "I'm sorry, I couldn't process your request at this time.";
+    } catch (error) {
+      console.error('Error calling AI API:', error);
+      return "I'm experiencing technical difficulties. Please try again later.";
+    }
   }
+
+  // Sample appointments data
+  let appointments = [
+    {
+      id: 1,
+      service: "Hair Cut & Style",
+      date: "2023-11-15",
+      time: "14:00",
+      stylist: "Jessica Williams",
+      status: "Confirmed"
+    },
+    {
+      id: 2,
+      service: "Manicure",
+      date: "2023-11-20",
+      time: "11:30",
+      stylist: "Michelle Rodriguez",
+      status: "Confirmed"
+    }
+  ];
 
   const productsData = [
     { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199, "image": "q89266q8926.jpg" },
@@ -453,45 +663,7 @@
     { "name": "Joico Color Intensity - Sapphire Blue", "brand": "Joico", "category": "Bright Color", "instructions": "Professional formula. Provides intense shine. Apply to pre-lightened hair. Process for 20-35 minutes. Rinse and style.", "priceCents": 2799, "image": "plvpakplvpakplvp.jpg" },
     { "name": "Lime Crime Unicorn Hair - Sext", "brand": "Lime Crime", "category": "Bright Color", "instructions": "Apply to blonde hair for true color. Wear gloves. Process for 20-40 minutes. Rinse with cool water. Vegan.", "priceCents": 2599, "image": "q89266q8926.jpg" },
     { "name": "Adore Creative Image - Paprika", "brand": "Adore", "category": "Bright Color", "instructions": "Alcohol-free, conditioning formula. Apply to clean, damp hair. Do not rinse out. Style as usual. For subtle tint on dark hair or vibrant color on light hair.", "priceCents": 1399, "image": "xmmaulx.jpg" },
-    { "name": "Pulp Riot Semi-Permanent - Fireball", "brand": "Pulp Riot", "category": "Bright Color", "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.", "priceCents": 3799, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Clairol Professional Pure White Wella Color Charm", "brand": "Wella", "category": "Gray Coverage", "instructions": "For professional use. Mix with developer. Apply to regrowth first, then pull through to ends. Process for up to 45 minutes. Covers 100% gray.", "priceCents": 1299, "image": "w7tu8vw.jpg" },
-    { "name": "L'Oreal Excellence Creme - Natural Black", "brand": "L'Oreal", "category": "Gray Coverage", "instructions": "Apply to dry, unwashed hair. Use applicator bottle for precise application to roots. Process for 30 minutes. Rinse thoroughly.", "priceCents": 1599, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Garnier Nutrisse Nourishing Color Creme - Soft Black", "brand": "Garnier", "category": "Gray Coverage", "instructions": "Includes a nourishing cream conditioner with avocado oil. Apply to regrowth. Process for 25 minutes. Rinse until water runs clear.", "priceCents": 1399, "image": "foleozfol.jpg" },
-    { "name": "Revlon Colorsilk - Medium Brown", "brand": "Revlon", "category": "Gray Coverage", "instructions": "Ammonia-free formula. Mix color and developer. Apply to hair. Process for 25 minutes. Rinse and shampoo.", "priceCents": 899, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Schwarzkopf Keratin Color - Dark Blonde", "brand": "Schwarzkopf", "category": "Gray Coverage", "instructions": "With keratin. Gently covers gray while caring for hair. Apply to roots. Process for 30 minutes. Rinse with water, then shampoo.", "priceCents": 1699, "image": "q89266q8926.jpg" },
-    { "name": "Olaplex No. 3 Hair Perfector", "brand": "Olaplex", "category": "Hair Repair", "instructions": "Apply to damp hair, comb through. Leave on for a minimum of 10 minutes. Rinse, shampoo, and condition. Repairs and strengthens hair.", "priceCents": 3000, "image": "xmmaulx.jpg" },
-    { "name": "K18 Leave-In Molecular Repair Hair Mask", "brand": "K18", "category": "Hair Repair", "instructions": "Shampoo, do not condition. Towel dry hair. Apply mask. Wait 4 minutes. Do not rinse out. Style as usual. Repairs damage in 4 minutes.", "priceCents": 7500, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Living Proof Triple Bond Complex", "brand": "Living Proof", "category": "Hair Repair", "instructions": "Apply to clean, damp hair from roots to ends. Wait 10 minutes. Rinse. Repairs all types of hair damage.", "priceCents": 4500, "image": "w7tu8vw.jpg" },
-    { "name": "Redken Acidic Bonding Concentrate", "brand": "Redken", "category": "Hair Repair", "instructions": "Apply after shampooing. Leave on for 5-10 minutes. Rinse thoroughly. Provides ultimate strength and conditioning on damaged hair.", "priceCents": 3000, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Pureology Hydrate Shampoo", "brand": "Pureology", "category": "Hair Repair", "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.", "priceCents": 2900, "image": "foleozfol.jpg" },
-    { "name": "Kerastase Resistance Ciment Thermique", "brand": "Kerastase", "category": "Hair Repair", "instructions": "Apply to towel-dried hair. Style with a blow dryer or heat tool. Protects from heat and strengthens hair fiber.", "priceCents": 3800, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Moroccanoil Treatment Oil", "brand": "Moroccanoil", "category": "Hair Repair", "instructions": "Apply a small amount to clean, towel-dried hair, from mid-length to ends. Blow-dry or let dry naturally. Conditions and adds shine.", "priceCents": 4400, "image": "q89266q8926.jpg" },
-    { "name": "Sukin Foaming Facial Cleanser", "brand": "Sukin", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1200, "image": "xmmaulx.jpg" },
-    { "name": "Endota Spa Hydration Mask", "brand": "Endota Spa", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 4500, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Aesop Parsley Seed Serum", "brand": "Aesop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6000, "image": "w7tu8vw.jpg" },
-    { "name": "Korres Greek Yoghurt Foaming Cleanser", "brand": "Korres", "category": "Skincare", "instructions": "Massage onto damp skin, rinse off.", "priceCents": 2800, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Bioderma Sensibio H2O Micellar Water", "brand": "Bioderma", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 2000, "image": "foleozfol.jpg" },
-    { "name": "CeraVe Moisturizing Cream", "brand": "CeraVe", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1500, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "The Face Shop Rice Water Bright Cleanser", "brand": "The Face Shop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1000, "image": "q89266q8926.jpg" },
-    { "name": "Tatcha The Water Cream", "brand": "Tatcha", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6800, "image": "xmmaulx.jpg" },
-    { "name": "Drunk Elephant Vitamin C Serum", "brand": "Drunk Elephant", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 7800, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Olay Regenerist Micro-Sculpting Cream", "brand": "Olay", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 3000, "image": "w7tu8vw.jpg" },
-    { "name": "Nivea Soft Cream", "brand": "Nivea", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Mavala Nail Hardener", "brand": "Mavala", "category": "Nail Care", "instructions": "Apply once or twice a week on clean nails.", "priceCents": 1500, "image": "foleozfol.jpg" },
-    { "name": "Risqué Nail Polish", "brand": "Risqué", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Essie Nail Polish", "brand": "Essie", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 900, "image": "q89266q8926.jpg" },
-    { "name": "Glycolic Acid Exfoliator", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Use once daily in the evening. Apply to a cotton pad and sweep across face. Do not rinse.", "priceCents": 1200, "image": "xmmaulx.jpg" },
-    { "name": "Retinol Serum 1%", "brand": "Paula's Choice", "category": "Anti-Aging", "instructions": "Apply a pea-sized amount in the evening after cleansing. Follow with a moisturizer. Use sunscreen during the day.", "priceCents": 5500, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700, "image": "w7tu8vw.jpg" },
-    { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aaging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500, "image": "foleozfol.jpg" },
-    { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900, "image": "plvpakplvpakplvp.jpg" },
-    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000, "image": "q89266q8926.jpg" },
-    { "name": "Disposable Tanning Mitt", "brand": "St. Tropez", "category": "Accessories", "instructions": "Use with self-tanning products to ensure a streak-free application.", "priceCents": 1000, "image": "xmmaulx.jpg" },
-    { "name": "Makeup Remover Wipes", "brand": "Neutrogena", "category": "Accessories", "instructions": "Use to quickly and gently remove makeup.", "priceCents": 800, "image": "6ol6t96ol6t96ol6.jpg" },
-    { "name": "Foundation Brush", "brand": "Real Techniques", "category": "Accessories", "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.", "priceCents": 1200, "image": "w7tu8vw.jpg" },
-    { "name": "Blending Sponge", "brand": "Beautyblender", "category": "Accessories", "instructions": "Use damp to apply and blend foundation, concealer, and other face products.", "priceCents": 2000, "image": "3gtwh3gtwh3g.jpg" },
-    { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500, "image": "foleozfol.jpg" }
+    { "name": "Pulp Riot Semi-Permanent - Fireball", "brand": "Pulp Riot", "category": "Bright Color", "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.", "priceCents": 3799, "image": "6ol6t96ol6t96ol6.jpg" }
   ];
 
   function getProducts(query) {
@@ -508,10 +680,6 @@
     return relevantProducts.slice(0, 25);
   }
 
-  async function getAIResponse(prompt) {
-    return "Thank you for your question. Here are some product recommendations.";
-  }
-
   class UnifiedSalonAI {
     constructor() {
       this.currentQuery = '';
@@ -522,13 +690,20 @@
       this.aiStatus = qs('#aiStatus');
       this.status = qs('#status');
       this.grid = qs('#productsGrid');
+      this.appointmentsGrid = qs('#appointmentsGrid');
       this.productsSection = qs('#productsSection');
+      this.appointmentsSection = qs('#appointmentsSection');
       this.welcomeSection = qs('.welcome-section');
       this.homeNavBtn = qs('#homeNavBtn');
       this.profileNavBtn = qs('#profileNavBtn');
       this.appointmentsNavBtn = qs('#appointmentsNavBtn');
       this.basketNavBtn = qs('#basketNavBtn');
+      this.newAppointmentBtn = qs('#newAppointmentBtn');
+      this.appointmentModal = qs('#appointmentModal');
+      this.appointmentForm = qs('#appointmentForm');
+      this.closeModalBtn = qs('.close-modal');
       this.exampleBtns = qsa('.example-btn');
+      this.currentView = 'home';
       this.bind();
       this.welcome();
     }
@@ -538,10 +713,13 @@
       this.chatInput?.addEventListener('keypress', e => {
         if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
       });
-      this.homeNavBtn?.addEventListener('click', () => this.startNewSearch());
+      this.homeNavBtn?.addEventListener('click', () => this.showView('home'));
       this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
-      this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
+      this.appointmentsNavBtn?.addEventListener('click', () => this.showView('appointments'));
       this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
+      this.newAppointmentBtn?.addEventListener('click', () => this.showAppointmentModal());
+      this.closeModalBtn?.addEventListener('click', () => this.hideAppointmentModal());
+      this.appointmentForm?.addEventListener('submit', (e) => this.handleAppointmentSubmit(e));
 
       this.exampleBtns.forEach(btn => {
           btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
@@ -556,23 +734,48 @@
               this.details(product);
           }
       });
+
+      this.appointmentsGrid.addEventListener('click', e => {
+        const cancelBtn = e.target.closest('.cancel-btn');
+        if (cancelBtn) {
+            const card = e.target.closest('.appointment-card');
+            const appointmentId = parseInt(card.dataset.id);
+            this.cancelAppointment(appointmentId);
+        }
+      });
+
+      // Close modal when clicking outside
+      this.appointmentModal.addEventListener('click', (e) => {
+        if (e.target === this.appointmentModal) {
+          this.hideAppointmentModal();
+        }
+      });
+    }
+
+    showView(view) {
+      this.currentView = view;
+      
+      // Update navigation
+      qsa('.footer-nav a').forEach(a => a.classList.remove('active'));
+      
+      if (view === 'home') {
+        this.homeNavBtn.classList.add('active');
+        this.welcomeSection.style.display = 'block';
+        this.productsSection.style.display = 'none';
+        this.appointmentsSection.style.display = 'none';
+        this.chatResponse.style.display = 'block';
+      } else if (view === 'appointments') {
+        this.appointmentsNavBtn.classList.add('active');
+        this.welcomeSection.style.display = 'none';
+        this.productsSection.style.display = 'none';
+        this.appointmentsSection.style.display = 'block';
+        this.chatResponse.style.display = 'none';
+        this.renderAppointments();
+      }
     }
 
     welcome() {
-      this.productsSection.style.display = 'none';
-      this.welcomeSection.style.display = 'block';
-      this.chatResponse.innerHTML = `
-        <div style="text-align:center;color:#666;">
-          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-          <p style="font-size:13px;"><strong>Try:</strong></p>
-          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-            <li>"shampoo"</li>
-            <li>"serum"</li>
-            <li>"bond repair"</li>
-            <li>"accessories"</li>
-          </ul>
-        </div>`;
+      this.showView('home');
     }
 
     async handleAsk(message = this.chatInput?.value) {
@@ -585,31 +788,24 @@
       this.welcomeSection.style.display = 'none';
 
       try {
-        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging', 'accessories'];
-        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
-
-        let chatResponse = '';
-        let products = [];
-        
-        if (isProductSearch) {
-          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
-          
-          if (matchingProducts.length > 0) {
-            products = matchingProducts.slice(0, 25);
-            chatResponse = `Here are some products that match your search.`;
-          } else {
-            chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
-          }
-        } else {
-          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
-          products = [];
-        }
+        // Get AI response for beauty questions
+        const chatResponse = await getAIResponse(message);
         
         this.renderChat(chatResponse);
-        this.renderProducts(products);
+        
+        // Only show products if it's a product-related query
+        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'product', 'buy', 'purchase'];
+        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+        
+        if (isProductSearch) {
+          const products = getProducts(message);
+          this.renderProducts(products);
+        } else {
+          this.productsSection.style.display = 'none';
+        }
 
       } catch (err) {
-        console.error('Front-end logic failed:', err);
+        console.error('Error handling question:', err);
         this.renderChat("An error occurred while processing your request. Please try again.");
         this.empty();
       }
@@ -637,13 +833,13 @@
       this.grid.innerHTML = '';
       
       if (products.length > 0) {
-          products.forEach(p => this.grid.appendChild(this.card(p)));
+          products.forEach(p => this.grid.appendChild(this.productCard(p)));
       } else {
           this.empty();
       }
     }
     
-    card(p) {
+    productCard(p) {
       const div = document.createElement('div');
       div.className = `product-card`;
       const price = formatCents(p.priceCents);
@@ -667,12 +863,102 @@
               <div class="product-price">${price}</div>
               <div class="product-actions">
                 <button class="details-btn">Details</button>
+                <button class="add-btn">Add to Cart</button>
               </div>
             </div>
           </div>
         </div>`;
       div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
+      div.querySelector('.add-btn')?.addEventListener('click', () => this.addToCart(p));
       return div;
+    }
+
+    renderAppointments() {
+      this.appointmentsGrid.innerHTML = '';
+      
+      if (appointments.length > 0) {
+        appointments.forEach(apt => {
+          this.appointmentsGrid.appendChild(this.appointmentCard(apt));
+        });
+      } else {
+        this.appointmentsGrid.innerHTML = `
+          <div class="empty-state">
+            <h3>No appointments scheduled</h3>
+            <p>Book your first appointment to get started.</p>
+          </div>`;
+      }
+    }
+    
+    appointmentCard(apt) {
+      const div = document.createElement('div');
+      div.className = 'appointment-card';
+      div.dataset.id = apt.id;
+      
+      const formattedDate = new Date(apt.date + 'T' + apt.time).toLocaleString();
+      
+      div.innerHTML = `
+        <div class="appointment-info">
+          <div class="appointment-service">${apt.service}</div>
+          <div class="appointment-meta">
+            <div>${formattedDate}</div>
+            <div>With: ${apt.stylist}</div>
+            <div>Status: <strong>${apt.status}</strong></div>
+          </div>
+        </div>
+        <div class="appointment-footer">
+          <div class="appointment-actions">
+            <button class="cancel-btn">Cancel Appointment</button>
+          </div>
+        </div>
+      `;
+      
+      return div;
+    }
+
+    showAppointmentModal() {
+      this.appointmentModal.style.display = 'flex';
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      qs('#appointmentDate').min = today;
+    }
+
+    hideAppointmentModal() {
+      this.appointmentModal.style.display = 'none';
+      this.appointmentForm.reset();
+    }
+
+    handleAppointmentSubmit(e) {
+      e.preventDefault();
+      
+      const serviceType = qs('#serviceType').value;
+      const date = qs('#appointmentDate').value;
+      const time = qs('#appointmentTime').value;
+      const requests = qs('#specialRequests').value;
+      
+      // Create new appointment
+      const newAppointment = {
+        id: appointments.length + 1,
+        service: serviceType,
+        date: date,
+        time: time,
+        stylist: "To be assigned",
+        status: "Pending",
+        specialRequests: requests
+      };
+      
+      appointments.push(newAppointment);
+      this.renderAppointments();
+      this.hideAppointmentModal();
+      
+      alert('Appointment scheduled successfully!');
+    }
+
+    cancelAppointment(id) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        appointments = appointments.filter(apt => apt.id !== id);
+        this.renderAppointments();
+        alert('Appointment cancelled successfully.');
+      }
     }
 
     details(p) {
@@ -682,6 +968,11 @@
       if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
       if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
       alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
+    }
+
+    addToCart(p) {
+      alert(`Added ${p.name} to your cart!`);
+      // Here you would typically add to a cart array or send to a backend
     }
 
     empty() {
