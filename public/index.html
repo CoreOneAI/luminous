@@ -1,74 +1,1008 @@
-import express from 'express';
-import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AI Salon Consultant - Luminous</title>
+  <style>
+    :root {
+      --primary-color: #B8860B;
+      --secondary-color: #DAA520;
+      --ink: #111;
+      --muted: #666;
+      --light-gray: #f8f8f8;
+      --border-color: #eee;
+    }
+    body {
+      margin: 0;
+      background: var(--light-gray);
+      color: var(--ink);
+      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+      line-height: 1.4;
+      overflow-x: hidden;
+    }
+    .container {
+      max-width: 414px;
+      margin: 0 auto;
+      background: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      padding: 24px 16px;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,.15);
+    }
+    header h1 {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: .5px;
+      margin-bottom: 4px;
+    }
+    header .tagline {
+      font-size: 12px;
+      opacity: .9;
+    }
+    main {
+      flex: 1;
+      padding: 20px 16px;
+    }
+    .welcome-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      text-align: center;
+    }
+    .welcome-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .welcome-text {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .quick-examples {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .example-btn {
+      background: var(--light-gray);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 12px 8px;
+      font-size: 11px;
+      text-align: center;
+      cursor: pointer;
+      color: #495057;
+      font-weight: 500;
+      transition: all .2s ease;
+    }
+    .example-btn:hover {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+      transform: translateY(-1px);
+    }
+    .chat-input-container {
+      background: #fff;
+      border-radius: 16px;
+      padding: 6px;
+      border: 2px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .chat-input-container:focus-within {
+      border-color: var(--primary-color);
+      box-shadow: 0 4px 20px rgba(184,134,11,.15);
+    }
+    .chat-input {
+      flex: 1;
+      padding: 16px;
+      border: none;
+      font-size: 15px;
+      outline: none;
+      background: transparent;
+      color: var(--ink);
+    }
+    .chat-input::placeholder {
+      color: #999;
+    }
+    .chat-btn {
+      padding: 12px 16px;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+      min-width: 60px;
+      transition: all .2s ease;
+    }
+    .chat-btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(184,134,11,.3);
+    }
+    .chat-btn:disabled {
+      opacity: .6;
+      cursor: not-allowed;
+    }
+    .ai-status {
+      background: linear-gradient(135deg, #e7f3ff, #f0f8ff);
+      color: #06c;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      margin: 16px 0;
+      text-align: center;
+      border: 1px solid #cce7ff;
+      display: none;
+      animation: pulse 2s infinite;
+    }
+    .ai-status.active {
+      display: block;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .7; }
+    }
+    .chat-response {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 12px rgba(0,0,0,.05);
+      font-size: 14px;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    .chat-paragraph {
+      white-space: pre-wrap;
+      margin-bottom: 1em;
+    }
+    .products-section {
+      margin-top: 24px;
+      display: none;
+    }
+    .appointments-section {
+      margin-top: 24px;
+      display: none;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+    .ai-badge {
+      background: #e7f3ff;
+      color: #06c;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 600;
+      border: 1px solid #cce7ff;
+    }
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .appointments-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .product-card {
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      border: 1px solid #f0f0f0;
+      transition: all .3s ease;
+    }
+    .appointment-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,.08);
+      border: 1px solid #f0f0f0;
+      transition: all .3s ease;
+    }
+    .product-card:hover, .appointment-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,.12);
+    }
+    .product-content {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 16px;
+    }
+    .product-image {
+      width: 100px;
+      height: 100px;
+      border-radius: 12px;
+      object-fit: cover;
+      margin: 16px 0 16px 16px;
+    }
+    .product-image-placeholder {
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #999;
+      font-size: 24px;
+      margin: 16px 0 16px 16px;
+      border-radius: 12px;
+    }
+    .product-info {
+      padding: 16px 16px 16px 0;
+    }
+    .appointment-info {
+      padding: 8px 0;
+    }
+    .product-name {
+      font-weight: 700;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+    .appointment-service {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 8px;
+    }
+    .product-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .appointment-meta {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .product-description {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.4;
+      margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .product-benefits {
+      margin-bottom: 10px;
+      display: none;
+    }
+    .product-benefits.visible {
+      display: block;
+    }
+    .benefit-tag {
+      display: inline-block;
+      background: #f0f8ff;
+      color: #06c;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      margin: 1px;
+      border: 1px solid #cce7ff;
+    }
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .appointment-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+    .product-price {
+      font-weight: 700;
+      color: var(--primary-color);
+      font-size: 16px;
+    }
+    .product-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .appointment-actions {
+      display: flex;
+      gap: 8px;
+    }
+    .details-btn {
+      background: var(--light-gray);
+      color: #666;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .cancel-btn {
+      background: #ffebee;
+      color: #d32f2f;
+      border: 1px solid #ffcdd2;
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .add-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .book-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .footer-nav {
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0;
+      border-top: 1px solid #eee;
+      box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+    }
+    .footer-nav a {
+      text-decoration: none;
+      color: #666;
+      font-size: 11px;
+      font-weight: 600;
+      text-align: center;
+    }
+    .footer-nav svg {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 4px;
+    }
+    .footer-nav a.active {
+      color: var(--primary-color);
+    }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+    }
+    .close-modal {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .form-input, .form-select, .form-textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+    .submit-btn {
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>AI Salon Consultant</h1>
+      <div class="tagline">Your personal beauty expert powered by AI</div>
+    </header>
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+    <main class="main">
+      <section class="welcome-section" id="welcomeSection">
+        <div class="welcome-title">Welcome to Your Personal Salon</div>
+        <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
+        <div class="quick-examples">
+          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
+          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
+          <button class="example-btn" data-query="accessories">Accessories</button>
+          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
+        </div>
+      </section>
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+      <section class="chat-section">
+        <div class="chat-input-container">
+          <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
+          <button id="chatBtn" class="chat-btn">Ask AI</button>
+        </div>
+        <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
+        <div id="chatResponse" class="chat-response">
+          <div style="text-align:center;color:#666;">
+            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
+            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
+            <p style="font-size:13px;"><strong>Try:</strong></p>
+            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+              <li>"shampoo"</li>
+              <li>"serum"</li>
+              <li>"bond repair"</li>
+              <li>"accessories"</li>
+            </ul>
+          </div>
+        </div>
+      </section>
 
-// Middleware
-app.use(cors());
-app.use(express.json());
-app.use(express.static(path.join(__dirname, 'public')));
+      <section id="productsSection" class="products-section">
+        <div class="section-header">
+          <div class="section-title">Your Recommendations</div>
+          <div class="ai-badge">AI Generated</div>
+        </div>
+        <div id="status" class="status"></div>
+        <div id="productsGrid" class="products-grid"></div>
+      </section>
 
-// Serve the main HTML file
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+      <section id="appointmentsSection" class="appointments-section">
+        <div class="section-header">
+          <div class="section-title">Your Appointments</div>
+          <button id="newAppointmentBtn" class="book-btn">New Appointment</button>
+        </div>
+        <div id="appointmentsGrid" class="appointments-grid"></div>
+      </section>
+    </main>
 
-// API endpoint for AI chat
-app.post('/api/ai-chat', async (req, res) => {
-  try {
-    const { message } = req.body;
+    <!-- Appointment Modal -->
+    <div id="appointmentModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">Schedule New Appointment</h3>
+          <button class="close-modal">&times;</button>
+        </div>
+        <form id="appointmentForm">
+          <div class="form-group">
+            <label class="form-label">Service Type</label>
+            <select class="form-select" id="serviceType" required>
+              <option value="">Select a service</option>
+              <option value="Hair">Hair Styling/Cut</option>
+              <option value="Nails">Manicure/Pedicure</option>
+              <option value="Spa">Spa Treatment</option>
+              <option value="Facial">Facial Treatment</option>
+              <option value="Massage">Massage</option>
+              <option value="Barber">Barber Service</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-input" id="appointmentDate" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Time</label>
+            <input type="time" class="form-input" id="appointmentTime" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Special Requests (Optional)</label>
+            <textarea class="form-textarea" id="specialRequests"></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Schedule Appointment</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-nav">
+        <a href="#" id="homeNavBtn" class="active">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M11.47 3.829a1.5 1.5 0 0 1 1.06 0l7.5 4.33a1.5 1.5 0 0 1 .75 1.296v9.141a1.5 1.5 0 0 1-.75 1.296l-7.5 4.33a1.5 1.5 0 0 1-1.06 0l-7.5-4.33a1.5 1.5 0 0 1-.75-1.296V9.455a1.5 1.5 0 0 1 .75-1.296l7.5-4.33Z" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+            Home
+        </a>
+        <a href="#" id="profileNavBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0a4.5 4.5 0 0 1-9 0Zm-.75 9a.75.75 0 0 0-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5Zm12.75 0a.75.75 0 0 0-.75.75v2.25a.75.75 0 0 0 .75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5ZM4.783 14.283a.75.75 0 0 1 1.061 0l.974.975a.75.75 0 1 1-1.06 1.06l-.975-.975a.75.75 0 0 1 0-1.06ZM19.217 14.283a.75.75 0 0 1 0 1.06l-.974.975a.75.75 0 0 1-1.06-1.06l.975-.975a.75.75 0 0 1 1.06 0ZM7.87 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM15.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM9.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM13.847 14.847a.75.75 0 1 1 1.06-1.06l.975.975a.75.75 0 0 1-1.06 1.06l-.975-.975ZM18.5 17.25a.75.75 0 0 1-.75.75H6.25a.75.75 0 0 1 0-1.5h11.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" stroke="currentColor" stroke-width="1.5"/>
+              </svg>
+            Profile
+        </a>
+        <a href="#" id="appointmentsNavBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
+            </svg>
+            Appointments
+        </a>
+        <a href="#" id="basketNavBtn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.310.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c-.427.275-.524-.46-.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085-.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.310.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
+            </svg>
+            Basket
+        </a>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const qs = (sel) => document.querySelector(sel);
+  const qsa = (sel) => document.querySelectorAll(sel);
+
+  // Add missing formatCents function
+  function formatCents(cents) {
+    return '$' + (cents / 100).toFixed(2);
+  }
+
+  // Function to call the AI API
+  async function getAIResponse(message) {
+    try {
+      const response = await fetch('/api/ai-chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message })
+      });
+      
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+      
+      const data = await response.json();
+      return data.response || "I'm sorry, I couldn't process your request at this time.";
+    } catch (error) {
+      console.error('Error calling AI API:', error);
+      return "I'm experiencing technical difficulties. Please try again later.";
+    }
+  }
+
+  // Sample appointments data
+  let appointments = [
+    {
+      id: 1,
+      service: "Hair Cut & Style",
+      date: "2023-11-15",
+      time: "14:00",
+      stylist: "Jessica Williams",
+      status: "Confirmed"
+    },
+    {
+      id: 2,
+      service: "Manicure",
+      date: "2023-11-20",
+      time: "11:30",
+      stylist: "Michelle Rodriguez",
+      status: "Confirmed"
+    }
+  ];
+
+  const productsData = [
+    { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199, "image": "q89266q8926.jpg" },
+    { "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon", "brand": "Arctic Fox", "category": "Bright Color", "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.", "priceCents": 2299, "image": "xmmaulx.jpg" },
+    { "name": "Pravana ChromaSilk Vivids - Neon Tangerine", "brand": "Pravana", "category": "Bright Color", "instructions": "For professional use only. Apply to pre-lightened hair. Process for 20-45 minutes under heat or as desired. Rinse with cool water.", "priceCents": 3499, "image": "6ol6t96ol6t96ol6.jpg" },
+    { "name": "Splat Rebellious Colors - Atomic Pink", "brand": "Splat", "category": "Bright Color", "instructions": "Kit includes bleaching system. Follow included instructions carefully. Perform a patch test 48 hours prior to application.", "priceCents": 1899, "image": "w7tu8vw.jpg" },
+    { "name": "L'Oreal Colorista Semi-Permanent - Purple", "brand": "L'Oreal", "category": "Bright Color", "instructions": "Shake well. Apply to pre-lightened hair. Leave for 15-30 minutes. Rinse with cold water. Lasts 4-10 shampoos.", "priceCents": 1599, "image": "3gtwh3gtwh3g.jpg" },
+    { "name": "Good Dye Young Semi-Permanent - Ex-Girl", "brand": "Good Dye Young", "category": "Bright Color", "instructions": "Apply to light blonde hair for best results. Leave on for 15-30 minutes. Rinse with cold water. Conditions while it colors.", "priceCents": 2399, "image": "foleozfol.jpg" },
+    { "name": "Joico Color Intensity - Sapphire Blue", "brand": "Joico", "category": "Bright Color", "instructions": "Professional formula. Provides intense shine. Apply to pre-lightened hair. Process for 20-35 minutes. Rinse and style.", "priceCents": 2799, "image": "plvpakplvpakplvp.jpg" },
+    { "name": "Lime Crime Unicorn Hair - Sext", "brand": "Lime Crime", "category": "Bright Color", "instructions": "Apply to blonde hair for true color. Wear gloves. Process for 20-40 minutes. Rinse with cool water. Vegan.", "priceCents": 2599, "image": "q89266q8926.jpg" },
+    { "name": "Adore Creative Image - Paprika", "brand": "Adore", "category": "Bright Color", "instructions": "Alcohol-free, conditioning formula. Apply to clean, damp hair. Do not rinse out. Style as usual. For subtle tint on dark hair or vibrant color on light hair.", "priceCents": 1399, "image": "xmmaulx.jpg" },
+    { "name": "Pulp Riot Semi-Permanent - Fireball", "brand": "Pulp Riot", "category": "Bright Color", "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.", "priceCents": 3799, "image": "6ol6t96ol6t96ol6.jpg" }
+  ];
+
+  function getProducts(query) {
+    const queryLower = query.toLowerCase();
     
-    if (!message) {
-      return res.status(400).json({ error: 'Message is required' });
+    const relevantProducts = productsData.filter(p => {
+      const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
+      const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
+      const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
+      const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
+      return nameMatches || brandMatches || categoryMatches || instructionsMatches;
+    });
+
+    return relevantProducts.slice(0, 25);
+  }
+
+  class UnifiedSalonAI {
+    constructor() {
+      this.currentQuery = '';
+      this.isLoading = false;
+      this.chatInput = qs('#chatInput');
+      this.chatBtn = qs('#chatBtn');
+      this.chatResponse = qs('#chatResponse');
+      this.aiStatus = qs('#aiStatus');
+      this.status = qs('#status');
+      this.grid = qs('#productsGrid');
+      this.appointmentsGrid = qs('#appointmentsGrid');
+      this.productsSection = qs('#productsSection');
+      this.appointmentsSection = qs('#appointmentsSection');
+      this.welcomeSection = qs('.welcome-section');
+      this.homeNavBtn = qs('#homeNavBtn');
+      this.profileNavBtn = qs('#profileNavBtn');
+      this.appointmentsNavBtn = qs('#appointmentsNavBtn');
+      this.basketNavBtn = qs('#basketNavBtn');
+      this.newAppointmentBtn = qs('#newAppointmentBtn');
+      this.appointmentModal = qs('#appointmentModal');
+      this.appointmentForm = qs('#appointmentForm');
+      this.closeModalBtn = qs('.close-modal');
+      this.exampleBtns = qsa('.example-btn');
+      this.currentView = 'home';
+      this.bind();
+      this.welcome();
+    }
+
+    bind() {
+      this.chatBtn?.addEventListener('click', () => this.handleAsk());
+      this.chatInput?.addEventListener('keypress', e => {
+        if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
+      });
+      this.homeNavBtn?.addEventListener('click', () => this.showView('home'));
+      this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
+      this.appointmentsNavBtn?.addEventListener('click', () => this.showView('appointments'));
+      this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
+      this.newAppointmentBtn?.addEventListener('click', () => this.showAppointmentModal());
+      this.closeModalBtn?.addEventListener('click', () => this.hideAppointmentModal());
+      this.appointmentForm?.addEventListener('submit', (e) => this.handleAppointmentSubmit(e));
+
+      this.exampleBtns.forEach(btn => {
+          btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
+      });
+      
+      this.grid.addEventListener('click', e => {
+          const detailsBtn = e.target.closest('.details-btn');
+          if (detailsBtn) {
+              const card = e.target.closest('.product-card');
+              const productName = card.querySelector('.product-name').textContent;
+              const product = productsData.find(p => p.name === productName);
+              this.details(product);
+          }
+      });
+
+      this.appointmentsGrid.addEventListener('click', e => {
+        const cancelBtn = e.target.closest('.cancel-btn');
+        if (cancelBtn) {
+            const card = e.target.closest('.appointment-card');
+            const appointmentId = parseInt(card.dataset.id);
+            this.cancelAppointment(appointmentId);
+        }
+      });
+
+      // Close modal when clicking outside
+      this.appointmentModal.addEventListener('click', (e) => {
+        if (e.target === this.appointmentModal) {
+          this.hideAppointmentModal();
+        }
+      });
+    }
+
+    showView(view) {
+      this.currentView = view;
+      
+      // Update navigation
+      qsa('.footer-nav a').forEach(a => a.classList.remove('active'));
+      
+      if (view === 'home') {
+        this.homeNavBtn.classList.add('active');
+        this.welcomeSection.style.display = 'block';
+        this.productsSection.style.display = 'none';
+        this.appointmentsSection.style.display = 'none';
+        this.chatResponse.style.display = 'block';
+      } else if (view === 'appointments') {
+        this.appointmentsNavBtn.classList.add('active');
+        this.welcomeSection.style.display = 'none';
+        this.productsSection.style.display = 'none';
+        this.appointmentsSection.style.display = 'block';
+        this.chatResponse.style.display = 'none';
+        this.renderAppointments();
+      }
+    }
+
+    welcome() {
+      this.showView('home');
+    }
+
+    async handleAsk(message = this.chatInput?.value) {
+      if (!message || this.isLoading) return;
+      this.currentQuery = message;
+
+      this.isLoading = true;
+      if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
+      this.aiStatus?.classList.add('active');
+      this.welcomeSection.style.display = 'none';
+
+      try {
+        // Get AI response for beauty questions
+        const chatResponse = await getAIResponse(message);
+        
+        this.renderChat(chatResponse);
+        
+        // Only show products if it's a product-related query
+        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'product', 'buy', 'purchase'];
+        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+        
+        if (isProductSearch) {
+          const products = getProducts(message);
+          this.renderProducts(products);
+        } else {
+          this.productsSection.style.display = 'none';
+        }
+
+      } catch (err) {
+        console.error('Error handling question:', err);
+        this.renderChat("An error occurred while processing your request. Please try again.");
+        this.empty();
+      }
+
+      if (this.chatInput) this.chatInput.value = '';
+      this.isLoading = false;
+      if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
+      this.aiStatus?.classList.remove('active');
     }
     
-    // In a real implementation, you would call OpenAI, Gemini, or Anthropic API here
-    // For now, we'll simulate a response
-    const response = await simulateAIResponse(message);
+    renderChat(text) {
+      if (!this.chatResponse) return;
+      
+      const chatContainer = qs('#chatResponse');
+      chatContainer.innerHTML = '';
+      
+      const p = document.createElement('p');
+      p.className = 'chat-paragraph';
+      p.textContent = text;
+      chatContainer.appendChild(p);
+    }
+
+    renderProducts(products) {
+      this.productsSection.style.display = 'block';
+      this.grid.innerHTML = '';
+      
+      if (products.length > 0) {
+          products.forEach(p => this.grid.appendChild(this.productCard(p)));
+      } else {
+          this.empty();
+      }
+    }
     
-    res.json({ response });
-  } catch (error) {
-    console.error('Error in AI chat:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
+    productCard(p) {
+      const div = document.createElement('div');
+      div.className = `product-card`;
+      const price = formatCents(p.priceCents);
+      const benefits = p.benefits?.length ? `<div class="product-benefits">${p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>` : '';
+      
+      // Fixed: Use proper escaping for the onerror handler
+      const onerrorHandler = "this.outerHTML='<div class=\"product-image-placeholder\">💆‍♀️</div>'";
+      
+      div.innerHTML = `
+        <div class="product-content">
+          <img class="product-image" loading="lazy" referrerpolicy="no-referrer"
+               src="${(p.image||'').replace(/"/g,'&quot;')}"
+               alt="${(p.name||'Product').replace(/"/g,'&quot;')}"
+               onerror="${onerrorHandler}">
+          <div class="product-info">
+            <div class="product-name">${p.name}</div>
+            <div class="product-meta">${p.brand} • ${p.category}</div>
+            ${p.description ? `<div class="product-description">${p.description}</div>` : ''}
+            ${benefits}
+            <div class="product-footer">
+              <div class="product-price">${price}</div>
+              <div class="product-actions">
+                <button class="details-btn">Details</button>
+                <button class="add-btn">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </div>`;
+      div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
+      div.querySelector('.add-btn')?.addEventListener('click', () => this.addToCart(p));
+      return div;
+    }
 
-// Simulated AI response function
-async function simulateAIResponse(message) {
-  // This is a simplified simulation - in production, you would call a real AI API
-  const lowerMessage = message.toLowerCase();
-  
-  if (lowerMessage.includes('damaged') && lowerMessage.includes('hair')) {
-    return "For damaged hair, I recommend:\n\n1. Use a deep conditioning treatment weekly\n2. Avoid heat styling tools\n3. Try a protein treatment like Olaplex No. 3\n4. Use a wide-tooth comb instead of brushing\n5. Trim split ends regularly\n6. Consider a silk pillowcase to reduce friction\n\nWould you like product recommendations for damaged hair?";
-  }
-  
-  if (lowerMessage.includes('wrinkle') || lowerMessage.includes('aging')) {
-    return "For aging skin and wrinkles, I suggest:\n\n1. Use a retinoid product (start with low concentration)\n2. Apply vitamin C serum in the morning\n3. Don't forget sunscreen daily (SPF 30+)\n4. Incorporate hyaluronic acid for hydration\n5. Consider peptides for collagen production\n6. Stay hydrated and maintain a healthy diet\n\nWould you like specific product recommendations?";
-  }
-  
-  if (lowerMessage.includes('acne') || lowerMessage.includes('breakout')) {
-    return "For acne-prone skin:\n\n1. Use a gentle salicylic acid cleanser\n2. Spot treat with benzoyl peroxide\n3. Avoid heavy, pore-clogging products\n4. Don't pick or pop pimples\n5. Change pillowcases regularly\n6. Consider non-comedogenic moisturizers\n\nWould you like me to recommend specific products for your skin type?";
-  }
-  
-  // Default response for other questions
-  return "Thank you for your question! As an AI beauty consultant, I can provide advice on hair care, skincare, makeup, and salon services. For more specific recommendations, please tell me more about your concerns or what you'd like to improve.";
-}
+    renderAppointments() {
+      this.appointmentsGrid.innerHTML = '';
+      
+      if (appointments.length > 0) {
+        appointments.forEach(apt => {
+          this.appointmentsGrid.appendChild(this.appointmentCard(apt));
+        });
+      } else {
+        this.appointmentsGrid.innerHTML = `
+          <div class="empty-state">
+            <h3>No appointments scheduled</h3>
+            <p>Book your first appointment to get started.</p>
+          </div>`;
+      }
+    }
+    
+    appointmentCard(apt) {
+      const div = document.createElement('div');
+      div.className = 'appointment-card';
+      div.dataset.id = apt.id;
+      
+      const formattedDate = new Date(apt.date + 'T' + apt.time).toLocaleString();
+      
+      div.innerHTML = `
+        <div class="appointment-info">
+          <div class="appointment-service">${apt.service}</div>
+          <div class="appointment-meta">
+            <div>${formattedDate}</div>
+            <div>With: ${apt.stylist}</div>
+            <div>Status: <strong>${apt.status}</strong></div>
+          </div>
+        </div>
+        <div class="appointment-footer">
+          <div class="appointment-actions">
+            <button class="cancel-btn">Cancel Appointment</button>
+          </div>
+        </div>
+      `;
+      
+      return div;
+    }
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
+    showAppointmentModal() {
+      this.appointmentModal.style.display = 'flex';
+      // Set minimum date to today
+      const today = new Date().toISOString().split('T')[0];
+      qs('#appointmentDate').min = today;
+    }
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+    hideAppointmentModal() {
+      this.appointmentModal.style.display = 'none';
+      this.appointmentForm.reset();
+    }
 
-// Export for testing
-export default app;
+    handleAppointmentSubmit(e) {
+      e.preventDefault();
+      
+      const serviceType = qs('#serviceType').value;
+      const date = qs('#appointmentDate').value;
+      const time = qs('#appointmentTime').value;
+      const requests = qs('#specialRequests').value;
+      
+      // Create new appointment
+      const newAppointment = {
+        id: appointments.length + 1,
+        service: serviceType,
+        date: date,
+        time: time,
+        stylist: "To be assigned",
+        status: "Pending",
+        specialRequests: requests
+      };
+      
+      appointments.push(newAppointment);
+      this.renderAppointments();
+      this.hideAppointmentModal();
+      
+      alert('Appointment scheduled successfully!');
+    }
+
+    cancelAppointment(id) {
+      if (confirm('Are you sure you want to cancel this appointment?')) {
+        appointments = appointments.filter(apt => apt.id !== id);
+        this.renderAppointments();
+        alert('Appointment cancelled successfully.');
+      }
+    }
+
+    details(p) {
+      const lines = [];
+      if (p.usage) lines.push(`Usage: ${p.usage}`);
+      if (p.instructions) lines.push(`Instructions: ${p.instructions}`);
+      if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
+      if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
+      alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
+    }
+
+    addToCart(p) {
+      alert(`Added ${p.name} to your cart!`);
+      // Here you would typically add to a cart array or send to a backend
+    }
+
+    empty() {
+      if (!this.grid) return;
+      this.grid.innerHTML = `
+        <div class="empty-state">
+          <h3>No products found</h3>
+          <p>Try a different search or be more specific about your needs.</p>
+        </div>`;
+      this.productsSection.style.display = 'block';
+    }
+    
+    startNewSearch() {
+        window.scrollTo(0, 0);
+        this.currentQuery = '';
+        this.grid.innerHTML = '';
+        this.productsSection.style.display = 'none';
+        this.status.textContent = '';
+        this.welcome();
+    }
+    
+    showComingSoon(feature) {
+        alert(`${feature} functionality is coming soon!`);
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    window.salonAI = new UnifiedSalonAI();
+  });
+})();
+</script>
+</body>
+</html>
