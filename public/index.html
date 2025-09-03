@@ -428,6 +428,15 @@
   const qs = (sel) => document.querySelector(sel);
   const qsa = (sel) => document.querySelectorAll(sel);
 
+  async function fetchUnifiedService(message) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+    });
+    return await response.json();
+  }
+
   const productsData = [
     { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199 },
     { "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon", "brand": "Arctic Fox", "category": "Bright Color", "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.", "priceCents": 2299 },
@@ -486,12 +495,6 @@
     });
 
     return relevantProducts.slice(0, 25);
-  }
-
-  async function getAIResponse(prompt) {
-    // This function will handle the AI response based on the message.
-    // For now, we will return a hardcoded response to fix the UI first.
-    return "Thank you for your question. Here are some product recommendations.";
   }
 
   class UnifiedSalonAI {
