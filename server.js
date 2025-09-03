@@ -184,13 +184,24 @@ const productsData = [
       this.welcomeSection.style.display = 'none';
 
       try {
-        const products = getProducts(message);
-        
+        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging', 'accessories'];
+        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+
         let chatResponse = '';
-        if (products.length > 0) {
+        let products = [];
+        
+        if (isProductSearch) {
+          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
+          
+          if (matchingProducts.length > 0) {
+            products = matchingProducts.slice(0, 25);
             chatResponse = `Here are some products that match your search.`;
-        } else {
+          } else {
             chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
+          }
+        } else {
+          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
+          products = [];
         }
         
         this.renderChat(chatResponse);
