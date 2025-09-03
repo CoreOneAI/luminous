@@ -502,6 +502,12 @@
     return relevantProducts.slice(0, 25);
   }
 
+  async function getAIResponse(prompt) {
+    // This function will handle the AI response based on the message.
+    // For now, we will return a hardcoded response to fix the UI first.
+    return "Thank you for your question. Here are some product recommendations.";
+  }
+
   class UnifiedSalonAI {
     constructor() {
       this.currentQuery = '';
