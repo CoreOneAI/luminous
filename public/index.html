@@ -416,7 +416,7 @@
         </a>
         <a href="#" id="basketNavBtn">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c-.427.275-.524-.46-.524.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c-.427.275-.524-.46-.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
             </svg>
             Basket
         </a>
@@ -427,6 +427,15 @@
 (() => {
   const qs = (sel) => document.querySelector(sel);
   const qsa = (sel) => document.querySelectorAll(sel);
+
+  async function fetchUnifiedService(message) {
+    const response = await fetch('/api/unified-service', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: message })
+    });
+    return await response.json();
+  }
 
   const productsData = [
     { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199 },
