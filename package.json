@@ -1,20 +1,22 @@
 {
-  "name": "luminous",
-  "version": "1.0.0",
+  "name": "ecommerce-ai-agent",
   "private": true,
-  "description": "Luminous Beauty AI - minimal server + catalog importer",
+  "version": "0.0.1",
   "type": "module",
-  "engines": { "node": "22.x" },
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "import:catalog": "node ./bin/import-catalog.mjs ./data/Louminous Product List-1.xlsx ./public/data/products.json",
-    "check:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\""
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "start": "node server.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.19.2",
-    "morgan": "^1.10.0",
-    "xlsx": "^0.18.5"
+    "lucide-react": "^0.453.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "vite": "^5.3.1"
   }
 }
