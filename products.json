@@ -1,764 +1,272 @@
-[
-  {
-    "name": "Hair Styling Tool #1",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #2",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #3",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #4",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #5",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #6",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #7",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #8",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #9",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #10",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #11",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #12",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #13",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #14",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #15",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #16",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #17",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #18",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #19",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #20",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #21",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #22",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #23",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #24",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #25",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #26",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #27",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #28",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #29",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #30",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #31",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #32",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #33",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #34",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #35",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #36",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #37",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #38",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #39",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #40",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #41",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #42",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #43",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #44",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #45",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #46",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #47",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #48",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #49",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Hair Styling Tool #50",
-    "brand": "Salon Tools & Accessories",
-    "category": "Hair Styling Tools",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #1",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #2",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #3",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #4",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #5",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Barber Tool #6",
-    "brand": "Salon Tools & Accessories",
-    "category": "Barber Supplies",
-    "instructions": "Use in salon or personal care setting as per professional guidance."
-  },
-  {
-    "name": "Guerlain Abeille Royale Youth Watery Oil",
-    "brand": "Guerlain",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Lavera Basis Sensitiv Shampoo",
-    "brand": "Lavera",
-    "category": "Haircare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Weleda Skin Food",
-    "brand": "Weleda",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Sebamed Clear Face Gel",
-    "brand": "Sebamed",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Annayake Cleansing Milk",
-    "brand": "Annayake",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Nivea Soft Cream",
-    "brand": "Nivea",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Dr. Hauschka Rose Day Cream",
-    "brand": "Dr. Hauschka",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Alverde Natural Cosmetics Hand Cream",
-    "brand": "Alverde",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Eubos Sensitive Skin Lotion",
-    "brand": "Eubos",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Balea Q10 Anti-Wrinkle Cream",
-    "brand": "Balea",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Kneipp Herbal Bath Oil",
-    "brand": "Kneipp",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Collistar Talasso-Scrub",
-    "brand": "Collistar",
-    "category": "Bodycare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Deborah Milano Lipstick",
-    "brand": "Deborah Milano",
-    "category": "Lip Care",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Kiko Milano Smart Nail Lacquer",
-    "brand": "Kiko Milano",
-    "category": "Nail Care",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "LErbolario Iris Bath Foam",
-    "brand": "LErbolario",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Diego Dalla Palma Brow Pencil",
-    "brand": "Diego Dalla Palma",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Pupa Vamp Mascara",
-    "brand": "Pupa",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Labo Transdermic Skincare",
-    "brand": "Labo Transdermic",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Guam Seaweed Mud",
-    "brand": "Guam",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Bottega Verde Face Serum with Hyaluronic Acid",
-    "brand": "Bottega Verde",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Natura House Foot Cream",
-    "brand": "Natura House",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Shiseido Ultimune Power Infusing Concentrate",
-    "brand": "Shiseido",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Majolica Majorca Lash Expander Mascara",
-    "brand": "Majolica Majorca",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Senka Perfect Whip Foam",
-    "brand": "Senka",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "SK-II Facial Treatment Essence",
-    "brand": "SK-II",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Hada Labo Gokujyun Lotion",
-    "brand": "Hada Labo",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Canmake Cream Cheek",
-    "brand": "Canmake",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Saborino Morning Face Mask",
-    "brand": "Saborino",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Biore UV Aqua Rich Watery Essence",
-    "brand": "Biore",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "DHC Deep Cleansing Oil",
-    "brand": "DHC",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Kose Softymo Cleansing Oil",
-    "brand": "Kose Softymo",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Clicks Exfoliating Facial Scrub",
-    "brand": "Clicks",
-    "category": "Bodycare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Oh So Heavenly Foot Scrub",
-    "brand": "Oh So Heavenly",
-    "category": "Footcare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Himalaya Herbals Neem Face Pack (local favorite)",
-    "brand": "Himalaya Herbals",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Sorbet Hydrating Face Mask",
-    "brand": "Sorbet",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "African Extracts Rooibos Toner",
-    "brand": "African Extracts",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Annique Rooibos Day Cream",
-    "brand": "Annique",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Dis-Chem Vitamin C Serum",
-    "brand": "Dis-Chem",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Lip Ice Lip Balm",
-    "brand": "Lip Ice",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Bio-Oil Skincare Oil",
-    "brand": "Bio-Oil",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Justine Tissue Oil",
-    "brand": "Justine",
-    "category": "Wellness",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Etude House Tint",
-    "brand": "Etude House",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Holika Holika Aloe Soothing Gel",
-    "brand": "Holika Holika",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Cosrx Acne Pimple Master Patch",
-    "brand": "Cosrx",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Laneige Water Sleeping Mask",
-    "brand": "Laneige",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Innisfree Green Tea Seed Serum",
-    "brand": "Innisfree",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Sulwhasoo First Care Activating Serum",
-    "brand": "Sulwhasoo",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Dr. Jart+ Cicapair Cream",
-    "brand": "Dr. Jart+",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Missha Time Revolution Essence",
-    "brand": "Missha",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "The Face Shop Rice Water Bright Cleanser",
-    "brand": "The Face Shop",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Banila Co Clean It Zero Balm",
-    "brand": "Banila Co",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Yves Rocher Spanish Rose Perfume",
-    "brand": "Yves Rocher",
-    "category": "Fragrance",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Deliplus Makeup Remover Wipes",
-    "brand": "Deliplus",
-    "category": "Lip Care",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "ISDIN Fotoprotector Fusion Water",
-    "brand": "ISDIN",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Babaria Aloe Vera Gel",
-    "brand": "Babaria",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Garnier SkinActive Micellar Water",
-    "brand": "Garnier",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "MartiDerm Ampoules",
-    "brand": "MartiDerm",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Lullage AcneXpert Serum",
-    "brand": "Lullage",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Nenuco Body Lotion",
-    "brand": "Nenuco",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Bella Aurora Anti-Stain Cream",
-    "brand": "Bella Aurora",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "La Chinata Lip Balm",
-    "brand": "La Chinata",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Essie Nail Polish",
-    "brand": "Essie",
-    "category": "Nail Care",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Neutrogena Hydro Boost Gel",
-    "brand": "Neutrogena",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Fenty Beauty Pro Filtr Foundation",
-    "brand": "Fenty Beauty",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Maybelline Great Lash Mascara",
-    "brand": "Maybelline",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "e.l.f. Poreless Putty Primer",
-    "brand": "e.l.f.",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Anastasia Beverly Hills Brow Wiz",
-    "brand": "Anastasia Beverly Hills",
-    "category": "Other",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "CeraVe Moisturizing Cream",
-    "brand": "CeraVe",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Tatcha The Water Cream",
-    "brand": "Tatcha",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Drunk Elephant Vitamin C Serum",
-    "brand": "Drunk Elephant",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  },
-  {
-    "name": "Olay Regenerist Micro-Sculpting Cream",
-    "brand": "Olay",
-    "category": "Skincare",
-    "instructions": "Use as directed for beauty/wellness care"
-  }
-]
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Salon Consultant</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <meta name="description" content="Your personal beauty expert powered by AI">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <h1>Welcome to Your Personal Salon</h1>
+      <p>Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</p>
+      <div class="category-buttons">
+        <button class="category-btn" data-category="repair">Repair Damage</button>
+        <button class="category-btn" data-category="anti-aging">Anti-Aging</button>
+        <button class="category-btn" data-category="accessories">Accessories</button>
+        <button class="category-btn" data-category="clear-skin">Clear Skin</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="chat-section">
+      <div class="container">
+        <form id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask AI" autocomplete="off">
+          <button type="submit">Ask AI</button>
+        </form>
+        <div id="loading" class="hidden">AI is generating personalized recommendations...</div>
+        <div id="chat-response" class="hidden">
+          <h3>Welcome to Your AI Salon</h3>
+          <p>I'm here to give you personalized product recommendations.</p>
+          <p>Try:</p>
+          <ul>
+            <li>"shampoo"</li>
+            <li>"serum"</li>
+            <li>"bond repair"</li>
+            <li>"accessories"</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-section">
+      <div class="container">
+        <h2>Your Recommendations</h2>
+        <p>AI Generated</p>
+        <div id="product-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <nav>
+        <a href="#" class="active">
+          <img src="/images/home-icon.png" alt="Home">
+          Home
+        </a>
+        <a href="#">
+          <img src="/images/profile-icon.png" alt="Profile">
+          Profile
+        </a>
+        <a href="#">
+          <img src="/images/appointments-icon.png" alt="Appointments">
+          Appointments
+        </a>
+        <a href="#">
+          <img src="/images/basket-icon.png" alt="Basket">
+          Basket
+        </a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // Ensure DOM is fully loaded before executing any DOM-related code
+    document.addEventListener('DOMContentLoaded', () => {
+      // Log DOM state for debugging
+      console.log('DOM fully loaded at:', new Date().toISOString());
+      const categoryButtonsCheck = document.querySelectorAll('.category-btn');
+      console.log('Initial check: Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
+      console.log('Script initialization started for https://luminous-render.onrender.com/');
+
+      // Initialize products array
+      let products = [];
+
+      // Format price in cents to dollars (e.g., 1234 -> $12.34)
+      function formatCents(cents) {
+        if (typeof cents !== 'number' || isNaN(cents)) {
+          console.warn('Invalid price value:', cents);
+          return 'N/A';
+        }
+        return `$${(cents / 100).toFixed(2)}`;
+      }
+
+      // Generate HTML for a single product card
+      function card(product) {
+        return `
+          <div class="product-card">
+            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
+            <h3>${product.name}</h3>
+            <p>Brand: ${product.brand}</p>
+            <p>Category: ${product.category}</p>
+            <p>Price: ${formatCents(product.price)}</p>
+            <p>${product.instructions}</p>
+          </div>
+        `;
+      }
+
+      // Render products in product-list
+      function renderProducts(productList) {
+        const productListDiv = document.getElementById('product-list');
+        if (!productListDiv) {
+          console.error('Product list element not found with ID "product-list"');
+          return;
+        }
+        productListDiv.innerHTML = '';
+        if (!Array.isArray(productList) || productList.length === 0) {
+          productListDiv.innerHTML = '<p>No products found.</p>';
+          return;
+        }
+        productListDiv.innerHTML = productList.map(product => card(product)).join('');
+      }
+
+      // Fetch products on load
+      async function loadProducts() {
+        try {
+          const response = await fetch('/data/products.json');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          products = await response.json();
+          renderProducts(products); // Display all products initially
+        } catch (error) {
+          console.error('Error loading products:', error);
+          const productListDiv = document.getElementById('product-list');
+          if (productListDiv) {
+            productListDiv.innerHTML = '<p>Error loading products. Please try again later.</p>';
+          } else {
+            console.error('Product list element not found with ID "product-list"');
+          }
+        }
+      }
+
+      // Category mappings for buttons
+      const categoryMappings = {
+        'repair': ['repair', 'damaged', 'bond', 'haircare'],
+        'anti-aging': ['aging', 'wrinkle', 'anti-aging', 'serum', 'skincare'],
+        'accessories': ['tools', 'accessories', 'barber', 'styling'],
+        'clear-skin': ['acne', 'clear', 'breakout', 'skincare']
+      };
+
+      // Retry mechanism for category buttons
+      function initializeCategoryButtons(attempt = 1, maxAttempts = 3, delayMs = 500) {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        if (categoryButtons.length === 0) {
+          console.warn(`Attempt ${attempt}/${maxAttempts}: No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn" in <div class="category-buttons">.`);
+          if (attempt < maxAttempts) {
+            console.log(`Retrying in ${delayMs}ms...`);
+            setTimeout(() => initializeCategoryButtons(attempt + 1, maxAttempts, delayMs), delayMs);
+            return;
+          } else {
+            console.error('All attempts failed: Category buttons not found. Proceeding without category button functionality.');
+            return;
+          }
+        }
+
+        console.log('Category buttons initialized:', categoryButtons.length);
+        categoryButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            console.log('Category button clicked:', category);
+            const terms = categoryMappings[category] || [];
+            const filtered = products.filter(p => {
+              const lowerName = p.name.toLowerCase();
+              const lowerBrand = p.brand.toLowerCase();
+              const lowerCategory = p.category.toLowerCase();
+              return terms.some(term => lowerName.includes(term) || lowerBrand.includes(term) || lowerCategory.includes(term));
+            });
+            renderProducts(filtered);
+          });
+        });
+      }
+
+      // Handle chat form submission
+      function handleAsk(e) {
+        e.preventDefault();
+        const chatInput = document.getElementById('chat-input');
+        const loading = document.getElementById('loading');
+        const chatResponse = document.getElementById('chat-response');
+
+        if (!chatInput) {
+          console.error('Chat input not found with ID "chat-input"');
+          return;
+        }
+        if (!loading) {
+          console.error('Loading element not found with ID "loading"');
+          return;
+        }
+        if (!chatResponse) {
+          console.error('Chat response element not found with ID "chat-response"');
+          return;
+        }
+
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        console.log('Chat form submitted with message:', message);
+        chatInput.value = '';
+        loading.classList.remove('hidden');
+        chatResponse.classList.add('hidden');
+        chatResponse.innerHTML = '';
+
+        fetch('/api/ai-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (data.response && chatResponse) {
+              chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
+              renderProducts(data.response.products); // Display AI-recommended products
+            }
+          })
+          .catch(error => {
+            console.error('Error in chat:', error);
+            if (chatResponse) {
+              chatResponse.innerHTML = 'An error occurred. Please try again.';
+            }
+          })
+          .finally(() => {
+            loading.classList.add('hidden');
+            chatResponse.classList.remove('hidden');
+          });
+      }
+
+      // Utility function to bind event listeners
+      function bind(element, event, handler) {
+        if (!element) {
+          console.error(`Cannot bind event "${event}" to undefined or null element`);
+          return;
+        }
+        element.addEventListener(event, handler);
+        console.log(`Bound event "${event}" to element with ID "${element.id || element.tagName}"`);
+      }
+
+      // Initialize chat form
+      const chatForm = document.getElementById('chat-form');
+      if (!chatForm) {
+        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
+        return;
+      }
+      bind(chatForm, 'submit', handleAsk);
+
+      // Initialize category buttons with retry mechanism
+      initializeCategoryButtons();
+
+      // Load products on page load
+      loadProducts();
+    });
+  </script>
+</body>
+</html>
