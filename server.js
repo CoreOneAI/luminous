@@ -1,232 +1,91 @@
-// server.js  —  Node >=18, package.json has "type":"module"
-import express from "express";
-import path from "path";
-import fs from "fs/promises";
-import { createReadStream } from "fs";
-import url from "url";
+import express from 'express';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-app.use(express.json());
-
-// ----- Paths / ENV -----
-const ROOT = path.dirname(url.fileURLToPath(import.meta.url));
-const PUBLIC_DIR = path.join(ROOT, "public");
 const PORT = process.env.PORT || 3000;
-const CATALOG_ENV = process.env.CATALOG_PATH || ""; // e.g. "products.json" or "data/products.json"
 
-// Try these in order if CATALOG_PATH not set
-const FALLBACK_CATALOGS = [
-  "data/products.json",
-  "public/data/products.json",
-  "products.json",
-  "salon_inventory.json",
-  "public/salon_inventory.json",
-];
+// Load products from JSON for product recommendations when explicitly requested
+const products = JSON.parse(fs.readFileSync(path.join(__dirname, 'public/data/products.json'), 'utf8'));
 
-let CATALOG_PATH_IN_USE = null;
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// ----- Utilities -----
-async function fileExists(p) {
-  try { await fs.access(p); return true; } catch { return false; }
-}
+// Serve the main HTML file
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
-function toCents(val) {
-  if (typeof val === "number" && Number.isFinite(val)) {
-    return val >= 1000 ? Math.round(val) : Math.round(val * 100);
+// API endpoint for AI chat
+app.post('/api/ai-chat', async (req, res) => {
+  try {
+    const { message } = req.body;
+    
+    if (!message) {
+      return res.status(400).json({ error: 'Message is required' });
+    }
+    
+    // Get AI response with advice and optional product recommendations
+    const response = await simulateAIResponse(message);
+    
+    res.json({ response });
+  } catch (error) {
+    console.error('Error in AI chat:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-  if (typeof val === "string") {
-    const n = parseFloat(val.replace(/[$,]/g, ""));
-    if (Number.isFinite(n)) return Math.round(n * 100);
+});
+
+// Simulated AI response function
+async function simulateAIResponse(message) {
+  const lowerMessage = message.toLowerCase();
+  let responseText = '';
+  
+  // Provide advice for specific concerns
+  if (lowerMessage.includes('damaged') && lowerMessage.includes('hair')) {
+    responseText = "For damaged hair, I recommend:\n\n1. Use a deep conditioning treatment weekly\n2. Avoid heat styling tools\n3. Try a protein treatment\n4. Use a wide-tooth comb instead of brushing\n5. Trim split ends regularly\n6. Consider a silk pillowcase to reduce friction";
+  } else if (lowerMessage.includes('wrinkle') || lowerMessage.includes('aging')) {
+    responseText = "For aging skin and wrinkles, I suggest:\n\n1. Use a retinoid product (start with low concentration)\n2. Apply vitamin C serum in the morning\n3. Don't forget sunscreen daily (SPF 30+)\n4. Incorporate hyaluronic acid for hydration\n5. Consider peptides for collagen production\n6. Stay hydrated and maintain a healthy diet";
+  } else if (lowerMessage.includes('acne') || lowerMessage.includes('breakout')) {
+    responseText = "For acne-prone skin:\n\n1. Use a gentle salicylic acid cleanser\n2. Spot treat with benzoyl peroxide\n3. Avoid heavy, pore-clogging products\n4. Don't pick or pop pimples\n5. Change pillowcases regularly\n6. Consider non-comedogenic moisturizers";
+  } else {
+    responseText = "Thank you for your question! As an AI beauty consultant, I can provide advice on hair care, skincare, makeup, and salon services. For more specific recommendations, please tell me more about your concerns or what you'd like to improve.";
   }
-  return NaN;
-}
 
-function normalizeProduct(p) {
-  // Shallow copy + trims
-  const clean = { ...p };
-  ["name", "brand", "category", "description"].forEach(k => {
-    if (typeof clean[k] === "string") clean[k] = clean[k].trim();
-  });
-
-  // Price normalization -> priceCents
-  let cents = Number.isFinite(clean.priceCents) ? clean.priceCents : NaN;
-  if (!Number.isFinite(cents) || cents <= 0) {
-    for (const key of ["price", "Price", "priceUSD", "msrp", "salePrice"]) {
-      if (clean[key] !== undefined && clean[key] !== null) {
-        const maybe = toCents(clean[key]);
-        if (Number.isFinite(maybe) && maybe > 0) { cents = maybe; break; }
-      }
+  // Only include product recommendations if explicitly requested
+  let recommendedProducts = [];
+  if (lowerMessage.includes('recommend products') || lowerMessage.includes('product recommendations')) {
+    recommendedProducts = products.filter(p => {
+      return p.name.toLowerCase().includes(lowerMessage) ||
+             p.brand.toLowerCase().includes(lowerMessage) ||
+             p.category.toLowerCase().includes(lowerMessage);
+    });
+    if (recommendedProducts.length > 0) {
+      responseText += "\n\nBased on your request, here are some product recommendations:\n" + 
+        recommendedProducts.map(p => `- ${p.name} by ${p.brand} (${p.category})`).join('\n');
+    } else {
+      responseText += "\n\nNo specific products found matching your query.";
     }
   }
-  if (Number.isFinite(cents) && cents > 0) clean.priceCents = cents;
-  else delete clean.priceCents;
 
-  // Ensure category/brand defaults for display
-  if (!clean.category) clean.category = "—";
-  if (!clean.brand) clean.brand = "—";
-
-  // Image fallback
-  if (!clean.image) clean.image = "/images/placeholder.jpg";
-
-  return clean;
+  return { text: responseText, products: recommendedProducts };
 }
 
-function pickCatalogArray(raw) {
-  // Accept either an array or an object with common array keys
-  if (Array.isArray(raw)) return raw;
-  if (raw && Array.isArray(raw.items)) return raw.items;
-  if (raw && Array.isArray(raw.products)) return raw.products;
-  return [];
-}
-
-// In-memory cache
-let catalog = [];
-let catalogStamp = 0;
-
-async function resolveCatalogPath() {
-  if (CATALOG_ENV) {
-    const abs = path.isAbsolute(CATALOG_ENV) ? CATALOG_ENV : path.join(ROOT, CATALOG_ENV);
-    if (await fileExists(abs)) return abs;
-  }
-  for (const rel of FALLBACK_CATALOGS) {
-    const abs = path.join(ROOT, rel);
-    if (await fileExists(abs)) return abs;
-  }
-  return null;
-}
-
-async function loadCatalog(force = false) {
-  const p = await resolveCatalogPath();
-  CATALOG_PATH_IN_USE = p;
-  if (!p) {
-    catalog = [];
-    catalogStamp = Date.now();
-    console.warn("[catalog] No catalog file found.");
-    return;
-  }
-
-  // Optionally skip reload if not forced and file unchanged. Simple: reload always (cheap + robust)
-  try {
-    const buf = await fs.readFile(p, "utf8");
-    const json = JSON.parse(buf);
-    const arr = pickCatalogArray(json).map(normalizeProduct).filter(Boolean);
-    catalog = arr;
-    catalogStamp = Date.now();
-    console.log(`[catalog] Loaded ${arr.length} items from ${p}`);
-  } catch (err) {
-    console.error(`[catalog] Failed to read ${p}:`, err.message);
-    catalog = [];
-    catalogStamp = Date.now();
-  }
-}
-
-// Simple text search across fields
-function productMatches(p, tokens) {
-  if (!tokens || tokens.length === 0) return true;
-  const hay = [
-    p.name, p.brand, p.category, p.description,
-    ...(Array.isArray(p.tags) ? p.tags : []),
-    ...(Array.isArray(p.benefits) ? p.benefits : []),
-    ...(typeof p.ingredients === "string" ? [p.ingredients] : [])
-  ].filter(Boolean).join(" ").toLowerCase();
-
-  return tokens.every(t => hay.includes(t));
-}
-
-function filterByProfile(p, q) {
-  // Optional “profile” filters from query string. Keep gentle guards (no-ops if empty)
-  // hairType/skinType/concerns are often stored in tags or suitableFor
-  const need = [];
-  if (q.hairType) need.push(q.hairType.toLowerCase());
-  if (q.skinType) need.push(q.skinType.toLowerCase());
-  if (q.concerns) need.push(q.concerns.toLowerCase());
-
-  if (need.length) {
-    const bag = [
-      p.category, p.description, p.suitableFor,
-      ...(Array.isArray(p.tags) ? p.tags.join(" ") : []),
-      ...(Array.isArray(p.benefits) ? p.benefits.join(" ") : []),
-    ].filter(Boolean).join(" ").toLowerCase();
-    if (!need.every(tok => bag.includes(tok))) return false;
-  }
-
-  // budget: budget ($10-30), mid ($30-60), luxury ($60+)
-  if (q.budget && p.priceCents) {
-    const dollars = p.priceCents / 100;
-    if (q.budget === "budget" && !(dollars >= 10 && dollars <= 30)) return false;
-    if (q.budget === "mid"    && !(dollars > 30 && dollars <= 60)) return false;
-    if (q.budget === "luxury" && !(dollars > 60)) return false;
-  }
-
-  return true;
-}
-
-// ----- API: Products -----
-app.get("/api/products", async (req, res) => {
-  await loadCatalog(); // cheap reload each request so updates show without redeploy
-
-  const { q = "", limit = "12", offset = "0" } = req.query;
-
-  const lim = Math.max(1, Math.min(100, parseInt(limit, 10) || 12));
-  const off = Math.max(0, parseInt(offset, 10) || 0);
-
-  const tokens = String(q).toLowerCase().split(/\s+/).filter(Boolean);
-
-  let results = catalog.filter(p => productMatches(p, tokens))
-                       .filter(p => filterByProfile(p, req.query));
-
-  // Stable order: by name, then id (prevents the “same 4” perception)
-  results = results.sort((a, b) => (a.name || "").localeCompare(b.name || "") || (a.id || "").localeCompare(b.id || ""));
-
-  const total = results.length;
-  const items = results.slice(off, off + lim);
-
-  res.json({
-    success: true,
-    source: CATALOG_PATH_IN_USE || "memory",
-    count: items.length,
-    total,
-    query: q,
-    items
-  });
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'OK', timestamp: new Date().toISOString() });
 });
 
-// ----- API: Chat (minimal echo; keeps your frontend happy) -----
-app.post("/api/chat", async (req, res) => {
-  const msg = (req.body?.message || "").trim();
-  // Keep it short and neutral; your UI provides the rest
-  const reply = msg
-    ? `Got it — I’ll tailor picks for “${msg}”.`
-    : "Tell me your goal (e.g., 'purple shampoo', 'anti-aging serum').";
-  res.json({ success: true, response: reply });
-});
-
-// ----- Debug helpers -----
-app.get("/__whoami", (req, res) => {
-  res.json({
-    ok: true,
-    node: process.version,
-    env: process.env.NODE_ENV || "development",
-    port: PORT,
-    catalogPath: CATALOG_PATH_IN_USE
-  });
-});
-
-app.get("/healthz", (req, res) => res.type("text/plain").send("ok"));
-
-// ----- Static files -----
-app.use(express.static(PUBLIC_DIR, { index: "index.html", extensions: ["html"] }));
-
-// Do NOT add a wildcard SPA catch-all that steals /api or /data routes.
-// Keep root route explicit for index if needed:
-app.get("/", (req, res) => {
-  const indexPath = path.join(PUBLIC_DIR, "index.html");
-  createReadStream(indexPath).pipe(res);
-});
-
-// ----- Start -----
-await loadCatalog(true);
+// Start server
 app.listen(PORT, () => {
-  const src = CATALOG_PATH_IN_USE || "none";
-  console.log(`Luminous listening on ${PORT}. catalog=${src}`);
+  console.log(`Server running on port ${PORT}`);
 });
+
+// Export for testing
+export default app;
