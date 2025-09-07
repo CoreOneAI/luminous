@@ -81,10 +81,49 @@
       // Log DOM state for debugging
       console.log('DOM fully loaded at:', new Date().toISOString());
       const categoryButtonsCheck = document.querySelectorAll('.category-btn');
-      console.log('Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
+      console.log('Initial check: Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
+      console.log('Script initialization started for https://luminous-render.onrender.com/');
 
       // Initialize products array
       let products = [];
+
+      // Format price in cents to dollars (e.g., 1234 -> $12.34)
+      function formatCents(cents) {
+        if (typeof cents !== 'number' || isNaN(cents)) {
+          console.warn('Invalid price value:', cents);
+          return 'N/A';
+        }
+        return `$${(cents / 100).toFixed(2)}`;
+      }
+
+      // Generate HTML for a single product card
+      function card(product) {
+        return `
+          <div class="product-card">
+            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
+            <h3>${product.name}</h3>
+            <p>Brand: ${product.brand}</p>
+            <p>Category: ${product.category}</p>
+            <p>Price: ${formatCents(product.price)}</p>
+            <p>${product.instructions}</p>
+          </div>
+        `;
+      }
+
+      // Render products in product-list
+      function renderProducts(productList) {
+        const productListDiv = document.getElementById('product-list');
+        if (!productListDiv) {
+          console.error('Product list element not found with ID "product-list"');
+          return;
+        }
+        productListDiv.innerHTML = '';
+        if (!Array.isArray(productList) || productList.length === 0) {
+          productListDiv.innerHTML = '<p>No products found.</p>';
+          return;
+        }
+        productListDiv.innerHTML = productList.map(product => card(product)).join('');
+      }
 
       // Fetch products on load
       async function loadProducts() {
@@ -94,7 +133,7 @@
             throw new Error(`HTTP error! status: ${response.status}`);
           }
           products = await response.json();
-          displayProducts(products); // Display all products initially
+          renderProducts(products); // Display all products initially
         } catch (error) {
           console.error('Error loading products:', error);
           const productListDiv = document.getElementById('product-list');
@@ -106,32 +145,6 @@
         }
       }
 
-      // Function to display products in product-list
-      function displayProducts(productList) {
-        const productListDiv = document.getElementById('product-list');
-        if (!productListDiv) {
-          console.error('Product list element not found with ID "product-list"');
-          return;
-        }
-        productListDiv.innerHTML = '';
-        if (productList.length === 0) {
-          productListDiv.innerHTML = '<p>No products found.</p>';
-          return;
-        }
-        productList.forEach(product => {
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          card.innerHTML = `
-            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
-            <h3>${product.name}</h3>
-            <p>Brand: ${product.brand}</p>
-            <p>Category: ${product.category}</p>
-            <p>${product.instructions}</p>
-          `;
-          productListDiv.appendChild(card);
-        });
-      }
-
       // Category mappings for buttons
       const categoryMappings = {
         'repair': ['repair', 'damaged', 'bond', 'haircare'],
@@ -140,11 +153,21 @@
         'clear-skin': ['acne', 'clear', 'breakout', 'skincare']
       };
 
-      // Handle category button clicks
-      const categoryButtons = document.querySelectorAll('.category-btn');
-      if (categoryButtons.length === 0) {
-        console.warn('No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn".');
-      } else {
+      // Retry mechanism for category buttons
+      function initializeCategoryButtons(attempt = 1, maxAttempts = 3, delayMs = 500) {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        if (categoryButtons.length === 0) {
+          console.warn(`Attempt ${attempt}/${maxAttempts}: No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn" in <div class="category-buttons">.`);
+          if (attempt < maxAttempts) {
+            console.log(`Retrying in ${delayMs}ms...`);
+            setTimeout(() => initializeCategoryButtons(attempt + 1, maxAttempts, delayMs), delayMs);
+            return;
+          } else {
+            console.error('All attempts failed: Category buttons not found. Proceeding without category button functionality.');
+            return;
+          }
+        }
+
         console.log('Category buttons initialized:', categoryButtons.length);
         categoryButtons.forEach(button => {
           button.addEventListener('click', () => {
@@ -157,67 +180,89 @@
               const lowerCategory = p.category.toLowerCase();
               return terms.some(term => lowerName.includes(term) || lowerBrand.includes(term) || lowerCategory.includes(term));
             });
-            displayProducts(filtered);
+            renderProducts(filtered);
           });
         });
       }
 
       // Handle chat form submission
-      const chatForm = document.getElementById('chat-form');
-      if (!chatForm) {
-        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
-        return;
-      }
-      const chatInput = document.getElementById('chat-input');
-      const loading = document.getElementById('loading');
-      const chatResponse = document.getElementById('chat-response');
-
-      if (!chatInput) {
-        console.error('Chat input not found with ID "chat-input".');
-      }
-      if (!loading) {
-        console.error('Loading element not found with ID "loading".');
-      }
-      if (!chatResponse) {
-        console.error('Chat response element not found with ID "chat-response".');
-      }
-
-      chatForm.addEventListener('submit', async (e) => {
+      function handleAsk(e) {
         e.preventDefault();
-        if (!chatInput) return;
+        const chatInput = document.getElementById('chat-input');
+        const loading = document.getElementById('loading');
+        const chatResponse = document.getElementById('chat-response');
+
+        if (!chatInput) {
+          console.error('Chat input not found with ID "chat-input"');
+          return;
+        }
+        if (!loading) {
+          console.error('Loading element not found with ID "loading"');
+          return;
+        }
+        if (!chatResponse) {
+          console.error('Chat response element not found with ID "chat-response"');
+          return;
+        }
+
         const message = chatInput.value.trim();
         if (!message) return;
 
         console.log('Chat form submitted with message:', message);
         chatInput.value = '';
-        if (loading) loading.classList.remove('hidden');
-        if (chatResponse) chatResponse.classList.add('hidden');
-        if (chatResponse) chatResponse.innerHTML = '';
+        loading.classList.remove('hidden');
+        chatResponse.classList.add('hidden');
+        chatResponse.innerHTML = '';
 
-        try {
-          const res = await fetch('/api/ai-chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message })
+        fetch('/api/ai-chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (data.response && chatResponse) {
+              chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
+              renderProducts(data.response.products); // Display AI-recommended products
+            }
+          })
+          .catch(error => {
+            console.error('Error in chat:', error);
+            if (chatResponse) {
+              chatResponse.innerHTML = 'An error occurred. Please try again.';
+            }
+          })
+          .finally(() => {
+            loading.classList.add('hidden');
+            chatResponse.classList.remove('hidden');
           });
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          const data = await res.json();
-          if (data.response && chatResponse) {
-            chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
-            displayProducts(data.response.products); // Display products if included in response
-          }
-        } catch (error) {
-          console.error('Error in chat:', error);
-          if (chatResponse) {
-            chatResponse.innerHTML = 'An error occurred. Please try again.';
-          }
-        } finally {
-          if (loading) loading.classList.add('hidden');
-          if (chatResponse) chatResponse.classList.remove('hidden');
+      }
+
+      // Utility function to bind event listeners
+      function bind(element, event, handler) {
+        if (!element) {
+          console.error(`Cannot bind event "${event}" to undefined or null element`);
+          return;
         }
-      });
+        element.addEventListener(event, handler);
+        console.log(`Bound event "${event}" to element with ID "${element.id || element.tagName}"`);
+      }
+
+      // Initialize chat form
+      const chatForm = document.getElementById('chat-form');
+      if (!chatForm) {
+        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
+        return;
+      }
+      bind(chatForm, 'submit', handleAsk);
+
+      // Initialize category buttons with retry mechanism
+      initializeCategoryButtons();
 
       // Load products on page load
       loadProducts();
