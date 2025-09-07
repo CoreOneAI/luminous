@@ -1,704 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AI Salon Consultant - Luminous</title>
-  <style>
-    :root {
-      --primary-color: #B8860B;
-      --secondary-color: #DAA520;
-      --ink: #111;
-      --muted: #666;
-      --light-gray: #f8f8f8;
-      --border-color: #eee;
-    }
-    body {
-      margin: 0;
-      background: var(--light-gray);
-      color: var(--ink);
-      font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-      line-height: 1.4;
-      overflow-x: hidden;
-    }
-    .container {
-      max-width: 414px;
-      margin: 0 auto;
-      background: #fff;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    header {
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: #fff;
-      padding: 24px 16px;
-      text-align: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 2px 20px rgba(0,0,0,.15);
-    }
-    header h1 {
-      font-size: 20px;
-      font-weight: 800;
-      letter-spacing: .5px;
-      margin-bottom: 4px;
-    }
-    header .tagline {
-      font-size: 12px;
-      opacity: .9;
-    }
-    main {
-      flex: 1;
-      padding: 20px 16px;
-    }
-    .welcome-section {
-      background: #fff;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,.05);
-      text-align: center;
-    }
-    .welcome-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--ink);
-      margin-bottom: 8px;
-    }
-    .welcome-text {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-    .quick-examples {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .example-btn {
-      background: var(--light-gray);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px 8px;
-      font-size: 11px;
-      text-align: center;
-      cursor: pointer;
-      color: #495057;
-      font-weight: 500;
-      transition: all .2s ease;
-    }
-    .example-btn:hover {
-      border-color: var(--primary-color);
-      color: var(--primary-color);
-      transform: translateY(-1px);
-    }
-    .chat-input-container {
-      background: #fff;
-      border-radius: 16px;
-      padding: 6px;
-      border: 2px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,.05);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .chat-input-container:focus-within {
-      border-color: var(--primary-color);
-      box-shadow: 0 4px 20px rgba(184,134,11,.15);
-    }
-    .chat-input {
-      flex: 1;
-      padding: 16px;
-      border: none;
-      font-size: 15px;
-      outline: none;
-      background: transparent;
-      color: var(--ink);
-    }
-    .chat-input::placeholder {
-      color: #999;
-    }
-    .chat-btn {
-      padding: 12px 16px;
-      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-      color: #fff;
-      border: none;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-      min-width: 60px;
-      transition: all .2s ease;
-    }
-    .chat-btn:hover:not(:disabled) {
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(184,134,11,.3);
-    }
-    .chat-btn:disabled {
-      opacity: .6;
-      cursor: not-allowed;
-    }
-    .ai-status {
-      background: linear-gradient(135deg, #e7f3ff, #f0f8ff);
-      color: #06c;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      margin: 16px 0;
-      text-align: center;
-      border: 1px solid #cce7ff;
-      display: none;
-      animation: pulse 2s infinite;
-    }
-    .ai-status.active {
-      display: block;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: .7; }
-    }
-    .chat-response {
-      background: #fff;
-      border-radius: 16px;
-      padding: 18px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 12px rgba(0,0,0,.05);
-      font-size: 14px;
-      line-height: 1.6;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    .chat-paragraph {
-      white-space: pre-wrap;
-      margin-bottom: 1em;
-    }
-    .products-section {
-      margin-top: 24px;
-    }
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-    .section-title {
-      font-size: 17px;
-      font-weight: 700;
-      color: var(--ink);
-    }
-    .ai-badge {
-      background: #e7f3ff;
-      color: #06c;
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 10px;
-      font-weight: 600;
-      border: 1px solid #cce7ff;
-    }
-    .products-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .product-card {
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,.08);
-      border: 1px solid #f0f0f0;
-      transition: all .3s ease;
-    }
-    .product-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0,0,0,.12);
-    }
-    .product-content {
-      display: grid;
-      grid-template-columns: 100px 1fr;
-      gap: 16px;
-    }
-    .product-image {
-      width: 100px;
-      height: 100px;
-      border-radius: 12px;
-      object-fit: cover;
-      margin: 16px 0 16px 16px;
-    }
-    .product-image-placeholder {
-      width: 100px;
-      height: 100px;
-      background: linear-gradient(135deg, #f0f0f0, #e8e8e8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #999;
-      font-size: 24px;
-      margin: 16px 0 16px 16px;
-      border-radius: 12px;
-    }
-    .product-info {
-      padding: 16px 16px 16px 0;
-    }
-    .product-name {
-      font-weight: 700;
-      font-size: 15px;
-      color: var(--ink);
-      margin-bottom: 4px;
-      line-height: 1.3;
-    }
-    .product-meta {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .product-description {
-      font-size: 12px;
-      color: #555;
-      line-height: 1.4;
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .product-benefits {
-      margin-bottom: 10px;
-      display: none;
-    }
-    .product-benefits.visible {
-      display: block;
-    }
-    .benefit-tag {
-      display: inline-block;
-      background: #f0f8ff;
-      color: #06c;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-size: 10px;
-      margin: 1px;
-      border: 1px solid #cce7ff;
-    }
-    .product-footer {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .product-price {
-      font-weight: 700;
-      color: var(--primary-color);
-      font-size: 16px;
-    }
-    .product-actions {
-      display: flex;
-      gap: 8px;
-    }
-    .details-btn {
-      background: var(--light-gray);
-      color: #666;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      padding: 6px 10px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .add-btn {
-      background: linear-gradient(135deg, #28a745, #20c997);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      padding: 6px 12px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-    .footer-nav {
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding: 10px 0;
-      border-top: 1px solid #eee;
-      box-shadow: 0 -2px 10px rgba(0,0,0,.05);
-    }
-    .footer-nav a {
-      text-decoration: none;
-      color: #666;
-      font-size: 11px;
-      font-weight: 600;
-      text-align: center;
-    }
-    .footer-nav svg {
-        width: 20px;
-        height: 20px;
-        margin-bottom: 4px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Salon Consultant</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <meta name="description" content="Your personal beauty expert powered by AI">
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1>AI Salon Consultant</h1>
-      <div class="tagline">Your personal beauty expert powered by AI</div>
-    </header>
-
-    <main class="main">
-      <section class="welcome-section" id="welcomeSection">
-        <div class="welcome-title">Welcome to Your Personal Salon</div>
-        <div class="welcome-text">Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</div>
-        <div class="quick-examples">
-          <button class="example-btn" data-query="repair damaged curly hair">Repair Damage</button>
-          <button class="example-btn" data-query="anti-aging skincare routine">Anti-Aging</button>
-          <button class="example-btn" data-query="accessories">Accessories</button>
-          <button class="example-btn" data-query="acne-prone sensitive skin">Clear Skin</button>
-        </div>
-      </section>
-
-      <section class="chat-section">
-        <div class="chat-input-container">
-          <input id="chatInput" class="chat-input" placeholder="Ask me anything... 'I need products for dry, frizzy hair'" autocomplete="off">
-          <button id="chatBtn" class="chat-btn">Ask AI</button>
-        </div>
-        <div id="aiStatus" class="ai-status">AI is generating personalized recommendations...</div>
-        <div id="chatResponse" class="chat-response">
-          <div style="text-align:center;color:#666;">
-            <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-            <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-            <p style="font-size:13px;"><strong>Try:</strong></p>
-            <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
-              <li>"shampoo"</li>
-              <li>"serum"</li>
-              <li>"bond repair"</li>
-              <li>"accessories"</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section id="productsSection" class="products-section" style="display:none;">
-        <div class="section-header">
-          <div class="section-title">Your Recommendations</div>
-          <div class="ai-badge">AI Generated</div>
-        </div>
-        <div id="status" class="status"></div>
-        <div id="productsGrid" class="products-grid"></div>
-      </section>
-    </main>
-    <div class="footer-nav">
-        <a href="#" id="homeNavBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.47 3.829a1.5 1.5 0 0 1 1.06 0l7.5 4.33a1.5 1.5 0 0 1 .75 1.296v9.141a1.5 1.5 0 0 1-.75 1.296l-7.5 4.33a1.5 1.5 0 0 1-1.06 0l-7.5-4.33a1.5 1.5 0 0 1-.75-1.296V9.455a1.5 1.5 0 0 1 .75-1.296l7.5-4.33Z" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-            Home
-        </a>
-        <a href="#" id="profileNavBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fill-rule="evenodd" d="M7.5 6a4.5 4.5 0 1 1 9 0a4.5 4.5 0 0 1-9 0Zm-.75 9a.75.75 0 0 0-.75.75v2.25c0 .414.336.75.75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5Zm12.75 0a.75.75 0 0 0-.75.75v2.25a.75.75 0 0 0 .75.75h1.5a.75.75 0 0 0 .75-.75v-2.25a.75.75 0 0 0-.75-.75h-1.5ZM4.783 14.283a.75.75 0 0 1 1.061 0l.974.975a.75.75 0 1 1-1.06 1.06l-.975-.975a.75.75 0 0 1 0-1.06ZM19.217 14.283a.75.75 0 0 1 0 1.06l-.974.975a.75.75 0 0 1-1.06-1.06l.975-.975a.75.75 0 0 1 1.06 0ZM7.87 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM15.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM9.75 18.75a.75.75 0 0 1-.75-.75V15a.75.75 0 0 1 1.5 0v3a.75.75 0 0 1-.75.75ZM13.847 14.847a.75.75 0 1 1 1.06-1.06l.975.975a.75.75 0 0 1-1.06 1.06l-.975-.975ZM18.5 17.25a.75.75 0 0 1-.75.75H6.25a.75.75 0 0 1 0-1.5h11.5a.75.75 0 0 1 .75.75Z" clip-rule="evenodd" stroke="currentColor" stroke-width="1.5"/>
-              </svg>
-            Profile
-        </a>
-        <a href="#" id="appointmentsNavBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0a9 9 0 0 1 18 0Z" />
-            </svg>
-            Appointments
-        </a>
-        <a href="#" id="basketNavBtn">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735-1.285l1.085-.698c-.427.275-.524-.46-.524-.555V10.59m-11.356 1.993-1.264.063a.572.572 0 0 1-.572-.572l-.063-1.264v-3.172c.007-.604.15-.82.676-1.15l1.085-.698a.75.75 0 0 1 .735 1.285l-1.085.698c-.427.275-.524.46-.524.555V10.59m1.264.063c.31.016.556.262.572.572l.063 1.264v3.172c-.007.604-.15.82-.676 1.15l-1.085.698a.75.75 0 0 1-.735 1.285l1.085-.698c-.427.275-.524.46-.524.555V10.59" />
-            </svg>
-            Basket
-        </a>
+  <header>
+    <div class="container">
+      <h1>Welcome to Your Personal Salon</h1>
+      <p>Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</p>
+      <div class="category-buttons">
+        <button class="category-btn" data-category="repair">Repair Damage</button>
+        <button class="category-btn" data-category="anti-aging">Anti-Aging</button>
+        <button class="category-btn" data-category="accessories">Accessories</button>
+        <button class="category-btn" data-category="clear-skin">Clear Skin</button>
+      </div>
     </div>
-  </div>
+  </header>
 
-<script>
-(() => {
-  const qs = (sel) => document.querySelector(sel);
-  const qsa = (sel) => document.querySelectorAll(sel);
-
-  async function fetchUnifiedService(message) {
-    const response = await fetch('/api/unified-service', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
-    });
-    return await response.json();
-  }
-
-  const productsData = [
-    { "name": "Manic Panic Amplified - Vampire Red", "brand": "Manic Panic", "category": "Bright Color", "instructions": "Apply to pre-lightened, dry hair. Wear gloves. Leave on for 30-45 minutes. Rinse with cool water until it runs clear. Avoid shampooing for 24-48 hours.", "priceCents": 2199 },
-    { "name": "Arctic Fox Semi-Permanent Hair Color - Poseidon", "brand": "Arctic Fox", "category": "Bright Color", "instructions": "Apply to bleached hair. Conditioner can be added to dilute. Process for at least 30 minutes. Rinse with cold water. Vegan and cruelty-free.", "priceCents": 2299 },
-    { "name": "Pravana ChromaSilk Vivids - Neon Tangerine", "brand": "Pravana", "category": "Bright Color", "instructions": "For professional use only. Apply to pre-lightened hair. Process for 20-45 minutes under heat or as desired. Rinse with cool water.", "priceCents": 3499 },
-    { "name": "Splat Rebellious Colors - Atomic Pink", "brand": "Splat", "category": "Bright Color", "instructions": "Kit includes bleaching system. Follow included instructions carefully. Perform a patch test 48 hours prior to application.", "priceCents": 1899 },
-    { "name": "L'Oreal Colorista Semi-Permanent - Purple", "brand": "L'Oreal", "category": "Bright Color", "instructions": "Shake well. Apply to pre-lightened hair. Leave for 15-30 minutes. Rinse with cold water. Lasts 4-10 shampoos.", "priceCents": 1599 },
-    { "name": "Good Dye Young Semi-Permanent - Ex-Girl", "brand": "Good Dye Young", "category": "Bright Color", "instructions": "Apply to light blonde hair for best results. Leave on for 15-30 minutes. Rinse with cold water. Conditions while it colors.", "priceCents": 2399 },
-    { "name": "Joico Color Intensity - Sapphire Blue", "brand": "Joico", "category": "Bright Color", "instructions": "Professional formula. Provides intense shine. Apply to pre-lightened hair. Process for 20-35 minutes. Rinse and style.", "priceCents": 2799 },
-    { "name": "Lime Crime Unicorn Hair - Sext", "brand": "Lime Crime", "category": "Bright Color", "instructions": "Apply to blonde hair for true color. Wear gloves. Process for 20-40 minutes. Rinse with cool water. Vegan.", "priceCents": 2599 },
-    { "name": "Adore Creative Image - Paprika", "brand": "Adore", "category": "Bright Color", "instructions": "Alcohol-free, conditioning formula. Apply to clean, damp hair. Do not rinse out. Style as usual. For subtle tint on dark hair or vibrant color on light hair.", "priceCents": 1399 },
-    { "name": "Pulp Riot Semi-Permanent - Fireball", "brand": "Pulp Riot", "category": "Bright Color", "instructions": "Professional use. Apply to pre-lightened hair. Process for 20-30 minutes. Can be mixed with other Pulp Riot colors to create custom shades.", "priceCents": 3799 },
-    { "name": "Olaplex No. 3 Hair Perfector", "brand": "Olaplex", "category": "Hair Repair", "instructions": "Apply to damp hair, comb through. Leave on for a minimum of 10 minutes. Rinse, shampoo, and condition. Repairs and strengthens hair.", "priceCents": 3000 },
-    { "name": "K18 Leave-In Molecular Repair Hair Mask", "brand": "K18", "category": "Hair Repair", "instructions": "Shampoo, do not condition. Towel dry hair. Apply mask. Wait 4 minutes. Do not rinse out. Style as usual. Repairs damage in 4 minutes.", "priceCents": 7500 },
-    { "name": "Living Proof Triple Bond Complex", "brand": "Living Proof", "category": "Hair Repair", "instructions": "Apply to clean, damp hair from roots to ends. Wait 10 minutes. Rinse. Repairs all types of hair damage.", "priceCents": 4500 },
-    { "name": "Redken Acidic Bonding Concentrate", "brand": "Redken", "category": "Hair Repair", "instructions": "Apply after shampooing. Leave on for 5-10 minutes. Rinse thoroughly. Provides ultimate strength and conditioning on damaged hair.", "priceCents": 3000 },
-    { "name": "Pureology Hydrate Shampoo", "brand": "Pureology", "category": "Hair Repair", "instructions": "Apply a dime-sized amount to wet hair. Lather. Rinse thoroughly. Hydrates and repairs hair.", "priceCents": 2900 },
-    { "name": "Kerastase Resistance Ciment Thermique", "brand": "Kerastase", "category": "Hair Repair", "instructions": "Apply to towel-dried hair. Style with a blow dryer or heat tool. Protects from heat and strengthens hair fiber.", "priceCents": 3800 },
-    { "name": "Moroccanoil Treatment Oil", "brand": "Moroccanoil", "category": "Hair Repair", "instructions": "Apply a small amount to clean, towel-dried hair, from mid-length to ends. Blow-dry or let dry naturally. Conditions and adds shine.", "priceCents": 4400 },
-    { "name": "Sukin Foaming Facial Cleanser", "brand": "Sukin", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1200 },
-    { "name": "Endota Spa Hydration Mask", "brand": "Endota Spa", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 4500 },
-    { "name": "Aesop Parsley Seed Serum", "brand": "Aesop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6000 },
-    { "name": "Korres Greek Yoghurt Foaming Cleanser", "brand": "Korres", "category": "Skincare", "instructions": "Massage onto damp skin, rinse off.", "priceCents": 2800 },
-    { "name": "Bioderma Sensibio H2O Micellar Water", "brand": "Bioderma", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 2000 },
-    { "name": "CeraVe Moisturizing Cream", "brand": "CeraVe", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1500 },
-    { "name": "The Face Shop Rice Water Bright Cleanser", "brand": "The Face Shop", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 1000 },
-    { "name": "Tatcha The Water Cream", "brand": "Tatcha", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 6800 },
-    { "name": "Drunk Elephant Vitamin C Serum", "brand": "Drunk Elephant", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 7800 },
-    { "name": "Olay Regenerist Micro-Sculpting Cream", "brand": "Olay", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 3000 },
-    { "name": "Nivea Soft Cream", "brand": "Nivea", "category": "Skincare", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800 },
-    { "name": "Mavala Nail Hardener", "brand": "Mavala", "category": "Nail Care", "instructions": "Apply once or twice a week on clean nails.", "priceCents": 1500 },
-    { "name": "Risqué Nail Polish", "brand": "Risqué", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 800 },
-    { "name": "Essie Nail Polish", "brand": "Essie", "category": "Nail Care", "instructions": "Use as directed for beauty/wellness care", "priceCents": 900 },
-    { "name": "Glycolic Acid Exfoliator", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Use once daily in the evening. Apply to a cotton pad and sweep across face. Do not rinse.", "priceCents": 1200 },
-    { "name": "Retinol Serum 1%", "brand": "Paula's Choice", "category": "Anti-Aging", "instructions": "Apply a pea-sized amount in the evening after cleansing. Follow with a moisturizer. Use sunscreen during the day.", "priceCents": 5500 },
-    { "name": "Vitamin C Suspension 23% + HA Spheres 2%", "brand": "The Ordinary", "category": "Anti-Aging", "instructions": "Apply a small amount to your face in the AM or PM. Tingling may be felt. Do not use with niacinamide.", "priceCents": 700 },
-    { "name": "Collagen Peptide Serum", "brand": "The Inkey List", "category": "Anti-Aging", "instructions": "Use morning and night. Apply a few drops to cleansed face and neck before moisturizer.", "priceCents": 1500 },
-    { "name": "Neutrogena Rapid Wrinkle Repair", "brand": "Neutrogena", "category": "Anti-Aging", "instructions": "Apply nightly to face and neck. Can be used in the morning with a sunscreen. Start with every other day to build tolerance.", "priceCents": 2500 },
-    { "name": "Bondi Boost Miracle Mask", "brand": "Bondi Boost", "category": "Hair Repair", "instructions": "Apply to clean, damp hair. Leave on for 5-10 minutes. Rinse thoroughly. Formulated to repair damaged hair.", "priceCents": 2900 },
-    { "name": "Amika The Kure Intense Repair Mask", "brand": "Amika", "category": "Hair Repair", "instructions": "Use after shampooing. Leave on for 10-15 minutes. Rinse. Strengthens and repairs damaged hair.", "priceCents": 4000 },
-    { "name": "Disposable Tanning Mitt", "brand": "St. Tropez", "category": "Accessories", "instructions": "Use with self-tanning products to ensure a streak-free application.", "priceCents": 1000 },
-    { "name": "Makeup Remover Wipes", "brand": "Neutrogena", "category": "Accessories", "instructions": "Use to quickly and gently remove makeup.", "priceCents": 800 },
-    { "name": "Foundation Brush", "brand": "Real Techniques", "category": "Accessories", "instructions": "Use to apply liquid or cream foundation for a smooth, airbrushed finish.", "priceCents": 1200 },
-    { "name": "Blending Sponge", "brand": "Beautyblender", "category": "Accessories", "instructions": "Use damp to apply and blend foundation, concealer, and other face products.", "priceCents": 2000 },
-    { "name": "Heated Eyelash Curler", "brand": "Panasonic", "category": "Accessories", "instructions": "Gently curl eyelashes for a long-lasting lift.", "priceCents": 2500 }
-  ];
-
-  function getProducts(query) {
-    const queryLower = query.toLowerCase();
-    
-    const relevantProducts = productsData.filter(p => {
-      const nameMatches = p.name?.toLowerCase().includes(queryLower) ?? false;
-      const brandMatches = p.brand?.toLowerCase().includes(queryLower) ?? false;
-      const categoryMatches = p.category?.toLowerCase().includes(queryLower) ?? false;
-      const instructionsMatches = p.instructions?.toLowerCase().includes(queryLower) ?? false;
-      return nameMatches || brandMatches || categoryMatches || instructionsMatches;
-    });
-
-    return relevantProducts.slice(0, 25);
-  }
-
-  async function getAIResponse(prompt) {
-    // This function will handle the AI response based on the message.
-    // For now, we will return a hardcoded response to fix the UI first.
-    return "Thank you for your question. Here are some product recommendations.";
-  }
-
-  class UnifiedSalonAI {
-    constructor() {
-      this.currentQuery = '';
-      this.isLoading = false;
-      this.chatInput = qs('#chatInput');
-      this.chatBtn = qs('#chatBtn');
-      this.chatResponse = qs('#chatResponse');
-      this.aiStatus = qs('#aiStatus');
-      this.status = qs('#status');
-      this.grid = qs('#productsGrid');
-      this.productsSection = qs('#productsSection');
-      this.welcomeSection = qs('.welcome-section');
-      this.homeNavBtn = qs('#homeNavBtn');
-      this.profileNavBtn = qs('#profileNavBtn');
-      this.appointmentsNavBtn = qs('#appointmentsNavBtn');
-      this.basketNavBtn = qs('#basketNavBtn');
-      this.exampleBtns = qsa('.example-btn');
-      this.bind();
-      this.welcome();
-    }
-
-    bind() {
-      this.chatBtn?.addEventListener('click', () => this.handleAsk());
-      this.chatInput?.addEventListener('keypress', e => {
-        if (e.key === 'Enter' && !this.isLoading) this.handleAsk();
-      });
-      this.homeNavBtn?.addEventListener('click', () => this.startNewSearch());
-      this.profileNavBtn?.addEventListener('click', () => this.showComingSoon("My Profile"));
-      this.appointmentsNavBtn?.addEventListener('click', () => this.showComingSoon("Appointments"));
-      this.basketNavBtn?.addEventListener('click', () => this.showComingSoon("Basket"));
-
-      this.exampleBtns.forEach(btn => {
-          btn.addEventListener('click', () => this.handleAsk(btn.dataset.query));
-      });
-      
-      this.grid.addEventListener('click', e => {
-          const detailsBtn = e.target.closest('.details-btn');
-          if (detailsBtn) {
-              const card = e.target.closest('.product-card');
-              const productName = card.querySelector('.product-name').textContent;
-              const product = productsData.find(p => p.name === productName);
-              this.details(product);
-          }
-      });
-    }
-
-    welcome() {
-      this.productsSection.style.display = 'none';
-      this.welcomeSection.style.display = 'block';
-      this.chatResponse.innerHTML = `
-        <div style="text-align:center;color:#666;">
-          <h3 style="color:#333;margin-bottom:12px;">Welcome to Your AI Salon</h3>
-          <p style="margin-bottom:16px;">I'm here to give you personalized product recommendations.</p>
-          <p style="font-size:13px;"><strong>Try:</strong></p>
-          <ul style="text-align:left;font-size:12px;margin-top:8px;padding-left:20px;">
+  <main>
+    <section class="chat-section">
+      <div class="container">
+        <form id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask AI" autocomplete="off">
+          <button type="submit">Ask AI</button>
+        </form>
+        <div id="loading" class="hidden">AI is generating personalized recommendations...</div>
+        <div id="chat-response" class="hidden">
+          <h3>Welcome to Your AI Salon</h3>
+          <p>I'm here to give you personalized product recommendations.</p>
+          <p>Try:</p>
+          <ul>
             <li>"shampoo"</li>
             <li>"serum"</li>
             <li>"bond repair"</li>
             <li>"accessories"</li>
           </ul>
-        </div>`;
-    }
+        </div>
+      </div>
+    </section>
 
-    async handleAsk(message = this.chatInput?.value) {
-      if (!message || this.isLoading) return;
-      this.currentQuery = message;
+    <section class="product-section">
+      <div class="container">
+        <h2>Your Recommendations</h2>
+        <p>AI Generated</p>
+        <div id="product-list"></div>
+      </div>
+    </section>
+  </main>
 
-      this.isLoading = true;
-      if (this.chatBtn) { this.chatBtn.disabled = true; this.chatBtn.textContent = '...'; }
-      this.aiStatus?.classList.add('active');
-      this.welcomeSection.style.display = 'none';
+  <footer>
+    <div class="container">
+      <nav>
+        <a href="#" class="active">
+          <img src="/images/home-icon.png" alt="Home">
+          Home
+        </a>
+        <a href="#">
+          <img src="/images/profile-icon.png" alt="Profile">
+          Profile
+        </a>
+        <a href="#">
+          <img src="/images/appointments-icon.png" alt="Appointments">
+          Appointments
+        </a>
+        <a href="#">
+          <img src="/images/basket-icon.png" alt="Basket">
+          Basket
+        </a>
+      </nav>
+    </div>
+  </footer>
 
-      try {
-        const productKeywords = ['shampoo', 'conditioner', 'serum', 'mask', 'cleanser', 'skincare', 'haircare', 'lipsticks', 'nail', 'tanning', 'eyelashes', 'brush', 'tool', 'cream', 'lotion', 'repair', 'dye', 'anti-aging', 'antiaging', 'accessories'];
-        const isProductSearch = productKeywords.some(keyword => message.toLowerCase().includes(keyword));
+  <script>
+    // Ensure DOM is fully loaded before executing any DOM-related code
+    document.addEventListener('DOMContentLoaded', () => {
+      // Log DOM state for debugging
+      console.log('DOM fully loaded at:', new Date().toISOString());
+      const categoryButtonsCheck = document.querySelectorAll('.category-btn');
+      console.log('Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
 
-        let chatResponse = '';
-        let products = [];
-        
-        if (isProductSearch) {
-          const matchingProducts = productsData.filter(p => productKeywords.some(keyword => (p.name + p.category).toLowerCase().includes(keyword)));
-          
-          if (matchingProducts.length > 0) {
-            products = matchingProducts.slice(0, 25);
-            chatResponse = `Here are some products that match your search.`;
-          } else {
-            chatResponse = `I'm sorry, I couldn't find any products that match your search.`;
+      // Initialize products array
+      let products = [];
+
+      // Fetch products on load
+      async function loadProducts() {
+        try {
+          const response = await fetch('/data/products.json');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
           }
-        } else {
-          chatResponse = `Thank you for your question! I'm designed to provide product recommendations. Please try asking about a specific product or a type of product.`;
-          products = [];
+          products = await response.json();
+          displayProducts(products); // Display all products initially
+        } catch (error) {
+          console.error('Error loading products:', error);
+          const productListDiv = document.getElementById('product-list');
+          if (productListDiv) {
+            productListDiv.innerHTML = '<p>Error loading products. Please try again later.</p>';
+          } else {
+            console.error('Product list element not found with ID "product-list"');
+          }
         }
-        
-        this.renderChat(chatResponse);
-        this.renderProducts(products);
-
-      } catch (err) {
-        console.error('Front-end logic failed:', err);
-        this.renderChat("An error occurred while processing your request. Please try again.");
-        this.empty();
       }
 
-      if (this.chatInput) this.chatInput.value = '';
-      this.isLoading = false;
-      if (this.chatBtn) { this.chatBtn.disabled = false; this.chatBtn.textContent = 'Ask AI'; }
-      this.aiStatus?.classList.remove('active');
-    }
-    
-    renderChat(text) {
-      if (!this.chatResponse) return;
-      
-      const chatContainer = qs('#chatResponse');
-      chatContainer.innerHTML = '';
-      
-      const p = document.createElement('p');
-      p.className = 'chat-paragraph';
-      p.textContent = text;
-      chatContainer.appendChild(p);
-    }
+      // Function to display products in product-list
+      function displayProducts(productList) {
+        const productListDiv = document.getElementById('product-list');
+        if (!productListDiv) {
+          console.error('Product list element not found with ID "product-list"');
+          return;
+        }
+        productListDiv.innerHTML = '';
+        if (productList.length === 0) {
+          productListDiv.innerHTML = '<p>No products found.</p>';
+          return;
+        }
+        productList.forEach(product => {
+          const card = document.createElement('div');
+          card.className = 'product-card';
+          card.innerHTML = `
+            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
+            <h3>${product.name}</h3>
+            <p>Brand: ${product.brand}</p>
+            <p>Category: ${product.category}</p>
+            <p>${product.instructions}</p>
+          `;
+          productListDiv.appendChild(card);
+        });
+      }
 
-    renderProducts(products) {
-      this.productsSection.style.display = 'block';
-      this.grid.innerHTML = '';
-      
-      if (products.length > 0) {
-          products.forEach(p => this.grid.appendChild(this.card(p)));
+      // Category mappings for buttons
+      const categoryMappings = {
+        'repair': ['repair', 'damaged', 'bond', 'haircare'],
+        'anti-aging': ['aging', 'wrinkle', 'anti-aging', 'serum', 'skincare'],
+        'accessories': ['tools', 'accessories', 'barber', 'styling'],
+        'clear-skin': ['acne', 'clear', 'breakout', 'skincare']
+      };
+
+      // Handle category button clicks
+      const categoryButtons = document.querySelectorAll('.category-btn');
+      if (categoryButtons.length === 0) {
+        console.warn('No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn".');
       } else {
-          this.empty();
+        console.log('Category buttons initialized:', categoryButtons.length);
+        categoryButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            console.log('Category button clicked:', category);
+            const terms = categoryMappings[category] || [];
+            const filtered = products.filter(p => {
+              const lowerName = p.name.toLowerCase();
+              const lowerBrand = p.brand.toLowerCase();
+              const lowerCategory = p.category.toLowerCase();
+              return terms.some(term => lowerName.includes(term) || lowerBrand.includes(term) || lowerCategory.includes(term));
+            });
+            displayProducts(filtered);
+          });
+        });
       }
-    }
-    
-    card(p) {
-      const div = document.createElement('div');
-      div.className = `product-card`;
-      const price = formatCents(p.priceCents);
-      const benefits = p.benefits?.length ? `<div class="product-benefits">${p.benefits.map(b=>`<span class="benefit-tag">${b}</span>`).join('')}</div>` : '';
-      div.innerHTML = `
-        <div class="product-content">
-          <img class="product-image" loading="lazy" referrerpolicy="no-referrer"
-               src="${(p.image||'').replace(/"/g,'&quot;')}"
-               alt="${(p.name||'Product').replace(/"/g,'&quot;')}"
-               onerror="this.outerHTML='<div class=\\'product-image-placeholder\\'>💆‍♀️</div>'">
-          <div class="product-info">
-            <div class="product-name">${p.name}</div>
-            <div class="product-meta">${p.brand} • ${p.category}</div>
-            ${p.description ? `<div class="product-description">${p.description}</div>` : ''}
-            ${benefits}
-            <div class="product-footer">
-              <div class="product-price">${price}</div>
-              <div class="product-actions">
-                <button class="details-btn">Details</button>
-              </div>
-            </div>
-          </div>
-        </div>`;
-      div.querySelector('.details-btn')?.addEventListener('click', () => this.details(p));
-      return div;
-    }
 
-    details(p) {
-      const lines = [];
-      if (p.usage) lines.push(`Usage: ${p.usage}`);
-      if (p.instructions) lines.push(`Instructions: ${p.instructions}`);
-      if (p.ingredients) lines.push(`Key Ingredients: ${p.ingredients}`);
-      if (p.benefits?.length) lines.push(`Benefits: ${p.benefits.join(', ')}`);
-      alert(`${p.name}\n\n${lines.join('\n\n') || p.description || 'Professional salon product.'}`);
-    }
+      // Handle chat form submission
+      const chatForm = document.getElementById('chat-form');
+      if (!chatForm) {
+        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
+        return;
+      }
+      const chatInput = document.getElementById('chat-input');
+      const loading = document.getElementById('loading');
+      const chatResponse = document.getElementById('chat-response');
 
-    empty() {
-      if (!this.grid) return;
-      this.grid.innerHTML = `
-        <div class="empty-state">
-          <h3>No products found</h3>
-          <p>Try a different search or be more specific about your needs.</p>
-        </div>`;
-      this.productsSection.style.display = 'block';
-    }
-    
-    startNewSearch() {
-        window.scrollTo(0, 0);
-        this.currentQuery = '';
-        this.grid.innerHTML = '';
-        this.productsSection.style.display = 'none';
-        this.status.textContent = '';
-        this.welcome();
-    }
-    
-    showComingSoon(feature) {
-        alert(`${feature} functionality is coming soon!`);
-    }
-  }
+      if (!chatInput) {
+        console.error('Chat input not found with ID "chat-input".');
+      }
+      if (!loading) {
+        console.error('Loading element not found with ID "loading".');
+      }
+      if (!chatResponse) {
+        console.error('Chat response element not found with ID "chat-response".');
+      }
 
-  window.addEventListener('DOMContentLoaded', () => {
-    window.salonAI = new UnifiedSalonAI();
-  });
-})();
-</script>
+      chatForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!chatInput) return;
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        console.log('Chat form submitted with message:', message);
+        chatInput.value = '';
+        if (loading) loading.classList.remove('hidden');
+        if (chatResponse) chatResponse.classList.add('hidden');
+        if (chatResponse) chatResponse.innerHTML = '';
+
+        try {
+          const res = await fetch('/api/ai-chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message })
+          });
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          const data = await res.json();
+          if (data.response && chatResponse) {
+            chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
+            displayProducts(data.response.products); // Display products if included in response
+          }
+        } catch (error) {
+          console.error('Error in chat:', error);
+          if (chatResponse) {
+            chatResponse.innerHTML = 'An error occurred. Please try again.';
+          }
+        } finally {
+          if (loading) loading.classList.add('hidden');
+          if (chatResponse) chatResponse.classList.remove('hidden');
+        }
+      });
+
+      // Load products on page load
+      loadProducts();
+    });
+  </script>
 </body>
 </html>
