@@ -1,20 +1,17 @@
 {
-  "name": "luminous",
+  "name": "luminous-shop",
   "version": "1.0.0",
   "private": true,
-  "description": "Luminous Beauty AI - minimal server + catalog importer",
-  "type": "module",
-  "engines": { "node": "22.x" },
+  "description": "Luminous Beauty storefront",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js",
-    "import:catalog": "node ./bin/import-catalog.mjs ./data/Louminous Product List-1.xlsx ./public/data/products.json",
-    "check:json": "node -e \"JSON.parse(require('fs').readFileSync('package.json','utf8')); console.log('package.json ok')\""
+    "dev": "nodemon server.js"
   },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "morgan": "^1.10.0",
-    "xlsx": "^0.18.5"
+    "express": "^4.19.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
   }
 }
