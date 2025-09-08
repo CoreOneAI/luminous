@@ -1,261 +1,104 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI Salon Consultant</title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <meta name="description" content="Your personal beauty expert powered by AI">
+  <meta charset="utf-8"/>
+  <title>Luminous Beauty — Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <style>
+    :root {
+      --bg: #fafafa;
+      --card: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --brand: #7c3aed; /* accent */
+      --line: #e5e7eb;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg); color: var(--text);
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px;
+      font-weight: 800; font-size: 20px;
+    }
+    .brand-dot { width: 10px; height: 10px; background: var(--brand); border-radius: 50%; }
+    .search {
+      display: flex; gap: 10px; width: 100%; max-width: 520px;
+    }
+    .search input {
+      flex: 1; padding: 12px 14px; border: 1px solid var(--line);
+      border-radius: 12px; font-size: 15px; outline: none;
+    }
+    .search input:focus { border-color: var(--brand); }
+    .grid {
+      display: grid; gap: 16px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+    .card {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
+      transition: box-shadow .2s ease, transform .2s ease;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.07); }
+    .card img {
+      width: 100%; height: 160px; object-fit: cover; background: #f3f4f6;
+    }
+    .card-body { padding: 12px; display: grid; gap: 8px; }
+    .card-title { font-weight: 700; }
+    .card-meta { color: var(--muted); font-size: 13px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .brand-pill, .cat-pill {
+      background: #f3f4f6; border-radius: 999px; padding: 2px 8px; font-size: 12px;
+    }
+    .card-bottom {
+      margin-top: 4px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .price { font-weight: 800; }
+    .rating { color: #f59e0b; font-weight: 700; }
+    .empty {
+      display: none; text-align: center; color: var(--muted); padding: 40px 12px;
+    }
+    footer {
+      margin-top: 28px; padding: 16px 0; color: var(--muted); font-size: 13px; text-align: center;
+    }
+    @media (max-width: 540px) {
+      .search { max-width: none; }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="container">
-      <h1>Welcome to Your Personal Salon</h1>
-      <p>Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</p>
-      <div class="category-buttons">
-        <button class="category-btn" data-category="repair">Repair Damage</button>
-        <button class="category-btn" data-category="anti-aging">Anti-Aging</button>
-        <button class="category-btn" data-category="accessories">Accessories</button>
-        <button class="category-btn" data-category="clear-skin">Clear Skin</button>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="brand-dot"></div>
+        Luminous Beauty
       </div>
+      <div class="search">
+        <input id="product-search" placeholder="Search products by name, brand, or category…" />
+      </div>
+    </header>
+
+    <div id="product-empty" class="empty">
+      <div style="font-size:18px; font-weight:800; margin-bottom:6px;">No products found</div>
+      <div>Try a different search or be more specific.</div>
     </div>
-  </header>
 
-  <main>
-    <section class="chat-section">
-      <div class="container">
-        <form id="chat-form">
-          <input type="text" id="chat-input" placeholder="Ask AI" autocomplete="off">
-          <button type="submit">Ask AI</button>
-        </form>
-        <div id="loading" class="hidden">AI is generating personalized recommendations...</div>
-        <div id="chat-response" class="hidden">
-          <h3>Welcome to Your AI Salon</h3>
-          <p>I'm here to give you personalized product recommendations.</p>
-          <p>Try:</p>
-          <ul>
-            <li>"shampoo"</li>
-            <li>"serum"</li>
-            <li>"bond repair"</li>
-            <li>"accessories"</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+    <div id="product-list" class="grid"></div>
 
-    <section class="product-section">
-      <div class="container">
-        <h2>Your Recommendations</h2>
-        <p>AI Generated</p>
-        <div id="product-list"></div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <nav>
-        <a href="#" class="active">
-          <img src="/images/home-icon.png" alt="Home">
-          Home
-        </a>
-        <a href="#">
-          <img src="/images/profile-icon.png" alt="Profile">
-          Profile
-        </a>
-        <a href="#">
-          <img src="/images/appointments-icon.png" alt="Appointments">
-          Appointments
-        </a>
-        <a href="#">
-          <img src="/images/basket-icon.png" alt="Basket">
-          Basket
-        </a>
-      </nav>
-    </div>
-  </footer>
+    <footer>
+      &copy; <span id="yr"></span> Luminous Beauty • All rights reserved
+    </footer>
+  </div>
 
   <script>
-    // Ensure DOM is fully loaded before executing any DOM-related code
-    document.addEventListener('DOMContentLoaded', () => {
-      // Log DOM state for debugging
-      console.log('DOM fully loaded at:', new Date().toISOString());
-      const categoryButtonsCheck = document.querySelectorAll('.category-btn');
-      console.log('Initial check: Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
-
-      // Initialize products array
-      let products = [];
-
-      // Format price in cents to dollars (e.g., 1234 -> $12.34)
-      function formatCents(cents) {
-        if (typeof cents !== 'number' || isNaN(cents)) {
-          console.warn('Invalid price value:', cents);
-          return 'N/A';
-        }
-        return `$${(cents / 100).toFixed(2)}`;
-      }
-
-      // Generate HTML for a single product card
-      function card(product) {
-        return `
-          <div class="product-card">
-            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
-            <h3>${product.name}</h3>
-            <p>Brand: ${product.brand}</p>
-            <p>Category: ${product.category}</p>
-            <p>Price: ${formatCents(product.price)}</p>
-            <p>${product.instructions}</p>
-          </div>
-        `;
-      }
-
-      // Render products in product-list
-      function renderProducts(productList) {
-        const productListDiv = document.getElementById('product-list');
-        if (!productListDiv) {
-          console.error('Product list element not found with ID "product-list"');
-          return;
-        }
-        productListDiv.innerHTML = '';
-        if (!Array.isArray(productList) || productList.length === 0) {
-          productListDiv.innerHTML = '<p>No products found.</p>';
-          return;
-        }
-        productListDiv.innerHTML = productList.map(product => card(product)).join('');
-      }
-
-      // Fetch products on load
-      async function loadProducts() {
-        try {
-          const response = await fetch('/data/products.json');
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          products = await response.json();
-          renderProducts(products); // Display all products initially
-        } catch (error) {
-          console.error('Error loading products:', error);
-          const productListDiv = document.getElementById('product-list');
-          if (productListDiv) {
-            productListDiv.innerHTML = '<p>Error loading products. Please try again later.</p>';
-          } else {
-            console.error('Product list element not found with ID "product-list"');
-          }
-        }
-      }
-
-      // Category mappings for buttons
-      const categoryMappings = {
-        'repair': ['repair', 'damaged', 'bond', 'haircare'],
-        'anti-aging': ['aging', 'wrinkle', 'anti-aging', 'serum', 'skincare'],
-        'accessories': ['tools', 'accessories', 'barber', 'styling'],
-        'clear-skin': ['acne', 'clear', 'breakout', 'skincare']
-      };
-
-      // Retry mechanism for category buttons
-      function initializeCategoryButtons(attempt = 1, maxAttempts = 3, delayMs = 500) {
-        const categoryButtons = document.querySelectorAll('.category-btn');
-        if (categoryButtons.length === 0) {
-          console.warn(`Attempt ${attempt}/${maxAttempts}: No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn" in <div class="category-buttons">.`);
-          if (attempt < maxAttempts) {
-            console.log(`Retrying in ${delayMs}ms...`);
-            setTimeout(() => initializeCategoryButtons(attempt + 1, maxAttempts, delayMs), delayMs);
-            return;
-          } else {
-            console.error('All attempts failed: Category buttons not found. Proceeding without category button functionality.');
-            return;
-          }
-        }
-
-        console.log('Category buttons initialized:', categoryButtons.length);
-        categoryButtons.forEach(button => {
-          button.addEventListener('click', () => {
-            const category = button.dataset.category;
-            console.log('Category button clicked:', category);
-            const terms = categoryMappings[category] || [];
-            const filtered = products.filter(p => {
-              const lowerName = p.name.toLowerCase();
-              const lowerBrand = p.brand.toLowerCase();
-              const lowerCategory = p.category.toLowerCase();
-              return terms.some(term => lowerName.includes(term) || lowerBrand.includes(term) || lowerCategory.includes(term));
-            });
-            renderProducts(filtered);
-          });
-        });
-      }
-
-      // Handle chat form submission
-      function handleAsk(e) {
-        e.preventDefault();
-        const chatInput = document.getElementById('chat-input');
-        const loading = document.getElementById('loading');
-        const chatResponse = document.getElementById('chat-response');
-
-        if (!chatInput) {
-          console.error('Chat input not found with ID "chat-input"');
-          return;
-        }
-        if (!loading) {
-          console.error('Loading element not found with ID "loading"');
-          return;
-        }
-        if (!chatResponse) {
-          console.error('Chat response element not found with ID "chat-response"');
-          return;
-        }
-
-        const message = chatInput.value.trim();
-        if (!message) return;
-
-        console.log('Chat form submitted with message:', message);
-        chatInput.value = '';
-        loading.classList.remove('hidden');
-        chatResponse.classList.add('hidden');
-        chatResponse.innerHTML = '';
-
-        fetch('/api/ai-chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        })
-          .then(res => {
-            if (!res.ok) {
-              throw new Error(`HTTP error! status: ${res.status}`);
-            }
-            return res.json();
-          })
-          .then(data => {
-            if (data.response && chatResponse) {
-              chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
-              renderProducts(data.response.products); // Display AI-recommended products
-            }
-          })
-          .catch(error => {
-            console.error('Error in chat:', error);
-            if (chatResponse) {
-              chatResponse.innerHTML = 'An error occurred. Please try again.';
-            }
-          })
-          .finally(() => {
-            loading.classList.add('hidden');
-            chatResponse.classList.remove('hidden');
-          });
-      }
-
-      // Initialize chat form
-      const chatForm = document.getElementById('chat-form');
-      if (!chatForm) {
-        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
-        return;
-      }
-      chatForm.addEventListener('submit', handleAsk);
-
-      // Initialize category buttons with retry mechanism
-      initializeCategoryButtons();
-
-      // Load products on page load
-      loadProducts();
-    });
+    document.getElementById('yr').textContent = new Date().getFullYear();
   </script>
+  <script src="shop.js"></script>
 </body>
 </html>
