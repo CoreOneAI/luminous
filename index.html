@@ -1,701 +1,261 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>InfoHealth AI</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="app-specialty" content="General" />
-
-  <style>
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Arial, sans-serif;
-      background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 25%, #3c3c3c 50%, #2a2a2a 75%, #000);
-      min-height: 100vh;
-      padding: env(safe-area-inset-top) 20px env(safe-area-inset-bottom) 20px;
-      display: flex; justify-content: center; align-items: center;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .mobile-frame {
-      width: 100%;
-      max-width: 380px;
-      height: 100dvh;
-      max-height: 800px;
-      background: linear-gradient(145deg, #000 0%, #1a1a1a 50%, #2c2c2c 100%);
-      border-radius: 35px; padding: 8px;
-      box-shadow: 0 25px 50px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08), inset 0 1px 0 rgba(255,255,255,.08), 0 0 30px rgba(218,165,32,.2);
-      position: relative; overflow: hidden;
-    }
-    .mobile-frame::before {
-      content: ''; position: absolute; top: 15px; left: 50%; transform: translateX(-50%);
-      width: 120px; height: 4px; background: linear-gradient(90deg,#333,#555,#333); border-radius: 2px; z-index: 10;
-    }
-    .wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; background: #fff; border-radius: 27px; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
-
-    .header {
-      background: linear-gradient(135deg, #000 0%, #1a1a1a 50%, #2c2c2c 100%);
-      padding: 1rem 1rem .5rem; text-align: center; color: #fff;
-      display: flex; justify-content: center; align-items: center; position: relative; overflow: hidden;
-    }
-    .header::before { content:''; position:absolute; inset:0; background: linear-gradient(45deg, rgba(255,255,255,.05), transparent 50%, rgba(218,165,32,.12) 100%); pointer-events:none; }
-    .header img { height: 80px; max-width: 90%; object-fit: contain; display: block; margin: 0 auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,.5)); position: relative; z-index: 1; }
-    .translate-btn {
-      position: absolute; top: 1rem; right: 1rem;
-      background: linear-gradient(135deg,#DAA520,#B8860B); color:#fff; border:none;
-      padding: .3rem .6rem; border-radius: 15px; font-size: .7rem; font-weight: 600; cursor: pointer;
-      box-shadow: 0 2px 6px rgba(218,165,32,.3); transition: transform .2s ease, box-shadow .2s ease; z-index: 10;
-    }
-    .translate-btn:hover { transform: translateY(-1px); box-shadow: 0 3px 8px rgba(218,165,32,.4); }
-
-    .cards-container { background:#f8f9fa; padding:.5rem; border-bottom:2px solid #e0e0e0; box-shadow: 0 1px 3px rgba(0,0,0,.1); }
-    .cards-section { margin-bottom:.4rem; }
-    .cards-section h3 { margin:0 0 .3rem; color:#333; font-size:.75rem; text-transform: uppercase; font-weight: 800; letter-spacing:.5px; }
-    .cards { display:grid; grid-template-columns: repeat(4,1fr); gap:.25rem; }
-    .card {
-      background:#fff; padding:.45rem .25rem; border-radius:6px; text-align:center; font-size:.7rem; font-weight:700;
-      cursor:pointer; transition: all .2s ease; box-shadow: 0 1px 2px rgba(0,0,0,.1); border:1px solid #e0e0e0;
-      min-height: 34px; display:flex; align-items:center; justify-content:center; color:#333; line-height:1.15;
-    }
-    .card:hover, .card:focus { transform: translateY(-1px); box-shadow: 0 2px 4px rgba(0,0,0,.15); border-color:#DAA520; outline: 2px solid #DAA520; outline-offset: 2px; }
-
-    .chat { flex:1; padding:.8rem !important; overflow-y:auto; background:#fff; }
-    .bubble-wrapper { display:flex; gap:.4rem; margin-bottom:.8rem; align-items: flex-end; }
-    .bubble-wrapper.user { flex-direction: row-reverse; }
-    .avatar img {
-      width:28px; height:28px; border-radius:50%; object-fit:cover;
-      background: linear-gradient(135deg,#000,#1a1a1a); padding:2px; border:1px solid rgba(218,165,32,.3);
-    }
-    .message { padding:.6rem .8rem; border-radius:12px; max-width:75%; line-height:1.5; font-size:.9rem; word-wrap:break-word; white-space:pre-wrap; }
-    .message strong { display:block; margin:.8rem 0 .4rem; color:#DAA520; font-weight:800; font-size:.95rem; border-bottom:1px solid #e0e0e0; padding-bottom:.2rem; }
-    .user .message { background: linear-gradient(135deg, #6B7280, #4B5563); color:#fff; box-shadow: 0 2px 8px rgba(107,114,128,.3); }
-    .bot  .message { background:#f8f9fa; color:#333; border:1px solid #e0e0e0; }
-    .ai-status { background: linear-gradient(135deg,#28a745,#20c997); color:#fff; padding:.3rem .6rem; border-radius:12px; font-size:.7rem; font-weight:800; margin:.5rem auto 0; display:inline-block; box-shadow: 0 2px 6px rgba(40,167,69,.3); }
-
-    .input-area { display:flex; padding:.8rem; background:#fff; border-top:1px solid #e0e0e0; gap:.5rem; align-items: center; }
-    .input-area input { flex:1; padding:.6rem; border-radius:20px; border:1px solid #e0e0e0; outline:none; font-size:.9rem; }
-    .input-area input:focus { border-color:#DAA520; }
-    .input-area button {
-      background: linear-gradient(135deg, #DAA520, #B8860B); color:#fff; border:none; padding:.6rem 1rem;
-      border-radius:20px; cursor:pointer; font-weight:700; font-size:.9rem; box-shadow:0 2px 8px rgba(218,165,32,.3);
-    }
-
-    /* Consent Splash */
-    .splash {
-      position: fixed; inset: 0; z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center;
-      background: radial-gradient(60% 60% at 50% 40%, rgba(255,255,255,.06) 0%, rgba(0,0,0,0) 60%), linear-gradient(135deg, #0d0d0d, #1a1a1a 50%, #2a2a2a);
-      transition: opacity .3s ease, visibility .3s ease;
-      padding: 22px;
-    }
-    .splash.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-    .disclaimer { margin: 0 18px 14px; color: #e6e6e6; font-size: .95rem; line-height: 1.5; text-align: center; max-width: 560px; }
-    .btn-accept {
-      background: linear-gradient(135deg,#28a745,#20c997); color:#fff; border:none;
-      padding:.6rem 1.2rem; border-radius: 999px; font-size: .95rem; font-weight: 900; cursor:pointer;
-      box-shadow: 0 2px 10px rgba(32,201,151,.35);
-    }
-
-    @media (max-width: 450px) { body { padding: 10px; } .mobile-frame { max-width: 100%; border-radius: 25px; } .wrapper { border-radius: 17px; } }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Salon Consultant</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <meta name="description" content="Your personal beauty expert powered by AI">
 </head>
 <body>
-  <!-- Consent Splash -->
-  <div id="splash" class="splash" role="dialog" aria-modal="true" aria-label="Consent">
-    <p id="disclaimer" class="disclaimer">
-      This app provides educational health information and does not replace professional medical advice.
-      Content may be AI-generated. Do not use for emergencies. By clicking “I Agree,” you confirm you understand and accept.
-    </p>
-    <button id="acceptBtn" class="btn-accept" aria-label="I Agree">I Agree</button>
-  </div>
-
-  <div class="mobile-frame" aria-hidden="true" id="appRoot">
-    <div class="wrapper">
-      <div class="header">
-        <button class="translate-btn" id="translateBtn">Español</button>
-        <img src="logo-silver.png" alt="InfoHealth AI Logo" id="appLogo">
-      </div>
-
-      <!-- Cards mount here -->
-      <div class="cards-container" id="cardsContainer"></div>
-
-      <!-- Chat -->
-      <div class="chat" id="chatBox"><!-- Welcome shown after consent --></div>
-
-      <!-- Input -->
-      <div class="input-area">
-        <input type="text" id="userInput" placeholder="Ask a medical question..." />
-        <button id="sendBtn">Send</button>
+  <header>
+    <div class="container">
+      <h1>Welcome to Your Personal Salon</h1>
+      <p>Tell me about your hair, skin, or beauty goals and I'll recommend the perfect professional products just for you.</p>
+      <div class="category-buttons">
+        <button class="category-btn" data-category="repair">Repair Damage</button>
+        <button class="category-btn" data-category="anti-aging">Anti-Aging</button>
+        <button class="category-btn" data-category="accessories">Accessories</button>
+        <button class="category-btn" data-category="clear-skin">Clear Skin</button>
       </div>
     </div>
-  </div>
+  </header>
+
+  <main>
+    <section class="chat-section">
+      <div class="container">
+        <form id="chat-form">
+          <input type="text" id="chat-input" placeholder="Ask AI" autocomplete="off">
+          <button type="submit">Ask AI</button>
+        </form>
+        <div id="loading" class="hidden">AI is generating personalized recommendations...</div>
+        <div id="chat-response" class="hidden">
+          <h3>Welcome to Your AI Salon</h3>
+          <p>I'm here to give you personalized product recommendations.</p>
+          <p>Try:</p>
+          <ul>
+            <li>"shampoo"</li>
+            <li>"serum"</li>
+            <li>"bond repair"</li>
+            <li>"accessories"</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="product-section">
+      <div class="container">
+        <h2>Your Recommendations</h2>
+        <p>AI Generated</p>
+        <div id="product-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <nav>
+        <a href="#" class="active">
+          <img src="/images/home-icon.png" alt="Home">
+          Home
+        </a>
+        <a href="#">
+          <img src="/images/profile-icon.png" alt="Profile">
+          Profile
+        </a>
+        <a href="#">
+          <img src="/images/appointments-icon.png" alt="Appointments">
+          Appointments
+        </a>
+        <a href="#">
+          <img src="/images/basket-icon.png" alt="Basket">
+          Basket
+        </a>
+      </nav>
+    </div>
+  </footer>
 
   <script>
-  (function(){
-    // ===== Backend endpoint =====
-    // If your frontend is served by the backend (Render Web Service), keep this empty string.
-    // If hosting separately, set to your Render URL (no trailing slash), e.g.:
-    // const BACKEND_URL = "https://infomed-ai-backend-bckn.onrender.com";
-    const BACKEND_URL = "";
-    const API_BASE = BACKEND_URL || "";
+    // Ensure DOM is fully loaded before executing any DOM-related code
+    document.addEventListener('DOMContentLoaded', () => {
+      // Log DOM state for debugging
+      console.log('DOM fully loaded at:', new Date().toISOString());
+      const categoryButtonsCheck = document.querySelectorAll('.category-btn');
+      console.log('Initial check: Found', categoryButtonsCheck.length, 'elements with class "category-btn"');
 
-    // ===== Translations =====
-    let LANG = (localStorage.getItem('ih_lang') || 'en');
-    const T = {
-      en: {
-        agree: "I Agree",
-        disclaimer: "This app provides educational health information and does not replace professional medical advice. Content may be AI-generated. Do not use for emergencies. By clicking “I Agree,” you confirm you understand and accept.",
-        welcome: "Welcome to InfoHealth AI. I provide health information for educational purposes. Always consult healthcare professionals for diagnosis and treatment.",
-        statusKB: "📚 General – Knowledge-Based",
-        statusENH: "✨ General – Enhanced (educational)",
-        headingCore: "Core Topics",
-        headingMgmt: "Health Management",
-        headingTools: "Clinic Tools",
-        // top 4 definitions (not 'manage')
-        cHypertension: "Hypertension",
-        cCholesterol:  "Cholesterol",
-        cAsthma:       "Asthma",
-        cDiabetes:     "Diabetes",
-        // mgmt and tools
-        calendar: "Calendar", myinfo: "My Info", medications: "Medications", education: "Education",
-        appointments: "Appointments", messages: "Messages", refills: "Refills", drugchecker: "Drug Checker",
-        healthtracker: "Health Tracker", reminders: "Reminders", emergency: "Emergency", televisit: "Televisit",
-        // prompts
-        pHypertension: "What is hypertension?",
-        pCholesterol:  "What is cholesterol?",
-        pAsthma:       "What is asthma?",
-        pDiabetes:     "What is diabetes?",
-        // modal text (short)
-        saved: "Saved.",
-        noItems: "No items."
-      },
-      es: {
-        agree: "Acepto",
-        disclaimer: "Esta app ofrece información de salud con fines educativos y no sustituye el consejo médico profesional. El contenido puede ser generado por IA. No usar en emergencias. Al hacer clic en “Acepto”, confirmas que entiendes y aceptas.",
-        welcome: "Bienvenido a InfoHealth AI. Ofrezco información de salud con fines educativos. Consulta siempre a profesionales para diagnóstico y tratamiento.",
-        statusKB: "📚 General – Basado en conocimiento",
-        statusENH: "✨ General – Respuesta mejorada (educativa)",
-        headingCore: "Temas Principales",
-        headingMgmt: "Manejo de la Salud",
-        headingTools: "Herramientas de la Clínica",
-        cHypertension: "Hipertensión",
-        cCholesterol:  "Colesterol",
-        cAsthma:       "Asma",
-        cDiabetes:     "Diabetes",
-        calendar: "Calendario", myinfo: "Mi Información", medications: "Medicamentos", education: "Educación",
-        appointments: "Citas", messages: "Mensajes", refills: "Resurtidos", drugchecker: "Verificador de fármacos",
-        healthtracker: "Registro de Salud", reminders: "Recordatorios", emergency: "Emergencia", televisit: "Teleconsulta",
-        pHypertension: "¿Qué es la hipertensión?",
-        pCholesterol:  "¿Qué es el colesterol?",
-        pAsthma:       "¿Qué es el asma?",
-        pDiabetes:     "¿Qué es la diabetes?",
-        saved: "Guardado.",
-        noItems: "Sin elementos."
-      }
-    };
+      // Initialize products array
+      let products = [];
 
-    // ===== Baseline definitions (fallback if API unavailable) =====
-    function baselineFor(query){
-      const q = (query||"").toLowerCase();
-      const defs = {
-        en: {
-          hypertension: "Hypertension (high blood pressure) means the force of blood against artery walls is too high over time. It often has no symptoms but increases risk of heart attack, stroke, kidney disease, and vision loss. Diagnosis is via repeated BP readings; treatment can include lifestyle measures and medications.",
-          cholesterol:  "Cholesterol is a waxy substance in the blood used to build cells and hormones. LDL ('bad') cholesterol can contribute to plaque in arteries; HDL ('good') helps remove LDL. High LDL raises risk of heart attack and stroke.",
-          asthma:       "Asthma is a chronic condition where airways are inflamed and narrow, leading to wheeze, cough, chest tightness, and shortness of breath. Triggers include viruses, allergens, smoke, and exercise.",
-          diabetes:     "Diabetes is a condition where the body has trouble making or using insulin, causing high blood sugar. Type 1 is autoimmune and requires insulin; Type 2 involves insulin resistance and is more common."
-        },
-        es: {
-          hypertension: "La hipertensión (presión arterial alta) significa que la fuerza de la sangre contra las arterias se mantiene elevada con el tiempo. Suele no dar síntomas, pero aumenta el riesgo de infarto, derrame, enfermedad renal y problemas de visión.",
-          cholesterol:  "El colesterol es una sustancia cerosa en la sangre usada para construir células y hormonas. El LDL ('malo') favorece la placa en arterias; el HDL ('bueno') ayuda a retirarlo. LDL alto aumenta el riesgo cardiovascular.",
-          asthma:       "El asma es una condición crónica en la que las vías respiratorias están inflamadas y estrechas, causando sibilancias, tos, opresión en el pecho y falta de aire. Los detonantes incluyen virus, alérgenos, humo y ejercicio.",
-          diabetes:     "La diabetes es una condición en la que el cuerpo tiene dificultad para producir o usar insulina, lo que eleva el azúcar en sangre. La tipo 1 requiere insulina; la tipo 2 se relaciona con resistencia a la insulina y es más común."
+      // Format price in cents to dollars (e.g., 1234 -> $12.34)
+      function formatCents(cents) {
+        if (typeof cents !== 'number' || isNaN(cents)) {
+          console.warn('Invalid price value:', cents);
+          return 'N/A';
         }
-      };
-      if (/(hypertension|blood pressure|presión|hipertensión)/.test(q)) return defs[LANG].hypertension;
-      if (/(cholesterol|colesterol)/.test(q)) return defs[LANG].cholesterol;
-      if (/(asthma|asma)/.test(q)) return defs[LANG].asthma;
-      if (/(diabetes)/.test(q)) return defs[LANG].diabetes;
-      return null;
-    }
-
-    // ===== DOM =====
-    const chatBox   = document.getElementById('chatBox');
-    const splash    = document.getElementById('splash');
-    const appRoot   = document.getElementById('appRoot');
-    const acceptBtn = document.getElementById('acceptBtn');
-
-    // ===== Helpers =====
-    function typeWriter(el, text, stepMs = 25, chunk = 2) {
-      el.textContent = '';
-      let i = 0;
-      (function tick(){
-        el.textContent += text.slice(i, i += chunk);
-        if (i < text.length) setTimeout(tick, stepMs);
-      })();
-    }
-    function addBubble(text, role, { typewriter=true } = {}) {
-      const wrap = document.createElement('div');
-      wrap.className = `bubble-wrapper ${role}`;
-      const avatar = role === 'user' ? 'infohealth-user-logo.png' : 'logo-silver.png';
-      wrap.innerHTML = `
-        <div class="avatar"><img src="${avatar}" alt="${role}" /></div>
-        <div class="message"></div>
-      `;
-      chatBox.appendChild(wrap);
-      const msgEl = wrap.querySelector('.message');
-      if (role === 'bot' && typewriter) typeWriter(msgEl, text);
-      else msgEl.textContent = text;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
-    function updateAIStatus(text) {
-      let el = document.getElementById('aiStatus');
-      if (!el) {
-        el = document.createElement('div');
-        el.id = 'aiStatus';
-        el.className = 'ai-status';
-        chatBox.appendChild(el);
+        return `$${(cents / 100).toFixed(2)}`;
       }
-      el.textContent = text;
-      chatBox.scrollTop = chatBox.scrollHeight;
-    }
 
-    // ===== Consent =====
-    function showApp() {
-      splash.classList.add('hidden');
-      appRoot.removeAttribute('aria-hidden');
-      addBubble(T[LANG].welcome, 'bot', { typewriter:true });
-      updateAIStatus(T[LANG].statusKB);
-    }
-    function bootConsent() {
-      // translate splash
-      document.getElementById('disclaimer').textContent = T[LANG].disclaimer;
-      document.getElementById('acceptBtn').textContent = T[LANG].agree;
-
-      const already = (localStorage.getItem('consented_v1') === 'true');
-      if (already) { showApp(); return; }
-      splash.classList.remove('hidden');
-      appRoot.setAttribute('aria-hidden','true');
-      acceptBtn.onclick = () => { localStorage.setItem('consented_v1','true'); showApp(); };
-    }
-
-    // ===== Cards =====
-    function renderCards() {
-      const root = document.getElementById('cardsContainer');
-      if (!root) return;
-
-      root.innerHTML = `
-        <div class="cards-section">
-          <h3 id="h-core">${T[LANG].headingCore}</h3>
-          <div class="cards" id="cardsTop4"></div>
-        </div>
-        <div class="cards-section">
-          <h3 id="h-mgmt">${T[LANG].headingMgmt}</h3>
-          <div class="cards" id="cardsManagement">
-            <div class="card" data-action="calendar">${T[LANG].calendar}</div>
-            <div class="card" data-action="myinfo">${T[LANG].myinfo}</div>
-            <div class="card" data-action="medications">${T[LANG].medications}</div>
-            <div class="card" data-action="education">${T[LANG].education}</div>
+      // Generate HTML for a single product card
+      function card(product) {
+        return `
+          <div class="product-card">
+            <img src="/images/${encodeURIComponent(product.name.toLowerCase().replace(/ /g, '_'))}.jpg" alt="${product.name}" onerror="this.src='/images/fallback.jpg'">
+            <h3>${product.name}</h3>
+            <p>Brand: ${product.brand}</p>
+            <p>Category: ${product.category}</p>
+            <p>Price: ${formatCents(product.price)}</p>
+            <p>${product.instructions}</p>
           </div>
-        </div>
-        <div class="cards-section">
-          <h3 id="h-tools">${T[LANG].headingTools}</h3>
-          <div class="cards" id="cardsTools">
-            <div class="card" data-action="appointments">${T[LANG].appointments}</div>
-            <div class="card" data-action="messages">${T[LANG].messages}</div>
-            <div class="card" data-action="refills">${T[LANG].refills}</div>
-            <div class="card" data-action="drugchecker">${T[LANG].drugchecker}</div>
-            <div class="card" data-action="healthtracker">${T[LANG].healthtracker}</div>
-            <div class="card" data-action="reminders">${T[LANG].reminders}</div>
-            <div class="card" data-action="emergency">${T[LANG].emergency}</div>
-            <div class="card" data-action="televisit">${T[LANG].televisit}</div>
-          </div>
-        </div>`;
+        `;
+      }
 
-      // Top four condition cards → "What is …?" prompts
-      const top4 = [
-        { label: T[LANG].cHypertension, prompt: T[LANG].pHypertension },
-        { label: T[LANG].cCholesterol,  prompt: T[LANG].pCholesterol  },
-        { label: T[LANG].cAsthma,       prompt: T[LANG].pAsthma       },
-        { label: T[LANG].cDiabetes,     prompt: T[LANG].pDiabetes     }
-      ];
-      const topEl = root.querySelector('#cardsTop4');
-      top4.forEach(item => {
-        const c = document.createElement('div');
-        c.className = 'card';
-        c.textContent = item.label;
-        c.setAttribute('data-prompt', item.prompt);
-        topEl.appendChild(c);
-      });
-    }
+      // Render products in product-list
+      function renderProducts(productList) {
+        const productListDiv = document.getElementById('product-list');
+        if (!productListDiv) {
+          console.error('Product list element not found with ID "product-list"');
+          return;
+        }
+        productListDiv.innerHTML = '';
+        if (!Array.isArray(productList) || productList.length === 0) {
+          productListDiv.innerHTML = '<p>No products found.</p>';
+          return;
+        }
+        productListDiv.innerHTML = productList.map(product => card(product)).join('');
+      }
 
-    // ===== API call =====
-    async function callAPI(message) {
-      try {
-        const r = await fetch(`${API_BASE}/chat`, {
+      // Fetch products on load
+      async function loadProducts() {
+        try {
+          const response = await fetch('/data/products.json');
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          products = await response.json();
+          renderProducts(products); // Display all products initially
+        } catch (error) {
+          console.error('Error loading products:', error);
+          const productListDiv = document.getElementById('product-list');
+          if (productListDiv) {
+            productListDiv.innerHTML = '<p>Error loading products. Please try again later.</p>';
+          } else {
+            console.error('Product list element not found with ID "product-list"');
+          }
+        }
+      }
+
+      // Category mappings for buttons
+      const categoryMappings = {
+        'repair': ['repair', 'damaged', 'bond', 'haircare'],
+        'anti-aging': ['aging', 'wrinkle', 'anti-aging', 'serum', 'skincare'],
+        'accessories': ['tools', 'accessories', 'barber', 'styling'],
+        'clear-skin': ['acne', 'clear', 'breakout', 'skincare']
+      };
+
+      // Retry mechanism for category buttons
+      function initializeCategoryButtons(attempt = 1, maxAttempts = 3, delayMs = 500) {
+        const categoryButtons = document.querySelectorAll('.category-btn');
+        if (categoryButtons.length === 0) {
+          console.warn(`Attempt ${attempt}/${maxAttempts}: No category buttons found with class "category-btn". Please verify the HTML structure for elements with class="category-btn" in <div class="category-buttons">.`);
+          if (attempt < maxAttempts) {
+            console.log(`Retrying in ${delayMs}ms...`);
+            setTimeout(() => initializeCategoryButtons(attempt + 1, maxAttempts, delayMs), delayMs);
+            return;
+          } else {
+            console.error('All attempts failed: Category buttons not found. Proceeding without category button functionality.');
+            return;
+          }
+        }
+
+        console.log('Category buttons initialized:', categoryButtons.length);
+        categoryButtons.forEach(button => {
+          button.addEventListener('click', () => {
+            const category = button.dataset.category;
+            console.log('Category button clicked:', category);
+            const terms = categoryMappings[category] || [];
+            const filtered = products.filter(p => {
+              const lowerName = p.name.toLowerCase();
+              const lowerBrand = p.brand.toLowerCase();
+              const lowerCategory = p.category.toLowerCase();
+              return terms.some(term => lowerName.includes(term) || lowerBrand.includes(term) || lowerCategory.includes(term));
+            });
+            renderProducts(filtered);
+          });
+        });
+      }
+
+      // Handle chat form submission
+      function handleAsk(e) {
+        e.preventDefault();
+        const chatInput = document.getElementById('chat-input');
+        const loading = document.getElementById('loading');
+        const chatResponse = document.getElementById('chat-response');
+
+        if (!chatInput) {
+          console.error('Chat input not found with ID "chat-input"');
+          return;
+        }
+        if (!loading) {
+          console.error('Loading element not found with ID "loading"');
+          return;
+        }
+        if (!chatResponse) {
+          console.error('Chat response element not found with ID "chat-response"');
+          return;
+        }
+
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        console.log('Chat form submitted with message:', message);
+        chatInput.value = '';
+        loading.classList.remove('hidden');
+        chatResponse.classList.add('hidden');
+        chatResponse.innerHTML = '';
+
+        fetch('/api/ai-chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message, lang: LANG, provider: 'auto', specialty: 'General' })
-        });
-        const text = await r.text();
-        let data = null; try { data = JSON.parse(text); } catch {}
-        const reply = data?.reply || data?.message || data?.text || (typeof data === 'string' ? data : text);
-        return (reply && String(reply).trim()) ? reply : null;
-      } catch {
-        return null;
+          body: JSON.stringify({ message })
+        })
+          .then(res => {
+            if (!res.ok) {
+              throw new Error(`HTTP error! status: ${res.status}`);
+            }
+            return res.json();
+          })
+          .then(data => {
+            if (data.response && chatResponse) {
+              chatResponse.innerHTML = data.response.text.replace(/\n/g, '<br>');
+              renderProducts(data.response.products); // Display AI-recommended products
+            }
+          })
+          .catch(error => {
+            console.error('Error in chat:', error);
+            if (chatResponse) {
+              chatResponse.innerHTML = 'An error occurred. Please try again.';
+            }
+          })
+          .finally(() => {
+            loading.classList.add('hidden');
+            chatResponse.classList.remove('hidden');
+          });
       }
-    }
 
-    // ===== Local storage utils for simple tools =====
-    function lsGet(key, fallback){ try{ return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } }
-    function lsSet(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); } catch {} }
-    function fmtDate(d){ const x = new Date(d); return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')} ${String(x.getHours()).padStart(2,'0')}:${String(x.getMinutes()).padStart(2,'0')}`; }
-
-    // ===== Simple modals (local, non-network) =====
-    (function initModal(){
-      if (document.getElementById('ih-modal')) return;
-      const modal = document.createElement('div');
-      modal.id = 'ih-modal';
-      modal.style.cssText = "position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.45)";
-      modal.innerHTML = `
-        <div id="ih-modal-card" style="width:calc(100% - 40px);max-width:360px;background:#fff;border-radius:12px;border:1px solid #e0e0e0;box-shadow:0 10px 30px rgba(0,0,0,.25);overflow:hidden;font-family:inherit;">
-          <div style="background:linear-gradient(135deg,#000,#1a1a1a);color:#fff;padding:.7rem 1rem;font-weight:800;">
-            <span id="ih-modal-title">Title</span>
-          </div>
-          <div id="ih-modal-body" style="padding:.8rem;"></div>
-          <div style="display:flex;gap:.5rem;justify-content:flex-end;padding:.6rem .8rem;border-top:1px solid #eee;">
-            <button id="ih-modal-close" class="btn" style="background:linear-gradient(135deg,#6B7280,#4B5563);color:#fff;border:none;padding:.4rem .8rem;border-radius:6px;cursor:pointer;">Close</button>
-            <button id="ih-modal-primary" class="btn" style="background:linear-gradient(135deg,#DAA520,#B8860B);color:#fff;border:none;padding:.4rem .8rem;border-radius:6px;cursor:pointer;">Save</button>
-          </div>
-        </div>`;
-      document.body.appendChild(modal);
-      function openModal({ title, bodyHTML, primaryText='Save', onPrimary=null, showPrimary=true }){
-        document.getElementById('ih-modal-title').textContent = title;
-        const body = document.getElementById('ih-modal-body'); body.innerHTML = bodyHTML;
-        const pbtn = document.getElementById('ih-modal-primary');
-        pbtn.textContent = primaryText; pbtn.style.display = showPrimary ? 'inline-block' : 'none';
-        pbtn.onclick = async () => { if (onPrimary) await onPrimary(body); closeModal(); };
-        modal.style.display = 'flex';
+      // Initialize chat form
+      const chatForm = document.getElementById('chat-form');
+      if (!chatForm) {
+        console.error('Chat form not found with ID "chat-form". Please verify the HTML structure.');
+        return;
       }
-      function closeModal(){ modal.style.display = 'none'; }
-      document.getElementById('ih-modal-close').onclick = closeModal;
-      modal.addEventListener('click', (e)=>{ if (e.target === modal) closeModal(); });
-      window.IHModal = { open: openModal, close: closeModal };
-    })();
+      chatForm.addEventListener('submit', handleAsk);
 
-    // Tools (local)
-    function openCalendar(){
-      const key='ih_calendar';
-      const items = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Calendario':'Calendar'),
-        primaryText: (LANG==='es'?'Guardar':'Save'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Fecha y hora':'Date & time'}</label>
-            <input type="datetime-local" id="cal-dt"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Título':'Title'}</label>
-            <input type="text" id="cal-title" placeholder="${LANG==='es'?'p.ej. Consulta de seguimiento':'e.g., Follow-up visit'}"/></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${items.map(x=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(x.dt)}</strong><div>${x.title||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const dt = body.querySelector('#cal-dt')?.value;
-          const title = body.querySelector('#cal-title')?.value?.trim();
-          if (dt && title){ items.push({ dt, title }); lsSet(key, items); addBubble((LANG==='es'?'Evento guardado: ':'Saved event: ') + `${title} — ${fmtDate(dt)}`,'bot',{typewriter:true}); }
-        }
-      });
-    }
-    function openMyInfo(){
-      const key='ih_profile';
-      const prof = lsGet(key, { name:'', dob:'', allergies:'', conditions:'' });
-      IHModal.open({
-        title: (LANG==='es'?'Mi Información':'My Info'),
-        primaryText: (LANG==='es'?'Guardar':'Save'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Nombre':'Name'}</label><input id="p-name" value="${prof.name||''}"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Fecha de nacimiento':'DOB'}</label><input id="p-dob" type="date" value="${prof.dob||''}"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Alergias':'Allergies'}</label><input id="p-all" value="${prof.allergies||''}"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Condiciones':'Conditions'}</label><input id="p-cond" value="${prof.conditions||''}"/></div>`,
-        onPrimary: (body)=>{
-          const out = {
-            name: body.querySelector('#p-name')?.value || '',
-            dob: body.querySelector('#p-dob')?.value || '',
-            allergies: body.querySelector('#p-all')?.value || '',
-            conditions: body.querySelector('#p-cond')?.value || ''
-          };
-          lsSet(key, out);
-          addBubble((LANG==='es'?'Perfil actualizado.':'Profile updated.'),'bot',{typewriter:true});
-        }
-      });
-    }
-    function openMeds(){
-      const key='ih_meds';
-      const meds = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Medicamentos':'Medications'),
-        primaryText: (LANG==='es'?'Añadir':'Add'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Nombre':'Name'}</label><input id="m-name" placeholder="e.g., Metformin 500 mg"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Frecuencia':'Schedule'}</label><input id="m-sched" placeholder="${LANG==='es'?'p.ej. 2 veces al día':'e.g., twice daily'}"/></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(meds||[]).map(m=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${m.name||''}</strong><div>${m.sched||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const name = body.querySelector('#m-name')?.value?.trim();
-          const sched = body.querySelector('#m-sched')?.value?.trim();
-          if (name){ meds.push({ name, sched }); lsSet(key, meds); addBubble((LANG==='es'?'Medicamento añadido.':'Medication added.'),'bot',{typewriter:true}); }
-        }
-      });
-    }
-    function openEducation(){
-      IHModal.open({
-        title: (LANG==='es'?'Educación':'Education'),
-        showPrimary:false,
-        bodyHTML: `<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;">${LANG==='es'
-          ? 'Revisa temas clínicos con tu profesional de salud. Este módulo puede conectarse a material educativo aprobado por la clínica.'
-          : 'Review clinical topics with your care team. This module can link to clinic-approved education materials.'}</div>`
-      });
-    }
-    function openAppointments(){
-      const key='ih_appts';
-      const appts = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Citas':'Appointments'),
-        primaryText: (LANG==='es'?'Añadir':'Add'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Fecha y hora':'Date & time'}</label><input id="a-dt" type="datetime-local"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Motivo':'Reason'}</label><input id="a-reason" placeholder="${LANG==='es'?'p.ej. control de presión':'e.g., BP check'}"/></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(appts||[]).map(a=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(a.dt)}</strong><div>${a.reason||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const dt = body.querySelector('#a-dt')?.value;
-          const reason = body.querySelector('#a-reason')?.value?.trim();
-          if (dt && reason){ appts.push({ dt, reason }); lsSet(key, appts); addBubble((LANG==='es'?'Cita añadida.':'Appointment added.'),'bot',{typewriter:true}); }
-        }
-      });
-    }
-    function openMessages(){
-      const key='ih_msgs';
-      const msgs = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Mensajes':'Messages'),
-        primaryText: (LANG==='es'?'Enviar':'Send'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Mensaje':'Message'}</label><textarea id="msg-txt" rows="3"></textarea></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(msgs||[]).map(m=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(m.ts)}</strong><div>${m.text||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const text = body.querySelector('#msg-txt')?.value?.trim();
-          if (text){ msgs.push({ ts: Date.now(), text }); lsSet(key, msgs); addBubble((LANG==='es'?'Mensaje guardado localmente.':'Message saved locally.'),'bot',{typewriter:true}); }
-        }
-      });
-    }
-    function openRefills(){
-      const key='ih_refills';
-      const reqs = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Resurtidos':'Refills'),
-        primaryText: (LANG==='es'?'Solicitar':'Request'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Medicamento':'Medication'}</label><input id="r-med" placeholder="e.g., Atorvastatin 20 mg"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Farmacia':'Pharmacy'}</label><input id="r-pharm" placeholder="e.g., CVS #1234"/></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(reqs||[]).map(r=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(r.ts)}</strong><div>${r.med||''} — ${r.pharm||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const med = body.querySelector('#r-med')?.value?.trim();
-          const pharm = body.querySelector('#r-pharm')?.value?.trim();
-          if (med){ reqs.push({ ts: Date.now(), med, pharm }); lsSet(key, reqs); addBubble((LANG==='es'?'Solicitud de resurtido guardada.':'Refill request saved.'),'bot',{typewriter:true}); }
-        }
-      });
-    }
-    async function openDrugChecker(){
-      IHModal.open({
-        title: (LANG==='es'?'Verificador de fármacos':'Drug Checker'),
-        primaryText: (LANG==='es'?'Consultar':'Check'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Medicamentos (separados por comas)':'Medications (comma-separated)'}</label>
-            <input id="dc-meds" placeholder="e.g., Atorvastatin, Gemfibrozil"/>
-          </div>
-          <div class="form-group"><label>${LANG==='es'?'Condiciones (opcional)':'Conditions (optional)'}</label>
-            <input id="dc-cond" placeholder="e.g., kidney disease"/>
-          </div>
-          <div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;">${LANG==='es'
-            ? 'Resultados educativos; verifica con tu clínica.'
-            : 'Educational results; confirm with your clinic.'}</div>`,
-        onPrimary: async (body)=>{
-          const meds = body.querySelector('#dc-meds')?.value || '';
-          const cond = body.querySelector('#dc-cond')?.value || '';
-          const q = (LANG==='es'
-            ? `¿Existen interacciones o precauciones entre: ${meds}? Condiciones: ${cond}. Devuelve puntos clave, signos de alarma y acciones de seguridad en lenguaje claro.`
-            : `Are there interactions or precautions between: ${meds}? Conditions: ${cond}. Return key points, red-flag symptoms, and safety actions in plain language.`);
-          const reply = await callAPI(q);
-          addBubble(reply || (LANG==='es'?'Sin resultados.':'No results.'), 'bot', { typewriter:true });
-        }
-      });
-    }
-    function openHealthTracker(){
-      const key='ih_tracker';
-      const rows = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Registro de Salud':'Health Tracker'),
-        primaryText: (LANG==='es'?'Guardar':'Save'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Tipo':'Type'}</label>
-            <select id="ht-type"><option value="bp">Blood Pressure</option><option value="glucose">Glucose</option><option value="hr">Heart Rate</option><option value="spo2">SpO₂</option></select>
-          </div>
-          <div id="ht-fields">
-            <div class="form-group"><label>Systolic / Diastolic</label><input id="bp-sys" placeholder="130"/> <input id="bp-dia" placeholder="80"/></div>
-          </div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(rows||[]).map(r=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(r.ts)}</strong> ${r.type}: ${JSON.stringify(r.val)}</div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const type = body.querySelector('#ht-type').value;
-          let val = null;
-          if (type==='bp') {
-            val = { sys: Number(body.querySelector('#bp-sys')?.value||0), dia: Number(body.querySelector('#bp-dia')?.value||0) };
-          } else if (type==='glucose') { val = Number(prompt('Glucose mg/dL:', '120')||0); }
-          else if (type==='hr') { val = Number(prompt('Heart rate bpm:', '72')||0); }
-          else if (type==='spo2') { val = Number(prompt('SpO₂ %:', '97')||0); }
-          const list = lsGet(key, []); list.push({ ts: Date.now(), type, val }); lsSet(key, list);
-          addBubble(T[LANG].saved, 'bot', { typewriter:true });
-        }
-      });
-      const sel = document.querySelector('#ht-type');
-      const fields = document.querySelector('#ht-fields');
-      sel.addEventListener('change', ()=>{
-        if (sel.value==='bp') fields.innerHTML = `<div class="form-group"><label>Systolic / Diastolic</label><input id="bp-sys" placeholder="130"/> <input id="bp-dia" placeholder="80"/></div>`;
-        else fields.innerHTML = `<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;">${LANG==='es'?'Se te pedirá el valor al guardar.':'You’ll be prompted for the value on Save.'}</div>`;
-      });
-    }
-    function openReminders(){
-      const key='ih_remind';
-      const rows = lsGet(key, []);
-      IHModal.open({
-        title: (LANG==='es'?'Recordatorios':'Reminders'),
-        primaryText: (LANG==='es'?'Añadir':'Add'),
-        bodyHTML: `
-          <div class="form-group"><label>${LANG==='es'?'Texto':'Text'}</label><input id="rm-text" placeholder="${LANG==='es'?'p.ej. Tomar Metformina 8am':'e.g., Take Metformin 8am'}"/></div>
-          <div class="form-group"><label>${LANG==='es'?'Fecha y hora':'Date & time'}</label><input id="rm-dt" type="datetime-local"/></div>
-          <div style="max-height:180px; overflow:auto; border-top:1px solid #eee; margin-top:.6rem; padding-top:.6rem;">
-            ${(rows||[]).map(r=>`<div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${fmtDate(r.dt)}</strong> ${r.text||''}</div></div>`).join('') || `<div class="info-item">${T[LANG].noItems}</div>`}
-          </div>`,
-        onPrimary: (body)=>{
-          const text = body.querySelector('#rm-text')?.value?.trim();
-          const dt   = body.querySelector('#rm-dt')?.value;
-          if (text && dt){ const list = lsGet(key, []); list.push({ text, dt }); lsSet(key, list); addBubble(T[LANG].saved,'bot',{typewriter:true}); }
-        }
-      });
-    }
-    function openEmergency(){
-      IHModal.open({
-        title: (LANG==='es'?'Emergencia':'Emergency'),
-        showPrimary:false,
-        bodyHTML: `
-          <div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;"><strong>${LANG==='es'?'Si tienes síntomas de alarma':'If you have red-flag symptoms'}</strong><br/>
-            ${LANG==='es'
-              ? 'Llama al 911 o acude a urgencias. Este app es informativo y no sustituye atención médica.'
-              : 'Call 911 or go to the ER. This app is informational and not a substitute for medical care.'}
-          </div>
-          <div class="info-item" style="padding:.5rem;border-left:3px solid #e0e0e0;background:#fff;margin:.4rem 0;border-radius:6px;">• Chest pain, severe trouble breathing, fainting, one-sided weakness, severe allergic reaction.</div>`
-      });
-    }
+      // Initialize category buttons with retry mechanism
+      initializeCategoryButtons();
 
-    // ===== Send flow =====
-    async function handleSend(presetText) {
-      const input = document.getElementById('userInput');
-      const q = (presetText ?? input?.value ?? '').trim();
-      if (!q) return;
-
-      // user bubble
-      const u = document.createElement('div');
-      u.className = 'bubble-wrapper user';
-      u.innerHTML = `<div class="avatar"><img src="infohealth-user-logo.png" alt="user" /></div><div class="message"></div>`;
-      chatBox.appendChild(u);
-      u.querySelector('.message').textContent = q;
-      chatBox.scrollTop = chatBox.scrollHeight;
-      if (input) input.value = '';
-
-      const base = baselineFor(q);
-      const ai = await callAPI(q);
-      if (ai) { addBubble(ai, 'bot', { typewriter:true }); updateAIStatus(T[LANG].statusENH); return; }
-      if (base){ addBubble(base, 'bot', { typewriter:true }); updateAIStatus(T[LANG].statusKB); return; }
-
-      addBubble(LANG==='es'
-        ? "No pude conectar con el servicio de conocimiento ahora."
-        : "I couldn’t reach the knowledge service right now.", 'bot', { typewriter:true });
-    }
-
-    // ===== Events =====
-    function bindEvents() {
-      // translate button
-      const tbtn = document.getElementById('translateBtn');
-      function syncBtn(){ tbtn.textContent = (LANG==='en') ? 'Español' : 'English'; }
-      tbtn.addEventListener('click', () => {
-        LANG = (LANG==='en') ? 'es' : 'en';
-        localStorage.setItem('ih_lang', LANG);
-        // update splash text in case it’s showing
-        document.getElementById('disclaimer').textContent = T[LANG].disclaimer;
-        document.getElementById('acceptBtn').textContent = T[LANG].agree;
-        // rerender cards and show a welcome line
-        renderCards();
-        addBubble(T[LANG].welcome, 'bot', { typewriter:true });
-        updateAIStatus(T[LANG].statusKB);
-        syncBtn();
-      });
-      syncBtn();
-
-      // send
-      document.getElementById('sendBtn')?.addEventListener('click', () => handleSend());
-      document.getElementById('userInput')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
-      });
-
-      // cards click
-      document.getElementById('cardsContainer')?.addEventListener('click', (e) => {
-        const card = e.target.closest('.card');
-        if (!card) return;
-
-        // top 4 “definition” prompts
-        const prompt = card.getAttribute('data-prompt');
-        if (prompt) return handleSend(prompt);
-
-        // tools
-        const action = card.getAttribute('data-action');
-        if (!action) return;
-
-        switch(action){
-          case 'calendar':       return openCalendar();
-          case 'myinfo':         return openMyInfo();
-          case 'medications':    return openMeds();
-          case 'education':      return openEducation();
-          case 'appointments':   return openAppointments();
-          case 'messages':       return openMessages();
-          case 'refills':        return openRefills();
-          case 'drugchecker':    return openDrugChecker();
-          case 'healthtracker':  return openHealthTracker();
-          case 'reminders':      return openReminders();
-          case 'emergency':      return openEmergency();
-          case 'televisit':      return addBubble(LANG==='es'
-            ? 'Demostración: aquí abriría la plataforma de video con la cita.'
-            : 'Demo: this would open your video platform with visit info.', 'bot', { typewriter:true });
-        }
-      }, { passive: true });
-    }
-
-    // ===== Boot =====
-    function boot() {
-      renderCards();
-      bindEvents();
-      // consent gate last so UI is ready underneath
-      bootConsent();
-    }
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-    else boot();
-  })();
+      // Load products on page load
+      loadProducts();
+    });
   </script>
 </body>
 </html>
