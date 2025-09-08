@@ -1,121 +1,86 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <title>Luminous Beauty — Shop</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
-  <style>
-    :root {
-      --bg: #fafafa;
-      --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --brand: #7c3aed; /* accent */
-      --line: #e5e7eb;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg); color: var(--text);
-    }
-    .wrap { max-width: 1100px; margin: 0 auto; padding: 24px; }
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 20px;
-    }
-    .brand {
-      display: flex; align-items: center; gap: 10px;
-      font-weight: 800; font-size: 20px;
-    }
-    .brand-dot { width: 10px; height: 10px; background: var(--brand); border-radius: 50%; }
-    .search {
-      display: flex; gap: 10px; width: 100%; max-width: 520px;
-    }
-    .search input {
-      flex: 1; padding: 12px 14px; border: 1px solid var(--line);
-      border-radius: 12px; font-size: 15px; outline: none;
-    }
-    .search input:focus { border-color: var(--brand); }
-    .grid {
-      display: grid; gap: 16px;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    }
-    .card {
-      background: var(--card); border: 1px solid var(--line);
-      border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
-      transition: box-shadow .2s ease, transform .2s ease;
-    }
-    .card:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.07); }
-    .card img {
-      width: 100%; height: 160px; object-fit: cover; background: #f3f4f6;
-    }
-    .card-body { padding: 12px; display: grid; gap: 8px; }
-    .card-title { font-weight: 700; }
-    .card-meta { color: var(--muted); font-size: 13px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .brand-pill, .cat-pill {
-      background: #f3f4f6; border-radius: 999px; padding: 2px 8px; font-size: 12px;
-    }
-    .card-bottom {
-      margin-top: 4px; display: flex; align-items: center; justify-content: space-between;
-    }
-    .price { font-weight: 800; }
-    .rating { color: #f59e0b; font-weight: 700; }
-    .empty {
-      display: none; text-align: center; color: var(--muted); padding: 40px 12px;
-    }
-    footer {
-      margin-top: 28px; padding: 16px 0; color: var(--muted); font-size: 13px; text-align: center;
-    }
-    @media (max-width: 540px) {
-      .search { max-width: none; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Luminous Beauty</title>
+<link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="brand">
-        <div class="brand-dot"></div>
-        Luminous Beauty
-      </div>
-      <div class="search">
-        <input id="product-search" placeholder="Search products by name, brand, or category…" />
-      </div>
-    </header>
+<header class="topbar">
+  <div class="brand">💡 Luminous</div>
+  <a class="small-link" href="/stylist" target="_blank" rel="noopener">Stylist Portal</a>
+</header>
 
-    <div id="product-empty" class="empty">
-      <div style="font-size:18px; font-weight:800; margin-bottom:6px;">No products found</div>
-      <div>Try a different search or be more specific.</div>
+<main class="wrap">
+  <section class="card">
+    <h2>Ask AI (independent)</h2>
+    <p class="muted">Tell me the vibe, event, skin/hair details, celebs you like, etc.</p>
+    <textarea id="prompt" placeholder="e.g., Soft glam for daytime; pale skin, cool undertone; blue eyes; shoulder-length hair;"></textarea>
+
+    <div class="row">
+      <div class="field">
+        <label>Skin Undertone</label>
+        <select id="undertone">
+          <option value="">—</option>
+          <option>cool</option>
+          <option>neutral</option>
+          <option>warm</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hair Type</label>
+        <select id="hairtype">
+          <option value="">—</option>
+          <option>straight</option>
+          <option>wavy</option>
+          <option>curly</option>
+          <option>coily</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Event</label>
+        <select id="event">
+          <option value="">—</option>
+          <option>everyday</option>
+          <option>wedding guest</option>
+          <option>photoshoot</option>
+          <option>interview</option>
+          <option>date night</option>
+        </select>
+      </div>
     </div>
 
-    <div id="product-list" class="grid"></div>
+    <div class="uploader">
+      <label class="btn-secondary" for="images">Add inspo images</label>
+      <input id="images" type="file" accept="image/*" multiple />
+      <div id="thumbs" class="thumbs"></div>
+    </div>
 
-    <footer>
-      &copy; <span id="yr"></span> Luminous Beauty • All rights reserved
-    </footer>
-  </div>
+    <div id="palette" class="palette"></div>
 
-  <script>
-    document.getElementById('yr').textContent = new Date().getFullYear();
- <script>
-(() => {
-  // Accepts either integer cents (e.g., 899) or dollar amounts (e.g., 8.99)
-  function formatCents(value, currency = 'USD', locale = undefined) {
-    const n = Number(value);
-    if (!isFinite(n)) return (0).toLocaleString(locale, { style: 'currency', currency });
+    <div class="actions">
+      <button id="create" class="btn">Create Brief</button>
+      <button id="reset" class="btn-ghost">Reset</button>
+    </div>
+  </section>
 
-    // Heuristic: if it looks like an integer and not a decimal string, treat as cents. Otherwise treat as dollars.
-    const looksLikeInteger = Number.isInteger(n) && !String(value).includes('.');
-    const amount = looksLikeInteger ? n / 100 : n;
+  <section id="results" class="card hidden">
+    <div class="row-split">
+      <h2>AI Brief</h2>
+      <div class="row-gap">
+        <a id="shareLink" class="small-link" target="_blank" rel="noopener">Open Stylist View</a>
+        <a id="pdfLink" class="btn-small" target="_blank" rel="noopener">Export PDF</a>
+      </div>
+    </div>
+    <div id="ai"></div>
+  </section>
+</main>
 
-    return amount.toLocaleString(locale, { style: 'currency', currency });
-  }
+<footer class="foot">
+  <div>Demo • No PII stored • Images kept in session only</div>
+</footer>
 
-  // Expose globally for existing code that calls formatCents(...)
-  window.formatCents = formatCents;
-})();
-</script>
+<script src="/shop.js" defer></script>
 </body>
 </html>
-

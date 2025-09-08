@@ -1,17 +1,22 @@
 {
-  "name": "luminous-shop",
+  "name": "luminous",
   "version": "1.0.0",
-  "private": true,
-  "description": "Luminous Beauty storefront",
+  "description": "Luminous Beauty AI demo",
+  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "PORT=8080 node server.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.2"
+    "colorthief": "^2.6.0",
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "^4.21.2",
+    "helmet": "7.1.0",
+    "multer": "1.4.5-lts.1",
+    "openai": "4.56.0",
+    "pdfkit": "0.13.0",
+    "uuid": "9.0.1"
   }
 }
