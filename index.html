@@ -98,7 +98,24 @@
 
   <script>
     document.getElementById('yr').textContent = new Date().getFullYear();
-  </script>
-  <script src="shop.js"></script>
+ <script>
+(() => {
+  // Accepts either integer cents (e.g., 899) or dollar amounts (e.g., 8.99)
+  function formatCents(value, currency = 'USD', locale = undefined) {
+    const n = Number(value);
+    if (!isFinite(n)) return (0).toLocaleString(locale, { style: 'currency', currency });
+
+    // Heuristic: if it looks like an integer and not a decimal string, treat as cents. Otherwise treat as dollars.
+    const looksLikeInteger = Number.isInteger(n) && !String(value).includes('.');
+    const amount = looksLikeInteger ? n / 100 : n;
+
+    return amount.toLocaleString(locale, { style: 'currency', currency });
+  }
+
+  // Expose globally for existing code that calls formatCents(...)
+  window.formatCents = formatCents;
+})();
+</script>
 </body>
 </html>
+
