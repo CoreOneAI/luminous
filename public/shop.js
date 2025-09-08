@@ -1,14 +1,12 @@
 /* Luminous Beauty Shop
-   - tolerant loader for products.json schemas
-   - robust currency helper (formatCents)
-   - search/“ask” in one box
-   - graceful empty state + error status
+   - Robust currency helper (formatCents)
+   - Tolerant product mapper (name/price/image/tags in many shapes)
+   - Search/“ask” with price filters and fuzzy fallback (never empty)
 */
 
 (() => {
-  // --------- utilities ---------
+  // ---------- helpers ----------
   function normalizePriceToCents(product) {
-    // Accept many shapes: price_cents | priceCents | price (number or "$12.34")
     const rawCents = product.price_cents ?? product.priceCents ?? product.cents;
     if (Number.isFinite(rawCents)) return Math.round(Number(rawCents));
 
@@ -16,10 +14,8 @@
     if (raw == null) return 0;
 
     if (typeof raw === "number" && Number.isFinite(raw)) {
-      // assume dollars
       return Math.round(raw * 100);
     }
-    // "$12.34", "12.34", "12"
     const m = String(raw).replace(/[^\d.]/g, "");
     const n = Number(m);
     return Number.isFinite(n) ? Math.round(n * 100) : 0;
@@ -66,38 +62,55 @@
     return bucket;
   }
 
-  // --------- state ---------
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function escapeAttr(s) { return escapeHtml(s).replace(/"/g,"&quot;"); }
+
+  // ---------- state ----------
   let ALL = [];
   const els = {
-    q:    document.getElementById("q"),
-    ask:  document.getElementById("askBtn"),
-    clr:  document.getElementById("clearBtn"),
-    grid: document.getElementById("grid"),
-    empty:document.getElementById("empty"),
+    q:     document.getElementById("q"),
+    ask:   document.getElementById("askBtn"),
+    clr:   document.getElementById("clearBtn"),
+    grid:  document.getElementById("grid"),
+    empty: document.getElementById("empty"),
     status:document.getElementById("status"),
   };
 
-  // --------- data load ---------
+  // ---------- load data ----------
   async function loadProducts() {
     setStatus("Loading catalog…");
     try {
       const r = await fetch("/products.json", { cache: "no-store" });
       if (!r.ok) throw new Error(`HTTP ${r.status}`);
       const json = await r.json();
-
       const arr = Array.isArray(json) ? json : (Array.isArray(json.items) ? json.items : []);
-      ALL = arr.map((p, i) => ({
-        __raw: p,
-        id: p.id ?? p.sku ?? p.handle ?? `prod_${i}`,
-        name: getName(p),
-        description: getDescription(p),
-        brand: getBrand(p),
-        tags: getTags(p),
-        image: getImage(p),
-        price_cents: normalizePriceToCents(p),
-        url: p.url ?? p.href ?? null,
-        rating: p.rating ?? p.stars ?? null
-      }));
+
+      ALL = arr.map((p, i) => {
+        const name = getName(p);
+        const description = getDescription(p);
+        const brand = getBrand(p);
+        const tags = getTags(p);
+        const haystack = [
+          name, description, brand,
+          ...(Array.isArray(tags) ? tags : [])
+        ].join(" ").toLowerCase();
+
+        return {
+          __raw: p,
+          id: p.id ?? p.sku ?? p.handle ?? `prod_${i}`,
+          name,
+          description,
+          brand,
+          tags,
+          image: getImage(p),
+          price_cents: normalizePriceToCents(p),
+          url: p.url ?? p.href ?? null,
+          rating: p.rating ?? p.stars ?? null,
+          haystack
+        };
+      });
 
       renderProducts(ALL);
       setStatus(`${ALL.length} products loaded`);
@@ -109,10 +122,9 @@
     }
   }
 
-  // --------- rendering ---------
+  // ---------- status & render ----------
   function setStatus(text) {
-    if (!els.status) return;
-    els.status.textContent = text || "";
+    if (els.status) els.status.textContent = text || "";
   }
 
   function renderProducts(list) {
@@ -141,8 +153,8 @@
 
     div.innerHTML = `
       <div class="thumb">
-        ${p.image ? `<img src="${escapeHtml(p.image)}" alt="${escapeHtml(p.name)}" />`
-                  : `<span aria-hidden="true">🧴</span>`}
+        ${p.image ? `<img src="${escapeAttr(p.image)}" alt="${escapeHtml(p.name)}" />`
+                  : `<span aria-hidden="true" style="font-size:28px">🧴</span>`}
       </div>
       <div class="pad">
         <div class="title">${escapeHtml(p.name)}</div>
@@ -152,78 +164,86 @@
           <div>${p.brand ? `<span class="tag">${escapeHtml(p.brand)}</span>` : ""}</div>
         </div>
         <div style="margin-top:8px">${tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join(" ")}</div>
-        <div style="margin-top:10px;display:flex;gap:8px">
-          ${p.url ? `<a class="secondary" style="text-decoration:none;padding:8px 10px;border-radius:8px;border:1px solid #ddd" href="${escapeAttr(p.url)}" target="_blank" rel="noopener">View</a>` : ""}
-          <button class="addBtn" data-id="${escapeAttr(p.id)}">Add to cart</button>
+        <div class="btnbar">
+          ${p.url ? `<a class="btn btn-outline" href="${escapeAttr(p.url)}" target="_blank" rel="noopener">View</a>` : ""}
+          <button class="btn addBtn" data-id="${escapeAttr(p.id)}">Add to cart</button>
         </div>
       </div>
     `;
 
-    // simple add-to-cart demo
     div.querySelector(".addBtn")?.addEventListener("click", () => {
       alert(`Added “${p.name}” to cart (demo)`);
     });
 
-    // image fallback
     const img = div.querySelector("img");
     if (img) img.addEventListener("error", () => { img.remove(); });
 
     return div;
   }
 
-  function escapeHtml(s) {
-    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  }
-  function escapeAttr(s){ return escapeHtml(s).replace(/"/g,"&quot;"); }
-
-  // --------- search / ask ---------
-  function filterProducts(query) {
-    if (!query) return ALL;
-
-    const q = query.toLowerCase();
-
-    // price filters like "under $25" or "< 25"
-    let maxCents = null;
-    const priceMatch = q.match(/(?:under|less than|<)\s*\$?\s*(\d+(?:\.\d+)?)/);
-    if (priceMatch) {
-      maxCents = Math.round(parseFloat(priceMatch[1]) * 100);
+  // ---------- search / ask ----------
+  // super-simple fuzzy score: more token hits in haystack = higher score
+  function scoreProduct(p, tokens) {
+    if (tokens.length === 0) return 1;
+    let score = 0;
+    for (const t of tokens) {
+      if (!t) continue;
+      if (p.haystack.includes(t)) score += 1;
     }
+    return score;
+  }
 
+  function parsePriceMax(query) {
+    const q = query.toLowerCase();
+    const m = q.match(/(?:under|less than|below|<=|≤|<|max)\s*\$?\s*(\d+(?:\.\d+)?)/);
+    return m ? Math.round(parseFloat(m[1]) * 100) : null;
+  }
+
+  function filterProducts(query) {
+    const q = (query || "").trim();
+    if (!q) return ALL;
+
+    const maxCents = parsePriceMax(q);
     const tokens = q
-      .replace(/under\s*\$?\s*\d+(?:\.\d+)?/g, " ")
-      .replace(/less than\s*\$?\s*\d+(?:\.\d+)?/g, " ")
+      .toLowerCase()
+      .replace(/(?:under|less than|below|<=|≤|<|max)\s*\$?\s*\d+(?:\.\d+)?/g, " ")
       .split(/\s+/)
       .map(t => t.trim())
       .filter(Boolean);
 
-    return ALL.filter(p => {
-      const hay = [
-        p.name, p.description, p.brand,
-        ...(Array.isArray(p.tags) ? p.tags : [])
-      ].join(" ").toLowerCase();
-
-      const textMatch = tokens.every(t => hay.includes(t));
+    // exact tokens filter first
+    let exact = ALL.filter(p => {
+      const textMatch = tokens.every(t => p.haystack.includes(t));
       if (!textMatch) return false;
-
-      if (maxCents != null) {
-        return (p.price_cents || 0) <= maxCents;
-      }
+      if (maxCents != null) return (p.price_cents || 0) <= maxCents;
       return true;
     });
+
+    if (exact.length > 0) return exact;
+
+    // fuzzy fallback (never return empty)
+    const scored = ALL
+      .map(p => ({ p, s: scoreProduct(p, tokens) }))
+      .sort((a,b) => b.s - a.s);
+
+    const top = scored.filter(x => x.s > 0).slice(0, 24).map(x => x.p);
+    if (maxCents != null) {
+      const capped = top.filter(p => (p.price_cents || 0) <= maxCents);
+      if (capped.length) return capped;
+    }
+    return top.length ? top : ALL.slice(0, 24);
   }
 
   async function handleAsk() {
     const q = (els.q?.value || "").trim();
     const list = filterProducts(q);
     renderProducts(list);
-    setStatus(list.length ? `Showing ${list.length} result(s)` : "No matches for your query");
+    setStatus(list.length ? `Showing ${list.length} result(s)` : "No matches — showing closest items");
   }
 
   function bind() {
     els.ask?.addEventListener("click", handleAsk);
-    els.q?.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") handleAsk();
-    });
+    els.q?.addEventListener("keydown", (e) => { if (e.key === "Enter") handleAsk(); });
     els.clr?.addEventListener("click", () => {
       els.q.value = "";
       renderProducts(ALL);
@@ -231,7 +251,7 @@
     });
   }
 
-  // --------- boot ---------
+  // ---------- boot ----------
   document.addEventListener("DOMContentLoaded", async () => {
     bind();
     await loadProducts();
