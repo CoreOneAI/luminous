@@ -1,0 +1,49 @@
+[
+  {
+    "id": "sku_bananas_001",
+    "name": "Organic Bananas",
+    "brand": "Dole",
+    "store": "Target",
+    "category": "Groceries",
+    "price": 2.99,
+    "was": 3.49,
+    "description": "Ripe organic bananas, sold by the bunch."
+  },
+  {
+    "id": "sku_charger_002",
+    "name": "iPhone USB-C Charger",
+    "brand": "Anker",
+    "store": "Best Buy",
+    "category": "Electronics",
+    "price": 19.99,
+    "description": "20W fast charger for iPhone and iPad."
+  },
+  {
+    "id": "sku_coffee_003",
+    "name": "Whole Bean Coffee 2lb",
+    "brand": "Kirkland",
+    "store": "Costco",
+    "category": "Groceries",
+    "price": 12.99,
+    "was": 14.99,
+    "description": "Medium roast, whole bean."
+  },
+  {
+    "id": "sku_shoes_004",
+    "name": "Running Shoes",
+    "brand": "Nike",
+    "store": "Amazon",
+    "category": "Clothing",
+    "price": 89.99,
+    "description": "Lightweight daily trainers."
+  },
+  {
+    "id": "sku_tv_005",
+    "name": "55\" 4K Smart TV",
+    "brand": "Samsung",
+    "store": "Walmart",
+    "category": "Electronics",
+    "price": 379.0,
+    "description": "Crystal UHD with HDR."
+  }
+]
