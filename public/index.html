@@ -4,342 +4,395 @@
   <meta charset="utf-8" />
   <title>Luminous Beauty</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="color-scheme" content="light" />
+  <meta name="color-scheme" content="light only" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    :root{
-      --bg:#fafafa; --fg:#1f2937; --muted:#6b7280; --brand:#7c3aed; --brand-2:#a855f7;
-      --card:#ffffff; --line:#e5e7eb; --ok:#16a34a; --warn:#f59e0b; --danger:#dc2626;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    .app{max-width:420px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column}
-    header{
-      position:sticky;top:0;z-index:2;background:var(--card);border-bottom:1px solid var(--line);
-      padding:12px 14px;display:flex;align-items:center;gap:10px
-    }
-    header .brand{font-weight:800;letter-spacing:.3px}
-    .pill{font-size:12px;padding:2px 8px;border-radius:999px;background:rgba(124,58,237,.09);color:var(--brand);border:1px solid rgba(124,58,237,.22)}
-    .spacer{flex:1}
-    .cart{position:relative}
-    .cart .dot{position:absolute;right:-2px;top:-2px;width:10px;height:10px;border-radius:999px;background:var(--brand)}
-    main{padding:12px;display:flex;flex-direction:column;gap:12px}
-    .card{
-      background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden
-    }
-    .card h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:700}
-    .card .body{padding:12px 14px}
-    .row{display:flex;gap:10px;align-items:center}
-    .row.wrap{flex-wrap:wrap}
-    input[type="text"], textarea{
-      width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--fg);
-      outline:none
-    }
-    textarea{min-height:70px;resize:vertical}
-    button{
-      appearance:none;border:none;background:var(--brand);color:#fff;font-weight:700;padding:12px 14px;border-radius:12px;cursor:pointer
-    }
-    button.secondary{background:#fff;color:var(--fg);border:1px solid var(--line)}
-    button.ghost{background:transparent;color:var(--brand);border:1px solid rgba(124,58,237,.25)}
-    button:disabled{opacity:.6;cursor:not-allowed}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:13px;color:var(--muted);cursor:pointer}
-    .chip:hover{border-color:var(--brand);color:var(--brand)}
-    .chat{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow:auto;padding-right:2px}
-    .bubble{padding:10px 12px;border-radius:14px;max-width:85%}
-    .me{background:#ede9fe;color:#3b0764;align-self:flex-end;border:1px solid rgba(124,58,237,.25)}
-    .bot{background:#f3f4f6;color:#111827;border:1px solid var(--line)}
-    .muted{color:var(--muted)}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .product{
-      display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff
-    }
-    .thumb{aspect-ratio:1.2/1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
-    .meta{padding:10px}
-    .name{font-weight:700;font-size:14px;margin:0 0 2px 0}
-    .brand{font-size:12px;color:var(--muted);margin-bottom:6px}
-    .price{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-    .was{font-size:12px;color:var(--muted);text-decoration:line-through}
-    .btns{display:flex;gap:8px}
-    footer{height:60px}
-    .hint{font-size:12px}
-    .empty{padding:8px 0;color:var(--muted)}
-    .bar{display:flex;gap:8px}
-    .search{flex:1}
-    .status{font-size:12px;color:var(--muted)}
-    .hidden{display:none!important}
+    :root { --brand:#111827; --accent:#f472b6; --accent2:#8b5cf6; }
+    html,body { background:#fff; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .chip{padding:.375rem .625rem;border-radius:999px;border:1px solid #e5e7eb;font-size:.75rem;display:inline-flex;gap:.375rem;align-items:center;background:#fff}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.75rem 1rem;border-radius:12px;font-weight:600}
+    .btn-accent{background:linear-gradient(90deg,var(--accent),var(--accent2));color:#fff}
+    .btn-subtle{background:#f3f4f6;color:#111827}
+    .card{background:#fff;border:1px solid #eef2f7;border-radius:16px;box-shadow:0 6px 14px rgba(17,24,39,.05)}
+    .skeleton{background:linear-gradient(90deg,#f3f4f6,#e5e7eb,#f3f4f6);background-size:200% 100%;animation:shimmer 1.2s infinite}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .sticky-bottom{position:sticky;bottom:0;background:#fff;padding:10px 0}
   </style>
 </head>
-<body>
-  <div class="app">
-    <header>
-      <div style="font-size:22px">💫</div>
-      <div class="brand">Luminous</div>
-      <div class="pill">Demo</div>
-      <div class="spacer"></div>
-      <div class="status" id="status">AI: …</div>
-      <div class="cart" title="Bag"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 6h12l-1 14H7L6 6Z"/><path d="M9 6a3 3 0 0 1 6 0"/></svg><div class="dot hidden" id="bagDot"></div></div>
-    </header>
-
-    <main>
-      <!-- Ask AI -->
-      <section class="card" id="askCard">
-        <h3>Ask AI for Ideas</h3>
-        <div class="body">
-          <div class="chips" id="suggestions"></div>
-          <div class="chat" id="chat"></div>
-          <div class="row" style="margin-top:8px">
-            <textarea id="askInput" placeholder="e.g., Best makeup for pale skin with cool undertones"></textarea>
-          </div>
-          <div class="row" style="margin-top:8px">
-            <button id="askBtn">Ask</button>
-            <button class="secondary" id="clearChatBtn">Clear</button>
-            <span class="hint muted">Responses come from your /ask endpoint.</span>
-          </div>
+<body class="min-h-screen">
+  <!-- Header -->
+  <header class="px-4 pt-6 pb-4">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="h-10 w-10 rounded-xl bg-gradient-to-br from-pink-400 to-violet-500 shadow-sm"></div>
+        <div>
+          <h1 class="text-lg font-extrabold tracking-tight">Luminous Beauty</h1>
+          <p class="text-xs text-gray-500 -mt-0.5">Personal beauty concierge</p>
         </div>
-      </section>
+      </div>
+      <span id="statusDot" class="inline-flex items-center gap-2 text-xs text-gray-500">
+        <span class="h-2 w-2 rounded-full bg-gray-300" aria-hidden="true"></span>
+        Offline
+      </span>
+    </div>
+  </header>
 
-      <!-- Recommendations -->
-      <section class="card">
-        <h3>Your Recommendations</h3>
-        <div class="body">
-          <div class="bar">
-            <input id="search" class="search" type="text" placeholder="Search products…" />
-            <button class="ghost" id="refreshBtn">Refresh</button>
-          </div>
-          <div class="hint muted" style="margin-top:6px">Powered by <code>/products.json</code> on your server.</div>
-          <div id="products" class="grid" style="margin-top:10px"></div>
-          <div id="emptyProducts" class="empty hidden">No products found<br/><span class="hint">Try a different search or be more specific.</span></div>
-        </div>
-      </section>
-    </main>
+  <!-- Hero notice -->
+  <section class="px-4 -mt-2 mb-2">
+    <div class="card px-4 py-3">
+      <p class="text-[13px] text-gray-600">
+        <strong>Demo catalog.</strong> Prices &amp; availability for demonstration only.
+      </p>
+    </div>
+  </section>
 
-    <footer></footer>
-  </div>
+  <!-- Ask AI -->
+  <section class="px-4 mt-4">
+    <h2 class="text-base font-semibold mb-3">Ask AI</h2>
+    <div class="card p-3">
+      <div class="flex gap-2">
+        <input id="chatInput" class="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-[15px] outline-none focus:ring-2 focus:ring-pink-300"
+               placeholder="e.g., Best makeup for pale skin with cool undertones" />
+        <button id="chatBtn" class="btn btn-accent px-4">Ask</button>
+      </div>
+      <div class="mt-3 flex gap-2 flex-wrap" id="quickChips">
+        <button class="chip" data-q="Everyday dewy routine">Everyday dewy routine</button>
+        <button class="chip" data-q="Sensitive skin, fragrance-free skincare">Sensitive skin</button>
+        <button class="chip" data-q="Wedding makeup ideas, soft glam">Wedding soft glam</button>
+        <button class="chip" data-q="Makeup for hooded eyes, natural look">Hooded eyes</button>
+      </div>
+      <div id="aiBlock" class="mt-4 hidden">
+        <div class="text-xs font-semibold text-gray-500 mb-2">AI Generated</div>
+        <div id="chatResponse" class="prose prose-sm max-w-none text-[15px] leading-6"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Recommendations -->
+  <section class="px-4 mt-6">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-semibold">Your Recommendations</h2>
+      <div class="flex gap-2">
+        <input id="searchBox" class="rounded-lg border border-gray-200 px-3 py-2 text-[14px] w-44 outline-none focus:ring-2 focus:ring-pink-300" placeholder="Search products…" />
+        <button id="clearBtn" class="btn btn-subtle px-3">Clear</button>
+      </div>
+    </div>
+
+    <div id="results" class="grid grid-cols-2 gap-3"></div>
+    <div id="emptyState" class="hidden text-center text-sm text-gray-500 mt-6">
+      <p class="font-medium mb-1">No products found</p>
+      <p>Try a different search or be more specific about your needs.</p>
+    </div>
+
+    <div class="sticky-bottom px-4">
+      <button id="loadMore" class="btn btn-subtle w-full">Load more</button>
+    </div>
+  </section>
 
   <script>
-    // ------- Utilities -------
-    const $ = sel => document.querySelector(sel);
-    const $$ = sel => Array.from(document.querySelectorAll(sel));
-    const API_BASE = ''; // same-origin
-    let BAG_COUNT = 0;
-    const chatView = $('#chat');
-    const statusEl = $('#status');
-    const bagDot = $('#bagDot');
+    // --- Configuration (adjust only if you change backend routes) ---
+    const CHAT_PATH = '/ask';            // working POST chat endpoint
+    const API_PRODUCTS = '/api/products';// optional server endpoint
+    const JSON_PRODUCTS = '/products.json'; // static JSON fallback
 
-    function setStatus(text){ statusEl.textContent = text; }
+    // --- Small helpers ---
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
 
-    function cents(v){
-      // Accept number (e.g. 19.99) or string ("19.99", "$19.99")
-      if (typeof v === 'string') {
-        const n = Number(String(v).replace(/[^0-9.]/g,''));
-        if (!Number.isFinite(n)) return '$—';
-        return `$${n.toFixed(2)}`;
+    function safeText(t) {
+      return (t ?? '').toString();
+    }
+
+    // Accepts cents, dollars, or strings like "$24.99". Returns "$—" when missing.
+    function formatPrice(value) {
+      if (value === null || value === undefined || value === '') return '$—';
+      if (typeof value === 'number') {
+        // Heuristic: treat large integers as cents, small numbers as dollars
+        if (Number.isInteger(value) && value >= 100) return '$' + (value / 100).toFixed(2);
+        return '$' + value.toFixed(2);
       }
-      if (typeof v === 'number') return `$${v.toFixed(2)}`;
+      if (typeof value === 'string') {
+        const s = value.trim();
+        if (s.startsWith('$')) return s;
+        const n = parseFloat(s);
+        if (!isFinite(n)) return '$—';
+        if (!s.includes('.') && n >= 100) return '$' + (n / 100).toFixed(2);
+        return '$' + n.toFixed(2);
+      }
       return '$—';
     }
 
-    function placeholderSVG(text='No image'){
-      const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='400' height='330'>
-        <rect width='100%' height='100%' fill='#f3f4f6'/>
-        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9ca3af' font-family='system-ui' font-size='16'>${text}</text>
-      </svg>`);
-      return `data:image/svg+xml;charset=utf-8,${svg}`;
+    function setStatus(ok) {
+      const dot = $('#statusDot');
+      if (!dot) return;
+      dot.innerHTML = '';
+      const span = document.createElement('span');
+      span.className = 'h-2 w-2 rounded-full ' + (ok ? 'bg-green-500' : 'bg-gray-300');
+      dot.appendChild(span);
+      dot.append(' ' + (ok ? 'Online' : 'Offline'));
     }
 
-    async function getJSON(url, opts={}){
-      try{
-        const r = await fetch(url, opts);
-        if (!r.ok) throw new Error(`${r.status}`);
-        return await r.json();
-      }catch(err){
-        console.error('fetch failed', url, err);
-        throw err;
+    async function checkHealth() {
+      try {
+        const r = await fetch('/health');
+        setStatus(r.ok);
+      } catch {
+        setStatus(false);
       }
     }
 
-    function addBubble(text, who='bot'){
-      const b = document.createElement('div');
-      b.className = `bubble ${who}`;
-      b.textContent = text;
-      chatView.appendChild(b);
-      chatView.scrollTop = chatView.scrollHeight;
-    }
+    // --- Core UI class ---
+    class LuminousUI {
+      constructor() {
+        // chat
+        this.chatInput = $('#chatInput');
+        this.chatBtn = $('#chatBtn');
+        this.chatResponse = $('#chatResponse');
+        this.aiBlock = $('#aiBlock');
+        this.quickChips = $('#quickChips');
 
-    function setBag(n){ BAG_COUNT = Math.max(0, n); bagDot.classList.toggle('hidden', BAG_COUNT===0); }
+        // products
+        this.results = $('#results');
+        this.emptyState = $('#emptyState');
+        this.loadMoreBtn = $('#loadMore');
+        this.searchBox = $('#searchBox');
+        this.clearBtn = $('#clearBtn');
 
-    // ------- Ask AI -------
-    const askBtn = $('#askBtn');
-    const askInput = $('#askInput');
-    const clearChatBtn = $('#clearChatBtn');
+        // state
+        this.query = '';
+        this.offset = 0;
+        this.pageSize = 8;
+        this.total = 0;
+        this.catalog = []; // when falling back to local JSON
 
-    async function askAI(message){
-      addBubble(message, 'me');
-      askBtn.disabled = true;
-      setStatus('AI: thinking…');
-      try{
-        const payload = { message };
-        const res = await getJSON(`${API_BASE}/ask`, {
-          method:'POST',
-          headers:{ 'Content-Type':'application/json' },
-          body: JSON.stringify(payload)
+        this.bind();
+        this.bootstrap();
+      }
+
+      bind() {
+        this.chatBtn.addEventListener('click', () => this.handleAsk());
+        this.chatInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') this.handleAsk();
         });
-        const reply = res?.reply || 'I could not find an answer right now.';
-        addBubble(reply, 'bot');
-      }catch(e){
-        addBubble('An error occurred while processing your request. Please try again.', 'bot');
-      }finally{
-        askBtn.disabled = false;
-        setStatus('AI: ready');
+        this.quickChips.addEventListener('click', (e) => {
+          const btn = e.target.closest('[data-q]');
+          if (!btn) return;
+          this.chatInput.value = btn.dataset.q;
+          this.handleAsk();
+        });
+
+        this.searchBox.addEventListener('input', () => {
+          this.query = this.searchBox.value.trim();
+          this.offset = 0;
+          this.renderProducts(true);
+        });
+
+        this.clearBtn.addEventListener('click', () => {
+          this.searchBox.value = '';
+          this.query = '';
+          this.offset = 0;
+          this.renderProducts(true);
+        });
+
+        this.loadMoreBtn.addEventListener('click', () => this.renderProducts());
       }
-    }
 
-    askBtn.addEventListener('click', () => {
-      const msg = askInput.value.trim();
-      if (!msg) return;
-      askInput.value = '';
-      askAI(msg);
-    });
-
-    askInput.addEventListener('keydown', (e)=>{
-      if (e.key === 'Enter' && !e.shiftKey){
-        e.preventDefault();
-        askBtn.click();
+      async bootstrap() {
+        await checkHealth();
+        // Try to preload catalog (helps instant rendering on first load)
+        try {
+          const res = await fetch(JSON_PRODUCTS + '?bust=' + Date.now());
+          if (res.ok) this.catalog = await res.json();
+        } catch {}
+        this.renderProducts(true);
       }
-    });
 
-    clearChatBtn.addEventListener('click', ()=>{
-      chatView.innerHTML = '';
-    });
+      // ---- CHAT ----
+      async handleAsk() {
+        const msg = this.chatInput.value.trim();
+        if (!msg) return;
 
-    // Suggestions
-    const SUGGESTIONS = [
-      'Everyday natural look for olive skin',
-      'Evening glam for cool undertones',
-      'Hydrating routine for curly hair',
-      'Wedding makeup for pale skin',
-      'Smudge-proof eyeliner for sensitive eyes'
-    ];
-    const sugWrap = $('#suggestions');
-    SUGGESTIONS.forEach(s=>{
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip';
-      chip.textContent = s;
-      chip.addEventListener('click', ()=>{ askInput.value = s; askInput.focus(); });
-      sugWrap.appendChild(chip);
-    });
+        // UI: show skeleton answer
+        this.aiBlock.classList.remove('hidden');
+        this.chatResponse.innerHTML = `
+          <div class="animate-pulse">
+            <div class="h-4 bg-gray-200 rounded w-5/6 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-4/6 mb-2"></div>
+            <div class="h-4 bg-gray-200 rounded w-3/6"></div>
+          </div>
+        `;
 
-    // ------- Products -------
-    const productsEl = $('#products');
-    const emptyProducts = $('#emptyProducts');
-    const searchInput = $('#search');
-    const refreshBtn = $('#refreshBtn');
+        try {
+          const r = await fetch(CHAT_PATH, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: msg })
+          });
+          const data = await r.json().catch(() => ({}));
 
-    let ALL_PRODUCTS = [];
-    let VISIBLE = [];
-
-    function renderProducts(list){
-      productsEl.innerHTML = '';
-      if (!list || list.length === 0){
-        emptyProducts.classList.remove('hidden');
-        return;
+          // Your backend returns { provider, model, reply }
+          const text = safeText(data.reply || data.response || data.text || 'Sorry, I couldn’t find that.');
+          this.chatResponse.textContent = text;
+        } catch (err) {
+          console.error('Chat failed', err);
+          this.chatResponse.textContent = 'An error occurred while processing your request. Please try again.';
+        }
       }
-      emptyProducts.classList.add('hidden');
 
-      list.forEach(p=>{
+      // ---- PRODUCTS ----
+      async fetchProductsServerSide() {
+        // Try /api/products first (if implemented)
+        const params = new URLSearchParams({
+          q: this.query,
+          offset: String(this.offset),
+          limit: String(this.pageSize)
+        });
+        const res = await fetch(`${API_PRODUCTS}?${params.toString()}`, { method: 'GET' });
+        if (!res.ok) throw new Error('api.products not available');
+        const data = await res.json();
+        if (!data || data.success === false) throw new Error('api.products returned error');
+        // expected shape: { success:true, total, items:[...] }
+        return { total: data.total ?? data.items?.length ?? 0, items: data.items ?? [] };
+      }
+
+      async fetchProductsFallback() {
+        // Client-side filter from /products.json
+        if (!this.catalog.length) {
+          const res = await fetch(JSON_PRODUCTS + '?bust=' + Date.now());
+          if (!res.ok) throw new Error('products.json missing');
+          this.catalog = await res.json();
+        }
+        const q = this.query.toLowerCase();
+        const all = this.catalog.filter(p => {
+          if (!q) return true;
+          const hay = [
+            p.name, p.brand, p.category, p.description, p.usage, p.ingredients, p.suitableFor
+          ].filter(Boolean).join(' ').toLowerCase();
+          return hay.includes(q);
+        });
+        const items = all.slice(this.offset, this.offset + this.pageSize);
+        return { total: all.length, items };
+      }
+
+      async renderProducts(reset = false) {
+        if (reset) {
+          this.results.innerHTML = '';
+          this.offset = 0;
+          this.total = 0;
+        }
+
+        // show skeletons
+        const skeleton = document.createElement('div');
+        skeleton.className = 'grid grid-cols-2 gap-3';
+        skeleton.innerHTML = Array.from({ length: 4 }).map(() => `
+          <div class="card p-3">
+            <div class="h-28 rounded-lg skeleton mb-3"></div>
+            <div class="h-4 w-3/4 rounded skeleton mb-2"></div>
+            <div class="h-3 w-1/2 rounded skeleton mb-3"></div>
+            <div class="flex justify-between">
+              <div class="h-4 w-16 rounded skeleton"></div>
+              <div class="h-8 w-20 rounded skeleton"></div>
+            </div>
+          </div>
+        `).join('');
+        this.results.appendChild(skeleton);
+
+        try {
+          let batch;
+          try {
+            batch = await this.fetchProductsServerSide();
+          } catch {
+            batch = await this.fetchProductsFallback();
+          }
+
+          this.total = batch.total;
+          this.offset += batch.items.length;
+
+          // render batch
+          const frag = document.createDocumentFragment();
+          for (const item of batch.items) frag.appendChild(this.renderCard(item));
+
+          // swap skeleton with real nodes
+          this.results.replaceChild(frag, skeleton);
+
+          // empty state toggle
+          $('#emptyState').classList.toggle('hidden', this.results.children.length > 0);
+
+          // load more
+          const hasMore = this.offset < this.total;
+          this.loadMoreBtn.disabled = !hasMore;
+          this.loadMoreBtn.textContent = hasMore ? 'Load more' : 'No more items';
+        } catch (e) {
+          console.error('renderProducts failed', e);
+          // on error, clear skeleton and show empty state
+          this.results.removeChild(skeleton);
+          $('#emptyState').classList.remove('hidden');
+          this.loadMoreBtn.disabled = true;
+          this.loadMoreBtn.textContent = 'Load more';
+        }
+      }
+
+      renderCard(p) {
+        const name = safeText(p.name || 'Beauty product');
+        const brand = safeText(p.brand || 'Salon Pro');
+        const price = formatPrice(p.price);
+        const was = p.was !== undefined && p.was !== null && p.was !== '' ? formatPrice(p.was) : '';
+        const badge = p.category ? `<span class="text-[10px] px-2 py-1 bg-pink-50 text-pink-600 rounded-full">${safeText(p.category)}</span>` : '';
+
         const card = document.createElement('div');
-        card.className = 'product';
+        card.className = 'card overflow-hidden';
 
-        const img = document.createElement('div');
-        img.className = 'thumb';
-        const src = p.image || p.img || p.photo || placeholderSVG('Beauty');
-        img.style.backgroundImage = src.startsWith('http') || src.startsWith('data:')
-          ? `url("${src}")` : `url("${src}")`;
-        img.style.backgroundSize = 'cover';
-        img.style.backgroundPosition = 'center';
-        img.textContent = src ? '' : 'No image';
-        card.appendChild(img);
+        // image or placeholder
+        const imgSrc = p.image || p.img || '';
+        const imgBlock = imgSrc
+          ? `<img src="${imgSrc}" alt="${name}" class="w-full h-36 object-cover">`
+          : `<div class="h-36 bg-gray-100 flex items-center justify-center text-gray-400 text-sm">No image</div>`;
 
-        const meta = document.createElement('div');
-        meta.className = 'meta';
-        const name = document.createElement('div');
-        name.className = 'name'; name.textContent = p.name || 'Unnamed';
-        const brand = document.createElement('div');
-        brand.className = 'brand'; brand.textContent = p.brand || p.line || '—';
-        const price = document.createElement('div');
-        price.className = 'price';
-        const now = document.createElement('div'); now.textContent = cents(p.price);
-        price.appendChild(now);
-        if (p.was){ const was = document.createElement('div'); was.className='was'; was.textContent=cents(p.was); price.appendChild(was); }
-        const btns = document.createElement('div'); btns.className='btns';
-        const add = document.createElement('button'); add.textContent='Add to Bag'; add.addEventListener('click', ()=> setBag(BAG_COUNT+1));
-        const more = document.createElement('button'); more.textContent='Details'; more.className='secondary';
-        more.addEventListener('click', ()=>{
-          alert(`${p.name || 'Product'}\n\n${p.description || p.desc || 'No description.'}`);
+        card.innerHTML = `
+          ${imgBlock}
+          <div class="p-3">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <div class="text-[11px] text-gray-500">${brand}</div>
+                <div class="text-[15px] font-semibold leading-5">${name}</div>
+              </div>
+              ${badge}
+            </div>
+            <div class="mt-2 flex items-center justify-between">
+              <div class="text-[15px] font-bold">${price}</div>
+              <div class="text-xs text-gray-400 line-through">${was}</div>
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button class="btn btn-subtle flex-1" data-action="details">Details</button>
+              <button class="btn btn-accent flex-1" data-action="add">Add</button>
+            </div>
+          </div>
+        `;
+
+        card.querySelector('[data-action="details"]').addEventListener('click', () => {
+          const bits = [];
+          if (p.description) bits.push(p.description);
+          if (p.usage) bits.push('Usage: ' + p.usage);
+          if (p.ingredients) bits.push('Key ingredients: ' + p.ingredients);
+          if (p.suitableFor) bits.push('Perfect for: ' + p.suitableFor);
+          alert(`${name}\n\n${bits.join('\n\n') || 'Professional salon product designed for optimal results.'}`);
         });
-        btns.appendChild(add); btns.appendChild(more);
 
-        meta.appendChild(name); meta.appendChild(brand); meta.appendChild(price); meta.appendChild(btns);
-        card.appendChild(meta);
-        productsEl.appendChild(card);
-      });
-    }
-
-    function filterProducts(q){
-      q = (q||'').trim().toLowerCase();
-      if (!q){ VISIBLE = [...ALL_PRODUCTS]; renderProducts(VISIBLE); return; }
-      VISIBLE = ALL_PRODUCTS.filter(p=>{
-        const hay = [
-          p.name, p.brand, p.category, p.tone, p.undertone, p.finish, p.description, p.desc
-        ].filter(Boolean).join(' ').toLowerCase();
-        return hay.includes(q);
-      });
-      renderProducts(VISIBLE);
-    }
-
-    async function loadProducts(){
-      try{
-        const data = await getJSON(`${API_BASE}/products.json?bust=${Date.now()}`);
-        if (!Array.isArray(data)) throw new Error('bad products');
-        // Normalize price fields if needed
-        ALL_PRODUCTS = data.map(p=>{
-          const cloned = {...p};
-          // convert price strings like "$19.99" to number for sort (but keep cents() tolerant)
-          if (typeof cloned.price === 'string'){
-            const n = Number(cloned.price.replace(/[^0-9.]/g,'')); if (Number.isFinite(n)) cloned.price = n;
-          }
-          if (typeof cloned.was === 'string'){
-            const n = Number(cloned.was.replace(/[^0-9.]/g,'')); if (Number.isFinite(n)) cloned.was = n;
-          }
-          return cloned;
+        card.querySelector('[data-action="add"]').addEventListener('click', () => {
+          alert('Added to bag (demo)');
         });
-        VISIBLE = [...ALL_PRODUCTS];
-        renderProducts(VISIBLE);
-      }catch(e){
-        console.error('loadProducts failed', e);
-        ALL_PRODUCTS = [];
-        VISIBLE = [];
-        renderProducts(VISIBLE);
-        emptyProducts.classList.remove('hidden');
+
+        return card;
       }
     }
 
-    searchInput.addEventListener('input', ()=> filterProducts(searchInput.value));
-    refreshBtn.addEventListener('click', loadProducts);
-
-    // ------- Boot -------
-    async function boot(){
-      // Health status
-      try{
-        const h = await getJSON(`${API_BASE}/health`);
-        setStatus(`AI: ${h?.hasOpenAI ? 'on' : 'off'}`);
-      }catch{ setStatus('AI: unknown'); }
-      await loadProducts();
-      // Welcome seed
-      addBubble('Hi! Tell me your vibe or event, and I’ll suggest looks, palettes, and products to discuss with your stylist.', 'bot');
-    }
-    document.addEventListener('DOMContentLoaded', boot);
+    // Wire up
+    document.addEventListener('DOMContentLoaded', () => {
+      window.app = new LuminousUI();
+    });
   </script>
 </body>
 </html>
