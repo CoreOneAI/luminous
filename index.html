@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#B8860B"/>
   <link rel="manifest" href="manifest.json"/>
   <script>
-    // Splash on first load only
+    // Keep your splash redirect behavior
     const splashShown = sessionStorage.getItem('splashShown');
     if (!splashShown) window.location.href = '/splash.html';
   </script>
@@ -22,10 +22,8 @@
       --premium-gradient:linear-gradient(135deg,#B8860B,#DAA520);
       --info:#2563eb20; --info-text:#1f2937;
     }
-    body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-      background:var(--primary-charcoal);color:#333;min-height:100vh;overflow-x:hidden
-    }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      background:var(--primary-charcoal);color:#333;min-height:100vh;overflow-x:hidden}
     .container{max-width:414px;margin:0 auto;background:var(--primary-charcoal);min-height:100vh;position:relative}
     .header{background:var(--primary-charcoal);padding:20px;text-align:center;border-bottom:1px solid #3A3A3A}
     .logo{font-size:28px;font-weight:700;margin-bottom:8px;
@@ -141,65 +139,51 @@
         <button class="chat-btn" id="consultBtn">🌟 Start Beauty Consultation</button>
       </div>
 
-      <!-- Quick actions -->
+      <!-- Quick actions (filter only; no chat) -->
       <div class="quick-actions" id="quickGrid">
-        <div class="action-card premium-feature"
-             data-preset="Recommend an anti-aging routine for sensitive, dry skin. Focus on gentle actives and SPF."
-             data-filter="anti-aging">
+        <div class="action-card premium-feature" data-filter="anti-aging">
           <div class="premium-star">⭐</div>
           <div class="action-icon">🧘</div>
           <div class="action-title">Anti-aging</div>
           <div class="action-subtitle">Wellness & skincare</div>
         </div>
 
-        <div class="action-card"
-             data-preset="Best eye care regimen to reduce puffiness and dark circles, fragrance-free."
-             data-filter="eye care">
+        <div class="action-card" data-filter="eye">
           <div class="action-icon">👁️</div>
           <div class="action-title">Eye Care</div>
-          <div class="action-subtitle">2,000+ eye products</div>
+          <div class="action-subtitle">gel • cream • serum</div>
         </div>
 
-        <div class="action-card premium-feature"
-             data-preset="Give me a skin analysis checklist to share with my stylist before an appointment."
-             data-filter="skin care">
+        <div class="action-card premium-feature" data-filter="skin care">
           <div class="premium-star">⭐</div>
           <div class="action-icon">✨</div>
           <div class="action-title">Skin Analysis</div>
           <div class="action-subtitle">AI recommendations</div>
         </div>
 
-        <div class="action-card premium-feature"
-             data-preset="Suggest a facial plan for dullness and texture with gentle exfoliation."
-             data-filter="facial">
+        <div class="action-card premium-feature" data-filter="night cream">
           <div class="premium-star">⭐</div>
-          <div class="action-icon">😊</div>
-          <div class="action-title">Facial Analysis</div>
-          <div class="action-subtitle">AI face scanning</div>
+          <div class="action-icon">🌙</div>
+          <div class="action-title">Night Cream</div>
+          <div class="action-subtitle">PM moisturizers</div>
         </div>
 
-        <div class="action-card"
-             data-preset="Show current beauty trends and viral looks; add approachable options for everyday wear."
-             data-filter="sale">
-          <div class="action-icon">🏷️</div>
-          <div class="action-title">Discounts</div>
-          <div class="action-subtitle">discount products</div>
+        <div class="action-card" data-filter="vitamin c">
+          <div class="action-icon">🍊</div>
+          <div class="action-title">Vitamin C</div>
+          <div class="action-subtitle">brightening</div>
         </div>
 
-        <div class="action-card"
-             data-preset="Nail care routine for brittle nails plus polish shades for cool undertones."
-             data-filter="nail">
-          <div class="action-icon">💅</div>
-          <div class="action-title">Nail Care</div>
-          <div class="action-subtitle">2,000+ nail products</div>
+        <div class="action-card" data-filter="spf">
+          <div class="action-icon">🛡️</div>
+          <div class="action-title">SPF</div>
+          <div class="action-subtitle">sunscreen</div>
         </div>
 
-        <div class="action-card"
-             data-preset="Useful beauty tools and accessories for travel: compact, TSA-friendly."
-             data-filter="accessories">
-          <div class="action-icon">💎</div>
-          <div class="action-title">Accessories</div>
-          <div class="action-subtitle">2,000+ beauty tools</div>
+        <div class="action-card" data-filter="peptide">
+          <div class="action-icon">🧬</div>
+          <div class="action-title">Peptide</div>
+          <div class="action-subtitle">firming</div>
         </div>
 
         <div class="action-card" id="basketBtn">
@@ -210,7 +194,7 @@
         </div>
       </div>
 
-      <!-- In-page Chat -->
+      <!-- In-page Chat (typewriter) -->
       <div class="chat-card" id="chatCard" aria-live="polite">
         <div class="chat-head">
           <div class="chat-title">AI Suggestions</div>
@@ -225,7 +209,7 @@
       <div class="section-head">
         <div class="section-title">Your Recommendations</div>
         <div class="search-row">
-          <input id="searchBox" class="search-input" placeholder="Search products by brand, concern, category…"/>
+          <input id="searchBox" class="search-input" placeholder="Search products… (Retinol, Peptide, Vitamin C, SPF, Night cream, Eye)"/>
           <button id="clearBtn" class="btn btn-subtle">Clear</button>
         </div>
       </div>
@@ -242,7 +226,7 @@
       <div class="footer-gap"></div>
     </div>
 
-    <!-- Bottom nav -->
+    <!-- Bottom nav (keeps user on page) -->
     <div class="bottom-nav">
       <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
       <div class="nav-item" data-nav="signin"><div class="nav-icon">🔑</div><div class="nav-label">Sign In</div></div>
@@ -254,20 +238,18 @@
 
   <script>
     // ---------------- Config ----------------
-    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat'];   // tries in order
-    const JSON_PRODUCTS  = '/products.json';               // single source for catalog
+    // Chat is independent and uses your AI API only:
+    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat'];   // tries in order for chat only
+    // Products come only from the catalog file served by the app:
+    const JSON_PRODUCTS  = '/products.json';
 
     // ---------------- Helpers ----------------
     const $ = (sel,root=document)=>root.querySelector(sel);
-    const $$ = (sel,root=document)=>Array.from(root.querySelectorAll(sel));
     const chatThread = $('#chatThread');
     const chatStatus = $('#chatStatus');
     const infoBar    = $('#infoBar');
 
-    function setStatus(s){ chatStatus.textContent = s; }
-    function safe(s){ return (s ?? '').toString(); }
-
-    function formatPrice(v){
+    const formatPrice = (v)=>{
       if (v===null||v===undefined||v==='') return '$—';
       if (typeof v==='number'){
         if (Number.isInteger(v) && v>=100) return '$'+(v/100).toFixed(2);
@@ -279,7 +261,8 @@
       if (!isFinite(n)) return '$—';
       if (!s.includes('.') && n>=100) return '$'+(n/100).toFixed(2);
       return '$'+n.toFixed(2);
-    }
+    };
+    const safe = (s)=> (s ?? '').toString();
 
     function addBubble(role, text, { typing=false }={}){
       const b = document.createElement('div');
@@ -304,7 +287,7 @@
     }
 
     async function askBackend(message){
-      let err;
+      let lastErr;
       for (const ep of CHAT_ENDPOINTS){
         try{
           const r = await fetch(ep,{
@@ -315,14 +298,19 @@
           if (!r.ok) throw new Error('HTTP '+r.status);
           const data = await r.json().catch(()=> ({}));
           return data.reply || data.response || data.text || 'Sorry, no answer available.';
-        }catch(e){ err=e; }
+        }catch(e){ lastErr=e; }
       }
-      throw err || new Error('All endpoints failed');
+      throw lastErr || new Error('All endpoints failed');
     }
 
-    async function askInPlace(q){
-      if (!q) return;
-      setStatus('Thinking…');
+    async function handleAsk(){
+      const inp = $('#aiInput');
+      const q = (inp?.value||'').trim();
+      if (!q){
+        addBubble('bot','Try: “Best makeup for pale skin with cool undertones.”');
+        return;
+      }
+      chatStatus.textContent='Thinking…';
       addBubble('user', q);
       const typing = addBubble('bot','',{typing:true});
       try{
@@ -333,118 +321,129 @@
         typing.innerHTML='';
         await typeText(typing, '⚠️ Could not reach AI. Please try again.');
       }finally{
-        setStatus('Ready');
+        chatStatus.textContent='Ready';
       }
     }
 
-    // --------- Product matching: synonyms + soft fallback ----------
-    const ALIASES = {
-      'anti-aging': ['anti aging','antiaging','wrinkle','retinol','fine lines','firming','age'],
-      'eye care': ['eye','undereye','under-eye','dark circle','puffy','crow\'s feet','eye cream','eye serum'],
-      'skin care': ['skin','moistur','cleanser','serum','toner','spf','sunscreen','hydrating','barrier'],
-      'facial': ['facial','mask','peel','exfol','treatment','spa'],
-      'nail': ['nail','cuticle','polish','manicure','pedicure'],
-      'accessories': ['tool','brush','applicator','roller','gua','mirror','bag'],
-      'sale': ['sale','discount','deal','clearance','save']
+    // --------- Product search (catalog only) ----------
+    // Normalize many schema shapes: strings, arrays, alt keys
+    const FIELD_SETS = {
+      name:        ['name','title'],
+      brand:       ['brand','maker','manufacturer'],
+      category:    ['category','type'],
+      tags:        ['tags','labels','keywords'],
+      ingredients: ['ingredients','keyIngredients','actives','activesList'],
+      suitableFor: ['suitableFor','skinType','concern','skinConcerns'],
+      usage:       ['usage','howToUse','directions'],
+      description: ['description','desc','about']
     };
 
-    function normalize(str){
-      return safe(str).toLowerCase();
-    }
+    const SYNONYMS = {
+      'retinol':     ['retinoid','retinal','retinaldehyde','vitamin a'],
+      'peptide':     ['peptides'],
+      'vitamin c':   ['vit c','ascorbic','ascorbyl','l-ascorbic'],
+      'spf':         ['sunscreen','broad spectrum','uv','uva','uvb','spf30','spf40','spf50'],
+      'night cream': ['pm','overnight','sleep mask','night moisturizer','night balm'],
+      'eye':         ['eye cream','eye serum','eye gel','undereye','under-eye','dark circle','puffy','puffiness']
+    };
 
-    function buildHaystack(p){
-      const fields = [
-        p.name,p.brand,p.category,p.description,p.usage,p.ingredients,p.suitableFor
-      ];
-      if (Array.isArray(p.tags)) fields.push(p.tags.join(' '));
-      return normalize(fields.filter(Boolean).join(' '));
+    const FIELD_WEIGHTS = { name:5, brand:4, category:4, tags:3, ingredients:3, suitableFor:2, usage:1, description:1 };
+    const norm = s => safe(s).toLowerCase();
+
+    function collectText(obj, keys){
+      const parts=[];
+      for (const k of keys){
+        const v = obj?.[k];
+        if (!v) continue;
+        if (Array.isArray(v)) { parts.push(v.join(' ')); continue; }
+        if (typeof v === 'object') { parts.push(Object.values(v).join(' ')); continue; }
+        parts.push(String(v));
+      }
+      return parts.join(' ');
     }
 
     function expandQuery(q){
-      const base = normalize(q);
-      const syns = new Set([base]);
-      // add alias bundle if exact key matches
-      if (ALIASES[base]) ALIASES[base].forEach(s=>syns.add(normalize(s)));
-      // also: if base includes spaces, add tokens
-      base.split(/\s+/).forEach(tok=> tok && syns.add(tok));
-      return Array.from(syns);
+      const base = norm(q);
+      const tokens = new Set(base.split(/[^a-z0-9]+/).filter(Boolean));
+      // synonyms for whole phrase
+      if (SYNONYMS[base]) SYNONYMS[base].forEach(s => s.split(' ').forEach(t => tokens.add(t)));
+      // synonyms for each token
+      base.split(/[^a-z0-9]+/).forEach(tok=>{
+        if (SYNONYMS[tok]) SYNONYMS[tok].forEach(s => s.split(' ').forEach(t=> tokens.add(t)));
+      });
+      // naive stems to help partial matches
+      [...tokens].forEach(t=>{ if (t.length>=5) tokens.add(t.slice(0,5)); });
+      return [...tokens];
     }
 
-    // ---------------- Products (JSON only) ----------------
+    function buildIndexable(p){
+      return {
+        name:        norm(collectText(p, FIELD_SETS.name)),
+        brand:       norm(collectText(p, FIELD_SETS.brand)),
+        category:    norm(collectText(p, FIELD_SETS.category)),
+        tags:        norm(collectText(p, FIELD_SETS.tags)),
+        ingredients: norm(collectText(p, FIELD_SETS.ingredients)),
+        suitableFor: norm(collectText(p, FIELD_SETS.suitableFor)),
+        usage:       norm(collectText(p, FIELD_SETS.usage)),
+        description: norm(collectText(p, FIELD_SETS.description))
+      };
+    }
+
+    function scoreProduct(p, q){
+      if (!q) return 1;
+      const idx = buildIndexable(p);
+      const tokens = expandQuery(q);
+      let score=0;
+      for (const [field,text] of Object.entries(idx)){
+        if (!text) continue;
+        const w = FIELD_WEIGHTS[field]||1;
+        tokens.forEach(t=>{ if (text.includes(t)) score+=w; });
+      }
+      return score;
+    }
+
     class Catalog {
       constructor(){
-        this.results   = $('#results');
-        this.empty     = $('#emptyState');
-        this.searchBox = $('#searchBox');
-        this.clearBtn  = $('#clearBtn');
-        this.moreBtn   = $('#loadMore');
+        this.results   = document.getElementById('results');
+        this.empty     = document.getElementById('emptyState');
+        this.searchBox = document.getElementById('searchBox');
+        this.clearBtn  = document.getElementById('clearBtn');
+        this.moreBtn   = document.getElementById('loadMore');
 
-        this.all   = [];   // full catalog from JSON
-        this.query = '';
-        this.offset = 0;
-        this.pageSize = 8;
-        this.total = 0;
+        this.all=[]; this.query=''; this.offset=0; this.pageSize=8; this.total=0;
 
-        this.bind();
-        this.bootstrap();
-      }
-
-      bind(){
-        this.searchBox.addEventListener('input', ()=>{
-          this.query = this.searchBox.value.trim();
-          this.offset=0; this.render(true);
-        });
-        this.clearBtn.addEventListener('click', ()=>{
-          this.searchBox.value=''; this.query=''; this.offset=0; this.render(true);
-        });
+        this.searchBox.addEventListener('input', ()=>{ this.query=this.searchBox.value.trim(); this.offset=0; this.render(true); });
+        this.clearBtn.addEventListener('click', ()=>{ this.searchBox.value=''; this.query=''; this.offset=0; this.render(true); });
         this.moreBtn.addEventListener('click', ()=> this.render());
+
+        this.bootstrap();
       }
 
       async bootstrap(){
         try{
-          const r = await fetch(JSON_PRODUCTS+'?bust='+Date.now());
+          const r = await fetch(JSON_PRODUCTS + '?bust=' + Date.now());
           if (r.ok) this.all = await r.json();
         }catch{}
         this.render(true);
       }
 
-      filterExact(){
-        const q = normalize(this.query);
-        if (!q) return this.all.slice();
-        const tokens = expandQuery(q);
-        return this.all.filter(p=>{
-          const hay = buildHaystack(p);
-          // OR match on any synonym token
-          return tokens.some(t => hay.includes(t));
-        });
-      }
-
-      filterSimilar(){
-        // If nothing found: try looser category/synonym match
-        const q = normalize(this.query);
-        const tokens = expandQuery(q);
-        return this.all.filter(p=>{
-          const s = buildHaystack(p);
-          return tokens.some(t=>{
-            // loose contains on stems (first 4 chars) for small typos
-            const stem = t.slice(0, Math.min(4, t.length));
-            return stem && s.includes(stem);
-          });
-        });
+      computeList(){
+        if (!this.query) return this.all.slice();
+        return this.all
+          .map(p=>({p, s:scoreProduct(p,this.query)}))
+          .filter(x=> x.s>0)
+          .sort((a,b)=> b.s-a.s)
+          .map(x=> x.p);
       }
 
       async render(reset=false){
-        infoBar.style.display = 'none';
-        if (reset){
-          this.results.innerHTML=''; this.offset=0; this.total=0;
-        }
+        infoBar.style.display='none';
+        if (reset){ this.results.innerHTML=''; this.offset=0; this.total=0; }
 
-        // skeletons
         const sk = document.createElement('div');
         sk.className='grid';
         sk.innerHTML = Array.from({length:4}).map(()=>`
-          <div class="card">
-            <div class="imgph">Loading…</div>
+          <div class="card"><div class="imgph">Loading…</div>
             <div class="meta">
               <div class="brand"> </div>
               <div class="name"> </div>
@@ -455,23 +454,9 @@
         this.results.appendChild(sk);
 
         try{
-          // exact first
-          let list = this.filterExact();
-
-          let usingSimilar = false;
-          if (!list.length && this.query){
-            list = this.filterSimilar();
-            usingSimilar = list.length > 0;
-          }
-
-          // still nothing? show top of catalog as a safety net
-          if (!list.length){
-            list = this.all.slice(0, 12);
-            if (this.query) usingSimilar = true;
-          }
-
+          const list = this.computeList();
           this.total = list.length;
-          const items = list.slice(this.offset, this.offset + this.pageSize);
+          const items = list.slice(this.offset, this.offset+this.pageSize);
           this.offset += items.length;
 
           const frag = document.createDocumentFragment();
@@ -485,12 +470,12 @@
           this.moreBtn.disabled = !hasMore;
           this.moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
 
-          if (usingSimilar){
-            infoBar.textContent = 'No exact matches — showing similar items.';
-            infoBar.style.display = 'block';
+          if (this.query){
+            infoBar.textContent = `Matches for “${this.query}” — showing ${Math.min(this.offset,this.total)} of ${this.total}.`;
+            infoBar.style.display='block';
           }
         }catch(e){
-          console.error('render error', e);
+          console.error(e);
           this.results.removeChild(sk);
           this.empty.style.display='block';
           this.moreBtn.disabled = true;
@@ -499,17 +484,17 @@
       }
 
       card(p){
-        const name  = safe(p.name||'Beauty product');
-        const brand = safe(p.brand||'Salon Pro');
-        const price = formatPrice(p.price);
-        const was   = (p.was!==undefined&&p.was!==null&&p.was!=='') ? formatPrice(p.was) : '';
-        const badge = p.category ? `<span class="badge">${safe(p.category)}</span>` : '';
-        const img   = p.image||p.img;
+        const name=safe(p.name||'Beauty product');
+        const brand=safe(p.brand||'Salon Pro');
+        const price=formatPrice(p.price);
+        const was=(p.was!==undefined&&p.was!==null&&p.was!=='')?formatPrice(p.was):'';
+        const badge=p.category?`<span class="badge">${safe(p.category)}</span>`:'';
+        const img=p.image||p.img;
 
-        const el = document.createElement('div');
+        const el=document.createElement('div');
         el.className='card';
-        el.innerHTML = `
-          ${img ? `<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">` : `<div class="imgph">No image</div>`}
+        el.innerHTML=`
+          ${img?`<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">`:`<div class="imgph">No image</div>`}
           <div class="meta">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
               <div>
@@ -528,11 +513,15 @@
 
         el.querySelector('[data-action="details"]').addEventListener('click', ()=>{
           const bits=[];
-          if (p.description)  bits.push(p.description);
-          if (p.usage)        bits.push('Usage: '+p.usage);
-          if (p.ingredients)  bits.push('Key ingredients: '+p.ingredients);
-          if (p.suitableFor)  bits.push('Perfect for: '+p.suitableFor);
-          if (Array.isArray(p.tags) && p.tags.length) bits.push('Tags: '+p.tags.join(', '));
+          // Collect visible details from any schema
+          const desc = collectText(p, ['description','desc','about']);
+          const usage= collectText(p, ['usage','howToUse','directions']);
+          const ingr = collectText(p, ['ingredients','keyIngredients','actives','activesList']);
+          const suit = collectText(p, ['suitableFor','skinType','concern','skinConcerns']);
+          if (desc) bits.push(desc);
+          if (usage) bits.push('Usage: '+usage);
+          if (ingr) bits.push('Key ingredients: '+ingr);
+          if (suit) bits.push('Perfect for: '+suit);
           alert(`${name}\n\n${bits.join('\n\n')||'Professional salon product designed for optimal results.'}`);
         });
 
@@ -547,54 +536,33 @@
     // ---------------- App wiring ----------------
     const ui = { cat:null };
 
-    function handleAsk(){
-      const q = ($('#aiInput')?.value||'').trim();
-      if (!q){
-        addBubble('bot','Try: “Best makeup for pale skin with cool undertones.”');
-        return;
-      }
-      askInPlace(q);
-    }
-
-    function applyFilter(term){
-      const sb = $('#searchBox');
-      sb.value = term;
-      ui.cat.query = term;
-      ui.cat.offset = 0;
-      ui.cat.render(true);
-    }
-
     document.addEventListener('DOMContentLoaded', ()=>{
-      // subtle logo pulse
+      // logo pulse
       const logo = document.querySelector('.logo');
       setInterval(()=>{ logo.style.transform='scale(1.02)'; setTimeout(()=>logo.style.transform='',180); }, 3000);
 
-      // build catalog
+      // Catalog (independent of chat)
       ui.cat = new Catalog();
 
-      // ask handlers
-      $('#aiInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(); });
-      $('#askBtn')?.addEventListener('click', handleAsk);
-      $('#consultBtn')?.addEventListener('click', handleAsk);
+      // Ask AI (independent)
+      document.getElementById('askBtn')?.addEventListener('click', handleAsk);
+      document.getElementById('consultBtn')?.addEventListener('click', handleAsk);
+      document.getElementById('aiInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(); });
 
-      // quick actions → ask + filter
-      $('#quickGrid')?.addEventListener('click', (e)=>{
+      // Quick filters (no chat)
+      document.getElementById('quickGrid')?.addEventListener('click', (e)=>{
         const card = e.target.closest('.action-card');
         if (!card) return;
-        const preset = card.getAttribute('data-preset');
-        const filter = card.getAttribute('data-filter');
-        // tap animation
         card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',110);
-        if (preset) askInPlace(preset);
-        if (filter) applyFilter(filter);
+        const term = card.getAttribute('data-filter') || '';
+        const sb = document.getElementById('searchBox');
+        sb.value = term;
+        ui.cat.query = term;
+        ui.cat.offset = 0;
+        ui.cat.render(true);
       });
 
-      // basket demo
-      $('#basketBtn')?.addEventListener('click', ()=>{
-        alert('🛒 Your Beauty Basket:\n\n• K-Beauty Serum - $29.99\n• French Moisturizer - $45.50\n• Vitamin C Complex - $52.01\n\nTotal: $127.50\n\nCheckout coming soon!');
-      });
-
-      // bottom nav keeps user on this page
+      // Bottom nav keeps user here (simple scroll/focus)
       document.querySelectorAll('.nav-item').forEach(nav=>{
         nav.addEventListener('click', ()=>{
           document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -602,7 +570,6 @@
           const id = nav.dataset.nav;
           if (id==='ask'){ document.getElementById('aiInput')?.focus(); }
           else if (id==='catalog'){ window.scrollTo({top: document.getElementById('results').offsetTop-20, behavior:'smooth'}); }
-          else if (id==='signin' || id==='create'){ alert('Coming soon'); }
           else { window.scrollTo({top:0,behavior:'smooth'}); }
         });
       });
