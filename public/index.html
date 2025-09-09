@@ -1,77 +1,345 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Luminous Beauty — Shop</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link rel="icon" href="/favicon.ico" />
+  <title>Luminous Beauty</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
   <style>
-    :root {
-      --text:#111827; --muted:#6b7280; --line:#e5e7eb;
-      --bg:#ffffff; --bg2:#fafafa;
-      --accent:#111827; --accent-contrast:#ffffff;
-      --soft:#f5f5f5; --tag:#f7f7f7; --gold:#c7a96b;
+    :root{
+      --bg:#fafafa; --fg:#1f2937; --muted:#6b7280; --brand:#7c3aed; --brand-2:#a855f7;
+      --card:#ffffff; --line:#e5e7eb; --ok:#16a34a; --warn:#f59e0b; --danger:#dc2626;
     }
     *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line)}
-    .wrap{max-width:1100px;margin:0 auto;padding:16px}
-    .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
-    .brand{font-weight:800;letter-spacing:.3px}
-    .brand span{color:var(--gold)}
-    input[type="search"]{flex:1;min-width:240px;padding:10px 12px;border:1px solid #ddd;border-radius:10px;font-size:15px}
-    .btn{appearance:none;border:0;border-radius:10px;padding:10px 14px;background:var(--accent);color:var(--accent-contrast);font-weight:700;cursor:pointer}
-    .btn:disabled{opacity:.5;cursor:not-allowed}
-    .btn-outline{background:#fff;color:var(--text);border:1px solid var(--line)}
-    main .wrap{padding:18px 16px}
-    h2{margin:6px 0 14px;font-size:18px}
-    #status{font-size:13px;color:var(--muted);margin-bottom:10px}
-    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
-    .card{border:1px solid #eee;border-radius:14px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
-    .thumb{width:100%;aspect-ratio:4/3;background:var(--bg2);display:flex;align-items:center;justify-content:center;overflow:hidden}
-    .thumb img{width:100%;height:100%;object-fit:cover}
-    .pad{padding:12px}
-    .title{font-weight:700;margin:2px 0 6px;line-height:1.2}
-    .desc{font-size:13px;color:#555;min-height:36px}
-    .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px}
-    .price{font-weight:800}
-    .tag{font-size:12px;background:var(--tag);border:1px solid var(--line);padding:2px 8px;border-radius:999px;margin-right:6px;display:inline-block;color:#555}
-    .empty{padding:22px;border:1px dashed #e3e3e3;border-radius:12px;color:#666;background:#fafafa}
-    .btnbar{margin-top:10px;display:flex;gap:8px}
-    footer{border-top:1px solid var(--line);margin-top:24px}
-    .muted{color:var(--muted);font-size:12px}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .app{max-width:420px;margin:0 auto;min-height:100svh;display:flex;flex-direction:column}
+    header{
+      position:sticky;top:0;z-index:2;background:var(--card);border-bottom:1px solid var(--line);
+      padding:12px 14px;display:flex;align-items:center;gap:10px
+    }
+    header .brand{font-weight:800;letter-spacing:.3px}
+    .pill{font-size:12px;padding:2px 8px;border-radius:999px;background:rgba(124,58,237,.09);color:var(--brand);border:1px solid rgba(124,58,237,.22)}
+    .spacer{flex:1}
+    .cart{position:relative}
+    .cart .dot{position:absolute;right:-2px;top:-2px;width:10px;height:10px;border-radius:999px;background:var(--brand)}
+    main{padding:12px;display:flex;flex-direction:column;gap:12px}
+    .card{
+      background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden
+    }
+    .card h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--line);font-weight:700}
+    .card .body{padding:12px 14px}
+    .row{display:flex;gap:10px;align-items:center}
+    .row.wrap{flex-wrap:wrap}
+    input[type="text"], textarea{
+      width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--fg);
+      outline:none
+    }
+    textarea{min-height:70px;resize:vertical}
+    button{
+      appearance:none;border:none;background:var(--brand);color:#fff;font-weight:700;padding:12px 14px;border-radius:12px;cursor:pointer
+    }
+    button.secondary{background:#fff;color:var(--fg);border:1px solid var(--line)}
+    button.ghost{background:transparent;color:var(--brand);border:1px solid rgba(124,58,237,.25)}
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{padding:8px 10px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:13px;color:var(--muted);cursor:pointer}
+    .chip:hover{border-color:var(--brand);color:var(--brand)}
+    .chat{display:flex;flex-direction:column;gap:8px;max-height:280px;overflow:auto;padding-right:2px}
+    .bubble{padding:10px 12px;border-radius:14px;max-width:85%}
+    .me{background:#ede9fe;color:#3b0764;align-self:flex-end;border:1px solid rgba(124,58,237,.25)}
+    .bot{background:#f3f4f6;color:#111827;border:1px solid var(--line)}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .product{
+      display:flex;flex-direction:column;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff
+    }
+    .thumb{aspect-ratio:1.2/1;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)}
+    .meta{padding:10px}
+    .name{font-weight:700;font-size:14px;margin:0 0 2px 0}
+    .brand{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .price{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .was{font-size:12px;color:var(--muted);text-decoration:line-through}
+    .btns{display:flex;gap:8px}
+    footer{height:60px}
+    .hint{font-size:12px}
+    .empty{padding:8px 0;color:var(--muted)}
+    .bar{display:flex;gap:8px}
+    .search{flex:1}
+    .status{font-size:12px;color:var(--muted)}
+    .hidden{display:none!important}
   </style>
 </head>
 <body>
-  <header>
-    <div class="wrap">
-      <div class="row">
-        <div class="brand">Luminous <span>Beauty</span></div>
-        <input id="q" type="search" placeholder="Search products or ask: “dry skin serum under $40”" />
-        <button id="askBtn" class="btn">Ask</button>
-        <button id="clearBtn" class="btn btn-outline" title="Clear query">Clear</button>
-      </div>
-    </div>
-  </header>
+  <div class="app">
+    <header>
+      <div style="font-size:22px">💫</div>
+      <div class="brand">Luminous</div>
+      <div class="pill">Demo</div>
+      <div class="spacer"></div>
+      <div class="status" id="status">AI: …</div>
+      <div class="cart" title="Bag"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M6 6h12l-1 14H7L6 6Z"/><path d="M9 6a3 3 0 0 1 6 0"/></svg><div class="dot hidden" id="bagDot"></div></div>
+    </header>
 
-  <main>
-    <div class="wrap">
-      <div id="status" aria-live="polite"></div>
-      <h2>Your Recommendations</h2>
-      <div id="grid" class="grid" role="list"></div>
-      <div id="empty" class="empty" style="display:none">
-        <strong>No products found</strong><br/>
-        Try a different search, e.g., <em>“retinol serum”</em>, <em>“SPF moisturizer”</em>, or <em>“toner under $25”</em>.
-      </div>
-    </div>
-  </main>
+    <main>
+      <!-- Ask AI -->
+      <section class="card" id="askCard">
+        <h3>Ask AI for Ideas</h3>
+        <div class="body">
+          <div class="chips" id="suggestions"></div>
+          <div class="chat" id="chat"></div>
+          <div class="row" style="margin-top:8px">
+            <textarea id="askInput" placeholder="e.g., Best makeup for pale skin with cool undertones"></textarea>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button id="askBtn">Ask</button>
+            <button class="secondary" id="clearChatBtn">Clear</button>
+            <span class="hint muted">Responses come from your /ask endpoint.</span>
+          </div>
+        </div>
+      </section>
 
-  <footer>
-    <div class="wrap">
-      <p class="muted">Demo catalog. Prices & availability for demonstration only.</p>
-    </div>
-  </footer>
+      <!-- Recommendations -->
+      <section class="card">
+        <h3>Your Recommendations</h3>
+        <div class="body">
+          <div class="bar">
+            <input id="search" class="search" type="text" placeholder="Search products…" />
+            <button class="ghost" id="refreshBtn">Refresh</button>
+          </div>
+          <div class="hint muted" style="margin-top:6px">Powered by <code>/products.json</code> on your server.</div>
+          <div id="products" class="grid" style="margin-top:10px"></div>
+          <div id="emptyProducts" class="empty hidden">No products found<br/><span class="hint">Try a different search or be more specific.</span></div>
+        </div>
+      </section>
+    </main>
 
-  <script src="/shop.js" defer></script>
+    <footer></footer>
+  </div>
+
+  <script>
+    // ------- Utilities -------
+    const $ = sel => document.querySelector(sel);
+    const $$ = sel => Array.from(document.querySelectorAll(sel));
+    const API_BASE = ''; // same-origin
+    let BAG_COUNT = 0;
+    const chatView = $('#chat');
+    const statusEl = $('#status');
+    const bagDot = $('#bagDot');
+
+    function setStatus(text){ statusEl.textContent = text; }
+
+    function cents(v){
+      // Accept number (e.g. 19.99) or string ("19.99", "$19.99")
+      if (typeof v === 'string') {
+        const n = Number(String(v).replace(/[^0-9.]/g,''));
+        if (!Number.isFinite(n)) return '$—';
+        return `$${n.toFixed(2)}`;
+      }
+      if (typeof v === 'number') return `$${v.toFixed(2)}`;
+      return '$—';
+    }
+
+    function placeholderSVG(text='No image'){
+      const svg = encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='400' height='330'>
+        <rect width='100%' height='100%' fill='#f3f4f6'/>
+        <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#9ca3af' font-family='system-ui' font-size='16'>${text}</text>
+      </svg>`);
+      return `data:image/svg+xml;charset=utf-8,${svg}`;
+    }
+
+    async function getJSON(url, opts={}){
+      try{
+        const r = await fetch(url, opts);
+        if (!r.ok) throw new Error(`${r.status}`);
+        return await r.json();
+      }catch(err){
+        console.error('fetch failed', url, err);
+        throw err;
+      }
+    }
+
+    function addBubble(text, who='bot'){
+      const b = document.createElement('div');
+      b.className = `bubble ${who}`;
+      b.textContent = text;
+      chatView.appendChild(b);
+      chatView.scrollTop = chatView.scrollHeight;
+    }
+
+    function setBag(n){ BAG_COUNT = Math.max(0, n); bagDot.classList.toggle('hidden', BAG_COUNT===0); }
+
+    // ------- Ask AI -------
+    const askBtn = $('#askBtn');
+    const askInput = $('#askInput');
+    const clearChatBtn = $('#clearChatBtn');
+
+    async function askAI(message){
+      addBubble(message, 'me');
+      askBtn.disabled = true;
+      setStatus('AI: thinking…');
+      try{
+        const payload = { message };
+        const res = await getJSON(`${API_BASE}/ask`, {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const reply = res?.reply || 'I could not find an answer right now.';
+        addBubble(reply, 'bot');
+      }catch(e){
+        addBubble('An error occurred while processing your request. Please try again.', 'bot');
+      }finally{
+        askBtn.disabled = false;
+        setStatus('AI: ready');
+      }
+    }
+
+    askBtn.addEventListener('click', () => {
+      const msg = askInput.value.trim();
+      if (!msg) return;
+      askInput.value = '';
+      askAI(msg);
+    });
+
+    askInput.addEventListener('keydown', (e)=>{
+      if (e.key === 'Enter' && !e.shiftKey){
+        e.preventDefault();
+        askBtn.click();
+      }
+    });
+
+    clearChatBtn.addEventListener('click', ()=>{
+      chatView.innerHTML = '';
+    });
+
+    // Suggestions
+    const SUGGESTIONS = [
+      'Everyday natural look for olive skin',
+      'Evening glam for cool undertones',
+      'Hydrating routine for curly hair',
+      'Wedding makeup for pale skin',
+      'Smudge-proof eyeliner for sensitive eyes'
+    ];
+    const sugWrap = $('#suggestions');
+    SUGGESTIONS.forEach(s=>{
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip';
+      chip.textContent = s;
+      chip.addEventListener('click', ()=>{ askInput.value = s; askInput.focus(); });
+      sugWrap.appendChild(chip);
+    });
+
+    // ------- Products -------
+    const productsEl = $('#products');
+    const emptyProducts = $('#emptyProducts');
+    const searchInput = $('#search');
+    const refreshBtn = $('#refreshBtn');
+
+    let ALL_PRODUCTS = [];
+    let VISIBLE = [];
+
+    function renderProducts(list){
+      productsEl.innerHTML = '';
+      if (!list || list.length === 0){
+        emptyProducts.classList.remove('hidden');
+        return;
+      }
+      emptyProducts.classList.add('hidden');
+
+      list.forEach(p=>{
+        const card = document.createElement('div');
+        card.className = 'product';
+
+        const img = document.createElement('div');
+        img.className = 'thumb';
+        const src = p.image || p.img || p.photo || placeholderSVG('Beauty');
+        img.style.backgroundImage = src.startsWith('http') || src.startsWith('data:')
+          ? `url("${src}")` : `url("${src}")`;
+        img.style.backgroundSize = 'cover';
+        img.style.backgroundPosition = 'center';
+        img.textContent = src ? '' : 'No image';
+        card.appendChild(img);
+
+        const meta = document.createElement('div');
+        meta.className = 'meta';
+        const name = document.createElement('div');
+        name.className = 'name'; name.textContent = p.name || 'Unnamed';
+        const brand = document.createElement('div');
+        brand.className = 'brand'; brand.textContent = p.brand || p.line || '—';
+        const price = document.createElement('div');
+        price.className = 'price';
+        const now = document.createElement('div'); now.textContent = cents(p.price);
+        price.appendChild(now);
+        if (p.was){ const was = document.createElement('div'); was.className='was'; was.textContent=cents(p.was); price.appendChild(was); }
+        const btns = document.createElement('div'); btns.className='btns';
+        const add = document.createElement('button'); add.textContent='Add to Bag'; add.addEventListener('click', ()=> setBag(BAG_COUNT+1));
+        const more = document.createElement('button'); more.textContent='Details'; more.className='secondary';
+        more.addEventListener('click', ()=>{
+          alert(`${p.name || 'Product'}\n\n${p.description || p.desc || 'No description.'}`);
+        });
+        btns.appendChild(add); btns.appendChild(more);
+
+        meta.appendChild(name); meta.appendChild(brand); meta.appendChild(price); meta.appendChild(btns);
+        card.appendChild(meta);
+        productsEl.appendChild(card);
+      });
+    }
+
+    function filterProducts(q){
+      q = (q||'').trim().toLowerCase();
+      if (!q){ VISIBLE = [...ALL_PRODUCTS]; renderProducts(VISIBLE); return; }
+      VISIBLE = ALL_PRODUCTS.filter(p=>{
+        const hay = [
+          p.name, p.brand, p.category, p.tone, p.undertone, p.finish, p.description, p.desc
+        ].filter(Boolean).join(' ').toLowerCase();
+        return hay.includes(q);
+      });
+      renderProducts(VISIBLE);
+    }
+
+    async function loadProducts(){
+      try{
+        const data = await getJSON(`${API_BASE}/products.json?bust=${Date.now()}`);
+        if (!Array.isArray(data)) throw new Error('bad products');
+        // Normalize price fields if needed
+        ALL_PRODUCTS = data.map(p=>{
+          const cloned = {...p};
+          // convert price strings like "$19.99" to number for sort (but keep cents() tolerant)
+          if (typeof cloned.price === 'string'){
+            const n = Number(cloned.price.replace(/[^0-9.]/g,'')); if (Number.isFinite(n)) cloned.price = n;
+          }
+          if (typeof cloned.was === 'string'){
+            const n = Number(cloned.was.replace(/[^0-9.]/g,'')); if (Number.isFinite(n)) cloned.was = n;
+          }
+          return cloned;
+        });
+        VISIBLE = [...ALL_PRODUCTS];
+        renderProducts(VISIBLE);
+      }catch(e){
+        console.error('loadProducts failed', e);
+        ALL_PRODUCTS = [];
+        VISIBLE = [];
+        renderProducts(VISIBLE);
+        emptyProducts.classList.remove('hidden');
+      }
+    }
+
+    searchInput.addEventListener('input', ()=> filterProducts(searchInput.value));
+    refreshBtn.addEventListener('click', loadProducts);
+
+    // ------- Boot -------
+    async function boot(){
+      // Health status
+      try{
+        const h = await getJSON(`${API_BASE}/health`);
+        setStatus(`AI: ${h?.hasOpenAI ? 'on' : 'off'}`);
+      }catch{ setStatus('AI: unknown'); }
+      await loadProducts();
+      // Welcome seed
+      addBubble('Hi! Tell me your vibe or event, and I’ll suggest looks, palettes, and products to discuss with your stylist.', 'bot');
+    }
+    document.addEventListener('DOMContentLoaded', boot);
+  </script>
 </body>
 </html>
