@@ -9,7 +9,7 @@
   <meta name="theme-color" content="#B8860B"/>
   <link rel="manifest" href="manifest.json"/>
   <script>
-    // Splash redirect on first load only
+    // Splash on first load only
     const splashShown = sessionStorage.getItem('splashShown');
     if (!splashShown) window.location.href = '/splash.html';
   </script>
@@ -33,8 +33,9 @@
     .main-content{background:var(--pearl-white);min-height:calc(100vh - 120px);padding:20px}
 
     .welcome-section{background:#fff;border-radius:16px;padding:24px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);text-align:center}
-    .welcome-title{font-size:20px;font-weight:700;color:var(--primary-charcoal);margin-bottom:8px}
+    .welcome-title{font-size:20px;font-weight:700;color:#222;margin-bottom:8px}
     .welcome-subtitle{font-size:14px;color:#666;margin-bottom:16px}
+
     .ai-search-container{margin-bottom:12px}
     .ai-search-bar{background:#fff;border-radius:25px;padding:12px 14px;display:flex;align-items:center;gap:10px;
       box-shadow:0 4px 12px rgba(0,0,0,.08);border:2px solid var(--luminous-gold)}
@@ -58,6 +59,7 @@
     .action-title{font-size:10px;font-weight:600;color:#222;margin-bottom:2px;line-height:1.1}
     .action-subtitle{font-size:8px;color:#666;line-height:1.1}
 
+    /* Chat block */
     .chat-card{background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);padding:14px;margin-bottom:16px}
     .chat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .chat-title{font-size:14px;font-weight:700;color:#222}
@@ -72,12 +74,14 @@
     .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
     @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
 
+    /* Products */
     .section-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
     .section-title{font-size:15px;font-weight:700;color:#222}
     .search-row{display:flex;gap:8px}
     .search-input{flex:1;border:1px solid #ddd;border-radius:10px;padding:8px 10px;font-size:14px;background:#fff}
     .btn{display:inline-flex;align-items:center;justify-content:center;padding:.6rem .9rem;border-radius:12px;font-weight:600;border:0}
     .btn-subtle{background:#f0f1f3;color:#222}
+    .btn-accent{background:var(--premium-gradient);color:#fff}
 
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
     .card{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
@@ -89,12 +93,12 @@
     .price{font-size:15px;font-weight:700}
     .was{font-size:11px;color:#9ca3af;text-decoration:line-through}
     .btn-line{display:flex;gap:8px;margin-top:8px}
-    .btn-accent{background:var(--premium-gradient);color:#fff}
     .badge{font-size:10px;padding:2px 8px;background:#fde8b2;color:#8a6b11;border-radius:999px}
 
     .empty{text-align:center;font-size:13px;color:#666;margin:18px 0}
     .footer-gap{height:100px}
 
+    /* Bottom nav (kept visible; no external page links) */
     .bottom-nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
       padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
@@ -234,21 +238,20 @@
       <div class="footer-gap"></div>
     </div>
 
-    <!-- Bottom nav -->
+    <!-- Bottom nav (no external page links) -->
     <div class="bottom-nav">
       <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
       <div class="nav-item" data-nav="signin"><div class="nav-icon">🔑</div><div class="nav-label">Sign In</div></div>
-      <div class="nav-item" data-nav="createaccount"><div class="nav-icon">👤</div><div class="nav-label">Create Account</div></div>
+      <div class="nav-item" data-nav="create"><div class="nav-icon">👤</div><div class="nav-label">Create Account</div></div>
       <div class="nav-item" data-nav="catalog"><div class="nav-icon">🌍</div><div class="nav-label">Catalog</div></div>
-      <div class="nav-item" data-nav="askme"><div class="nav-icon">💬</div><div class="nav-label">Ask Me</div></div>
+      <div class="nav-item" data-nav="ask"><div class="nav-icon">💬</div><div class="nav-label">Ask Me</div></div>
     </div>
   </div>
 
   <script>
     // ---------------- Config ----------------
-    const CHAT_ENDPOINTS = ['/ask','/api/chat','/chat'];
-    const API_PRODUCTS = '/api/products';
-    const JSON_PRODUCTS = '/products.json';
+    const CHAT_ENDPOINTS = ['/ask','/chat'];   // only routes you actually have
+    const JSON_PRODUCTS  = '/products.json';   // single source for catalog
 
     // ---------------- Helpers ----------------
     const $ = (sel,root=document)=>root.querySelector(sel);
@@ -329,16 +332,16 @@
       }
     }
 
-    // ---------------- Products ----------------
+    // ---------------- Products (JSON only) ----------------
     class Catalog {
       constructor(){
-        this.results = $('#results');
-        this.emptyState = $('#emptyState');
+        this.results   = $('#results');
+        this.empty     = $('#emptyState');
         this.searchBox = $('#searchBox');
-        this.clearBtn = $('#clearBtn');
-        this.loadMoreBtn = $('#loadMore');
+        this.clearBtn  = $('#clearBtn');
+        this.moreBtn   = $('#loadMore');
 
-        this.catalog = [];   // full in-memory catalog (from JSON fallback)
+        this.all   = [];   // full catalog from JSON
         this.query = '';
         this.offset = 0;
         this.pageSize = 8;
@@ -356,45 +359,31 @@
         this.clearBtn.addEventListener('click', ()=>{
           this.searchBox.value=''; this.query=''; this.offset=0; this.render(true);
         });
-        this.loadMoreBtn.addEventListener('click', ()=> this.render());
+        this.moreBtn.addEventListener('click', ()=> this.render());
       }
 
       async bootstrap(){
-        // Preload JSON for instant fallback
         try{
           const r = await fetch(JSON_PRODUCTS+'?bust='+Date.now());
-          if (r.ok) this.catalog = await r.json();
+          if (r.ok) this.all = await r.json();
         }catch{}
         this.render(true);
       }
 
-      async fetchServer(){
-        const params = new URLSearchParams({
-          q:this.query, offset:String(this.offset), limit:String(this.pageSize)
-        });
-        const r = await fetch(`${API_PRODUCTS}?${params.toString()}`);
-        if (!r.ok) throw new Error('No /api/products');
-        const data = await r.json();
-        if (!data || data.success===false) throw new Error('api error');
-        return { total: data.total ?? (data.items?.length||0), items: data.items ?? [] };
-      }
-
-      async fetchFallback(){
-        if (!this.catalog.length){
-          const r = await fetch(JSON_PRODUCTS+'?bust='+Date.now());
-          if (!r.ok) throw new Error('missing products.json');
-          this.catalog = await r.json();
-        }
+      filtered(){
         const q = this.query.toLowerCase();
-        const all = this.catalog.filter(p=>{
-          if (!q) return true;
+        if (!q) return this.all.slice();
+        return this.all.filter(p=>{
           const hay = [
             p.name,p.brand,p.category,p.description,p.usage,p.ingredients,p.suitableFor
           ].filter(Boolean).join(' ').toLowerCase();
+          if (q==='sale'){
+            const price = Number(p.price);
+            const was   = Number(p.was);
+            return (isFinite(price) && isFinite(was) && was > price) || hay.includes('sale') || hay.includes('discount');
+          }
           return hay.includes(q);
         });
-        const items = all.slice(this.offset, this.offset+this.pageSize);
-        return { total: all.length, items };
       }
 
       async render(reset=false){
@@ -418,39 +407,37 @@
         this.results.appendChild(sk);
 
         try{
-          let batch;
-          try{ batch = await this.fetchServer(); }
-          catch{ batch = await this.fetchFallback(); }
-
-          this.total = batch.total;
-          this.offset += batch.items.length;
+          const list = this.filtered();
+          this.total = list.length;
+          const items = list.slice(this.offset, this.offset + this.pageSize);
+          this.offset += items.length;
 
           const frag = document.createDocumentFragment();
-          for (const p of batch.items) frag.appendChild(this.card(p));
+          for (const p of items) frag.appendChild(this.card(p));
           this.results.replaceChild(frag, sk);
 
           const hasAny = this.results.children.length>0;
-          this.emptyState.style.display = hasAny ? 'none' : 'block';
+          this.empty.style.display = hasAny ? 'none' : 'block';
 
           const hasMore = this.offset < this.total;
-          this.loadMoreBtn.disabled = !hasMore;
-          this.loadMoreBtn.textContent = hasMore ? 'Load more' : 'No more items';
+          this.moreBtn.disabled = !hasMore;
+          this.moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
         }catch(e){
           console.error('render error', e);
           this.results.removeChild(sk);
-          this.emptyState.style.display='block';
-          this.loadMoreBtn.disabled = true;
-          this.loadMoreBtn.textContent='Load more';
+          this.empty.style.display='block';
+          this.moreBtn.disabled = true;
+          this.moreBtn.textContent='Load more';
         }
       }
 
       card(p){
-        const name = safe(p.name||'Beauty product');
+        const name  = safe(p.name||'Beauty product');
         const brand = safe(p.brand||'Salon Pro');
         const price = formatPrice(p.price);
-        const was = (p.was!==undefined&&p.was!==null&&p.was!=='') ? formatPrice(p.was) : '';
+        const was   = (p.was!==undefined&&p.was!==null&&p.was!=='') ? formatPrice(p.was) : '';
         const badge = p.category ? `<span class="badge">${safe(p.category)}</span>` : '';
-        const img = p.image||p.img;
+        const img   = p.image||p.img;
 
         const el = document.createElement('div');
         el.className='card';
@@ -474,10 +461,10 @@
 
         el.querySelector('[data-action="details"]').addEventListener('click', ()=>{
           const bits=[];
-          if (p.description) bits.push(p.description);
-          if (p.usage) bits.push('Usage: '+p.usage);
-          if (p.ingredients) bits.push('Key ingredients: '+p.ingredients);
-          if (p.suitableFor) bits.push('Perfect for: '+p.suitableFor);
+          if (p.description)  bits.push(p.description);
+          if (p.usage)        bits.push('Usage: '+p.usage);
+          if (p.ingredients)  bits.push('Key ingredients: '+p.ingredients);
+          if (p.suitableFor)  bits.push('Perfect for: '+p.suitableFor);
           alert(`${name}\n\n${bits.join('\n\n')||'Professional salon product designed for optimal results.'}`);
         });
 
@@ -490,9 +477,7 @@
     }
 
     // ---------------- App wiring ----------------
-    const ui = {
-      cat: null
-    };
+    const ui = { cat:null };
 
     function handleAsk(){
       const q = ($('#aiInput')?.value||'').trim();
@@ -512,14 +497,14 @@
     }
 
     document.addEventListener('DOMContentLoaded', ()=>{
-      // logo gentle pulse
-      const logo = $('.logo');
+      // subtle logo pulse
+      const logo = document.querySelector('.logo');
       setInterval(()=>{ logo.style.transform='scale(1.02)'; setTimeout(()=>logo.style.transform='',180); }, 3000);
 
       // build catalog
       ui.cat = new Catalog();
 
-      // input + buttons
+      // ask handlers
       $('#aiInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(); });
       $('#askBtn')?.addEventListener('click', handleAsk);
       $('#consultBtn')?.addEventListener('click', handleAsk);
@@ -530,20 +515,10 @@
         if (!card) return;
         const preset = card.getAttribute('data-preset');
         const filter = card.getAttribute('data-filter');
-        // visual feedback
+        // visual tap
         card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',110);
         if (preset) askInPlace(preset);
-        if (filter){
-          // sale filter = show items with a 'was' higher than price (fallback: keyword search)
-          if (filter==='sale'){
-            $('#searchBox').value='';
-            ui.cat.query=''; // fetch all then local filter on render fallback
-            // For server endpoint, we simulate by searching 'sale' (your API can interpret)
-            ui.cat.query='sale';
-          } else {
-            applyFilter(filter);
-          }
-        }
+        if (filter) applyFilter(filter);
       });
 
       // basket demo
@@ -551,18 +526,16 @@
         alert('🛒 Your Beauty Basket:\n\n• K-Beauty Serum - $29.99\n• French Moisturizer - $45.50\n• Vitamin C Complex - $52.01\n\nTotal: $127.50\n\nCheckout coming soon!');
       });
 
-      // bottom nav (kept as-is)
+      // bottom nav (no external pages; keep user on index)
       document.querySelectorAll('.nav-item').forEach(nav=>{
         nav.addEventListener('click', ()=>{
           document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
           nav.classList.add('active');
-          switch(nav.dataset.nav){
-            case 'home': location.href='/index.html'; break;
-            case 'signin': location.href='/signin.html'; break;
-            case 'createaccount': location.href='/createaccount.html'; break;
-            case 'catalog': location.href='/catalog.html'; break;
-            case 'askme': location.href='/askme.html'; break; // if you want this to be in-page too, we can point to #chatCard
-          }
+          const id = nav.dataset.nav;
+          if (id==='ask'){ document.getElementById('aiInput')?.focus(); }
+          else if (id==='catalog'){ window.scrollTo({top: document.getElementById('results').offsetTop-20, behavior:'smooth'}); }
+          else if (id==='signin' || id==='create'){ alert('Coming soon'); }
+          else { window.scrollTo({top:0,behavior:'smooth'}); }
         });
       });
     });
