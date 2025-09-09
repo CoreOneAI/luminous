@@ -1,0 +1,112 @@
+[
+  {
+    "id": "prod_001",
+    "name": "Color Safe Shampoo",
+    "brand": "Matrix",
+    "category": "Hair",
+    "price": 1850,
+    "description": "Sulfate-free shampoo for color-treated hair",
+    "inStock": true,
+    "benefits": ["Color Protection", "Gentle Cleansing", "Sulfate-Free"],
+    "usage": "Apply to wet hair, lather, rinse thoroughly"
+  },
+  {
+    "id": "prod_002", 
+    "name": "Bond Ultim8 Miracle Leave-In",
+    "brand": "Matrix",
+    "category": "Hair",
+    "price": 2400,
+    "description": "Strengthening leave-in treatment for damaged hair",
+    "inStock": true,
+    "benefits": ["Strengthening", "Heat Protection", "Damage Repair"],
+    "usage": "Apply to damp hair before styling"
+  },
+  {
+    "id": "prod_003",
+    "name": "Biolage Hydrasource Mask",
+    "brand": "Matrix",
+    "category": "Hair", 
+    "price": 2800,
+    "description": "Deep hydrating mask for dry hair",
+    "inStock": true,
+    "benefits": ["Deep Hydration", "Moisture Retention", "Softness"],
+    "usage": "Apply to clean, damp hair for 5-10 minutes"
+  },
+  {
+    "id": "prod_004",
+    "name": "All Soft Argan-6 Oil",
+    "brand": "Redken",
+    "category": "Hair",
+    "price": 3200,
+    "description": "Nourishing argan oil for all hair types",
+    "inStock": true,
+    "benefits": ["Shine Enhancement", "Frizz Control", "Nourishing"],
+    "usage": "Apply 1-2 drops to damp or dry hair"
+  },
+  {
+    "id": "prod_005",
+    "name": "Extreme Anti-Snap",
+    "brand": "Redken",
+    "category": "Hair",
+    "price": 2600,
+    "description": "Leave-in treatment for damaged, brittle hair",
+    "inStock": true,
+    "benefits": ["Breakage Prevention", "Strength Building", "Split End Repair"],
+    "usage": "Apply to towel-dried hair before styling"
+  },
+  {
+    "id": "prod_006",
+    "name": "No. 3 Hair Perfector",
+    "brand": "Olaplex",
+    "category": "Hair",
+    "price": 2800,
+    "description": "At-home bond building treatment",
+    "inStock": true,
+    "benefits": ["Bond Repair", "Damage Reversal", "Strength Restoration"],
+    "usage": "Apply to damp hair for 10+ minutes, then shampoo"
+  },
+  {
+    "id": "prod_007",
+    "name": "No. 7 Bonding Oil",
+    "brand": "Olaplex",
+    "category": "Hair",
+    "price": 2800,
+    "description": "Highly-concentrated, weightless styling oil",
+    "inStock": true,
+    "benefits": ["Heat Protection", "Shine", "Frizz Control"],
+    "usage": "Apply to damp or dry hair, style as usual"
+  },
+  {
+    "id": "prod_008",
+    "name": "Blonde Idol Shampoo",
+    "brand": "Redken",
+    "category": "Hair",
+    "price": 2200,
+    "description": "Purple shampoo for blonde hair",
+    "inStock": true,
+    "benefits": ["Brass Neutralizing", "Tone Correction", "Color Enhancement"],
+    "usage": "Use 1-2 times per week on wet hair"
+  },
+  {
+    "id": "prod_009",
+    "name": "Curl Wow Shampoo",
+    "brand": "Color Wow",
+    "category": "Hair",
+    "price": 2400,
+    "description": "Sulfate-free shampoo for curly hair",
+    "inStock": true,
+    "benefits": ["Curl Definition", "Frizz Control", "Gentle Cleansing"],
+    "usage": "Massage into wet hair, rinse thoroughly"
+  },
+  {
+    "id": "prod_010",
+    "name": "Dream Coat Curl Creme",
+    "brand": "Color Wow",
+    "category": "Hair",
+    "price": 2800,
+    "description": "Curl-enhancing cream with humidity protection",
+    "inStock": true,
+    "benefits": ["Curl Enhancement", "Humidity Shield", "Frizz Prevention"],
+    "usage": "Apply to damp hair, scrunch and air dry"
+  }
+]
