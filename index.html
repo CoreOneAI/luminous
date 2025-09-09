@@ -20,6 +20,7 @@
       --luminous-gold:#B8860B;
       --pearl-white:#F8F8F8;
       --premium-gradient:linear-gradient(135deg,#B8860B,#DAA520);
+      --info:#2563eb20; --info-text:#1f2937;
     }
     body{
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
@@ -95,10 +96,11 @@
     .btn-line{display:flex;gap:8px;margin-top:8px}
     .badge{font-size:10px;padding:2px 8px;background:#fde8b2;color:#8a6b11;border-radius:999px}
 
+    .info{margin:10px 0;background:var(--info);color:var(--info-text);padding:10px;border-radius:10px;font-size:12px}
     .empty{text-align:center;font-size:13px;color:#666;margin:18px 0}
     .footer-gap{height:100px}
 
-    /* Bottom nav (kept visible; no external page links) */
+    /* Bottom nav */
     .bottom-nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
       padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
@@ -139,7 +141,7 @@
         <button class="chat-btn" id="consultBtn">🌟 Start Beauty Consultation</button>
       </div>
 
-      <!-- Quick actions (click = chat in place + filter grid) -->
+      <!-- Quick actions -->
       <div class="quick-actions" id="quickGrid">
         <div class="action-card premium-feature"
              data-preset="Recommend an anti-aging routine for sensitive, dry skin. Focus on gentle actives and SPF."
@@ -218,18 +220,20 @@
       </div>
 
       <!-- Products -->
+      <div id="infoBar" class="info" style="display:none"></div>
+
       <div class="section-head">
         <div class="section-title">Your Recommendations</div>
         <div class="search-row">
-          <input id="searchBox" class="search-input" placeholder="Search products…"/>
+          <input id="searchBox" class="search-input" placeholder="Search products by brand, concern, category…"/>
           <button id="clearBtn" class="btn btn-subtle">Clear</button>
         </div>
       </div>
 
       <div id="results" class="grid"></div>
       <div id="emptyState" class="empty" style="display:none">
-        <p class="font-medium">No products found</p>
-        <p>Try a different search or be more specific about your needs.</p>
+        <p class="font-medium">No matching products yet</p>
+        <p>Try a different term (e.g., brand, concern, or category).</p>
       </div>
       <div style="margin-top:10px;">
         <button id="loadMore" class="btn btn-subtle" style="width:100%;">Load more</button>
@@ -238,7 +242,7 @@
       <div class="footer-gap"></div>
     </div>
 
-    <!-- Bottom nav (no external page links) -->
+    <!-- Bottom nav -->
     <div class="bottom-nav">
       <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
       <div class="nav-item" data-nav="signin"><div class="nav-icon">🔑</div><div class="nav-label">Sign In</div></div>
@@ -250,14 +254,15 @@
 
   <script>
     // ---------------- Config ----------------
-    const CHAT_ENDPOINTS = ['/ask','/chat'];   // only routes you actually have
-    const JSON_PRODUCTS  = '/products.json';   // single source for catalog
+    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat'];   // tries in order
+    const JSON_PRODUCTS  = '/products.json';               // single source for catalog
 
     // ---------------- Helpers ----------------
     const $ = (sel,root=document)=>root.querySelector(sel);
     const $$ = (sel,root=document)=>Array.from(root.querySelectorAll(sel));
     const chatThread = $('#chatThread');
     const chatStatus = $('#chatStatus');
+    const infoBar    = $('#infoBar');
 
     function setStatus(s){ chatStatus.textContent = s; }
     function safe(s){ return (s ?? '').toString(); }
@@ -332,6 +337,39 @@
       }
     }
 
+    // --------- Product matching: synonyms + soft fallback ----------
+    const ALIASES = {
+      'anti-aging': ['anti aging','antiaging','wrinkle','retinol','fine lines','firming','age'],
+      'eye care': ['eye','undereye','under-eye','dark circle','puffy','crow\'s feet','eye cream','eye serum'],
+      'skin care': ['skin','moistur','cleanser','serum','toner','spf','sunscreen','hydrating','barrier'],
+      'facial': ['facial','mask','peel','exfol','treatment','spa'],
+      'nail': ['nail','cuticle','polish','manicure','pedicure'],
+      'accessories': ['tool','brush','applicator','roller','gua','mirror','bag'],
+      'sale': ['sale','discount','deal','clearance','save']
+    };
+
+    function normalize(str){
+      return safe(str).toLowerCase();
+    }
+
+    function buildHaystack(p){
+      const fields = [
+        p.name,p.brand,p.category,p.description,p.usage,p.ingredients,p.suitableFor
+      ];
+      if (Array.isArray(p.tags)) fields.push(p.tags.join(' '));
+      return normalize(fields.filter(Boolean).join(' '));
+    }
+
+    function expandQuery(q){
+      const base = normalize(q);
+      const syns = new Set([base]);
+      // add alias bundle if exact key matches
+      if (ALIASES[base]) ALIASES[base].forEach(s=>syns.add(normalize(s)));
+      // also: if base includes spaces, add tokens
+      base.split(/\s+/).forEach(tok=> tok && syns.add(tok));
+      return Array.from(syns);
+    }
+
     // ---------------- Products (JSON only) ----------------
     class Catalog {
       constructor(){
@@ -370,23 +408,33 @@
         this.render(true);
       }
 
-      filtered(){
-        const q = this.query.toLowerCase();
+      filterExact(){
+        const q = normalize(this.query);
         if (!q) return this.all.slice();
+        const tokens = expandQuery(q);
         return this.all.filter(p=>{
-          const hay = [
-            p.name,p.brand,p.category,p.description,p.usage,p.ingredients,p.suitableFor
-          ].filter(Boolean).join(' ').toLowerCase();
-          if (q==='sale'){
-            const price = Number(p.price);
-            const was   = Number(p.was);
-            return (isFinite(price) && isFinite(was) && was > price) || hay.includes('sale') || hay.includes('discount');
-          }
-          return hay.includes(q);
+          const hay = buildHaystack(p);
+          // OR match on any synonym token
+          return tokens.some(t => hay.includes(t));
+        });
+      }
+
+      filterSimilar(){
+        // If nothing found: try looser category/synonym match
+        const q = normalize(this.query);
+        const tokens = expandQuery(q);
+        return this.all.filter(p=>{
+          const s = buildHaystack(p);
+          return tokens.some(t=>{
+            // loose contains on stems (first 4 chars) for small typos
+            const stem = t.slice(0, Math.min(4, t.length));
+            return stem && s.includes(stem);
+          });
         });
       }
 
       async render(reset=false){
+        infoBar.style.display = 'none';
         if (reset){
           this.results.innerHTML=''; this.offset=0; this.total=0;
         }
@@ -407,7 +455,21 @@
         this.results.appendChild(sk);
 
         try{
-          const list = this.filtered();
+          // exact first
+          let list = this.filterExact();
+
+          let usingSimilar = false;
+          if (!list.length && this.query){
+            list = this.filterSimilar();
+            usingSimilar = list.length > 0;
+          }
+
+          // still nothing? show top of catalog as a safety net
+          if (!list.length){
+            list = this.all.slice(0, 12);
+            if (this.query) usingSimilar = true;
+          }
+
           this.total = list.length;
           const items = list.slice(this.offset, this.offset + this.pageSize);
           this.offset += items.length;
@@ -422,6 +484,11 @@
           const hasMore = this.offset < this.total;
           this.moreBtn.disabled = !hasMore;
           this.moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
+
+          if (usingSimilar){
+            infoBar.textContent = 'No exact matches — showing similar items.';
+            infoBar.style.display = 'block';
+          }
         }catch(e){
           console.error('render error', e);
           this.results.removeChild(sk);
@@ -465,6 +532,7 @@
           if (p.usage)        bits.push('Usage: '+p.usage);
           if (p.ingredients)  bits.push('Key ingredients: '+p.ingredients);
           if (p.suitableFor)  bits.push('Perfect for: '+p.suitableFor);
+          if (Array.isArray(p.tags) && p.tags.length) bits.push('Tags: '+p.tags.join(', '));
           alert(`${name}\n\n${bits.join('\n\n')||'Professional salon product designed for optimal results.'}`);
         });
 
@@ -515,7 +583,7 @@
         if (!card) return;
         const preset = card.getAttribute('data-preset');
         const filter = card.getAttribute('data-filter');
-        // visual tap
+        // tap animation
         card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',110);
         if (preset) askInPlace(preset);
         if (filter) applyFilter(filter);
@@ -526,7 +594,7 @@
         alert('🛒 Your Beauty Basket:\n\n• K-Beauty Serum - $29.99\n• French Moisturizer - $45.50\n• Vitamin C Complex - $52.01\n\nTotal: $127.50\n\nCheckout coming soon!');
       });
 
-      // bottom nav (no external pages; keep user on index)
+      // bottom nav keeps user on this page
       document.querySelectorAll('.nav-item').forEach(nav=>{
         nav.addEventListener('click', ()=>{
           document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
