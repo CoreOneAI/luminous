@@ -1,112 +1,104 @@
-// server.js — Luminous Beauty (clean, no colorthief)
-// Node >= 18, ESM (package.json has "type": "module")
-
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import multer from 'multer';
 import OpenAI from 'openai';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname  = path.dirname(__filename);
 
-// ---- Env / Config ----
-const PORT          = process.env.PORT || 10000;
-const ALLOW_ORIGIN  = process.env.ALLOW_ORIGIN || '*'; // set to your site URL to lock down
-const OPENAI_KEY    = process.env.OPENAI_API_KEY || '';
-const OPENAI_MODEL  = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+const app  = express();
+const PORT = process.env.PORT || 10000;
 
-// ---- App ----
-const app = express();
-app.use(express.json({ limit: '2mb' }));
-
-// Security headers (relaxed CSP so inline styles/scripts in your current HTML won’t break)
+// --- security & infra ---
 app.use(helmet({
-  contentSecurityPolicy: false, // we’ll rely on static bundle safety for now
-  crossOriginEmbedderPolicy: false
+  contentSecurityPolicy: false // keep simple for now; we can harden later
+}));
+app.use(cors({ origin: true, credentials: false }));
+app.use(compression());
+app.use(express.json({ limit: '2mb' }));
+app.use(express.urlencoded({ extended: true }));
+
+// --- static files ---
+app.use(express.static(path.join(__dirname, 'public'), {
+  index: 'index.html',
+  maxAge: '1h',
+  immutable: false
 }));
 
-// CORS
-app.use(cors({
-  origin: ALLOW_ORIGIN === '*' ? true : ALLOW_ORIGIN,
-}));
+// --- products feed ---
+app.get('/products.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'products.json'));
+});
 
-// Static files
-const publicDir = path.join(__dirname, 'public');
-app.use(express.static(publicDir, {
-  etag: true,
-  lastModified: true,
-  maxAge: '1h'
-}));
-
-// ---- Health ----
+// --- health ---
 app.get('/health', (req, res) => {
   res.json({
     ok: true,
     node: process.version,
-    hasOpenAI: Boolean(OPENAI_KEY),
-    model: OPENAI_MODEL
+    hasOpenAI: !!process.env.OPENAI_API_KEY,
+    model: process.env.OPENAI_MODEL || 'gpt-4o-mini'
   });
 });
 
-// ---- Products ----
-// Your index.html already fetches /products.json from /public.
-// This route guarantees it resolves even if static isn’t mounted.
-app.get('/products.json', (req, res) => {
-  res.sendFile(path.join(publicDir, 'products.json'));
-});
+// --- chat /ask ---
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
+const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
-// ---- Ask AI (independent of catalog) ----
 app.post('/ask', async (req, res) => {
   try {
-    if (!OPENAI_KEY) {
-      return res.status(503).json({ ok: false, error: 'OPENAI_API_KEY not set' });
+    if (!openai) {
+      res.set('X-Provider', 'baseline');
+      res.set('X-Model', 'none');
+      return res.status(200).json({
+        provider: 'baseline',
+        model: 'none',
+        reply: 'Hi! Add a valid OPENAI_API_KEY to enable AI answers.'
+      });
     }
 
-    const message = String(req.body?.message || '').trim();
-    if (!message) {
-      return res.status(400).json({ ok: false, error: 'Missing message' });
+    const { message } = req.body || {};
+    if (!message || typeof message !== 'string') {
+      return res.status(400).json({ error: 'Missing message' });
     }
 
-    const openai = new OpenAI({ apiKey: OPENAI_KEY });
-    const system = [
-      "You are Luminous, a calm, friendly beauty assistant for salon clients.",
-      "Be practical and specific. Offer product-agnostic advice first; if relevant, describe product types (e.g., 'lightweight, oil-free moisturizer').",
-      "Avoid medical claims. Keep tone positive and encouraging."
-    ].join(' ');
+    const sys = `You are a friendly beauty assistant helping salon clients prep for visits.
+Be concise, warm, and specific. When asked for product ideas, suggest categories & shade families first,
+then 2–4 example product types. Avoid medical claims.`;
 
-    const completion = await openai.chat.completions.create({
+    const r = await openai.chat.completions.create({
       model: OPENAI_MODEL,
       messages: [
-        { role: 'system', content: system },
-        { role: 'user',   content: message }
+        { role: 'system', content: sys },
+        { role: 'user', content: message }
       ],
-      temperature: 0.7
+      temperature: 0.6,
+      max_tokens: 400
     });
 
-    const reply = completion.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not find an answer.';
-    res.setHeader('X-Provider', 'openai');
-    res.setHeader('X-Model', OPENAI_MODEL);
-    return res.json({ provider: 'openai', model: OPENAI_MODEL, reply });
+    const reply = r.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not generate a reply.';
+    res.set('X-Provider', 'openai');
+    res.set('X-Model', OPENAI_MODEL);
+    return res.status(200).json({ provider: 'openai', model: OPENAI_MODEL, reply });
   } catch (err) {
-    console.error('ASK error:', err);
-    return res.status(500).json({ ok: false, error: 'AI unavailable' });
+    console.error('ASK_ERROR', err);
+    return res.status(500).json({ error: 'AI error' });
   }
 });
 
-// ---- Root -> index.html ----
-app.get('/', (req, res) => {
-  res.sendFile(path.join(publicDir, 'index.html'));
+// --- image upload placeholder (future moodboard) ---
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+app.post('/upload', upload.single('image'), (req, res) => {
+  if (!req.file) return res.status(400).json({ ok: false, error: 'No file' });
+  // later: extract palette
+  return res.json({ ok: true, bytes: req.file.size, type: req.file.mimetype });
 });
 
-// ---- 404 fallback (for SPA-like paths) ----
-app.use((req, res) => {
-  res.status(404).sendFile(path.join(publicDir, 'index.html'));
-});
-
-// ---- Start ----
+// --- start ---
 app.listen(PORT, () => {
-  console.log('Luminous listening on', PORT, { hasOpenAI: Boolean(OPENAI_KEY) });
+  console.log(`Luminous listening on ${PORT}`, { hasOpenAI: !!process.env.OPENAI_API_KEY });
 });
