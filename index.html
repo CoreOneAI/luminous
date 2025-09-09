@@ -4,293 +4,200 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Luminous AI - Your Radiant Beauty Companion</title>
-  <meta name="apple-mobile-web-app-capable" content="yes"/>
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="theme-color" content="#B8860B"/>
-  <link rel="manifest" href="manifest.json"/>
-  <script>
-    // Keep your splash redirect behavior
-    const splashShown = sessionStorage.getItem('splashShown');
-    if (!splashShown) window.location.href = '/splash.html';
-  </script>
+
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
     :root{
-      --primary-charcoal:#2C2C2C;
-      --luminous-gold:#B8860B;
-      --pearl-white:#F8F8F8;
-      --premium-gradient:linear-gradient(135deg,#B8860B,#DAA520);
-      --info:#2563eb20; --info-text:#1f2937;
+      --primary:#2C2C2C; --gold:#B8860B; --pearl:#F8F8F8;
+      --grad:linear-gradient(135deg,#B8860B,#DAA520);
+      --muted:#666; --ink:#222; --card:#fff;
     }
     body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-      background:var(--primary-charcoal);color:#333;min-height:100vh;overflow-x:hidden}
-    .container{max-width:414px;margin:0 auto;background:var(--primary-charcoal);min-height:100vh;position:relative}
-    .header{background:var(--primary-charcoal);padding:20px;text-align:center;border-bottom:1px solid #3A3A3A}
-    .logo{font-size:28px;font-weight:700;margin-bottom:8px;
-      background:var(--premium-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .tagline{font-size:14px;color:var(--luminous-gold);font-weight:500;opacity:.9}
-    .main-content{background:var(--pearl-white);min-height:calc(100vh - 120px);padding:20px}
+         background:var(--primary);min-height:100vh;color:#333}
+    .container{max-width:414px;margin:0 auto;background:var(--primary);min-height:100vh}
+    .header{padding:20px;text-align:center;border-bottom:1px solid #3A3A3A}
+    .logo{font-size:28px;font-weight:800;background:var(--grad);
+          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .tagline{font-size:14px;color:var(--gold);opacity:.9;margin-top:4px}
+    .main{background:var(--pearl);min-height:calc(100vh - 120px);padding:18px}
 
-    .welcome-section{background:#fff;border-radius:16px;padding:24px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);text-align:center}
-    .welcome-title{font-size:20px;font-weight:700;color:#222;margin-bottom:8px}
-    .welcome-subtitle{font-size:14px;color:#666;margin-bottom:16px}
+    /* welcome + ask */
+    .card{background:var(--card);border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
+    .welcome{padding:20px;text-align:center;margin-bottom:14px}
+    .title{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:8px}
+    .sub{font-size:14px;color:var(--muted)}
+    .askbar{display:flex;gap:10px;align-items:center;margin:14px 0;
+            border:2px solid var(--gold);border-radius:25px;padding:10px 12px;background:#fff}
+    .askbar .ai{font-size:18px}
+    .askbar input{border:none;outline:none;flex:1;font-size:14px}
+    .askbtn{border:none;border-radius:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
+            color:#fff;background:var(--grad);cursor:pointer}
+    .cta{border:none;border-radius:22px;background:var(--grad);color:#fff;font-weight:700;
+         padding:12px 20px;width:100%;cursor:pointer;box-shadow:0 4px 12px rgba(184,134,11,.25)}
 
-    .ai-search-container{margin-bottom:12px}
-    .ai-search-bar{background:#fff;border-radius:25px;padding:12px 14px;display:flex;align-items:center;gap:10px;
-      box-shadow:0 4px 12px rgba(0,0,0,.08);border:2px solid var(--luminous-gold)}
-    .ai-icon{font-size:18px;color:var(--luminous-gold)}
-    .ai-input{flex:1;border:none;outline:none;font-size:14px;background:transparent;color:#222}
-    .ai-input::placeholder{color:#999;font-style:italic}
-    .ai-send-btn{background:var(--premium-gradient);border:none;border-radius:20px;width:40px;height:40px;display:flex;align-items:center;
-      justify-content:center;color:#fff;cursor:pointer;transition:.2s}
-    .ai-send-btn:hover{transform:scale(1.05);box-shadow:0 4px 12px rgba(184,134,11,.3)}
-    .chat-btn{background:var(--premium-gradient);color:#fff;border:none;padding:14px 22px;border-radius:22px;font-weight:600;font-size:16px;
-      cursor:pointer;width:100%;box-shadow:0 4px 12px rgba(184,134,11,.25);transition:.2s}
-    .chat-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(184,134,11,.35)}
+    /* quick actions (filters) */
+    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
+    .qcard{background:#fff;border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+    .qicon{width:28px;height:28px;border-radius:14px;background:var(--grad);color:#fff;
+           display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
+    .qtitle{font-size:10px;font-weight:700;color:#222}
+    .qsub{font-size:9px;color:#666}
 
-    .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:16px 0 20px}
-    .action-card{background:#fff;border-radius:12px;padding:8px 6px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.1);
-      transition:.2s;cursor:pointer;position:relative;min-height:60px;display:flex;flex-direction:column;justify-content:center}
-    .action-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.15)}
-    .premium-feature{background:linear-gradient(135deg,#FFF9E6,#FFFFFF);border:1px solid var(--luminous-gold)}
-    .premium-star{position:absolute;top:3px;right:3px;font-size:8px;color:var(--luminous-gold)}
-    .action-icon{width:28px;height:28px;border-radius:14px;background:var(--premium-gradient);display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;margin:0 auto 4px}
-    .action-title{font-size:10px;font-weight:600;color:#222;margin-bottom:2px;line-height:1.1}
-    .action-subtitle{font-size:8px;color:#666;line-height:1.1}
-
-    /* Chat block */
-    .chat-card{background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);padding:14px;margin-bottom:16px}
-    .chat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-    .chat-title{font-size:14px;font-weight:700;color:#222}
-    .chat-status{font-size:11px;color:#888}
-    .chat-thread{max-height:300px;overflow:auto;padding:6px;scroll-behavior:smooth}
-    .bubble{display:inline-block;max-width:80%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.35;margin:6px 0;
-      box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    .bubble.user{margin-left:auto;background:rgba(184,134,11,.12);border:1px solid rgba(184,134,11,.35)}
-    .bubble.bot{margin-right:auto;background:#fff;border:1px solid #eee}
+    /* in-page chat */
+    .chat{padding:14px;margin-bottom:14px}
+    .chathead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+    .chatname{font-size:14px;font-weight:800}
+    .chatstat{font-size:12px;color:#888}
+    .thread{max-height:300px;overflow:auto;padding:6px}
+    .bubble{display:inline-block;max-width:80%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.35;
+            margin:6px 0;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+    .user{margin-left:auto;background:rgba(184,134,11,.12);border:1px solid rgba(184,134,11,.35)}
+    .bot{margin-right:auto;background:#fff;border:1px solid #eee}
     .typing{display:inline-flex;gap:4px;align-items:center}
     .dot{width:6px;height:6px;background:#aaa;border-radius:50%;animation:blink 1.2s infinite ease-in-out}
     .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
     @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
 
-    /* Products */
-    .section-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
-    .section-title{font-size:15px;font-weight:700;color:#222}
-    .search-row{display:flex;gap:8px}
-    .search-input{flex:1;border:1px solid #ddd;border-radius:10px;padding:8px 10px;font-size:14px;background:#fff}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.6rem .9rem;border-radius:12px;font-weight:600;border:0}
-    .btn-subtle{background:#f0f1f3;color:#222}
-    .btn-accent{background:var(--premium-gradient);color:#fff}
-
+    /* products */
+    .section{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+    .sectitle{font-size:15px;font-weight:800;color:#222}
+    .row{display:flex;gap:8px}
+    .search{flex:1;border:1px solid #ddd;border-radius:10px;padding:8px 10px;font-size:14px;background:#fff}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.6rem .9rem;border-radius:12px;font-weight:700;border:0}
+    .subtle{background:#f0f1f3}
+    .accent{background:var(--grad);color:#fff}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .card{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
-    .imgph{height:144px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
+    .p{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
+    .ph{height:144px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
     .meta{padding:10px}
     .brand{font-size:11px;color:#6b7280}
-    .name{font-size:15px;font-weight:600;line-height:1.2;margin-top:2px}
-    .row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
-    .price{font-size:15px;font-weight:700}
+    .name{font-size:15px;font-weight:700;line-height:1.2;margin-top:2px}
+    .row2{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+    .price{font-size:15px;font-weight:800}
     .was{font-size:11px;color:#9ca3af;text-decoration:line-through}
-    .btn-line{display:flex;gap:8px;margin-top:8px}
+    .btns{display:flex;gap:8px;margin-top:8px}
     .badge{font-size:10px;padding:2px 8px;background:#fde8b2;color:#8a6b11;border-radius:999px}
-
-    .info{margin:10px 0;background:var(--info);color:var(--info-text);padding:10px;border-radius:10px;font-size:12px}
+    .info{margin:10px 0;background:#2563eb1a;color:#1f2937;padding:10px;border-radius:10px;font-size:12px}
     .empty{text-align:center;font-size:13px;color:#666;margin:18px 0}
-    .footer-gap{height:100px}
+    .gap{height:96px}
 
-    /* Bottom nav */
-    .bottom-nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
-      padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
-    .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
-    .nav-item.active{color:var(--luminous-gold)}
-    .nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
-    .nav-label{font-size:10px;font-weight:500}
+    /* bottom nav */
+    .nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
+         padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
+    .navitem{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
+    .navitem.active{color:var(--gold)}
+    .navicon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
+    .navlbl{font-size:10px;font-weight:600}
 
-    @media(max-width:380px){
-      .quick-actions{grid-template-columns:1fr 1fr;gap:12px}
-      .action-card{min-height:80px;padding:12px 8px}
-      .action-title{font-size:11px}
-      .action-subtitle{font-size:9px}
-    }
+    .build{color:#9ca3af;text-align:center;font-size:11px;margin-top:10px}
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Header -->
     <div class="header">
       <div class="logo">✨ Luminous AI</div>
       <div class="tagline">Your Radiant Beauty Companion</div>
     </div>
 
-    <div class="main-content">
+    <div class="main">
       <!-- Welcome + Ask -->
-      <div class="welcome-section">
-        <div class="welcome-title">Welcome to Your Beauty Journey</div>
-        <div class="welcome-subtitle">Get personalized AI-powered beauty recommendations from global experts</div>
+      <div class="card welcome">
+        <div class="title">Welcome to Your Beauty Journey</div>
+        <div class="sub">Get personalized AI-powered beauty recommendations from global experts</div>
 
-        <div class="ai-search-container">
-          <div class="ai-search-bar">
-            <div class="ai-icon">🤖</div>
-            <input id="aiInput" class="ai-input" placeholder="Ask: ‘Best makeup for pale skin with cool undertones’"/>
-            <button id="askBtn" class="ai-send-btn" title="Ask"><span>✨</span></button>
-          </div>
+        <div class="askbar">
+          <div class="ai">🤖</div>
+          <input id="aiInput" placeholder="Ask: Best makeup for pale skin with cool undertones"/>
+          <button id="askBtn" class="askbtn" title="Ask"><span>✨</span></button>
         </div>
 
-        <button class="chat-btn" id="consultBtn">🌟 Start Beauty Consultation</button>
+        <button id="consultBtn" class="cta">🌟 Start Beauty Consultation</button>
       </div>
 
-      <!-- Quick actions (filter only; no chat) -->
-      <div class="quick-actions" id="quickGrid">
-        <div class="action-card premium-feature" data-filter="anti-aging">
-          <div class="premium-star">⭐</div>
-          <div class="action-icon">🧘</div>
-          <div class="action-title">Anti-aging</div>
-          <div class="action-subtitle">Wellness & skincare</div>
-        </div>
-
-        <div class="action-card" data-filter="eye">
-          <div class="action-icon">👁️</div>
-          <div class="action-title">Eye Care</div>
-          <div class="action-subtitle">gel • cream • serum</div>
-        </div>
-
-        <div class="action-card premium-feature" data-filter="skin care">
-          <div class="premium-star">⭐</div>
-          <div class="action-icon">✨</div>
-          <div class="action-title">Skin Analysis</div>
-          <div class="action-subtitle">AI recommendations</div>
-        </div>
-
-        <div class="action-card premium-feature" data-filter="night cream">
-          <div class="premium-star">⭐</div>
-          <div class="action-icon">🌙</div>
-          <div class="action-title">Night Cream</div>
-          <div class="action-subtitle">PM moisturizers</div>
-        </div>
-
-        <div class="action-card" data-filter="vitamin c">
-          <div class="action-icon">🍊</div>
-          <div class="action-title">Vitamin C</div>
-          <div class="action-subtitle">brightening</div>
-        </div>
-
-        <div class="action-card" data-filter="spf">
-          <div class="action-icon">🛡️</div>
-          <div class="action-title">SPF</div>
-          <div class="action-subtitle">sunscreen</div>
-        </div>
-
-        <div class="action-card" data-filter="peptide">
-          <div class="action-icon">🧬</div>
-          <div class="action-title">Peptide</div>
-          <div class="action-subtitle">firming</div>
-        </div>
-
-        <div class="action-card" id="basketBtn">
-          <div class="action-icon">🛒</div>
-          <div class="action-title">Basket</div>
-          <div class="action-subtitle">3 items • $127.50</div>
-          <div class="badge">Demo</div>
-        </div>
+      <!-- Quick actions (filters only) -->
+      <div class="grid4" id="quick">
+        <div class="qcard" data-filter="anti-aging"><div class="qicon">🧘</div><div class="qtitle">Anti-aging</div><div class="qsub">wellness & skin</div></div>
+        <div class="qcard" data-filter="eye"><div class="qicon">👁️</div><div class="qtitle">Eye Care</div><div class="qsub">gel • cream • serum</div></div>
+        <div class="qcard" data-filter="night cream"><div class="qicon">🌙</div><div class="qtitle">Night Cream</div><div class="qsub">PM moisturizers</div></div>
+        <div class="qcard" data-filter="vitamin c"><div class="qicon">🍊</div><div class="qtitle">Vitamin C</div><div class="qsub">brightening</div></div>
+        <div class="qcard" data-filter="spf"><div class="qicon">🛡️</div><div class="qtitle">SPF</div><div class="qsub">sunscreen</div></div>
+        <div class="qcard" data-filter="peptide"><div class="qicon">🧬</div><div class="qtitle">Peptide</div><div class="qsub">firming</div></div>
+        <div class="qcard" data-filter="retinol"><div class="qicon">🧴</div><div class="qtitle">Retinol</div><div class="qsub">vitamin A</div></div>
+        <div class="qcard" data-filter=""><div class="qicon">🛒</div><div class="qtitle">All</div><div class="qsub">full catalog</div></div>
       </div>
 
-      <!-- In-page Chat (typewriter) -->
-      <div class="chat-card" id="chatCard" aria-live="polite">
-        <div class="chat-head">
-          <div class="chat-title">AI Suggestions</div>
-          <div class="chat-status" id="chatStatus">Ready</div>
+      <!-- In-page Chat -->
+      <div class="card chat" aria-live="polite">
+        <div class="chathead">
+          <div class="chatname">AI Suggestions</div>
+          <div id="chatStatus" class="chatstat">Ready</div>
         </div>
-        <div class="chat-thread" id="chatThread"></div>
+        <div id="thread" class="thread"></div>
       </div>
 
       <!-- Products -->
-      <div id="infoBar" class="info" style="display:none"></div>
+      <div id="infobar" class="info" style="display:none"></div>
 
-      <div class="section-head">
-        <div class="section-title">Your Recommendations</div>
-        <div class="search-row">
-          <input id="searchBox" class="search-input" placeholder="Search products… (Retinol, Peptide, Vitamin C, SPF, Night cream, Eye)"/>
-          <button id="clearBtn" class="btn btn-subtle">Clear</button>
+      <div class="section">
+        <div class="sectitle">Your Recommendations</div>
+        <div class="row">
+          <input id="search" class="search" placeholder="Search… (Retinol, Peptide, Vitamin C, SPF, Night cream, Eye)"/>
+          <button id="clear" class="btn subtle">Clear</button>
         </div>
       </div>
 
-      <div id="results" class="grid"></div>
-      <div id="emptyState" class="empty" style="display:none">
-        <p class="font-medium">No matching products yet</p>
-        <p>Try a different term (e.g., brand, concern, or category).</p>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" style="display:none">
+        <p><strong>No matching products yet</strong></p>
+        <p>Try a different term (brand, concern, or category).</p>
       </div>
-      <div style="margin-top:10px;">
-        <button id="loadMore" class="btn btn-subtle" style="width:100%;">Load more</button>
-      </div>
+      <button id="more" class="btn subtle" style="width:100%;margin-top:10px">Load more</button>
 
-      <div class="footer-gap"></div>
+      <div class="gap"></div>
+      <div class="build">BUILD_ID: 2025-09-09-safe</div>
     </div>
 
-    <!-- Bottom nav (keeps user on page) -->
-    <div class="bottom-nav">
-      <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
-      <div class="nav-item" data-nav="signin"><div class="nav-icon">🔑</div><div class="nav-label">Sign In</div></div>
-      <div class="nav-item" data-nav="create"><div class="nav-icon">👤</div><div class="nav-label">Create Account</div></div>
-      <div class="nav-item" data-nav="catalog"><div class="nav-icon">🌍</div><div class="nav-label">Catalog</div></div>
-      <div class="nav-item" data-nav="ask"><div class="nav-icon">💬</div><div class="nav-label">Ask Me</div></div>
+    <div class="nav">
+      <div class="navitem active"><div class="navicon">🏠</div><div class="navlbl">Home</div></div>
+      <div class="navitem"><div class="navicon">🔑</div><div class="navlbl">Sign In</div></div>
+      <div class="navitem"><div class="navicon">👤</div><div class="navlbl">Create</div></div>
+      <div class="navitem"><div class="navicon">🌍</div><div class="navlbl">Catalog</div></div>
+      <div class="navitem"><div class="navicon">💬</div><div class="navlbl">Ask</div></div>
     </div>
   </div>
 
   <script>
-    // ---------------- Config ----------------
-    // Chat is independent and uses your AI API only:
-    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat'];   // tries in order for chat only
-    // Products come only from the catalog file served by the app:
-    const JSON_PRODUCTS  = '/products.json';
+    // ---------- Config ----------
+    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat']; // tries in order
+    const CATALOG_PATH   = '/products.json';            // your beauty catalog only
 
-    // ---------------- Helpers ----------------
-    const $ = (sel,root=document)=>root.querySelector(sel);
-    const chatThread = $('#chatThread');
-    const chatStatus = $('#chatStatus');
-    const infoBar    = $('#infoBar');
-
-    const formatPrice = (v)=>{
-      if (v===null||v===undefined||v==='') return '$—';
-      if (typeof v==='number'){
-        if (Number.isInteger(v) && v>=100) return '$'+(v/100).toFixed(2);
-        return '$'+v.toFixed(2);
-      }
-      const s = String(v).trim();
-      if (s.startsWith('$')) return s;
-      const n = parseFloat(s);
-      if (!isFinite(n)) return '$—';
-      if (!s.includes('.') && n>=100) return '$'+(n/100).toFixed(2);
-      return '$'+n.toFixed(2);
-    };
-    const safe = (s)=> (s ?? '').toString();
-
-    function addBubble(role, text, { typing=false }={}){
+    // ---------- Chat helpers ----------
+    const thread   = document.getElementById('thread');
+    const statusEl = document.getElementById('chatStatus');
+    const addBubble = (role, text, typing=false)=>{
       const b = document.createElement('div');
       b.className = `bubble ${role}`;
-      if (typing){
-        b.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
-      } else {
-        b.textContent = text;
-      }
-      chatThread.appendChild(b);
-      chatThread.scrollTop = chatThread.scrollHeight;
+      b.innerHTML = typing
+        ? `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`
+        : (text || '');
+      thread.appendChild(b);
+      thread.scrollTop = thread.scrollHeight;
       return b;
-    }
-
-    async function typeText(el, text, speed=12){
+    };
+    const type = async (el, text, speed=10)=>{
       el.textContent = '';
       for (let i=0;i<text.length;i++){
         el.textContent += text[i];
-        if (i%3===0) await new Promise(r=>setTimeout(r, speed));
-        chatThread.scrollTop = chatThread.scrollHeight;
+        if (i%3===0) await new Promise(r=>setTimeout(r,speed));
+        thread.scrollTop = thread.scrollHeight;
       }
-    }
-
-    async function askBackend(message){
+    };
+    const askAI = async (message)=>{
       let lastErr;
       for (const ep of CHAT_ENDPOINTS){
         try{
-          const r = await fetch(ep,{
+          const r = await fetch(ep, {
             method:'POST',
             headers:{'Content-Type':'application/json','Accept':'application/json'},
             body: JSON.stringify({ message, includeProducts:false })
@@ -298,282 +205,213 @@
           if (!r.ok) throw new Error('HTTP '+r.status);
           const data = await r.json().catch(()=> ({}));
           return data.reply || data.response || data.text || 'Sorry, no answer available.';
-        }catch(e){ lastErr=e; }
+        }catch(e){ lastErr = e; }
       }
-      throw lastErr || new Error('All endpoints failed');
-    }
+      throw lastErr || new Error('All chat endpoints failed');
+    };
 
-    async function handleAsk(){
-      const inp = $('#aiInput');
+    const doAsk = async ()=>{
+      const inp = document.getElementById('aiInput');
       const q = (inp?.value||'').trim();
-      if (!q){
-        addBubble('bot','Try: “Best makeup for pale skin with cool undertones.”');
-        return;
-      }
-      chatStatus.textContent='Thinking…';
+      if (!q) return;
+      statusEl.textContent = 'Thinking…';
       addBubble('user', q);
-      const typing = addBubble('bot','',{typing:true});
+      const bot = addBubble('bot', '', true);
       try{
-        const reply = await askBackend(q);
-        typing.innerHTML = '';
-        await typeText(typing, reply, 10);
+        const reply = await askAI(q);
+        bot.innerHTML = '';
+        await type(bot, reply, 10);
       }catch(e){
-        typing.innerHTML='';
-        await typeText(typing, '⚠️ Could not reach AI. Please try again.');
+        bot.innerHTML = '';
+        await type(bot, '⚠️ Could not reach AI. Please try again.');
       }finally{
-        chatStatus.textContent='Ready';
+        statusEl.textContent = 'Ready';
       }
-    }
+    };
 
-    // --------- Product search (catalog only) ----------
-    // Normalize many schema shapes: strings, arrays, alt keys
+    document.getElementById('askBtn')?.addEventListener('click', doAsk);
+    document.getElementById('consultBtn')?.addEventListener('click', doAsk);
+    document.getElementById('aiInput')?.addEventListener('keydown', e => { if (e.key==='Enter') doAsk(); });
+
+    // ---------- Catalog search (client-side only) ----------
     const FIELD_SETS = {
-      name:        ['name','title'],
-      brand:       ['brand','maker','manufacturer'],
-      category:    ['category','type'],
-      tags:        ['tags','labels','keywords'],
-      ingredients: ['ingredients','keyIngredients','actives','activesList'],
-      suitableFor: ['suitableFor','skinType','concern','skinConcerns'],
-      usage:       ['usage','howToUse','directions'],
-      description: ['description','desc','about']
+      name:['name','title'],
+      brand:['brand','maker','manufacturer'],
+      category:['category','type'],
+      tags:['tags','labels','keywords'],
+      ingredients:['ingredients','keyIngredients','actives','activesList'],
+      suitableFor:['suitableFor','skinType','concern','skinConcerns'],
+      usage:['usage','howToUse','directions'],
+      description:['description','desc','about'],
+      image:['image','img','photo','thumb']
     };
-
-    const SYNONYMS = {
-      'retinol':     ['retinoid','retinal','retinaldehyde','vitamin a'],
-      'peptide':     ['peptides'],
-      'vitamin c':   ['vit c','ascorbic','ascorbyl','l-ascorbic'],
-      'spf':         ['sunscreen','broad spectrum','uv','uva','uvb','spf30','spf40','spf50'],
-      'night cream': ['pm','overnight','sleep mask','night moisturizer','night balm'],
-      'eye':         ['eye cream','eye serum','eye gel','undereye','under-eye','dark circle','puffy','puffiness']
+    const WEIGHTS = { name:5, brand:4, category:4, tags:3, ingredients:3, suitableFor:2, usage:1, description:1 };
+    const SYN = {
+      'retinol':['retinoid','retinal','retinaldehyde','vitamin a'],
+      'peptide':['peptides'],
+      'vitamin c':['vit c','ascorbic','ascorbyl','l-ascorbic'],
+      'spf':['sunscreen','broad spectrum','uv','uva','uvb','spf30','spf40','spf50'],
+      'night cream':['pm','overnight','sleep mask','night moisturizer','night balm'],
+      'eye':['eye cream','eye serum','eye gel','undereye','under-eye','dark circle','puffy','puffiness']
     };
-
-    const FIELD_WEIGHTS = { name:5, brand:4, category:4, tags:3, ingredients:3, suitableFor:2, usage:1, description:1 };
-    const norm = s => safe(s).toLowerCase();
-
-    function collectText(obj, keys){
-      const parts=[];
+    const norm = s => (s??'').toString().toLowerCase();
+    const collect = (obj, keys)=>{
+      const out=[];
       for (const k of keys){
         const v = obj?.[k];
         if (!v) continue;
-        if (Array.isArray(v)) { parts.push(v.join(' ')); continue; }
-        if (typeof v === 'object') { parts.push(Object.values(v).join(' ')); continue; }
-        parts.push(String(v));
+        if (Array.isArray(v)) out.push(v.join(' '));
+        else if (typeof v==='object') out.push(Object.values(v).join(' '));
+        else out.push(String(v));
       }
-      return parts.join(' ');
-    }
-
-    function expandQuery(q){
+      return out.join(' ');
+    };
+    const idx = p => ({
+      name:norm(collect(p,FIELD_SETS.name)),
+      brand:norm(collect(p,FIELD_SETS.brand)),
+      category:norm(collect(p,FIELD_SETS.category)),
+      tags:norm(collect(p,FIELD_SETS.tags)),
+      ingredients:norm(collect(p,FIELD_SETS.ingredients)),
+      suitableFor:norm(collect(p,FIELD_SETS.suitableFor)),
+      usage:norm(collect(p,FIELD_SETS.usage)),
+      description:norm(collect(p,FIELD_SETS.description))
+    });
+    const expand = q=>{
       const base = norm(q);
       const tokens = new Set(base.split(/[^a-z0-9]+/).filter(Boolean));
-      // synonyms for whole phrase
-      if (SYNONYMS[base]) SYNONYMS[base].forEach(s => s.split(' ').forEach(t => tokens.add(t)));
-      // synonyms for each token
+      if (SYN[base]) SYN[base].forEach(s=> s.split(' ').forEach(t=>tokens.add(t)));
       base.split(/[^a-z0-9]+/).forEach(tok=>{
-        if (SYNONYMS[tok]) SYNONYMS[tok].forEach(s => s.split(' ').forEach(t=> tokens.add(t)));
+        if (SYN[tok]) SYN[tok].forEach(s=> s.split(' ').forEach(t=>tokens.add(t)));
       });
-      // naive stems to help partial matches
       [...tokens].forEach(t=>{ if (t.length>=5) tokens.add(t.slice(0,5)); });
       return [...tokens];
-    }
+    };
+    const formatPrice = v=>{
+      if (v===null||v===undefined||v==='') return '$—';
+      if (typeof v==='number'){ return Number.isInteger(v)&&v>=100 ? '$'+(v/100).toFixed(2) : '$'+v.toFixed(2); }
+      const s = String(v).trim(); if (s.startsWith('$')) return s;
+      const n = parseFloat(s); if (!isFinite(n)) return '$—';
+      return (!s.includes('.') && n>=100) ? '$'+(n/100).toFixed(2) : '$'+n.toFixed(2);
+    };
 
-    function buildIndexable(p){
-      return {
-        name:        norm(collectText(p, FIELD_SETS.name)),
-        brand:       norm(collectText(p, FIELD_SETS.brand)),
-        category:    norm(collectText(p, FIELD_SETS.category)),
-        tags:        norm(collectText(p, FIELD_SETS.tags)),
-        ingredients: norm(collectText(p, FIELD_SETS.ingredients)),
-        suitableFor: norm(collectText(p, FIELD_SETS.suitableFor)),
-        usage:       norm(collectText(p, FIELD_SETS.usage)),
-        description: norm(collectText(p, FIELD_SETS.description))
-      };
-    }
+    const state = { all:[], q:'', offset:0, page:8, total:0 };
+    const grid     = document.getElementById('grid');
+    const empty    = document.getElementById('empty');
+    const moreBtn  = document.getElementById('more');
+    const infoBar  = document.getElementById('infobar');
+    const searchEl = document.getElementById('search');
 
-    function scoreProduct(p, q){
+    const score = (p, q)=>{
       if (!q) return 1;
-      const idx = buildIndexable(p);
-      const tokens = expandQuery(q);
-      let score=0;
-      for (const [field,text] of Object.entries(idx)){
-        if (!text) continue;
-        const w = FIELD_WEIGHTS[field]||1;
-        tokens.forEach(t=>{ if (text.includes(t)) score+=w; });
+      const I = idx(p); const T = expand(q);
+      let s=0;
+      for (const [k,text] of Object.entries(I)){
+        if (!text) continue; const w = WEIGHTS[k]||1;
+        T.forEach(t=>{ if (text.includes(t)) s+=w; });
       }
-      return score;
-    }
+      return s;
+    };
 
-    class Catalog {
-      constructor(){
-        this.results   = document.getElementById('results');
-        this.empty     = document.getElementById('emptyState');
-        this.searchBox = document.getElementById('searchBox');
-        this.clearBtn  = document.getElementById('clearBtn');
-        this.moreBtn   = document.getElementById('loadMore');
+    const listFor = q=>{
+      if (!q) return state.all.slice();
+      return state.all.map(p=>({p, s:score(p,q)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.p);
+    };
 
-        this.all=[]; this.query=''; this.offset=0; this.pageSize=8; this.total=0;
+    const renderCard = p=>{
+      const name = p.name || 'Beauty product';
+      const brand = p.brand || 'Salon Pro';
+      const price = formatPrice(p.price);
+      const was = (p.was!==undefined && p.was!==null && p.was!=='') ? formatPrice(p.was) : '';
+      const badge = p.category ? `<span class="badge">${p.category}</span>` : '';
+      const img = collect(p, FIELD_SETS.image).split(' ')[0];
 
-        this.searchBox.addEventListener('input', ()=>{ this.query=this.searchBox.value.trim(); this.offset=0; this.render(true); });
-        this.clearBtn.addEventListener('click', ()=>{ this.searchBox.value=''; this.query=''; this.offset=0; this.render(true); });
-        this.moreBtn.addEventListener('click', ()=> this.render());
-
-        this.bootstrap();
-      }
-
-      async bootstrap(){
-        try{
-          const r = await fetch(JSON_PRODUCTS + '?bust=' + Date.now());
-          if (r.ok) this.all = await r.json();
-        }catch{}
-        this.render(true);
-      }
-
-      computeList(){
-        if (!this.query) return this.all.slice();
-        return this.all
-          .map(p=>({p, s:scoreProduct(p,this.query)}))
-          .filter(x=> x.s>0)
-          .sort((a,b)=> b.s-a.s)
-          .map(x=> x.p);
-      }
-
-      async render(reset=false){
-        infoBar.style.display='none';
-        if (reset){ this.results.innerHTML=''; this.offset=0; this.total=0; }
-
-        const sk = document.createElement('div');
-        sk.className='grid';
-        sk.innerHTML = Array.from({length:4}).map(()=>`
-          <div class="card"><div class="imgph">Loading…</div>
-            <div class="meta">
-              <div class="brand"> </div>
-              <div class="name"> </div>
-              <div class="row"><div class="price"> </div><div class="was"> </div></div>
-              <div class="btn-line"><div class="btn btn-subtle" style="flex:1"> </div><div class="btn btn-accent" style="flex:1"> </div></div>
+      const el = document.createElement('div'); el.className='p';
+      el.innerHTML = `
+        ${img ? `<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">`
+              : `<div class="ph">No image</div>`}
+        <div class="meta">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+            <div>
+              <div class="brand">${brand}</div>
+              <div class="name">${name}</div>
             </div>
-          </div>`).join('');
-        this.results.appendChild(sk);
-
-        try{
-          const list = this.computeList();
-          this.total = list.length;
-          const items = list.slice(this.offset, this.offset+this.pageSize);
-          this.offset += items.length;
-
-          const frag = document.createDocumentFragment();
-          for (const p of items) frag.appendChild(this.card(p));
-          this.results.replaceChild(frag, sk);
-
-          const hasAny = this.results.children.length>0;
-          this.empty.style.display = hasAny ? 'none' : 'block';
-
-          const hasMore = this.offset < this.total;
-          this.moreBtn.disabled = !hasMore;
-          this.moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
-
-          if (this.query){
-            infoBar.textContent = `Matches for “${this.query}” — showing ${Math.min(this.offset,this.total)} of ${this.total}.`;
-            infoBar.style.display='block';
-          }
-        }catch(e){
-          console.error(e);
-          this.results.removeChild(sk);
-          this.empty.style.display='block';
-          this.moreBtn.disabled = true;
-          this.moreBtn.textContent='Load more';
-        }
-      }
-
-      card(p){
-        const name=safe(p.name||'Beauty product');
-        const brand=safe(p.brand||'Salon Pro');
-        const price=formatPrice(p.price);
-        const was=(p.was!==undefined&&p.was!==null&&p.was!=='')?formatPrice(p.was):'';
-        const badge=p.category?`<span class="badge">${safe(p.category)}</span>`:'';
-        const img=p.image||p.img;
-
-        const el=document.createElement('div');
-        el.className='card';
-        el.innerHTML=`
-          ${img?`<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">`:`<div class="imgph">No image</div>`}
-          <div class="meta">
-            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-              <div>
-                <div class="brand">${brand}</div>
-                <div class="name">${name}</div>
-              </div>
-              ${badge}
-            </div>
-            <div class="row"><div class="price">${price}</div><div class="was">${was}</div></div>
-            <div class="btn-line">
-              <button class="btn btn-subtle" data-action="details" style="flex:1">Details</button>
-              <button class="btn btn-accent" data-action="add" style="flex:1">Add</button>
-            </div>
+            ${badge}
           </div>
-        `;
+          <div class="row2"><div class="price">${price}</div><div class="was">${was}</div></div>
+          <div class="btns">
+            <button class="btn subtle" data-act="details" style="flex:1">Details</button>
+            <button class="btn accent" data-act="add" style="flex:1">Add</button>
+          </div>
+        </div>`;
+      el.querySelector('[data-act="details"]').addEventListener('click', ()=>{
+        const desc = collect(p, FIELD_SETS.description);
+        const use  = collect(p, FIELD_SETS.usage);
+        const ing  = collect(p, FIELD_SETS.ingredients);
+        const suit = collect(p, FIELD_SETS.suitableFor);
+        const bits = [];
+        if (desc) bits.push(desc);
+        if (use)  bits.push('Usage: '+use);
+        if (ing)  bits.push('Key ingredients: '+ing);
+        if (suit) bits.push('Perfect for: '+suit);
+        alert(`${name}\n\n${bits.join('\n\n') || 'Professional salon product designed for optimal results.'}`);
+      });
+      el.querySelector('[data-act="add"]').addEventListener('click', ()=> alert('Added to bag (demo)'));
+      return el;
+    };
 
-        el.querySelector('[data-action="details"]').addEventListener('click', ()=>{
-          const bits=[];
-          // Collect visible details from any schema
-          const desc = collectText(p, ['description','desc','about']);
-          const usage= collectText(p, ['usage','howToUse','directions']);
-          const ingr = collectText(p, ['ingredients','keyIngredients','actives','activesList']);
-          const suit = collectText(p, ['suitableFor','skinType','concern','skinConcerns']);
-          if (desc) bits.push(desc);
-          if (usage) bits.push('Usage: '+usage);
-          if (ingr) bits.push('Key ingredients: '+ingr);
-          if (suit) bits.push('Perfect for: '+suit);
-          alert(`${name}\n\n${bits.join('\n\n')||'Professional salon product designed for optimal results.'}`);
-        });
+    const render = (reset=false)=>{
+      if (reset){ grid.innerHTML=''; state.offset=0; state.total=0; }
+      const all = listFor(state.q); state.total = all.length;
+      const items = all.slice(state.offset, state.offset+state.page);
+      state.offset += items.length;
 
-        el.querySelector('[data-action="add"]').addEventListener('click', ()=>{
-          alert('Added to bag (demo)');
-        });
+      const frag = document.createDocumentFragment();
+      items.forEach(p=> frag.appendChild(renderCard(p)));
+      grid.appendChild(frag);
 
-        return el;
+      const any = grid.children.length>0;
+      empty.style.display = any ? 'none' : 'block';
+      const hasMore = state.offset < state.total;
+      moreBtn.disabled = !hasMore;
+      moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
+
+      if (state.q){
+        infoBar.style.display='block';
+        infoBar.textContent = `Matches for “${state.q}” — showing ${Math.min(state.offset,state.total)} of ${state.total}.`;
+      } else {
+        infoBar.style.display='none';
       }
-    }
+    };
 
-    // ---------------- App wiring ----------------
-    const ui = { cat:null };
+    const bootstrap = async ()=>{
+      try{
+        const r = await fetch(CATALOG_PATH+'?bust='+Date.now());
+        if (r.ok) state.all = await r.json();
+      }catch(e){ console.warn('Catalog load failed', e); }
+      render(true);
+    };
 
-    document.addEventListener('DOMContentLoaded', ()=>{
-      // logo pulse
-      const logo = document.querySelector('.logo');
-      setInterval(()=>{ logo.style.transform='scale(1.02)'; setTimeout(()=>logo.style.transform='',180); }, 3000);
-
-      // Catalog (independent of chat)
-      ui.cat = new Catalog();
-
-      // Ask AI (independent)
-      document.getElementById('askBtn')?.addEventListener('click', handleAsk);
-      document.getElementById('consultBtn')?.addEventListener('click', handleAsk);
-      document.getElementById('aiInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(); });
-
-      // Quick filters (no chat)
-      document.getElementById('quickGrid')?.addEventListener('click', (e)=>{
-        const card = e.target.closest('.action-card');
-        if (!card) return;
-        card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',110);
-        const term = card.getAttribute('data-filter') || '';
-        const sb = document.getElementById('searchBox');
-        sb.value = term;
-        ui.cat.query = term;
-        ui.cat.offset = 0;
-        ui.cat.render(true);
-      });
-
-      // Bottom nav keeps user here (simple scroll/focus)
-      document.querySelectorAll('.nav-item').forEach(nav=>{
-        nav.addEventListener('click', ()=>{
-          document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-          nav.classList.add('active');
-          const id = nav.dataset.nav;
-          if (id==='ask'){ document.getElementById('aiInput')?.focus(); }
-          else if (id==='catalog'){ window.scrollTo({top: document.getElementById('results').offsetTop-20, behavior:'smooth'}); }
-          else { window.scrollTo({top:0,behavior:'smooth'}); }
-        });
-      });
+    // Wire up UI
+    document.getElementById('quick')?.addEventListener('click', e=>{
+      const card = e.target.closest('.qcard'); if (!card) return;
+      const term = card.getAttribute('data-filter')||'';
+      searchEl.value = term; state.q = term; state.offset = 0; render(true);
     });
+    searchEl.addEventListener('input', ()=>{
+      state.q = searchEl.value.trim(); state.offset=0; render(true);
+    });
+    document.getElementById('clear').addEventListener('click', ()=>{
+      searchEl.value=''; state.q=''; state.offset=0; render(true);
+    });
+    moreBtn.addEventListener('click', ()=> render());
+
+    // Ask AI
+    document.getElementById('askBtn').addEventListener('click', doAsk);
+    document.getElementById('consultBtn').addEventListener('click', doAsk);
+    document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doAsk(); });
+
+    // Start
+    document.addEventListener('DOMContentLoaded', bootstrap);
   </script>
 </body>
 </html>
