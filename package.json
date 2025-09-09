@@ -1,7 +1,7 @@
 {
   "name": "luminous",
   "version": "1.0.0",
-  "description": "Luminous Beauty AI demo",
+  "description": "Luminous Beauty AI",
   "type": "module",
   "main": "server.js",
   "scripts": {
