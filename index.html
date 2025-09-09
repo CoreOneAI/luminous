@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
   <title>Luminous AI - Your Radiant Beauty Companion</title>
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="theme-color" content="#B8860B" />
-  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+  <meta name="theme-color" content="#B8860B"/>
+  <link rel="manifest" href="manifest.json"/>
   <script>
-    // Splash first-load redirect
+    // Splash redirect on first load only
     const splashShown = sessionStorage.getItem('splashShown');
     if (!splashShown) window.location.href = '/splash.html';
   </script>
@@ -22,9 +22,8 @@
       --premium-gradient:linear-gradient(135deg,#B8860B,#DAA520);
     }
     body{
-      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-      background:var(--primary-charcoal);
-      color:#333;min-height:100vh;overflow-x:hidden
+      font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+      background:var(--primary-charcoal);color:#333;min-height:100vh;overflow-x:hidden
     }
     .container{max-width:414px;margin:0 auto;background:var(--primary-charcoal);min-height:100vh;position:relative}
     .header{background:var(--primary-charcoal);padding:20px;text-align:center;border-bottom:1px solid #3A3A3A}
@@ -32,6 +31,7 @@
       background:var(--premium-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
     .tagline{font-size:14px;color:var(--luminous-gold);font-weight:500;opacity:.9}
     .main-content{background:var(--pearl-white);min-height:calc(100vh - 120px);padding:20px}
+
     .welcome-section{background:#fff;border-radius:16px;padding:24px;margin-bottom:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);text-align:center}
     .welcome-title{font-size:20px;font-weight:700;color:var(--primary-charcoal);margin-bottom:8px}
     .welcome-subtitle{font-size:14px;color:#666;margin-bottom:16px}
@@ -58,18 +58,7 @@
     .action-title{font-size:10px;font-weight:600;color:#222;margin-bottom:2px;line-height:1.1}
     .action-subtitle{font-size:8px;color:#666;line-height:1.1}
 
-    .featured-section{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.1);margin-bottom:16px}
-    .featured-header{background:var(--premium-gradient);color:#fff;padding:14px;text-align:center}
-    .featured-title{font-size:16px;font-weight:700;margin-bottom:2px}
-    .featured-subtitle{font-size:12px;opacity:.9}
-    .featured-content{padding:16px;text-align:center}
-    .feature-card{background:#F3F4F6;border-radius:12px;padding:14px;cursor:pointer}
-    .feature-icon{font-size:22px;margin-bottom:6px}
-    .feature-title{font-size:12px;font-weight:600;color:#222;margin-bottom:4px}
-    .feature-desc{font-size:10px;color:#666}
-
-    /* Chat card (IN-PAGE) */
-    .chat-card{background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);padding:14px}
+    .chat-card{background:#fff;border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1);padding:14px;margin-bottom:16px}
     .chat-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
     .chat-title{font-size:14px;font-weight:700;color:#222}
     .chat-status{font-size:11px;color:#888}
@@ -83,6 +72,29 @@
     .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
     @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
 
+    .section-head{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+    .section-title{font-size:15px;font-weight:700;color:#222}
+    .search-row{display:flex;gap:8px}
+    .search-input{flex:1;border:1px solid #ddd;border-radius:10px;padding:8px 10px;font-size:14px;background:#fff}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.6rem .9rem;border-radius:12px;font-weight:600;border:0}
+    .btn-subtle{background:#f0f1f3;color:#222}
+
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+    .card{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
+    .imgph{height:144px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
+    .meta{padding:10px}
+    .brand{font-size:11px;color:#6b7280}
+    .name{font-size:15px;font-weight:600;line-height:1.2;margin-top:2px}
+    .row{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+    .price{font-size:15px;font-weight:700}
+    .was{font-size:11px;color:#9ca3af;text-decoration:line-through}
+    .btn-line{display:flex;gap:8px;margin-top:8px}
+    .btn-accent{background:var(--premium-gradient);color:#fff}
+    .badge{font-size:10px;padding:2px 8px;background:#fde8b2;color:#8a6b11;border-radius:999px}
+
+    .empty{text-align:center;font-size:13px;color:#666;margin:18px 0}
+    .footer-gap{height:100px}
+
     .bottom-nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
       padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
@@ -90,7 +102,7 @@
     .nav-icon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
     .nav-label{font-size:10px;font-weight:500}
 
-    @media (max-width:380px){
+    @media(max-width:380px){
       .quick-actions{grid-template-columns:1fr 1fr;gap:12px}
       .action-card{min-height:80px;padding:12px 8px}
       .action-title{font-size:11px}
@@ -106,18 +118,16 @@
       <div class="tagline">Your Radiant Beauty Companion</div>
     </div>
 
-    <!-- Main -->
     <div class="main-content">
-      <!-- Welcome -->
+      <!-- Welcome + Ask -->
       <div class="welcome-section">
         <div class="welcome-title">Welcome to Your Beauty Journey</div>
         <div class="welcome-subtitle">Get personalized AI-powered beauty recommendations from global experts</div>
 
-        <!-- Ask AI -->
         <div class="ai-search-container">
           <div class="ai-search-bar">
             <div class="ai-icon">🤖</div>
-            <input id="aiInput" class="ai-input" placeholder="Ask: ‘Best anti-aging serum for sensitive skin’" />
+            <input id="aiInput" class="ai-input" placeholder="Ask: ‘Best makeup for pale skin with cool undertones’"/>
             <button id="askBtn" class="ai-send-btn" title="Ask"><span>✨</span></button>
           </div>
         </div>
@@ -125,55 +135,76 @@
         <button class="chat-btn" id="consultBtn">🌟 Start Beauty Consultation</button>
       </div>
 
-      <!-- Quick Actions -->
+      <!-- Quick actions (click = chat in place + filter grid) -->
       <div class="quick-actions" id="quickGrid">
-        <div class="action-card premium-feature" data-preset="Recommend an anti-aging routine for sensitive, dry skin. Focus on gentle actives and SPF.">
+        <div class="action-card premium-feature"
+             data-preset="Recommend an anti-aging routine for sensitive, dry skin. Focus on gentle actives and SPF."
+             data-filter="anti-aging">
           <div class="premium-star">⭐</div>
           <div class="action-icon">🧘</div>
           <div class="action-title">Anti-aging</div>
           <div class="action-subtitle">Wellness & skincare</div>
         </div>
-        <div class="action-card" data-preset="Best eye care regimen to reduce puffiness and dark circles, fragrance-free.">
+
+        <div class="action-card"
+             data-preset="Best eye care regimen to reduce puffiness and dark circles, fragrance-free."
+             data-filter="eye care">
           <div class="action-icon">👁️</div>
           <div class="action-title">Eye Care</div>
           <div class="action-subtitle">2,000+ eye products</div>
         </div>
-        <div class="action-card premium-feature" data-preset="Give me a skin analysis checklist to share with my stylist before an appointment.">
+
+        <div class="action-card premium-feature"
+             data-preset="Give me a skin analysis checklist to share with my stylist before an appointment."
+             data-filter="skin care">
           <div class="premium-star">⭐</div>
           <div class="action-icon">✨</div>
           <div class="action-title">Skin Analysis</div>
           <div class="action-subtitle">AI recommendations</div>
         </div>
-        <div class="action-card premium-feature" data-preset="Suggest a facial plan for dullness and texture with gentle exfoliation.">
+
+        <div class="action-card premium-feature"
+             data-preset="Suggest a facial plan for dullness and texture with gentle exfoliation."
+             data-filter="facial">
           <div class="premium-star">⭐</div>
           <div class="action-icon">😊</div>
           <div class="action-title">Facial Analysis</div>
           <div class="action-subtitle">AI face scanning</div>
         </div>
-        <div class="action-card" data-preset="Show current beauty trends and viral looks; add approachable options for everyday wear.">
+
+        <div class="action-card"
+             data-preset="Show current beauty trends and viral looks; add approachable options for everyday wear."
+             data-filter="sale">
           <div class="action-icon">🏷️</div>
           <div class="action-title">Discounts</div>
           <div class="action-subtitle">discount products</div>
         </div>
-        <div class="action-card" data-preset="Nail care routine for brittle nails plus polish shades for cool undertones.">
+
+        <div class="action-card"
+             data-preset="Nail care routine for brittle nails plus polish shades for cool undertones."
+             data-filter="nail">
           <div class="action-icon">💅</div>
           <div class="action-title">Nail Care</div>
           <div class="action-subtitle">2,000+ nail products</div>
         </div>
-        <div class="action-card" data-preset="Useful beauty tools and accessories for travel: compact, TSA-friendly.">
+
+        <div class="action-card"
+             data-preset="Useful beauty tools and accessories for travel: compact, TSA-friendly."
+             data-filter="accessories">
           <div class="action-icon">💎</div>
           <div class="action-title">Accessories</div>
           <div class="action-subtitle">2,000+ beauty tools</div>
         </div>
+
         <div class="action-card" id="basketBtn">
           <div class="action-icon">🛒</div>
           <div class="action-title">Basket</div>
           <div class="action-subtitle">3 items • $127.50</div>
-          <div class="basket-count">3</div>
+          <div class="badge">Demo</div>
         </div>
       </div>
 
-      <!-- In-page Chat Card -->
+      <!-- In-page Chat -->
       <div class="chat-card" id="chatCard" aria-live="polite">
         <div class="chat-head">
           <div class="chat-title">AI Suggestions</div>
@@ -182,99 +213,93 @@
         <div class="chat-thread" id="chatThread"></div>
       </div>
 
-      <!-- Catalog promos (unchanged copy) -->
-      <div class="featured-section" style="margin-top:16px;">
-        <div class="featured-header">
-          <div class="featured-title">Beauty Catalog</div>
-          <div class="featured-subtitle">Curated American Collections</div>
-        </div>
-        <div class="featured-content">
-          <div class="feature-card" id="globalBtn">
-            <div class="feature-icon">🌍</div>
-            <div class="feature-title">Global Beauty Products</div>
-            <div class="feature-desc">Discover products from around the world</div>
-          </div>
+      <!-- Products -->
+      <div class="section-head">
+        <div class="section-title">Your Recommendations</div>
+        <div class="search-row">
+          <input id="searchBox" class="search-input" placeholder="Search products…"/>
+          <button id="clearBtn" class="btn btn-subtle">Clear</button>
         </div>
       </div>
 
-      <!-- Recommendations CTA -->
-      <div class="featured-section">
-        <div class="featured-header">
-          <div class="featured-title">Recommendations</div>
-          <div class="featured-subtitle">Personalized suggestions</div>
-        </div>
-        <div class="featured-content">
-          <div class="feature-card" id="recCard">
-            <div class="feature-icon">✨</div>
-            <div class="feature-title">Get Personalized Suggestions</div>
-            <div class="feature-desc">Create account or login for AI recommendations</div>
-          </div>
-        </div>
+      <div id="results" class="grid"></div>
+      <div id="emptyState" class="empty" style="display:none">
+        <p class="font-medium">No products found</p>
+        <p>Try a different search or be more specific about your needs.</p>
+      </div>
+      <div style="margin-top:10px;">
+        <button id="loadMore" class="btn btn-subtle" style="width:100%;">Load more</button>
       </div>
 
-      <div style="height:100px;"></div>
+      <div class="footer-gap"></div>
     </div>
 
     <!-- Bottom nav -->
     <div class="bottom-nav">
-      <div class="nav-item active" data-nav="home">
-        <div class="nav-icon">🏠</div><div class="nav-label">Home</div>
-      </div>
-      <div class="nav-item" data-nav="signin">
-        <div class="nav-icon">🔑</div><div class="nav-label">Sign In</div>
-      </div>
-      <div class="nav-item" data-nav="createaccount">
-        <div class="nav-icon">👤</div><div class="nav-label">Create Account</div>
-      </div>
-      <div class="nav-item" data-nav="catalog">
-        <div class="nav-icon">🌍</div><div class="nav-label">Catalog</div>
-      </div>
-      <div class="nav-item" data-nav="askme">
-        <div class="nav-icon">💬</div><div class="nav-label">Ask Me</div>
-      </div>
+      <div class="nav-item active" data-nav="home"><div class="nav-icon">🏠</div><div class="nav-label">Home</div></div>
+      <div class="nav-item" data-nav="signin"><div class="nav-icon">🔑</div><div class="nav-label">Sign In</div></div>
+      <div class="nav-item" data-nav="createaccount"><div class="nav-icon">👤</div><div class="nav-label">Create Account</div></div>
+      <div class="nav-item" data-nav="catalog"><div class="nav-icon">🌍</div><div class="nav-label">Catalog</div></div>
+      <div class="nav-item" data-nav="askme"><div class="nav-icon">💬</div><div class="nav-label">Ask Me</div></div>
     </div>
   </div>
 
   <script>
-    // ---------- Small helpers ----------
-    const $ = (s, r=document)=>r.querySelector(s);
+    // ---------------- Config ----------------
+    const CHAT_ENDPOINTS = ['/ask','/api/chat','/chat'];
+    const API_PRODUCTS = '/api/products';
+    const JSON_PRODUCTS = '/products.json';
+
+    // ---------------- Helpers ----------------
+    const $ = (sel,root=document)=>root.querySelector(sel);
+    const $$ = (sel,root=document)=>Array.from(root.querySelectorAll(sel));
     const chatThread = $('#chatThread');
     const chatStatus = $('#chatStatus');
-    const askBtn = $('#askBtn');
-    const aiInput = $('#aiInput');
 
-    // Endpoints: prefer /ask, then /api/chat, then /chat
-    const CHAT_ENDPOINTS = ['/ask','/api/chat','/chat'];
+    function setStatus(s){ chatStatus.textContent = s; }
+    function safe(s){ return (s ?? '').toString(); }
 
-    function setStatus(txt){ chatStatus.textContent = txt; }
-
-    function addBubble(role, text, {typing=false}={}){
-      const wrap = document.createElement('div');
-      wrap.className = `bubble ${role}`;
-      if (typing){
-        wrap.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
-      } else {
-        wrap.textContent = text;
+    function formatPrice(v){
+      if (v===null||v===undefined||v==='') return '$—';
+      if (typeof v==='number'){
+        if (Number.isInteger(v) && v>=100) return '$'+(v/100).toFixed(2);
+        return '$'+v.toFixed(2);
       }
-      chatThread.appendChild(wrap);
-      chatThread.scrollTop = chatThread.scrollHeight;
-      return wrap;
+      const s = String(v).trim();
+      if (s.startsWith('$')) return s;
+      const n = parseFloat(s);
+      if (!isFinite(n)) return '$—';
+      if (!s.includes('.') && n>=100) return '$'+(n/100).toFixed(2);
+      return '$'+n.toFixed(2);
     }
 
-    async function typeText(el, text, speed=14){
+    function addBubble(role, text, { typing=false }={}){
+      const b = document.createElement('div');
+      b.className = `bubble ${role}`;
+      if (typing){
+        b.innerHTML = `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`;
+      } else {
+        b.textContent = text;
+      }
+      chatThread.appendChild(b);
+      chatThread.scrollTop = chatThread.scrollHeight;
+      return b;
+    }
+
+    async function typeText(el, text, speed=12){
       el.textContent = '';
       for (let i=0;i<text.length;i++){
         el.textContent += text[i];
-        if (i % 3 === 0) await new Promise(r=>setTimeout(r, speed));
+        if (i%3===0) await new Promise(r=>setTimeout(r, speed));
         chatThread.scrollTop = chatThread.scrollHeight;
       }
     }
 
     async function askBackend(message){
-      let lastErr=null;
+      let err;
       for (const ep of CHAT_ENDPOINTS){
         try{
-          const r = await fetch(ep, {
+          const r = await fetch(ep,{
             method:'POST',
             headers:{'Content-Type':'application/json','Accept':'application/json'},
             body: JSON.stringify({ message, includeProducts:false })
@@ -282,63 +307,251 @@
           if (!r.ok) throw new Error('HTTP '+r.status);
           const data = await r.json().catch(()=> ({}));
           return data.reply || data.response || data.text || 'Sorry, no answer available.';
-        }catch(e){ lastErr=e; }
+        }catch(e){ err=e; }
       }
-      throw lastErr||new Error('All endpoints failed');
+      throw err || new Error('All endpoints failed');
     }
 
-    async function ask(message){
-      if (!message) return;
+    async function askInPlace(q){
+      if (!q) return;
       setStatus('Thinking…');
-      // user bubble
-      addBubble('user', message);
-      // bot typing bubble
-      const t = addBubble('bot','',{typing:true});
+      addBubble('user', q);
+      const typing = addBubble('bot','',{typing:true});
       try{
-        const reply = await askBackend(message);
-        // replace typing bubble with typewriter text
-        t.innerHTML = '';
-        await typeText(t, reply, 10);
+        const reply = await askBackend(q);
+        typing.innerHTML = '';
+        await typeText(typing, reply, 10);
       }catch(e){
-        t.innerHTML = '';
-        await typeText(t, '⚠️ Could not reach AI. Please try again.');
+        typing.innerHTML='';
+        await typeText(typing, '⚠️ Could not reach AI. Please try again.');
       }finally{
         setStatus('Ready');
       }
     }
 
-    // ---------- UI wiring ----------
-    document.addEventListener('DOMContentLoaded', ()=>{
-      // animate logo a touch
-      const logo=$('.logo');
-      setInterval(()=>{logo.style.transform='scale(1.02)';setTimeout(()=>logo.style.transform='',200);},3000);
+    // ---------------- Products ----------------
+    class Catalog {
+      constructor(){
+        this.results = $('#results');
+        this.emptyState = $('#emptyState');
+        this.searchBox = $('#searchBox');
+        this.clearBtn = $('#clearBtn');
+        this.loadMoreBtn = $('#loadMore');
 
-      // input enter
-      aiInput?.addEventListener('keydown', e=>{ if(e.key==='Enter'){ handleAsk(); }});
-      askBtn?.addEventListener('click', handleAsk);
+        this.catalog = [];   // full in-memory catalog (from JSON fallback)
+        this.query = '';
+        this.offset = 0;
+        this.pageSize = 8;
+        this.total = 0;
+
+        this.bind();
+        this.bootstrap();
+      }
+
+      bind(){
+        this.searchBox.addEventListener('input', ()=>{
+          this.query = this.searchBox.value.trim();
+          this.offset=0; this.render(true);
+        });
+        this.clearBtn.addEventListener('click', ()=>{
+          this.searchBox.value=''; this.query=''; this.offset=0; this.render(true);
+        });
+        this.loadMoreBtn.addEventListener('click', ()=> this.render());
+      }
+
+      async bootstrap(){
+        // Preload JSON for instant fallback
+        try{
+          const r = await fetch(JSON_PRODUCTS+'?bust='+Date.now());
+          if (r.ok) this.catalog = await r.json();
+        }catch{}
+        this.render(true);
+      }
+
+      async fetchServer(){
+        const params = new URLSearchParams({
+          q:this.query, offset:String(this.offset), limit:String(this.pageSize)
+        });
+        const r = await fetch(`${API_PRODUCTS}?${params.toString()}`);
+        if (!r.ok) throw new Error('No /api/products');
+        const data = await r.json();
+        if (!data || data.success===false) throw new Error('api error');
+        return { total: data.total ?? (data.items?.length||0), items: data.items ?? [] };
+      }
+
+      async fetchFallback(){
+        if (!this.catalog.length){
+          const r = await fetch(JSON_PRODUCTS+'?bust='+Date.now());
+          if (!r.ok) throw new Error('missing products.json');
+          this.catalog = await r.json();
+        }
+        const q = this.query.toLowerCase();
+        const all = this.catalog.filter(p=>{
+          if (!q) return true;
+          const hay = [
+            p.name,p.brand,p.category,p.description,p.usage,p.ingredients,p.suitableFor
+          ].filter(Boolean).join(' ').toLowerCase();
+          return hay.includes(q);
+        });
+        const items = all.slice(this.offset, this.offset+this.pageSize);
+        return { total: all.length, items };
+      }
+
+      async render(reset=false){
+        if (reset){
+          this.results.innerHTML=''; this.offset=0; this.total=0;
+        }
+
+        // skeletons
+        const sk = document.createElement('div');
+        sk.className='grid';
+        sk.innerHTML = Array.from({length:4}).map(()=>`
+          <div class="card">
+            <div class="imgph">Loading…</div>
+            <div class="meta">
+              <div class="brand"> </div>
+              <div class="name"> </div>
+              <div class="row"><div class="price"> </div><div class="was"> </div></div>
+              <div class="btn-line"><div class="btn btn-subtle" style="flex:1"> </div><div class="btn btn-accent" style="flex:1"> </div></div>
+            </div>
+          </div>`).join('');
+        this.results.appendChild(sk);
+
+        try{
+          let batch;
+          try{ batch = await this.fetchServer(); }
+          catch{ batch = await this.fetchFallback(); }
+
+          this.total = batch.total;
+          this.offset += batch.items.length;
+
+          const frag = document.createDocumentFragment();
+          for (const p of batch.items) frag.appendChild(this.card(p));
+          this.results.replaceChild(frag, sk);
+
+          const hasAny = this.results.children.length>0;
+          this.emptyState.style.display = hasAny ? 'none' : 'block';
+
+          const hasMore = this.offset < this.total;
+          this.loadMoreBtn.disabled = !hasMore;
+          this.loadMoreBtn.textContent = hasMore ? 'Load more' : 'No more items';
+        }catch(e){
+          console.error('render error', e);
+          this.results.removeChild(sk);
+          this.emptyState.style.display='block';
+          this.loadMoreBtn.disabled = true;
+          this.loadMoreBtn.textContent='Load more';
+        }
+      }
+
+      card(p){
+        const name = safe(p.name||'Beauty product');
+        const brand = safe(p.brand||'Salon Pro');
+        const price = formatPrice(p.price);
+        const was = (p.was!==undefined&&p.was!==null&&p.was!=='') ? formatPrice(p.was) : '';
+        const badge = p.category ? `<span class="badge">${safe(p.category)}</span>` : '';
+        const img = p.image||p.img;
+
+        const el = document.createElement('div');
+        el.className='card';
+        el.innerHTML = `
+          ${img ? `<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">` : `<div class="imgph">No image</div>`}
+          <div class="meta">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+              <div>
+                <div class="brand">${brand}</div>
+                <div class="name">${name}</div>
+              </div>
+              ${badge}
+            </div>
+            <div class="row"><div class="price">${price}</div><div class="was">${was}</div></div>
+            <div class="btn-line">
+              <button class="btn btn-subtle" data-action="details" style="flex:1">Details</button>
+              <button class="btn btn-accent" data-action="add" style="flex:1">Add</button>
+            </div>
+          </div>
+        `;
+
+        el.querySelector('[data-action="details"]').addEventListener('click', ()=>{
+          const bits=[];
+          if (p.description) bits.push(p.description);
+          if (p.usage) bits.push('Usage: '+p.usage);
+          if (p.ingredients) bits.push('Key ingredients: '+p.ingredients);
+          if (p.suitableFor) bits.push('Perfect for: '+p.suitableFor);
+          alert(`${name}\n\n${bits.join('\n\n')||'Professional salon product designed for optimal results.'}`);
+        });
+
+        el.querySelector('[data-action="add"]').addEventListener('click', ()=>{
+          alert('Added to bag (demo)');
+        });
+
+        return el;
+      }
+    }
+
+    // ---------------- App wiring ----------------
+    const ui = {
+      cat: null
+    };
+
+    function handleAsk(){
+      const q = ($('#aiInput')?.value||'').trim();
+      if (!q){
+        addBubble('bot','Try: “Best makeup for pale skin with cool undertones.”');
+        return;
+      }
+      askInPlace(q);
+    }
+
+    function applyFilter(term){
+      const sb = $('#searchBox');
+      sb.value = term;
+      ui.cat.query = term;
+      ui.cat.offset = 0;
+      ui.cat.render(true);
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      // logo gentle pulse
+      const logo = $('.logo');
+      setInterval(()=>{ logo.style.transform='scale(1.02)'; setTimeout(()=>logo.style.transform='',180); }, 3000);
+
+      // build catalog
+      ui.cat = new Catalog();
+
+      // input + buttons
+      $('#aiInput')?.addEventListener('keydown', e=>{ if(e.key==='Enter') handleAsk(); });
+      $('#askBtn')?.addEventListener('click', handleAsk);
       $('#consultBtn')?.addEventListener('click', handleAsk);
 
-      // quick action cards -> ask in-place (no navigation)
+      // quick actions → ask + filter
       $('#quickGrid')?.addEventListener('click', (e)=>{
         const card = e.target.closest('.action-card');
         if (!card) return;
-        const q = card.getAttribute('data-preset');
-        // tap feedback
-        card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',120);
-        if (q) ask(q);
+        const preset = card.getAttribute('data-preset');
+        const filter = card.getAttribute('data-filter');
+        // visual feedback
+        card.style.transform='scale(0.96)'; setTimeout(()=> card.style.transform='',110);
+        if (preset) askInPlace(preset);
+        if (filter){
+          // sale filter = show items with a 'was' higher than price (fallback: keyword search)
+          if (filter==='sale'){
+            $('#searchBox').value='';
+            ui.cat.query=''; // fetch all then local filter on render fallback
+            // For server endpoint, we simulate by searching 'sale' (your API can interpret)
+            ui.cat.query='sale';
+          } else {
+            applyFilter(filter);
+          }
+        }
       });
 
-      // global products promo — keep as navigation if you want
-      $('#globalBtn')?.addEventListener('click', ()=>{ location.href='/catalog.html'; });
-
-      // recommendations CTA
-      $('#recCard')?.addEventListener('click', ()=>{
-        const profile = JSON.parse(localStorage.getItem('userProfile')||'{}');
-        if (profile.name && profile.email && profile.password) location.href='account.html';
-        else showAccountPrompt();
+      // basket demo
+      $('#basketBtn')?.addEventListener('click', ()=>{
+        alert('🛒 Your Beauty Basket:\n\n• K-Beauty Serum - $29.99\n• French Moisturizer - $45.50\n• Vitamin C Complex - $52.01\n\nTotal: $127.50\n\nCheckout coming soon!');
       });
 
-      // bottom nav
+      // bottom nav (kept as-is)
       document.querySelectorAll('.nav-item').forEach(nav=>{
         nav.addEventListener('click', ()=>{
           document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -348,39 +561,11 @@
             case 'signin': location.href='/signin.html'; break;
             case 'createaccount': location.href='/createaccount.html'; break;
             case 'catalog': location.href='/catalog.html'; break;
-            case 'askme': location.href='/askme.html'; break;
+            case 'askme': location.href='/askme.html'; break; // if you want this to be in-page too, we can point to #chatCard
           }
         });
       });
-
-      // demo basket
-      $('#basketBtn')?.addEventListener('click', ()=>{
-        alert('🛒 Your Beauty Basket:\n\n• K-Beauty Serum - $29.99\n• French Moisturizer - $45.50\n• Vitamin C Complex - $52.01\n\nTotal: $127.50\n\nCheckout coming soon!');
-      });
     });
-
-    function handleAsk(){
-      const q = ($('#aiInput')?.value||'').trim();
-      if (!q) { addBubble('bot','Try: “Best makeup for pale skin with cool undertones.”'); return; }
-      ask(q);
-    }
-
-    function showAccountPrompt(){
-      const html = `
-      <div style="position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="this.remove()">
-        <div style="background:#fff;border-radius:20px;padding:28px;max-width:350px;text-align:center;" onclick="event.stopPropagation()">
-          <div style="font-size:44px;margin-bottom:14px;">✨</div>
-          <h2 style="color:#2c2c2c;margin-bottom:10px;font-size:20px;">Get Personalized Recommendations</h2>
-          <p style="color:#666;margin-bottom:18px;line-height:1.5;">Create an account or sign in to receive AI-powered beauty recommendations tailored just for you!</p>
-          <div style="display:flex;flex-direction:column;gap:10px;">
-            <button onclick="location.href='createaccount.html'" style="background:linear-gradient(135deg,#B8860B,#DAA520);color:#fff;border:none;padding:12px 20px;border-radius:22px;font-weight:600;cursor:pointer;font-size:15px;">Create Account</button>
-            <button onclick="location.href='signin.html'" style="background:#f0f0f0;color:#333;border:none;padding:12px 20px;border-radius:22px;font-weight:600;cursor:pointer;font-size:15px;">Sign In</button>
-            <button onclick="document.querySelector('[style*=&quot;z-index: 10000&quot;]')?.remove()" style="background:none;border:none;color:#888;padding:8px;cursor:pointer;font-size:13px;">Maybe Later</button>
-          </div>
-        </div>
-      </div>`;
-      document.body.insertAdjacentHTML('beforeend', html);
-    }
   </script>
 </body>
 </html>
