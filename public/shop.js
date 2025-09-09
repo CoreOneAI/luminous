@@ -1,320 +1,202 @@
-<!-- Make sure this file is saved as public/shop.js and referenced by your index.html -->
-<script>
+/* Luminous Beauty front-end logic
+   - Mobile card UI intact (uses styles.css)
+   - Ask AI independent of products (calls /ask)
+   - Product grid reads /products.json (or /api/products if present)
+*/
+
 (() => {
-  /* =========================
-     Luminous Beauty – Shop UI
-     - Loads catalog (/products.json)
-     - Client-side search & filters
-     - “Ask AI” (POST /ask) – independent of catalog
-     - Moodboard palette extraction (client-side Canvas)
-     ========================= */
+  const $ = sel => document.querySelector(sel);
 
-  // ---- DOM hooks (defensive: only bind if present) ----
-  const $$ = (sel) => document.querySelector(sel);
-  const grid         = $$('#product-grid');         // cards go here
-  const searchInput  = $$('#search-input');         // text input
-  const askInput     = $$('#ask-input');            // chat input
-  const askBtn       = $$('#ask-submit');           // chat send button
-  const askOut       = $$('#ask-output');           // chat output container
-  const moodUpload   = $$('#mood-upload');          // <input type=file> for moodboard
-  const paletteWrap  = $$('#palette');              // palette swatches container
-  const statusBar    = $$('#status');               // optional status text
+  const askInput = $('#askInput');
+  const askBtn   = $('#askBtn');
+  const chatlog  = $('#chatlog');
 
-  // ---- State ----
-  let CATALOG = [];       // full dataset
-  let FILTERED = [];      // current view
+  const q     = $('#q');
+  const cat   = $('#cat');
+  const grid  = $('#grid');
+  const empty = $('#empty');
 
-  // ---- Utils ----
+  // Cache
+  let PRODUCTS = [];
+  let FILTERED = [];
+
+  // --- Utilities -------------------------------------------------------------
+
   function formatCents(value) {
-    // Handles dollars or cents, strings or numbers.
-    if (value == null || value === '') return '$0.00';
-    const n = Number(value);
-    if (Number.isNaN(n)) return '$0.00';
-    // Assume cents if a large integer, else treat as dollars
-    const dollars = (n >= 1000 && Number.isInteger(n)) ? n / 100 : n;
-    return `$${dollars.toFixed(2)}`;
-  }
-
-  function escapeHTML(s) {
-    return String(s || '')
-      .replaceAll('&','&amp;')
-      .replaceAll('<','&lt;')
-      .replaceAll('>','&gt;')
-      .replaceAll('"','&quot;')
-      .replaceAll("'","&#039;");
-  }
-
-  function setStatus(text) {
-    if (!statusBar) return;
-    statusBar.textContent = text || '';
-  }
-
-  // ---- Catalog loader ----
-  async function loadCatalog() {
-    try {
-      setStatus('Loading products…');
-      const bust = Date.now();
-      const r = await fetch(`/products.json?bust=${bust}`, { cache: 'no-store' });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      CATALOG = await r.json();
-      FILTERED = [...CATALOG];
-      renderProducts(FILTERED);
-      setStatus(`Loaded ${CATALOG.length} products`);
-    } catch (err) {
-      console.error('Catalog load failed:', err);
-      setStatus('Failed to load products');
-      if (grid) grid.innerHTML = `
-        <div class="empty">
-          <div class="empty-title">No products found</div>
-          <div class="empty-sub">Try reloading or check /products.json</div>
-        </div>`;
+    // Accept integer cents OR dollar floats
+    if (value == null || isNaN(value)) return '$—';
+    let cents;
+    if (Number.isInteger(value)) {
+      if (value < 100 && value >= 0) cents = Math.round(value * 100);
+      else cents = value;
+    } else {
+      cents = Math.round(Number(value) * 100);
     }
+    return `$${(cents / 100).toFixed(2)}`;
   }
 
-  // ---- Product card ----
-  function card(p) {
-    const img = p.image || p.img || 'images/placeholder.jpg';
-    return `
-    <article class="card" data-id="${escapeHTML(p.id)}">
-      <div class="card-media">
-        <img src="${escapeHTML(img)}" alt="${escapeHTML(p.name)}" loading="lazy" />
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">${escapeHTML(p.name)}</h3>
-        <div class="card-meta">
-          <span class="brand">${escapeHTML(p.brand || '')}</span>
-          ${p.rating ? `<span class="rating">⭐ ${escapeHTML(p.rating)}</span>` : ''}
-        </div>
-        <div class="price-row">
-          <span class="price">${formatCents(p.price)}</span>
-          ${p.was ? `<span class="was">${formatCents(p.was)}</span>` : ''}
-        </div>
-        <p class="desc">${escapeHTML(p.description || '')}</p>
-        <div class="card-actions">
-          <button class="btn add-to-cart" data-id="${escapeHTML(p.id)}">Add to Bag</button>
-          <button class="btn outline view-details" data-id="${escapeHTML(p.id)}">Details</button>
-        </div>
-      </div>
-    </article>`;
+  function el(tagName, className, text) {
+    const el = document.createElement(tagName);
+    if (className) el.className = className;
+    if (text != null) el.textContent = text;
+    return el;
+  }
+
+  function bustUrl(url) {
+    const s = (url.includes('?') ? '&' : '?') + 'bust=' + Date.now();
+    return url + s;
+  }
+
+  // --- Rendering -------------------------------------------------------------
+
+  function productCard(p) {
+    const card = el('div', 'cardx');
+    // Image
+    const imgwrap = el('div', 'imgwrap');
+    if (p.image) {
+      const img = new Image();
+      img.alt = p.name || 'Product image';
+      img.loading = 'lazy';
+      img.src = p.image;
+      imgwrap.appendChild(img);
+    } else {
+      imgwrap.textContent = '🧴';
+      imgwrap.setAttribute('aria-label', 'Product');
+    }
+    card.appendChild(imgwrap);
+
+    // Title & meta
+    card.appendChild(el('div', 'title', p.name || 'Untitled'));
+    const sub = el('div', 'muted',
+      [p.brand, p.shade, p.size].filter(Boolean).join(' • ')
+      || (p.brand || p.category || '')
+    );
+    card.appendChild(sub);
+
+    // Price
+    const priceRow = el('div', 'price');
+    priceRow.appendChild(el('div', 'now', formatCents(p.price)));
+    if (p.was != null) priceRow.appendChild(el('div', 'was', formatCents(p.was)));
+    card.appendChild(priceRow);
+
+    // Tags
+    const tags = el('div', 'tags');
+    ['category','brand','tone','finish']
+      .filter(k => p[k])
+      .forEach(k => { const t = el('span', 'tag', p[k]); tags.appendChild(t); });
+    card.appendChild(tags);
+
+    // Button
+    const btn = el('button', 'addbtn', 'Add to bag');
+    btn.addEventListener('click', () => {
+      btn.textContent = 'Added ✓';
+      btn.disabled = true;
+      btn.style.opacity = 0.8;
+      setTimeout(() => {
+        btn.textContent = 'Add to bag';
+        btn.disabled = false;
+        btn.style.opacity = 1;
+      }, 1200);
+    });
+    card.appendChild(btn);
+
+    return card;
   }
 
   function renderProducts(list) {
-    if (!grid) return;
-    if (!Array.isArray(list) || list.length === 0) {
-      grid.innerHTML = `
-        <div class="empty">
-          <div class="empty-title">No products found</div>
-          <div class="empty-sub">Try a different search or be more specific.</div>
-        </div>`;
+    grid.innerHTML = '';
+    if (!list || list.length === 0) {
+      empty.classList.remove('hidden');
       return;
     }
-    grid.innerHTML = list.map(card).join('');
+    empty.classList.add('hidden');
+    const frag = document.createDocumentFragment();
+    list.forEach(p => frag.appendChild(productCard(p)));
+    grid.appendChild(frag);
   }
 
-  // ---- Search / filter ----
-  function applySearch(q) {
-    const needle = (q || '').trim().toLowerCase();
-    if (!needle) {
-      FILTERED = [...CATALOG];
-    } else {
-      FILTERED = CATALOG.filter(p => {
-        const hay = [
-          p.name, p.brand, p.category, p.description, p.tone, p.undertone, p.type, p.tags?.join(' ')
-        ].filter(Boolean).join(' ').toLowerCase();
-        return hay.includes(needle);
-      });
-    }
+  function applyFilters() {
+    const qv = (q.value || '').trim().toLowerCase();
+    const cv = (cat.value || '').trim().toLowerCase();
+
+    FILTERED = PRODUCTS.filter(p => {
+      const hay = [
+        p.name, p.brand, p.category, p.finish, p.tone, p.shade, p.description
+      ].filter(Boolean).join(' ').toLowerCase();
+
+      const catOk = !cv || (p.category || '').toLowerCase() === cv;
+      const qOk   = !qv || hay.includes(qv);
+      return catOk && qOk;
+    });
+
     renderProducts(FILTERED);
   }
 
-  // ---- Ask AI (independent of catalog) ----
-  async function askAI(message) {
-    if (!askOut) return;
-    const q = String(message || '').trim();
-    if (!q) return;
-    // Show user bubble
-    appendMsg('user', q);
+  // --- Data ------------------------------------------------------------------
 
+  async function loadProducts() {
     try {
-      appendMsg('bot', 'Thinking…');
-      const r = await fetch('/ask', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({ message: q })
-      });
-      if (!r.ok) throw new Error(`HTTP ${r.status}`);
-      const data = await r.json();
-      // Replace last "Thinking…" bubble with reply
-      replaceLastBot(data.reply || 'I could not find an answer right now.');
-
-      // Optional: naive follow-up – try to surface related products locally
-      const hints = extractKeywords(q);
-      if (hints.length && CATALOG.length) {
-        const recs = CATALOG.filter(p => {
-          const hay = [p.name, p.brand, p.category, p.description, p.tags?.join(' ')].filter(Boolean).join(' ').toLowerCase();
-          return hints.some(k => hay.includes(k));
-        }).slice(0, 6);
-        if (recs.length) {
-          appendMsg('bot', 'You might also like these (based on your question):');
-          appendProductStrip(recs);
-        }
-      }
+      const res = await fetch(bustUrl('/products.json'), { cache: 'no-store' });
+      if (!res.ok) throw new Error('Failed to load products.json');
+      const json = await res.json();
+      PRODUCTS = Array.isArray(json) ? json : (json.products || []);
+      // Populate category filter
+      const categories = Array.from(new Set(PRODUCTS.map(p => p.category).filter(Boolean))).sort();
+      cat.innerHTML = '<option value="">All categories</option>' +
+        categories.map(c => `<option>${c}</option>`).join('');
+      applyFilters();
     } catch (err) {
-      console.error('Ask AI failed:', err);
-      replaceLastBot('Sorry—AI is temporarily unavailable. Please try again.');
+      console.error('Failed to load products:', err);
+      PRODUCTS = [];
+      applyFilters();
     }
   }
 
-  function extractKeywords(text) {
-    // Tiny keyword pick: skin, tone words, hair style words, etc.
-    const base = String(text || '').toLowerCase();
-    const vocab = [
-      'pale','fair','light','medium','tan','deep','dark',
-      'cool','warm','neutral','olive',
-      'dry','oily','combination','sensitive',
-      'matte','dewy','natural','full coverage',
-      'lip','blush','foundation','concealer','bronzer','highlighter','mascara','eyeliner','brow',
-      'curly','wavy','straight','pixie','bob','balayage','foil','blonde','brunette','red','black'
-    ];
-    return vocab.filter(w => base.includes(w));
+  // --- Ask AI (independent) --------------------------------------------------
+
+  function pushMsg(who, text) {
+    const m = el('div', `msg ${who}`);
+    m.textContent = text;
+    chatlog.appendChild(m);
+    chatlog.scrollTop = chatlog.scrollHeight;
   }
 
-  // ---- Chat UI helpers ----
-  function appendMsg(role, text) {
-    if (!askOut) return;
-    const bubble = document.createElement('div');
-    bubble.className = `msg ${role}`;
-    bubble.innerHTML = `<div class="msg-inner">${escapeHTML(text)}</div>`;
-    askOut.appendChild(bubble);
-    askOut.scrollTop = askOut.scrollHeight;
-  }
+  async function handleAsk() {
+    const text = (askInput.value || '').trim();
+    if (!text) return;
+    pushMsg('user', text);
+    askInput.value = '';
 
-  function replaceLastBot(text) {
-    if (!askOut) return;
-    const bots = askOut.querySelectorAll('.msg.bot');
-    const last = bots[bots.length - 1];
-    if (last) last.querySelector('.msg-inner').textContent = text;
-    askOut.scrollTop = askOut.scrollHeight;
-  }
-
-  function appendProductStrip(items) {
-    const wrap = document.createElement('div');
-    wrap.className = 'product-strip';
-    wrap.innerHTML = items.map(p => `
-      <div class="strip-item">
-        <img src="${escapeHTML(p.image || 'images/placeholder.jpg')}" alt="${escapeHTML(p.name)}" loading="lazy"/>
-        <div class="si-title">${escapeHTML(p.name)}</div>
-        <div class="si-price">${formatCents(p.price)}</div>
-      </div>
-    `).join('');
-    askOut.appendChild(wrap);
-    askOut.scrollTop = askOut.scrollHeight;
-  }
-
-  // ---- Moodboard: client-side palette extraction ----
-  async function extractPaletteFromFile(file, maxColors = 5) {
-    const url = URL.createObjectURL(file);
     try {
-      const img = await new Promise((res, rej) => {
-        const i = new Image();
-        i.onload = () => res(i);
-        i.onerror = rej;
-        i.src = url;
+      const res = await fetch('/ask', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ message: text })
       });
-      const canvas = document.createElement('canvas');
-      const w = 200; const h = Math.max(50, Math.round((img.height / img.width) * w) || 200);
-      canvas.width = w; canvas.height = h;
-      const ctx = canvas.getContext('2d', { willReadFrequently: true });
-      ctx.drawImage(img, 0, 0, w, h);
-      const { data } = ctx.getImageData(0, 0, w, h);
-
-      // coarse quantization
-      const bucket = (v) => (v >> 4) << 4; // steps of 16
-      const freq = new Map();
-      for (let i = 0; i < data.length; i += 4) {
-        const a = data[i + 3]; if (a < 200) continue;
-        const r = bucket(data[i]), g = bucket(data[i + 1]), b = bucket(data[i + 2]);
-        const key = `${r},${g},${b}`;
-        freq.set(key, (freq.get(key) || 0) + 1);
-      }
-      const top = [...freq.entries()].sort((a,b)=>b[1]-a[1]).slice(0, maxColors).map(([k]) => {
-        const [r,g,b] = k.split(',').map(Number);
-        return `rgb(${r}, ${g}, ${b})`;
-      });
-      return top;
-    } finally {
-      URL.revokeObjectURL(url);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const data = await res.json();
+      const reply = (data && data.reply) || 'Sorry — I could not find helpful suggestions.';
+      pushMsg('bot', reply);
+    } catch (err) {
+      console.error('Ask failed:', err);
+      pushMsg('bot', 'An error occurred while processing your request. Please try again.');
     }
   }
 
-  function renderPalette(colors) {
-    if (!paletteWrap) return;
-    if (!colors || !colors.length) {
-      paletteWrap.innerHTML = '';
-      return;
-    }
-    paletteWrap.innerHTML = colors.map(c => `
-      <div class="swatch" title="${escapeHTML(c)}" style="background:${c}"></div>
-    `).join('');
-  }
+  // --- Events & Boot ---------------------------------------------------------
 
-  // ---- Event bindings ----
   function bind() {
-    if (searchInput) {
-      searchInput.addEventListener('input', (e) => applySearch(e.target.value), { passive: true });
-    }
-    if (askBtn && askInput) {
-      askBtn.addEventListener('click', () => askAI(askInput.value));
-      askInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') askAI(askInput.value);
-      });
-    }
-    if (moodUpload) {
-      moodUpload.addEventListener('change', async (e) => {
-        const f = e.target.files?.[0];
-        if (!f) return;
-        setStatus('Analyzing palette…');
-        try {
-          const colors = await extractPaletteFromFile(f, 5);
-          renderPalette(colors);
-          setStatus('Palette ready');
-        } catch (err) {
-          console.error('Palette error:', err);
-          setStatus('Could not extract palette');
-        }
-      });
-    }
-
-    // Delegate card buttons
-    if (grid) {
-      grid.addEventListener('click', (e) => {
-        const btn = e.target.closest('button');
-        if (!btn) return;
-        const id = btn.getAttribute('data-id');
-        if (btn.classList.contains('add-to-cart')) {
-          // Stub: add to cart behavior
-          setStatus(`Added to bag: ${id}`);
-        } else if (btn.classList.contains('view-details')) {
-          const p = CATALOG.find(x => String(x.id) === String(id));
-          if (p) showDetails(p);
-        }
-      });
-    }
+    askBtn.addEventListener('click', handleAsk);
+    askInput.addEventListener('keydown', e => { if (e.key === 'Enter') handleAsk(); });
+    q.addEventListener('input', applyFilters, { passive: true });
+    cat.addEventListener('change', applyFilters, { passive: true });
   }
 
-  function showDetails(p) {
-    alert(`${p.name}\n\n${p.description || 'No description.'}\n\nPrice: ${formatCents(p.price)}`);
-  }
-
-  // ---- Boot ----
-  async function boot() {
+  function boot() {
     bind();
-    await loadCatalog();
+    loadProducts();
   }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', boot);
-  } else {
-    boot();
-  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
 })();
-</script>
