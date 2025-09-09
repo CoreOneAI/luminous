@@ -1,86 +1,50 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-<title>Luminous Beauty</title>
-<link rel="stylesheet" href="/styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Luminous Beauty</title>
+  <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<header class="topbar">
-  <div class="brand">💡 Luminous</div>
-  <a class="small-link" href="/stylist" target="_blank" rel="noopener">Stylist Portal</a>
-</header>
+  <div id="app" class="app">
+    <header class="topbar">
+      <div class="brand">💫 Luminous</div>
+      <div class="pill">Demo</div>
+    </header>
 
-<main class="wrap">
-  <section class="card">
-    <h2>Ask AI (independent)</h2>
-    <p class="muted">Tell me the vibe, event, skin/hair details, celebs you like, etc.</p>
-    <textarea id="prompt" placeholder="e.g., Soft glam for daytime; pale skin, cool undertone; blue eyes; shoulder-length hair;"></textarea>
+    <main class="content">
+      <!-- Ask AI -->
+      <section class="card">
+        <h2 class="card-title">Ask AI for Ideas</h2>
+        <form id="ask-form" class="ask-row">
+          <input id="ask-input" class="ask-input" placeholder="e.g., Best makeup for pale skin with cool undertones">
+          <button class="btn">Ask</button>
+        </form>
+        <div id="ask-log" class="chatlog" aria-live="polite"></div>
+      </section>
 
-    <div class="row">
-      <div class="field">
-        <label>Skin Undertone</label>
-        <select id="undertone">
-          <option value="">—</option>
-          <option>cool</option>
-          <option>neutral</option>
-          <option>warm</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Hair Type</label>
-        <select id="hairtype">
-          <option value="">—</option>
-          <option>straight</option>
-          <option>wavy</option>
-          <option>curly</option>
-          <option>coily</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Event</label>
-        <select id="event">
-          <option value="">—</option>
-          <option>everyday</option>
-          <option>wedding guest</option>
-          <option>photoshoot</option>
-          <option>interview</option>
-          <option>date night</option>
-        </select>
-      </div>
-    </div>
+      <!-- Catalog -->
+      <section class="card">
+        <div class="row-between">
+          <h2 class="card-title">Your Recommendations</h2>
+          <input id="q" class="search" placeholder="Search products">
+        </div>
+        <div id="grid" class="grid"></div>
+        <div id="empty" class="empty hidden">
+          <strong>No products found</strong>
+          <div class="muted">Try another search or clear filters.</div>
+        </div>
+      </section>
+    </main>
 
-    <div class="uploader">
-      <label class="btn-secondary" for="images">Add inspo images</label>
-      <input id="images" type="file" accept="image/*" multiple />
-      <div id="thumbs" class="thumbs"></div>
-    </div>
+    <nav class="navbar">
+      <button class="navbtn active">Home</button>
+      <button class="navbtn">Saved</button>
+      <button class="navbtn">Profile</button>
+    </nav>
+  </div>
 
-    <div id="palette" class="palette"></div>
-
-    <div class="actions">
-      <button id="create" class="btn">Create Brief</button>
-      <button id="reset" class="btn-ghost">Reset</button>
-    </div>
-  </section>
-
-  <section id="results" class="card hidden">
-    <div class="row-split">
-      <h2>AI Brief</h2>
-      <div class="row-gap">
-        <a id="shareLink" class="small-link" target="_blank" rel="noopener">Open Stylist View</a>
-        <a id="pdfLink" class="btn-small" target="_blank" rel="noopener">Export PDF</a>
-      </div>
-    </div>
-    <div id="ai"></div>
-  </section>
-</main>
-
-<footer class="foot">
-  <div>Demo • No PII stored • Images kept in session only</div>
-</footer>
-
-<script src="/shop.js" defer></script>
+  <script src="/shop.js" type="module"></script>
 </body>
 </html>
