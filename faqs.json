@@ -1,0 +1,54 @@
+{
+  "hair_care": {
+    "questions": [
+      "How often should I wash my hair?",
+      "What's the difference between sulfate and sulfate-free shampoo?",
+      "How do I protect my colored hair?",
+      "Why is my hair frizzy after washing?",
+      "What's a hair mask and how often should I use it?",
+      "Should I brush my hair when it's wet?",
+      "What's the best way to prevent split ends?"
+    ],
+    "answers": {
+      "How often should I wash my hair?": "It depends on your hair type: oily hair 2-3 times per week, dry hair 1-2 times per week, normal hair every other day. Over-washing can strip natural oils.",
+      "What's the difference between sulfate and sulfate-free shampoo?": "Sulfates are strong cleansers that can strip color and natural oils. Sulfate-free is gentler, better for colored or damaged hair, but may not lather as much.",
+      "How do I protect my colored hair?": "Use color-safe shampoo, wash in cool water, limit heat styling, apply UV protection, and use a weekly color-protecting mask.",
+      "Why is my hair frizzy after washing?": "Usually from towel-drying roughly, hot water, or lack of moisture. Try cool water, gentle patting with a microfiber towel, and leave-in conditioner.",
+      "What's a hair mask and how often should I use it?": "Hair masks are intensive treatments that repair and nourish. Use weekly for normal hair, 2-3 times for damaged hair.",
+      "Should I brush my hair when it's wet?": "Wet hair is more fragile. Use a wide-tooth comb starting from ends, or a wet brush designed for wet hair detangling.",
+      "What's the best way to prevent split ends?": "Regular trims every 6-8 weeks, use heat protectant, avoid over-brushing, sleep on silk pillowcases, and deep condition regularly."
+    }
+  },
+  "color_services": {
+    "questions": [
+      "How long does hair color last?",
+      "What's the difference between highlights and balayage?",
+      "Can I color my hair if it's damaged?",
+      "How soon can I wash my hair after coloring?",
+      "What is toner and do I need it?"
+    ],
+    "answers": {
+      "How long does hair color last?": "Permanent color lasts 4-6 weeks for roots, semi-permanent 4-8 washes, highlights 2-4 months depending on maintenance.",
+      "What's the difference between highlights and balayage?": "Highlights use foils for uniform streaks, balayage is hand-painted for a more natural, graduated look.",
+      "Can I color my hair if it's damaged?": "Depends on damage level. We'll assess your hair's condition first and may recommend treatments before coloring.",
+      "How soon can I wash my hair after coloring?": "Wait 48-72 hours to allow the color to fully set. Use cool water and color-safe products when you do wash.",
+      "What is toner and do I need it?": "Toner adjusts color undertones after lightening. You'll need it if your hair has unwanted yellow or orange tones."
+    }
+  },
+  "salon_services": {
+    "questions": [
+      "How long does a balayage appointment take?",
+      "What's included in a blowout service?",
+      "How often should I get a trim?",
+      "What's a keratin treatment?",
+      "Do I need to book a consultation first?"
+    ],
+    "answers": {
+      "How long does a balayage appointment take?": "Typically 2-4 hours depending on hair length and desired result. Longer hair and lighter results take more time.",
+      "What's included in a blowout service?": "Shampoo, conditioning treatment, blow dry, and styling. Add-ons like curls or updos available.",
+      "How often should I get a trim?": "Every 6-8 weeks for healthy hair, every 4-6 weeks if you have damaged ends or are growing out a specific cut.",
+      "What's a keratin treatment?": "A smoothing treatment that reduces frizz and curl, making hair more manageable. Lasts 3-4 months.",
+      "Do I need to book a consultation first?": "For major color changes or chemical services, yes. For trims and basic color touch-ups, you can book the service directly."
+    }
+  }
+}
