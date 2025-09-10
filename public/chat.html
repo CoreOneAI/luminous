@@ -2,227 +2,464 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <!-- This viewport tag is critical for making the page look correct on mobile devices -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Luminous Chat</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminous Beauty</title>
   <style>
-    body {
-      font-family: 'Inter', sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      background-color: #000;
-      color: #333;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .app {
+    
+    /* Browser Background */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    /* Phone Container - This creates the mobile illusion */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #000;
+      border-radius: 40px;
+      padding: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Phone Screen */
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
       display: flex;
       flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-      background-color: #f2f2f7;
-      /* Constrains the app to a mobile-like width on larger screens */
-      max-width: 100%;
-      margin: 0 auto;
     }
-    .status-bar {
-      height: 44px; /* Mimics iOS status bar height */
-      background-color: #000;
+    
+    /* Flutter AppBar */
+    .app-bar {
+      background: #000;
+      color: #fff;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .nav-bar {
-      background-color: #fff;
-      border-bottom: 1px solid #e5e7eb;
+    
+    .app-bar-leading {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
-    .chat-messages {
+    
+    .app-bar-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-right: 48px;
+    }
+    
+    /* Category Chip */
+    .category-chip {
+      background: #f5f5f5;
+      padding: 12px 16px;
+      margin: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    /* Flutter Scaffold Body */
+    .scaffold-body {
       flex: 1;
       overflow-y: auto;
-      padding: 16px;
+      background: #fafafa;
+      position: relative;
     }
-    .chat-bubble {
-      max-width: 80%;
-      margin-bottom: 12px;
-      padding: 12px;
-      border-radius: 20px;
-    }
-    .chat-bubble.user {
-      background-color: #007aff;
-      color: #fff;
-      margin-left: auto;
-      text-align: right;
-    }
-    .chat-bubble.assistant {
-      background-color: #e5e7eb;
-      color: #333;
-      margin-right: auto;
-      text-align: left;
-    }
-    .chat-input-bar {
-      background-color: #f2f2f7;
-      border-top: 1px solid #e5e7eb;
+    
+    /* Product GridView */
+    .grid-view {
       padding: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
     }
-    .input-field {
-      padding: 10px 16px;
-      border-radius: 24px;
-      border: 1px solid #d1d5db;
-      background-color: #fff;
-      resize: none;
-      outline: none;
-      max-height: 120px;
-      line-height: 1.5;
+    
+    /* Product Card - Flutter Style */
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
     }
-    .send-button {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background-color: #007aff;
+    
+    .product-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+    
+    .product-body {
+      padding: 10px;
+    }
+    
+    .product-brand {
+      font-size: 10px;
+      color: #757575;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+    
+    .product-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #212121;
+      margin: 4px 0;
+      line-height: 1.2;
+      height: 30px;
+      overflow: hidden;
+    }
+    
+    .product-subtitle {
+      font-size: 11px;
+      color: #757575;
+      line-height: 1.2;
+      height: 26px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    .product-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 8px;
+    }
+    
+    /* Flutter ElevatedButton */
+    .elevated-button {
+      width: 100%;
+      height: 32px;
+      background: #000;
       color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .tab-bar {
-      background-color: #fff;
-      border-top: 1px solid #e5e7eb;
+    
+    .elevated-button:hover {
+      background: #333;
     }
-    .tab-item {
-      color: #6b7280;
+    
+    .elevated-button:active {
+      transform: scale(0.98);
     }
-    .tab-item.active {
-      color: #007aff;
+    
+    /* Flutter BottomNavigationBar */
+    .bottom-nav {
+      background: #fff;
+      height: 56px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    
+    .nav-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #757575;
+      transition: all 0.2s;
+    }
+    
+    .nav-item.active {
+      color: #000;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+    }
+    
+    /* Flutter FloatingActionButton */
+    .fab {
+      position: absolute;
+      bottom: 70px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background: #000;
+      color: #fff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    
+    .fab:hover {
+      transform: scale(1.05);
+    }
+    
+    .fab:active {
+      transform: scale(0.95);
+    }
+    
+    /* Loading Indicator */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      grid-column: 1/-1;
+    }
+    
+    .circular-progress {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Empty State Widget */
+    .empty-widget {
+      grid-column: 1/-1;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+    
+    .empty-text {
+      font-size: 14px;
+      color: #757575;
+    }
+    
+    /* Responsive for smaller screens */
+    @media (max-width: 425px) {
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+      }
+      
+      .phone-screen {
+        border-radius: 0;
+      }
     }
   </style>
 </head>
-<body class="bg-gray-900">
-  <!-- This is the main container for the app, simulating a phone screen -->
-  <div class="app max-w-sm mx-auto">
-    <!-- Status Bar -->
-    <div class="status-bar bg-black text-white flex justify-between items-center px-4 text-xs font-light">
-      <span>9:41</span>
-      <div class="flex items-center space-x-1">
-        <span>⚡</span>
-        <span>📶</span>
-        <span>🔋</span>
+<body>
+  <!-- Phone Frame Container -->
+  <div class="phone-frame">
+    <div class="phone-screen">
+      
+      <!-- Flutter AppBar -->
+      <div class="app-bar">
+        <div class="app-bar-leading" onclick="window.location.href='/'">
+          <span style="font-size: 24px;">‹</span>
+        </div>
+        <div class="app-bar-title">Luminous Beauty</div>
       </div>
-    </div>
-
-    <!-- Navigation Bar -->
-    <header class="nav-bar bg-white shadow-sm py-3 px-4 flex items-center justify-between">
-      <button class="text-xl font-semibold text-blue-500 hidden">‹</button>
-      <div class="text-xl font-semibold text-gray-800 flex-1 text-center">Luminous Beauty</div>
-      <button class="text-blue-500 hover:text-blue-700 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-        </svg>
-      </button>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-1 flex flex-col overflow-hidden">
-      <div id="chatView" class="view active flex flex-col flex-1">
-        <div id="chatMessages" class="chat-messages flex-1 overflow-y-auto">
-          <div class="chat-bubble assistant">
-            Hi! I'm your Luminous Beauty assistant. How can I help you today?
+      
+      <!-- Category Display -->
+      <div class="category-chip" id="categoryChip">All Products</div>
+      
+      <!-- Flutter Scaffold Body -->
+      <div class="scaffold-body">
+        <!-- Product GridView -->
+        <div class="grid-view" id="gridView">
+          <div class="loading">
+            <div class="circular-progress"></div>
           </div>
         </div>
-        <div class="chat-input-bar p-2 flex items-end space-x-2">
-          <textarea id="chatInput" placeholder="Type a message..." rows="1" class="input-field flex-1"></textarea>
-          <button id="sendBtn" class="send-button flex-shrink-0 flex items-center justify-center text-xl font-bold rounded-full shadow-lg transition-colors duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 -rotate-45">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-            </svg>
-          </button>
+        
+        <!-- Floating Action Button -->
+        <div class="fab" onclick="openChat()">💬</div>
+      </div>
+      
+      <!-- Flutter BottomNavigationBar -->
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <div class="nav-icon">🏠</div>
+          <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">🔍</div>
+          <div class="nav-label">Search</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">🛒</div>
+          <div class="nav-label">Cart</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">👤</div>
+          <div class="nav-label">Profile</div>
         </div>
       </div>
-    </main>
-
-    <!-- Tab Bar -->
-    <nav class="tab-bar bg-white shadow-md p-2 flex justify-around items-center">
-      <a href="#" class="tab-item active flex flex-col items-center p-2 rounded-lg transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-          <path d="M4.5 4.5a3 3 0 00-3 3v9a3 3 0 003 3h8.25a3 3 0 003-3v-9a3 3 0 00-3-3H4.5zM19.94 18.75l-7.25-7.25-2.25 2.25c-.23.23-.335.5-.324.755.011.255.126.494.336.687l.487.487c.189.191.428.306.683.316.255.011.524-.092.75-.32L21.75 12m-3 3l.621-.621c.23-.23.335-.5.324-.755a.863.863 0 00-.336-.687l-.487-.487c-.189-.191-.428-.306-.683-.316a.863.863 0 00-.75.32l-.621.622" />
-        </svg>
-        <span class="text-xs mt-1">Chat</span>
-      </a>
-      <a href="#" class="tab-item flex flex-col items-center p-2 rounded-lg transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.803A8.001 8.001 0 0112 20.25a8.001 8.001 0 01-9.756-11.453M18.75 18.75v.008v.008zM12 18.75v.008v.008zM6.75 18.75v.008v.008z" />
-        </svg>
-        <span class="text-xs mt-1">Products</span>
-      </a>
-      <a href="#" class="tab-item flex flex-col items-center p-2 rounded-lg transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.02 0 1.91.75 2.074 1.743l.794 4.761a1.5 1.5 0 01-1.488 1.944H5.25a1.5 1.5 0 01-1.488-1.943l.793-4.762A4.5 4.5 0 017.5 14.25zm.75 0h.008v.008H8.25v-.008zm10.5 0h.008v.008h-.008v-.008zm-1.5 8.25a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        <span class="text-xs mt-1">Cart</span>
-      </a>
-      <a href="#" class="tab-item flex flex-col items-center p-2 rounded-lg transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-        </svg>
-        <span class="text-xs mt-1">Profile</span>
-      </a>
-    </nav>
+      
+    </div>
   </div>
-
+  
   <script>
-    const chatInput = document.getElementById('chatInput');
-    const chatMessages = document.getElementById('chatMessages');
-    const sendBtn = document.getElementById('sendBtn');
+    // Get category from URL
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || '';
+    const query = params.get('q') || category;
     
-    // Auto-resize textarea
-    chatInput.addEventListener('input', () => {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
-    });
-
-    // Send message on Enter key (without Shift)
-    chatInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    // Initialize
+    async function init() {
+      // Update category display
+      if (category) {
+        const names = {
+          'anti-aging': 'Anti-Aging Products',
+          'eye-care': 'Eye Care',
+          'moisturizers': 'Moisturizers',
+          'cleansers': 'Cleansers',
+          'serums': 'Serums',
+          'masks': 'Face Masks'
+        };
+        document.getElementById('categoryChip').textContent = 
+          names[category] || category.split('-').map(w => 
+            w.charAt(0).toUpperCase() + w.slice(1)
+          ).join(' ');
       }
-    });
-
-    // Send message on button click
-    sendBtn.addEventListener('click', sendMessage);
-
-    async function sendMessage() {
-      const message = chatInput.value.trim();
-      if (!message) return;
-
-      // Add user message to chat UI
-      const userBubble = document.createElement('div');
-      userBubble.classList.add('chat-bubble', 'user');
-      userBubble.textContent = message;
-      chatMessages.appendChild(userBubble);
-      chatMessages.scrollTop = chatMessages.scrollHeight;
-
-      // Clear input and reset height
-      chatInput.value = '';
-      chatInput.style.height = 'auto';
-
-      // Simulate a response
-      setTimeout(() => {
-        const assistantBubble = document.createElement('div');
-        assistantBubble.classList.add('chat-bubble', 'assistant');
-        assistantBubble.textContent = "I'm still learning, but I can help you with beauty questions!";
-        chatMessages.appendChild(assistantBubble);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 1000);
+      
+      await loadProducts();
     }
-
-    // Add event listeners for tab navigation
-    document.querySelectorAll('.tab-bar a').forEach(link => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
-        e.currentTarget.classList.add('active');
-        const tabName = e.currentTarget.querySelector('span').textContent.toLowerCase();
-        // Since we only have 'chat' functionality, we use an alert for other tabs
-        if (tabName !== 'chat') {
-          alert(`${tabName.charAt(0).toUpperCase() + tabName.slice(1)} functionality coming soon!`);
+    
+    // Load products
+    async function loadProducts() {
+      const gridView = document.getElementById('gridView');
+      
+      try {
+        const response = await fetch(`/api/products?q=${encodeURIComponent(query)}&limit=50`);
+        const data = await response.json();
+        
+        if (data.success && data.items && data.items.length > 0) {
+          renderProducts(data.items);
+        } else {
+          showEmpty();
         }
-      });
-    });
-
+      } catch (error) {
+        console.error('Error:', error);
+        showEmpty();
+      }
+    }
+    
+    // Render products in Flutter card style
+    function renderProducts(products) {
+      const gridView = document.getElementById('gridView');
+      
+      gridView.innerHTML = products.map(product => `
+        <div class="product-card">
+          <img class="product-image" 
+               src="${product.image || '/images/placeholder.jpg'}"
+               alt="${escapeHtml(product.name)}"
+               onerror="this.src='/images/placeholder.jpg'">
+          <div class="product-body">
+            <div class="product-brand">${escapeHtml((product.brand || 'Premium').substring(0, 20))}</div>
+            <div class="product-title">${escapeHtml(product.name || 'Product')}</div>
+            <div class="product-subtitle">${escapeHtml((product.description || '').substring(0, 50))}</div>
+            <div class="product-price">${formatPrice(product.price)}</div>
+            <button class="elevated-button" onclick="addToCart('${escapeHtml(product.name)}')">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    // Show empty state
+    function showEmpty() {
+      document.getElementById('gridView').innerHTML = `
+        <div class="empty-widget">
+          <div class="empty-icon">📦</div>
+          <div class="empty-text">No products found</div>
+        </div>
+      `;
+    }
+    
+    // Format price
+    function formatPrice(price) {
+      if (typeof price === 'number') {
+        // Handle prices that might be in cents
+        if (price > 500) {
+          return `$${(price / 100).toFixed(2)}`;
+        }
+        return `$${price.toFixed(2)}`;
+      }
+      return '$0.00';
+    }
+    
+    // Add to cart
+    function addToCart(name) {
+      alert(`Added "${name}" to cart!`);
+    }
+    
+    // Open chat
+    function openChat() {
+      alert('Chat feature coming soon!');
+    }
+    
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
+    
+    // Start app
+    init();
   </script>
 </body>
 </html>
