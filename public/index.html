@@ -11,7 +11,7 @@
       box-sizing: border-box;
     }
     
-    /* Browser Background - EXACT SAME AS CHAT */
+    /* Browser Background */
     body {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
@@ -22,7 +22,7 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
-    /* Phone Container - EXACT SAME AS CHAT */
+    /* Phone Container */
     .phone-frame {
       width: 375px;
       height: 812px;
@@ -34,7 +34,7 @@
       overflow: hidden;
     }
     
-    /* Phone Screen - EXACT SAME AS CHAT */
+    /* Phone Screen */
     .phone-screen {
       width: 100%;
       height: 100%;
@@ -46,7 +46,7 @@
       flex-direction: column;
     }
     
-    /* Flutter AppBar - EXACT SAME AS CHAT */
+    /* Flutter AppBar */
     .app-bar {
       background: #000;
       color: #fff;
@@ -74,7 +74,7 @@
       margin-right: 48px;
     }
     
-    /* Flutter Scaffold Body - EXACT SAME AS CHAT */
+    /* Flutter Scaffold Body */
     .scaffold-body {
       flex: 1;
       overflow-y: auto;
@@ -82,7 +82,7 @@
       position: relative;
     }
     
-    /* Grid View for Categories - USING CHAT PRODUCT GRID STYLE */
+    /* Grid View */
     .grid-view {
       padding: 8px;
       display: grid;
@@ -90,7 +90,7 @@
       gap: 8px;
     }
     
-    /* Category Cards - USING CHAT PRODUCT-CARD STYLE */
+    /* Category Cards */
     .category-card {
       background: #fff;
       border-radius: 12px;
@@ -101,13 +101,10 @@
       cursor: pointer;
     }
     
-    .category-icon {
+    .category-image {
       width: 100%;
       height: 100px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
+      object-fit: cover;
       background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
     }
     
@@ -149,7 +146,7 @@
       opacity: 0.9;
     }
     
-    /* Quick Actions Scroll */
+    /* Quick Actions */
     .quick-actions {
       padding: 8px;
       display: flex;
@@ -191,7 +188,7 @@
       color: #000;
     }
     
-    /* Featured Products Scroll */
+    /* Products Scroll */
     .products-scroll {
       padding: 8px;
       display: flex;
@@ -259,7 +256,7 @@
       opacity: 0.95;
     }
     
-    /* Flutter BottomNavigationBar - EXACT SAME AS CHAT */
+    /* Bottom Navigation */
     .bottom-nav {
       background: #fff;
       height: 56px;
@@ -286,11 +283,6 @@
       color: #000;
     }
     
-    .nav-icon {
-      font-size: 20px;
-      margin-bottom: 2px;
-    }
-    
     .nav-icon-img {
       width: 20px;
       height: 20px;
@@ -307,7 +299,7 @@
       font-weight: 500;
     }
     
-    /* Flutter FloatingActionButton - EXACT SAME AS CHAT */
+    /* Floating Action Button */
     .fab {
       position: absolute;
       bottom: 70px;
@@ -335,7 +327,7 @@
       transform: scale(0.95);
     }
     
-    /* Responsive - EXACT SAME AS CHAT */
+    /* Responsive */
     @media (max-width: 425px) {
       .phone-frame {
         width: 100%;
@@ -358,13 +350,15 @@
       <!-- Flutter AppBar -->
       <div class="app-bar">
         <div class="app-bar-leading">
-          <span style="font-size: 20px;">🔔</span>
+          <img src="/images/notification-icon.png" alt="Notifications" style="width: 24px; height: 24px;"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none; font-size: 20px;">🔔</span>
         </div>
         <div class="app-bar-title">Luminous Salon</div>
       </div>
       
-      <!-- Flutter Scaffold Body -->
-      <div class="scaffold-body">
+      <!-- Main View -->
+      <div class="scaffold-body" id="mainView">
         
         <!-- Hero Banner -->
         <div class="hero-banner">
@@ -375,21 +369,71 @@
         <!-- Quick Actions -->
         <div class="quick-actions">
           <button class="action-button" onclick="bookNow()">
-            <span>📅</span> Book Now
+            <img src="/images/book-icon.png" alt="" style="width: 16px; height: 16px;"
+                 onerror="this.style.display='none'"> Book Now
           </button>
           <button class="action-button" onclick="callUs()">
-            <span>📞</span> Call Us
+            <img src="/images/call-icon.png" alt="" style="width: 16px; height: 16px;"
+                 onerror="this.style.display='none'"> Call Us
+          </button>
+          <button class="action-button" onclick="viewOffers()">
+            <img src="/images/offers-icon.png" alt="" style="width: 16px; height: 16px;"
+                 onerror="this.style.display='none'"> Offers
+          </button>
+          <button class="action-button" onclick="rewards()">
+            <img src="/images/rewards-icon.png" alt="" style="width: 16px; height: 16px;"
+                 onerror="this.style.display='none'"> Rewards
           </button>
           <button class="action-button" onclick="consultation()">
-            <span>💬</span> Consult
+            <img src="/images/consult-icon.png" alt="" style="width: 16px; height: 16px;"
+                 onerror="this.style.display='none'"> Consult
           </button>
+        </div>
+        
+        <!-- AI Chat Section -->
+        <div class="section-label">Ask Our Beauty Expert</div>
+        <div style="padding: 8px;">
+          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+            <div id="chatContainer" style="height: 200px; overflow-y: auto; background: #f9f9f9; border-radius: 8px; padding: 10px; margin-bottom: 10px;">
+              <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
+                Welcome! Ask me anything about skincare, haircare, or beauty treatments.
+              </div>
+            </div>
+            
+            <div style="display: flex; gap: 8px;">
+              <input id="chatInput" type="text" placeholder="Ask about treatments, products, or beauty advice..." 
+                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
+                     onkeypress="if(event.key === 'Enter') sendChat()">
+              <button onclick="sendChat()" style="padding: 10px 20px; background: #000; color: #fff; border: none; 
+                                                  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Product Search Bar -->
+        <div class="section-label">Search Products</div>
+        <div style="padding: 8px;">
+          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+            <div style="display: flex; gap: 8px;">
+              <input id="productSearch" type="text" placeholder="Search for specific products..." 
+                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
+                     onkeypress="if(event.key === 'Enter') searchProducts()">
+              <button onclick="searchProducts()" style="padding: 10px 20px; background: #000000; color: #fff; border: none; 
+                                                        border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                Search
+              </button>
+            </div>
+          </div>
         </div>
         
         <!-- Shop Categories -->
         <div class="section-label">Shop by Category</div>
         <div class="grid-view">
           <a href="chat.html?category=hair-care" class="category-card">
-            <div class="category-icon">💇‍♀️</div>
+            <img class="category-image" src="/images/0015CC.jpg" alt="Hair Care"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Hair Care</div>
               <div class="category-subtitle">Shampoos, conditioners & more</div>
@@ -397,7 +441,8 @@
           </a>
           
           <a href="chat.html?category=skin-care" class="category-card">
-            <div class="category-icon">✨</div>
+            <img class="category-image" src="/images/0016CC.jpg" alt="Skin Care"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Skin Care</div>
               <div class="category-subtitle">Cleansers, moisturizers & serums</div>
@@ -405,7 +450,8 @@
           </a>
           
           <a href="chat.html?category=anti-aging" class="category-card">
-            <div class="category-icon">🌟</div>
+            <img class="category-image" src="/images/0013CC.jpg" alt="Anti-Aging"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Anti-Aging</div>
               <div class="category-subtitle">Turn back time</div>
@@ -413,7 +459,8 @@
           </a>
           
           <a href="chat.html?category=treatments" class="category-card">
-            <div class="category-icon">💆‍♀️</div>
+            <img class="category-image" src="/images/0012CC.jpg" alt="Treatments"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Treatments</div>
               <div class="category-subtitle">Professional care</div>
@@ -431,28 +478,28 @@
         <div class="section-label">Bestsellers</div>
         <div class="products-scroll">
           <div class="mini-product">
-            <img class="mini-product-image" src="/images/0015CC.jpg" onerror="this.style.background='#f0f0f0'">
+            <img class="mini-product-image" src="/images/004C.jpg" onerror="this.style.background='#f0f0f0'">
             <div class="mini-product-info">
               <div class="mini-product-name">Hydrating Serum</div>
               <div class="mini-product-price">$45.00</div>
             </div>
           </div>
           <div class="mini-product">
-            <img class="mini-product-image" src="/images/hispanic-american.jpg" onerror="this.style.background='#f0f0f0'">
+            <img class="mini-product-image" src="/images/0013CC.jpg" onerror="this.style.background='#f0f0f0'">
             <div class="mini-product-info">
               <div class="mini-product-name">Repair Mask</div>
               <div class="mini-product-price">$32.00</div>
             </div>
           </div>
           <div class="mini-product">
-            <img class="mini-product-image" src="/images/0016CC.jpg" onerror="this.style.background='#f0f0f0'">
+            <img class="mini-product-image" src="/images/0014CC.jpg" onerror="this.style.background='#f0f0f0'">
             <div class="mini-product-info">
               <div class="mini-product-name">Volume Shampoo</div>
               <div class="mini-product-price">$28.00</div>
             </div>
           </div>
           <div class="mini-product">
-            <img class="mini-product-image" src="/images/0011CC.jpg" onerror="this.style.background='#f0f0f0'">
+            <img class="mini-product-image" src="/images/0012CC.jpg" onerror="this.style.background='#f0f0f0'">
             <div class="mini-product-info">
               <div class="mini-product-name">Eye Cream</div>
               <div class="mini-product-price">$55.00</div>
@@ -464,7 +511,8 @@
         <div class="section-label">Our Services</div>
         <div class="grid-view">
           <div class="category-card" onclick="bookService('color')">
-            <img class="category-image" src="/images/006C.jpg" alt="Color Services">
+            <img class="category-image" src="/images/hispanic-american.jpg" alt="Color Services"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Color & Highlights</div>
               <div class="category-subtitle">Starting at $120</div>
@@ -472,7 +520,8 @@
           </div>
           
           <div class="category-card" onclick="bookService('styling')">
-            <img class="category-image" src="/images/0014CC.jpg" alt="Styling Services">
+            <img class="category-image" src="/images/black-americanfemale.jpg" alt="Styling Services"
+                 onerror="this.style.background='linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'">
             <div class="category-body">
               <div class="category-title">Styling & Makeup</div>
               <div class="category-subtitle">Starting at $85</div>
@@ -481,26 +530,196 @@
         </div>
         
         <!-- Floating Action Button -->
-        <div class="fab" onclick="openAI()">💬</div>
+        <div class="fab" onclick="openAI()">
+          <img src="/images/chat-icon.png" alt="Chat" style="width: 28px; height: 28px; filter: brightness(0) invert(1);"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none">💬</span>
+        </div>
         
+      </div>
+      
+      <!-- Profile View -->
+      <div class="scaffold-body" id="profileView" style="display: none;">
+        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
+          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
+          <h2 style="font-size: 18px; font-weight: 600;">My Profile</h2>
+        </div>
+        
+        <div style="padding: 16px; overflow-y: auto;">
+          <!-- Personal Info -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Personal Information</h3>
+            
+            <input type="text" id="userName" placeholder="Your Name" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            
+            <select id="preferredStyle" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+              <option value="">Preferred Style</option>
+              <option>Classic</option>
+              <option>Modern</option>
+              <option>Natural</option>
+              <option>Glamorous</option>
+              <option>Edgy</option>
+            </select>
+            
+            <input type="text" id="stylistName" placeholder="Preferred Stylist" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            
+            <input type="tel" id="userPhone" placeholder="Phone Number" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            
+            <input type="email" id="userEmail" placeholder="Email Address" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+          </div>
+          
+          <!-- Salon Info -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Salon Information</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📍 123 Beauty Ave, Suite 100</p>
+            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📞 (555) 123-4567</p>
+            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">✉️ info@luminoussalon.com</p>
+            <p style="font-size: 12px; color: #666;">⏰ Mon-Sat: 9AM-7PM, Sun: 10AM-5PM</p>
+          </div>
+          
+          <!-- Preferences -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Preferences</h3>
+            <label style="display: flex; align-items: center; margin-bottom: 8px;">
+              <input type="checkbox" style="margin-right: 8px;"> 
+              <span style="font-size: 13px;">Email notifications</span>
+            </label>
+            <label style="display: flex; align-items: center; margin-bottom: 8px;">
+              <input type="checkbox" checked style="margin-right: 8px;"> 
+              <span style="font-size: 13px;">SMS reminders</span>
+            </label>
+            <label style="display: flex; align-items: center;">
+              <input type="checkbox" checked style="margin-right: 8px;"> 
+              <span style="font-size: 13px;">Special offers</span>
+            </label>
+          </div>
+          
+          <button onclick="saveProfile()" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            Save Profile
+          </button>
+        </div>
+      </div>
+      
+      <!-- Booking View -->
+      <div class="scaffold-body" id="bookingView" style="display: none;">
+        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
+          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
+          <h2 style="font-size: 18px; font-weight: 600;">Book Appointment</h2>
+        </div>
+        
+        <div style="padding: 16px; overflow-y: auto;">
+          <!-- Date & Time -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Select Date & Time</h3>
+            
+            <input type="date" id="appointmentDate" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            
+            <select id="appointmentTime" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
+              <option value="">Select Time</option>
+              <option>9:00 AM</option>
+              <option>9:30 AM</option>
+              <option>10:00 AM</option>
+              <option>10:30 AM</option>
+              <option>11:00 AM</option>
+              <option>11:30 AM</option>
+              <option>12:00 PM</option>
+              <option>12:30 PM</option>
+              <option>1:00 PM</option>
+              <option>1:30 PM</option>
+              <option>2:00 PM</option>
+              <option>2:30 PM</option>
+              <option>3:00 PM</option>
+              <option>3:30 PM</option>
+              <option>4:00 PM</option>
+              <option>4:30 PM</option>
+              <option>5:00 PM</option>
+              <option>5:30 PM</option>
+              <option>6:00 PM</option>
+              <option>6:30 PM</option>
+            </select>
+          </div>
+          
+          <!-- Service Selection -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Choose Service</h3>
+            
+            <select id="serviceSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+              <option value="">Select Service</option>
+              <option value="haircut">Haircut & Style - $65</option>
+              <option value="color">Color - $120</option>
+              <option value="highlights">Highlights - $150</option>
+              <option value="balayage">Balayage - $200</option>
+              <option value="treatment">Deep Treatment - $45</option>
+              <option value="blowdry">Blow Dry - $45</option>
+              <option value="updo">Special Event Updo - $85</option>
+              <option value="makeup">Makeup Application - $75</option>
+              <option value="facial">Facial - $95</option>
+              <option value="brows">Brow Service - $35</option>
+              <option value="lashes">Lash Extensions - $120</option>
+              <option value="manicure">Manicure - $35</option>
+              <option value="pedicure">Pedicure - $45</option>
+            </select>
+            
+            <select id="stylistSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
+              <option value="">Select Stylist</option>
+              <option>Sarah Johnson</option>
+              <option>Maria Rodriguez</option>
+              <option>Emily Chen</option>
+              <option>Jessica Williams</option>
+              <option>Any Available</option>
+            </select>
+          </div>
+          
+          <!-- Contact Info -->
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
+            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Contact Information</h3>
+            
+            <input type="tel" id="bookingPhone" placeholder="Phone Number" 
+                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            
+            <textarea id="bookingNotes" placeholder="Special requests or notes..." 
+                      style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; height: 60px; font-size: 13px; resize: none;"></textarea>
+          </div>
+          
+          <button onclick="bookAppointment()" style="width: 100%; padding: 12px; background: #C9A961; color: #fff; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px; cursor: pointer;">
+            Book Appointment
+          </button>
+          
+          <button onclick="goHome()" style="width: 100%; padding: 12px; background: #f0f0f0; color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
+            Cancel
+          </button>
+        </div>
       </div>
       
       <!-- Flutter BottomNavigationBar -->
       <div class="bottom-nav">
-        <div class="nav-item active">
-          <div class="nav-icon">🏠</div>
+        <div class="nav-item active" onclick="goHome()">
+          <img src="/images/home-icon.png" alt="Home" class="nav-icon-img"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none; font-size: 20px;">🏠</span>
           <div class="nav-label">Home</div>
         </div>
         <a href="chat.html?category=all" class="nav-item">
-          <div class="nav-icon">🛍️</div>
+          <img src="/images/shop-icon.png" alt="Shop" class="nav-icon-img"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none; font-size: 20px;">🛍️</span>
           <div class="nav-label">Shop</div>
         </a>
         <div class="nav-item" onclick="openBooking()">
-          <div class="nav-icon">📅</div>
+          <img src="/images/calendar-icon.png" alt="Book" class="nav-icon-img"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none; font-size: 20px;">📅</span>
           <div class="nav-label">Book</div>
         </div>
         <div class="nav-item" onclick="openProfile()">
-          <div class="nav-icon">👤</div>
+          <img src="/images/profile-icon.png" alt="Profile" class="nav-icon-img"
+               onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+          <span style="display:none; font-size: 20px;">👤</span>
           <div class="nav-label">Profile</div>
         </div>
       </div>
@@ -509,9 +728,82 @@
   </div>
   
   <script>
+    // Chat functionality
+    async function sendChat() {
+      const input = document.getElementById('chatInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      const chatContainer = document.getElementById('chatContainer');
+      
+      // Add user message
+      chatContainer.innerHTML += `
+        <div style="padding: 8px; background: #000; color: #fff; border-radius: 8px; margin-bottom: 8px; 
+                    font-size: 12px; text-align: right;">
+          ${message}
+        </div>
+      `;
+      
+      input.value = '';
+      
+      // Show typing indicator
+      chatContainer.innerHTML += `
+        <div id="typing" style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; 
+                                font-size: 12px; font-style: italic;">
+          Typing...
+        </div>
+      `;
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      
+      try {
+        // Call chat API
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        
+        // Remove typing indicator
+        document.getElementById('typing')?.remove();
+        
+        if (response.ok) {
+          const data = await response.json();
+          chatContainer.innerHTML += `
+            <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
+              ${data.response || 'How can I help you with your beauty needs?'}
+            </div>
+          `;
+        } else {
+          chatContainer.innerHTML += `
+            <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
+              I'm here to help with your beauty questions. Please try again.
+            </div>
+          `;
+        }
+      } catch (error) {
+        document.getElementById('typing')?.remove();
+        chatContainer.innerHTML += `
+          <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
+            Let me help you with beauty advice. Please try again.
+          </div>
+        `;
+      }
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    // Product search
+    function searchProducts() {
+      const query = document.getElementById('productSearch').value.trim();
+      if (query) {
+        window.location.href = `chat.html?q=${encodeURIComponent(query)}`;
+      }
+    }
+    
     // Quick Actions
     function bookNow() {
-      alert('Opening booking system...');
+      openBooking();
     }
     
     function callUs() {
@@ -529,25 +821,87 @@
     }
     
     function consultation() {
-      window.location.href = 'chat.html?category=consultation';
+      // Scroll to chat section
+      document.getElementById('chatInput').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('chatInput').focus();
     }
     
     // Services
     function bookService(service) {
-      alert(`Booking ${service} service...`);
+      openBooking();
     }
     
     // Navigation
     function openBooking() {
-      alert('Booking system coming soon!');
+      // Hide main view, show booking view
+      document.getElementById('mainView').style.display = 'none';
+      document.getElementById('profileView').style.display = 'none';
+      document.getElementById('bookingView').style.display = 'block';
     }
     
     function openProfile() {
-      alert('Profile coming soon!');
+      // Hide main view, show profile view
+      document.getElementById('mainView').style.display = 'none';
+      document.getElementById('bookingView').style.display = 'none';
+      document.getElementById('profileView').style.display = 'block';
     }
     
     function openAI() {
       window.location.href = 'chat.html';
+    }
+    
+    function goHome() {
+      // Show main view, hide others
+      document.getElementById('mainView').style.display = 'block';
+      document.getElementById('profileView').style.display = 'none';
+      document.getElementById('bookingView').style.display = 'none';
+    }
+    
+    // Save profile
+    function saveProfile() {
+      const profile = {
+        name: document.getElementById('userName').value,
+        style: document.getElementById('preferredStyle').value,
+        stylist: document.getElementById('stylistName').value,
+        phone: document.getElementById('userPhone').value,
+        email: document.getElementById('userEmail').value
+      };
+      localStorage.setItem('userProfile', JSON.stringify(profile));
+      alert('Profile saved!');
+    }
+    
+    // Load profile on startup
+    window.addEventListener('load', () => {
+      const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+      if (profile.name) {
+        document.getElementById('userName').value = profile.name || '';
+        document.getElementById('preferredStyle').value = profile.style || '';
+        document.getElementById('stylistName').value = profile.stylist || '';
+        document.getElementById('userPhone').value = profile.phone || '';
+        document.getElementById('userEmail').value = profile.email || '';
+      }
+    });
+    
+    // Book appointment
+    function bookAppointment() {
+      const appointment = {
+        date: document.getElementById('appointmentDate').value,
+        time: document.getElementById('appointmentTime').value,
+        service: document.getElementById('serviceSelect').value,
+        stylist: document.getElementById('stylistSelect').value,
+        phone: document.getElementById('bookingPhone').value,
+        notes: document.getElementById('bookingNotes').value
+      };
+      
+      if (!appointment.date || !appointment.time || !appointment.service) {
+        alert('Please fill in all required fields');
+        return;
+      }
+      
+      // Here you would send to your booking API
+      console.log('Booking:', appointment);
+      alert(`Appointment booked for ${appointment.date} at ${appointment.time}`);
+      goHome();
     }
   </script>
 </body>
