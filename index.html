@@ -1,417 +1,560 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-  <title>Luminous AI - Your Radiant Beauty Companion</title>
-  <meta name="theme-color" content="#B8860B"/>
-
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminous Salon</title>
   <style>
-    *{margin:0;padding:0;box-sizing:border-box}
-    :root{
-      --primary:#2C2C2C; --gold:#B8860B; --pearl:#F8F8F8;
-      --grad:linear-gradient(135deg,#B8860B,#DAA520);
-      --muted:#666; --ink:#222; --card:#fff;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-         background:var(--primary);min-height:100vh;color:#333}
-    .container{max-width:414px;margin:0 auto;background:var(--primary);min-height:100vh}
-    .header{padding:20px;text-align:center;border-bottom:1px solid #3A3A3A}
-    .logo{font-size:28px;font-weight:800;background:var(--grad);
-          -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .tagline{font-size:14px;color:var(--gold);opacity:.9;margin-top:4px}
-    .main{background:var(--pearl);min-height:calc(100vh - 120px);padding:18px}
-
-    /* welcome + ask */
-    .card{background:var(--card);border-radius:16px;box-shadow:0 4px 12px rgba(0,0,0,.1)}
-    .welcome{padding:20px;text-align:center;margin-bottom:14px}
-    .title{font-size:20px;font-weight:800;color:var(--ink);margin-bottom:8px}
-    .sub{font-size:14px;color:var(--muted)}
-    .askbar{display:flex;gap:10px;align-items:center;margin:14px 0;
-            border:2px solid var(--gold);border-radius:25px;padding:10px 12px;background:#fff}
-    .askbar .ai{font-size:18px}
-    .askbar input{border:none;outline:none;flex:1;font-size:14px}
-    .askbtn{border:none;border-radius:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;
-            color:#fff;background:var(--grad);cursor:pointer}
-    .cta{border:none;border-radius:22px;background:var(--grad);color:#fff;font-weight:700;
-         padding:12px 20px;width:100%;cursor:pointer;box-shadow:0 4px 12px rgba(184,134,11,.25)}
-
-    /* quick actions (filters) */
-    .grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}
-    .qcard{background:#fff;border-radius:12px;padding:8px 6px;text-align:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.1)}
-    .qicon{width:28px;height:28px;border-radius:14px;background:var(--grad);color:#fff;
-           display:flex;align-items:center;justify-content:center;margin:0 auto 4px}
-    .qtitle{font-size:10px;font-weight:700;color:#222}
-    .qsub{font-size:9px;color:#666}
-
-    /* in-page chat */
-    .chat{padding:14px;margin-bottom:14px}
-    .chathead{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
-    .chatname{font-size:14px;font-weight:800}
-    .chatstat{font-size:12px;color:#888}
-    .thread{max-height:300px;overflow:auto;padding:6px}
-    .bubble{display:inline-block;max-width:80%;padding:10px 12px;border-radius:14px;font-size:14px;line-height:1.35;
-            margin:6px 0;box-shadow:0 1px 2px rgba(0,0,0,.06)}
-    .user{margin-left:auto;background:rgba(184,134,11,.12);border:1px solid rgba(184,134,11,.35)}
-    .bot{margin-right:auto;background:#fff;border:1px solid #eee}
-    .typing{display:inline-flex;gap:4px;align-items:center}
-    .dot{width:6px;height:6px;background:#aaa;border-radius:50%;animation:blink 1.2s infinite ease-in-out}
-    .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
-    @keyframes blink{0%,80%,100%{opacity:.3}40%{opacity:1}}
-
-    /* products */
-    .section{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
-    .sectitle{font-size:15px;font-weight:800;color:#222}
-    .row{display:flex;gap:8px}
-    .search{flex:1;border:1px solid #ddd;border-radius:10px;padding:8px 10px;font-size:14px;background:#fff}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:.6rem .9rem;border-radius:12px;font-weight:700;border:0}
-    .subtle{background:#f0f1f3}
-    .accent{background:var(--grad);color:#fff}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-    .p{background:#fff;border-radius:14px;box-shadow:0 4px 10px rgba(0,0,0,.06);overflow:hidden}
-    .ph{height:144px;background:#eee;display:flex;align-items:center;justify-content:center;color:#999;font-size:12px}
-    .meta{padding:10px}
-    .brand{font-size:11px;color:#6b7280}
-    .name{font-size:15px;font-weight:700;line-height:1.2;margin-top:2px}
-    .row2{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
-    .price{font-size:15px;font-weight:800}
-    .was{font-size:11px;color:#9ca3af;text-decoration:line-through}
-    .btns{display:flex;gap:8px;margin-top:8px}
-    .badge{font-size:10px;padding:2px 8px;background:#fde8b2;color:#8a6b11;border-radius:999px}
-    .info{margin:10px 0;background:#2563eb1a;color:#1f2937;padding:10px;border-radius:10px;font-size:12px}
-    .empty{text-align:center;font-size:13px;color:#666;margin:18px 0}
-    .gap{height:96px}
-
-    /* bottom nav */
-    .nav{background:#fff;height:80px;display:flex;align-items:center;justify-content:space-around;border-top:1px solid #E0E0E0;
-         padding-bottom:20px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:414px}
-    .navitem{display:flex;flex-direction:column;align-items:center;gap:4px;color:#666;cursor:pointer}
-    .navitem.active{color:var(--gold)}
-    .navicon{width:24px;height:24px;display:flex;align-items:center;justify-content:center;font-size:20px}
-    .navlbl{font-size:10px;font-weight:600}
-
-    .build{color:#9ca3af;text-align:center;font-size:11px;margin-top:10px}
+    
+    /* Browser Background - EXACT SAME AS CHAT */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    /* Phone Container - EXACT SAME AS CHAT */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #000;
+      border-radius: 40px;
+      padding: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Phone Screen - EXACT SAME AS CHAT */
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Flutter AppBar - EXACT SAME AS CHAT */
+    .app-bar {
+      background: #000;
+      color: #fff;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .app-bar-leading {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .app-bar-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-right: 48px;
+    }
+    
+    /* Flutter Scaffold Body - EXACT SAME AS CHAT */
+    .scaffold-body {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+    }
+    
+    /* Grid View for Categories - USING CHAT PRODUCT GRID STYLE */
+    .grid-view {
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    
+    /* Category Cards - USING CHAT PRODUCT-CARD STYLE */
+    .category-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      text-decoration: none;
+      color: inherit;
+      cursor: pointer;
+    }
+    
+    .category-icon {
+      width: 100%;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+    }
+    
+    .category-body {
+      padding: 10px;
+    }
+    
+    .category-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #212121;
+      margin: 4px 0;
+      line-height: 1.2;
+    }
+    
+    .category-subtitle {
+      font-size: 11px;
+      color: #757575;
+      line-height: 1.2;
+    }
+    
+    /* Hero Banner */
+    .hero-banner {
+      background: linear-gradient(135deg, #000 0%, #333 100%);
+      color: #fff;
+      padding: 16px;
+      margin: 8px;
+      border-radius: 12px;
+    }
+    
+    .hero-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .hero-text {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+    
+    /* Quick Actions Scroll */
+    .quick-actions {
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    
+    .quick-actions::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .action-button {
+      flex: 0 0 auto;
+      padding: 8px 16px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .action-button:active {
+      background: #333;
+    }
+    
+    /* Section Label */
+    .section-label {
+      padding: 12px 12px 4px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #000;
+    }
+    
+    /* Featured Products Scroll */
+    .products-scroll {
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    
+    .products-scroll::-webkit-scrollbar {
+      display: none;
+    }
+    
+    .mini-product {
+      flex: 0 0 120px;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .mini-product-image {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+    
+    .mini-product-info {
+      padding: 8px;
+    }
+    
+    .mini-product-name {
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 2px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    
+    .mini-product-price {
+      font-size: 13px;
+      font-weight: 700;
+      color: #000;
+    }
+    
+    /* Promo Card */
+    .promo-card {
+      margin: 8px;
+      padding: 12px;
+      background: linear-gradient(135deg, #C9A961 0%, #B8984F 100%);
+      border-radius: 12px;
+      color: #fff;
+    }
+    
+    .promo-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+    
+    .promo-text {
+      font-size: 11px;
+      opacity: 0.95;
+    }
+    
+    /* Flutter BottomNavigationBar - EXACT SAME AS CHAT */
+    .bottom-nav {
+      background: #fff;
+      height: 56px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    
+    .nav-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #757575;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    
+    .nav-item.active {
+      color: #000;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    
+    .nav-icon-img {
+      width: 20px;
+      height: 20px;
+      margin-bottom: 2px;
+      opacity: 0.6;
+    }
+    
+    .nav-item.active .nav-icon-img {
+      opacity: 1;
+    }
+    
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+    }
+    
+    /* Flutter FloatingActionButton - EXACT SAME AS CHAT */
+    .fab {
+      position: absolute;
+      bottom: 70px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background: #000;
+      color: #fff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    
+    .fab:hover {
+      transform: scale(1.05);
+    }
+    
+    .fab:active {
+      transform: scale(0.95);
+    }
+    
+    /* Responsive - EXACT SAME AS CHAT */
+    @media (max-width: 425px) {
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+      }
+      
+      .phone-screen {
+        border-radius: 0;
+      }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="header">
-      <div class="logo">✨ Luminous AI</div>
-      <div class="tagline">Your Radiant Beauty Companion</div>
-    </div>
-
-    <div class="main">
-      <!-- Welcome + Ask -->
-      <div class="card welcome">
-        <div class="title">Welcome to Your Beauty Journey</div>
-        <div class="sub">Get personalized AI-powered beauty recommendations from global experts</div>
-
-        <div class="askbar">
-          <div class="ai">🤖</div>
-          <input id="aiInput" placeholder="Ask: Best makeup for pale skin with cool undertones"/>
-          <button id="askBtn" class="askbtn" title="Ask"><span>✨</span></button>
+  <!-- Phone Frame Container -->
+  <div class="phone-frame">
+    <div class="phone-screen">
+      
+      <!-- Flutter AppBar -->
+      <div class="app-bar">
+        <div class="app-bar-leading">
+          <span style="font-size: 20px;">🔔</span>
         </div>
-
-        <button id="consultBtn" class="cta">🌟 Start Beauty Consultation</button>
+        <div class="app-bar-title">Luminous Salon</div>
       </div>
-
-      <!-- Quick actions (filters only) -->
-      <div class="grid4" id="quick">
-        <div class="qcard" data-filter="anti-aging"><div class="qicon">🧘</div><div class="qtitle">Anti-aging</div><div class="qsub">wellness & skin</div></div>
-        <div class="qcard" data-filter="eye"><div class="qicon">👁️</div><div class="qtitle">Eye Care</div><div class="qsub">gel • cream • serum</div></div>
-        <div class="qcard" data-filter="night cream"><div class="qicon">🌙</div><div class="qtitle">Night Cream</div><div class="qsub">PM moisturizers</div></div>
-        <div class="qcard" data-filter="vitamin c"><div class="qicon">🍊</div><div class="qtitle">Vitamin C</div><div class="qsub">brightening</div></div>
-        <div class="qcard" data-filter="spf"><div class="qicon">🛡️</div><div class="qtitle">SPF</div><div class="qsub">sunscreen</div></div>
-        <div class="qcard" data-filter="peptide"><div class="qicon">🧬</div><div class="qtitle">Peptide</div><div class="qsub">firming</div></div>
-        <div class="qcard" data-filter="retinol"><div class="qicon">🧴</div><div class="qtitle">Retinol</div><div class="qsub">vitamin A</div></div>
-        <div class="qcard" data-filter=""><div class="qicon">🛒</div><div class="qtitle">All</div><div class="qsub">full catalog</div></div>
-      </div>
-
-      <!-- In-page Chat -->
-      <div class="card chat" aria-live="polite">
-        <div class="chathead">
-          <div class="chatname">AI Suggestions</div>
-          <div id="chatStatus" class="chatstat">Ready</div>
+      
+      <!-- Flutter Scaffold Body -->
+      <div class="scaffold-body">
+        
+        <!-- Hero Banner -->
+        <div class="hero-banner">
+          <div class="hero-title">Welcome to Luminous</div>
+          <div class="hero-text">Your premier beauty destination</div>
         </div>
-        <div id="thread" class="thread"></div>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+          <button class="action-button" onclick="bookNow()">
+            <span>📅</span> Book Now
+          </button>
+          <button class="action-button" onclick="callUs()">
+            <span>📞</span> Call Us
+          </button>
+          <button class="action-button" onclick="viewOffers()">
+            <span>🎁</span> Offers
+          </button>
+          <button class="action-button" onclick="rewards()">
+            <span>⭐</span> Rewards
+          </button>
+          <button class="action-button" onclick="consultation()">
+            <span>💬</span> Consult
+          </button>
+        </div>
+        
+        <!-- Shop Categories -->
+        <div class="section-label">Shop by Category</div>
+        <div class="grid-view">
+          <a href="chat.html?category=hair-care" class="category-card">
+            <div class="category-icon">💇‍♀️</div>
+            <div class="category-body">
+              <div class="category-title">Hair Care</div>
+              <div class="category-subtitle">Shampoos, conditioners & more</div>
+            </div>
+          </a>
+          
+          <a href="chat.html?category=skin-care" class="category-card">
+            <div class="category-icon">✨</div>
+            <div class="category-body">
+              <div class="category-title">Skin Care</div>
+              <div class="category-subtitle">Cleansers, moisturizers & serums</div>
+            </div>
+          </a>
+          
+          <a href="chat.html?category=anti-aging" class="category-card">
+            <div class="category-icon">🌟</div>
+            <div class="category-body">
+              <div class="category-title">Anti-Aging</div>
+              <div class="category-subtitle">Turn back time</div>
+            </div>
+          </a>
+          
+          <a href="chat.html?category=treatments" class="category-card">
+            <div class="category-icon">💆‍♀️</div>
+            <div class="category-body">
+              <div class="category-title">Treatments</div>
+              <div class="category-subtitle">Professional care</div>
+            </div>
+          </a>
+        </div>
+        
+        <!-- Promo -->
+        <div class="promo-card">
+          <div class="promo-title">New Client Special</div>
+          <div class="promo-text">Get 20% off your first treatment + free consultation</div>
+        </div>
+        
+        <!-- Featured Products -->
+        <div class="section-label">Bestsellers</div>
+        <div class="products-scroll">
+          <div class="mini-product">
+            <img class="mini-product-image" src="/images/placeholder.jpg" onerror="this.style.background='#f0f0f0'">
+            <div class="mini-product-info">
+              <div class="mini-product-name">Hydrating Serum</div>
+              <div class="mini-product-price">$45.00</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <img class="mini-product-image" src="/images/placeholder.jpg" onerror="this.style.background='#f0f0f0'">
+            <div class="mini-product-info">
+              <div class="mini-product-name">Repair Mask</div>
+              <div class="mini-product-price">$32.00</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <img class="mini-product-image" src="/images/placeholder.jpg" onerror="this.style.background='#f0f0f0'">
+            <div class="mini-product-info">
+              <div class="mini-product-name">Volume Shampoo</div>
+              <div class="mini-product-price">$28.00</div>
+            </div>
+          </div>
+          <div class="mini-product">
+            <img class="mini-product-image" src="/images/placeholder.jpg" onerror="this.style.background='#f0f0f0'">
+            <div class="mini-product-info">
+              <div class="mini-product-name">Eye Cream</div>
+              <div class="mini-product-price">$55.00</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Services -->
+        <div class="section-label">Our Services</div>
+        <div class="grid-view">
+          <div class="category-card" onclick="bookService('color')">
+            <img class="category-image" src="/images/color-service.jpg" alt="Color Services">
+            <div class="category-body">
+              <div class="category-title">Color & Highlights</div>
+              <div class="category-subtitle">Starting at $120</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="bookService('styling')">
+            <img class="category-image" src="/images/styling-service.jpg" alt="Styling Services">
+            <div class="category-body">
+              <div class="category-title">Styling & Makeup</div>
+              <div class="category-subtitle">Starting at $85</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Floating Action Button -->
+        <div class="fab" onclick="openAI()">💬</div>
+        
       </div>
-
-      <!-- Products -->
-      <div id="infobar" class="info" style="display:none"></div>
-
-      <div class="section">
-        <div class="sectitle">Your Recommendations</div>
-        <div class="row">
-          <input id="search" class="search" placeholder="Search… (Retinol, Peptide, Vitamin C, SPF, Night cream, Eye)"/>
-          <button id="clear" class="btn subtle">Clear</button>
+      
+      <!-- Flutter BottomNavigationBar -->
+      <div class="bottom-nav">
+        <div class="nav-item active">
+          <div class="nav-icon">🏠</div>
+          <div class="nav-label">Home</div>
+        </div>
+        <a href="chat.html?category=all" class="nav-item">
+          <div class="nav-icon">🛍️</div>
+          <div class="nav-label">Shop</div>
+        </a>
+        <div class="nav-item" onclick="openBooking()">
+          <div class="nav-icon">📅</div>
+          <div class="nav-label">Book</div>
+        </div>
+        <div class="nav-item" onclick="openProfile()">
+          <div class="nav-icon">👤</div>
+          <div class="nav-label">Profile</div>
         </div>
       </div>
-
-      <div id="grid" class="grid"></div>
-      <div id="empty" class="empty" style="display:none">
-        <p><strong>No matching products yet</strong></p>
-        <p>Try a different term (brand, concern, or category).</p>
-      </div>
-      <button id="more" class="btn subtle" style="width:100%;margin-top:10px">Load more</button>
-
-      <div class="gap"></div>
-      <div class="build">BUILD_ID: 2025-09-09-safe</div>
-    </div>
-
-    <div class="nav">
-      <div class="navitem active"><div class="navicon">🏠</div><div class="navlbl">Home</div></div>
-      <div class="navitem"><div class="navicon">🔑</div><div class="navlbl">Sign In</div></div>
-      <div class="navitem"><div class="navicon">👤</div><div class="navlbl">Create</div></div>
-      <div class="navitem"><div class="navicon">🌍</div><div class="navlbl">Catalog</div></div>
-      <div class="navitem"><div class="navicon">💬</div><div class="navlbl">Ask</div></div>
+      
     </div>
   </div>
-
+  
   <script>
-    // ---------- Config ----------
-    const CHAT_ENDPOINTS = ['/ask','/chat','/api/chat']; // tries in order
-    const CATALOG_PATH   = '/products.json';            // your beauty catalog only
-
-    // ---------- Chat helpers ----------
-    const thread   = document.getElementById('thread');
-    const statusEl = document.getElementById('chatStatus');
-    const addBubble = (role, text, typing=false)=>{
-      const b = document.createElement('div');
-      b.className = `bubble ${role}`;
-      b.innerHTML = typing
-        ? `<span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>`
-        : (text || '');
-      thread.appendChild(b);
-      thread.scrollTop = thread.scrollHeight;
-      return b;
-    };
-    const type = async (el, text, speed=10)=>{
-      el.textContent = '';
-      for (let i=0;i<text.length;i++){
-        el.textContent += text[i];
-        if (i%3===0) await new Promise(r=>setTimeout(r,speed));
-        thread.scrollTop = thread.scrollHeight;
+    // Quick Actions
+    function bookNow() {
+      alert('Opening booking system...');
+    }
+    
+    function callUs() {
+      if (confirm('Call (555) 123-4567?')) {
+        window.location.href = 'tel:5551234567';
       }
-    };
-    const askAI = async (message)=>{
-      let lastErr;
-      for (const ep of CHAT_ENDPOINTS){
-        try{
-          const r = await fetch(ep, {
-            method:'POST',
-            headers:{'Content-Type':'application/json','Accept':'application/json'},
-            body: JSON.stringify({ message, includeProducts:false })
-          });
-          if (!r.ok) throw new Error('HTTP '+r.status);
-          const data = await r.json().catch(()=> ({}));
-          return data.reply || data.response || data.text || 'Sorry, no answer available.';
-        }catch(e){ lastErr = e; }
-      }
-      throw lastErr || new Error('All chat endpoints failed');
-    };
-
-    const doAsk = async ()=>{
-      const inp = document.getElementById('aiInput');
-      const q = (inp?.value||'').trim();
-      if (!q) return;
-      statusEl.textContent = 'Thinking…';
-      addBubble('user', q);
-      const bot = addBubble('bot', '', true);
-      try{
-        const reply = await askAI(q);
-        bot.innerHTML = '';
-        await type(bot, reply, 10);
-      }catch(e){
-        bot.innerHTML = '';
-        await type(bot, '⚠️ Could not reach AI. Please try again.');
-      }finally{
-        statusEl.textContent = 'Ready';
-      }
-    };
-
-    document.getElementById('askBtn')?.addEventListener('click', doAsk);
-    document.getElementById('consultBtn')?.addEventListener('click', doAsk);
-    document.getElementById('aiInput')?.addEventListener('keydown', e => { if (e.key==='Enter') doAsk(); });
-
-    // ---------- Catalog search (client-side only) ----------
-    const FIELD_SETS = {
-      name:['name','title'],
-      brand:['brand','maker','manufacturer'],
-      category:['category','type'],
-      tags:['tags','labels','keywords'],
-      ingredients:['ingredients','keyIngredients','actives','activesList'],
-      suitableFor:['suitableFor','skinType','concern','skinConcerns'],
-      usage:['usage','howToUse','directions'],
-      description:['description','desc','about'],
-      image:['image','img','photo','thumb']
-    };
-    const WEIGHTS = { name:5, brand:4, category:4, tags:3, ingredients:3, suitableFor:2, usage:1, description:1 };
-    const SYN = {
-      'retinol':['retinoid','retinal','retinaldehyde','vitamin a'],
-      'peptide':['peptides'],
-      'vitamin c':['vit c','ascorbic','ascorbyl','l-ascorbic'],
-      'spf':['sunscreen','broad spectrum','uv','uva','uvb','spf30','spf40','spf50'],
-      'night cream':['pm','overnight','sleep mask','night moisturizer','night balm'],
-      'eye':['eye cream','eye serum','eye gel','undereye','under-eye','dark circle','puffy','puffiness']
-    };
-    const norm = s => (s??'').toString().toLowerCase();
-    const collect = (obj, keys)=>{
-      const out=[];
-      for (const k of keys){
-        const v = obj?.[k];
-        if (!v) continue;
-        if (Array.isArray(v)) out.push(v.join(' '));
-        else if (typeof v==='object') out.push(Object.values(v).join(' '));
-        else out.push(String(v));
-      }
-      return out.join(' ');
-    };
-    const idx = p => ({
-      name:norm(collect(p,FIELD_SETS.name)),
-      brand:norm(collect(p,FIELD_SETS.brand)),
-      category:norm(collect(p,FIELD_SETS.category)),
-      tags:norm(collect(p,FIELD_SETS.tags)),
-      ingredients:norm(collect(p,FIELD_SETS.ingredients)),
-      suitableFor:norm(collect(p,FIELD_SETS.suitableFor)),
-      usage:norm(collect(p,FIELD_SETS.usage)),
-      description:norm(collect(p,FIELD_SETS.description))
-    });
-    const expand = q=>{
-      const base = norm(q);
-      const tokens = new Set(base.split(/[^a-z0-9]+/).filter(Boolean));
-      if (SYN[base]) SYN[base].forEach(s=> s.split(' ').forEach(t=>tokens.add(t)));
-      base.split(/[^a-z0-9]+/).forEach(tok=>{
-        if (SYN[tok]) SYN[tok].forEach(s=> s.split(' ').forEach(t=>tokens.add(t)));
-      });
-      [...tokens].forEach(t=>{ if (t.length>=5) tokens.add(t.slice(0,5)); });
-      return [...tokens];
-    };
-    const formatPrice = v=>{
-      if (v===null||v===undefined||v==='') return '$—';
-      if (typeof v==='number'){ return Number.isInteger(v)&&v>=100 ? '$'+(v/100).toFixed(2) : '$'+v.toFixed(2); }
-      const s = String(v).trim(); if (s.startsWith('$')) return s;
-      const n = parseFloat(s); if (!isFinite(n)) return '$—';
-      return (!s.includes('.') && n>=100) ? '$'+(n/100).toFixed(2) : '$'+n.toFixed(2);
-    };
-
-    const state = { all:[], q:'', offset:0, page:8, total:0 };
-    const grid     = document.getElementById('grid');
-    const empty    = document.getElementById('empty');
-    const moreBtn  = document.getElementById('more');
-    const infoBar  = document.getElementById('infobar');
-    const searchEl = document.getElementById('search');
-
-    const score = (p, q)=>{
-      if (!q) return 1;
-      const I = idx(p); const T = expand(q);
-      let s=0;
-      for (const [k,text] of Object.entries(I)){
-        if (!text) continue; const w = WEIGHTS[k]||1;
-        T.forEach(t=>{ if (text.includes(t)) s+=w; });
-      }
-      return s;
-    };
-
-    const listFor = q=>{
-      if (!q) return state.all.slice();
-      return state.all.map(p=>({p, s:score(p,q)})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s).map(x=>x.p);
-    };
-
-    const renderCard = p=>{
-      const name = p.name || 'Beauty product';
-      const brand = p.brand || 'Salon Pro';
-      const price = formatPrice(p.price);
-      const was = (p.was!==undefined && p.was!==null && p.was!=='') ? formatPrice(p.was) : '';
-      const badge = p.category ? `<span class="badge">${p.category}</span>` : '';
-      const img = collect(p, FIELD_SETS.image).split(' ')[0];
-
-      const el = document.createElement('div'); el.className='p';
-      el.innerHTML = `
-        ${img ? `<img src="${img}" alt="${name}" style="width:100%;height:144px;object-fit:cover">`
-              : `<div class="ph">No image</div>`}
-        <div class="meta">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
-            <div>
-              <div class="brand">${brand}</div>
-              <div class="name">${name}</div>
-            </div>
-            ${badge}
-          </div>
-          <div class="row2"><div class="price">${price}</div><div class="was">${was}</div></div>
-          <div class="btns">
-            <button class="btn subtle" data-act="details" style="flex:1">Details</button>
-            <button class="btn accent" data-act="add" style="flex:1">Add</button>
-          </div>
-        </div>`;
-      el.querySelector('[data-act="details"]').addEventListener('click', ()=>{
-        const desc = collect(p, FIELD_SETS.description);
-        const use  = collect(p, FIELD_SETS.usage);
-        const ing  = collect(p, FIELD_SETS.ingredients);
-        const suit = collect(p, FIELD_SETS.suitableFor);
-        const bits = [];
-        if (desc) bits.push(desc);
-        if (use)  bits.push('Usage: '+use);
-        if (ing)  bits.push('Key ingredients: '+ing);
-        if (suit) bits.push('Perfect for: '+suit);
-        alert(`${name}\n\n${bits.join('\n\n') || 'Professional salon product designed for optimal results.'}`);
-      });
-      el.querySelector('[data-act="add"]').addEventListener('click', ()=> alert('Added to bag (demo)'));
-      return el;
-    };
-
-    const render = (reset=false)=>{
-      if (reset){ grid.innerHTML=''; state.offset=0; state.total=0; }
-      const all = listFor(state.q); state.total = all.length;
-      const items = all.slice(state.offset, state.offset+state.page);
-      state.offset += items.length;
-
-      const frag = document.createDocumentFragment();
-      items.forEach(p=> frag.appendChild(renderCard(p)));
-      grid.appendChild(frag);
-
-      const any = grid.children.length>0;
-      empty.style.display = any ? 'none' : 'block';
-      const hasMore = state.offset < state.total;
-      moreBtn.disabled = !hasMore;
-      moreBtn.textContent = hasMore ? 'Load more' : 'No more items';
-
-      if (state.q){
-        infoBar.style.display='block';
-        infoBar.textContent = `Matches for “${state.q}” — showing ${Math.min(state.offset,state.total)} of ${state.total}.`;
-      } else {
-        infoBar.style.display='none';
-      }
-    };
-
-    const bootstrap = async ()=>{
-      try{
-        const r = await fetch(CATALOG_PATH+'?bust='+Date.now());
-        if (r.ok) state.all = await r.json();
-      }catch(e){ console.warn('Catalog load failed', e); }
-      render(true);
-    };
-
-    // Wire up UI
-    document.getElementById('quick')?.addEventListener('click', e=>{
-      const card = e.target.closest('.qcard'); if (!card) return;
-      const term = card.getAttribute('data-filter')||'';
-      searchEl.value = term; state.q = term; state.offset = 0; render(true);
-    });
-    searchEl.addEventListener('input', ()=>{
-      state.q = searchEl.value.trim(); state.offset=0; render(true);
-    });
-    document.getElementById('clear').addEventListener('click', ()=>{
-      searchEl.value=''; state.q=''; state.offset=0; render(true);
-    });
-    moreBtn.addEventListener('click', ()=> render());
-
-    // Ask AI
-    document.getElementById('askBtn').addEventListener('click', doAsk);
-    document.getElementById('consultBtn').addEventListener('click', doAsk);
-    document.getElementById('aiInput').addEventListener('keydown', e=>{ if(e.key==='Enter') doAsk(); });
-
-    // Start
-    document.addEventListener('DOMContentLoaded', bootstrap);
+    }
+    
+    function viewOffers() {
+      alert('Special offers coming soon!');
+    }
+    
+    function rewards() {
+      alert('Loyalty rewards coming soon!');
+    }
+    
+    function consultation() {
+      window.location.href = 'chat.html?category=consultation';
+    }
+    
+    // Services
+    function bookService(service) {
+      alert(`Booking ${service} service...`);
+    }
+    
+    // Navigation
+    function openBooking() {
+      alert('Booking system coming soon!');
+    }
+    
+    function openProfile() {
+      alert('Profile coming soon!');
+    }
+    
+    function openAI() {
+      window.location.href = 'chat.html';
+    }
   </script>
 </body>
 </html>
