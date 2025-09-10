@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Luminous • Chat</title>
+  <title>Luminous Beauty</title>
   <meta name="theme-color" content="#000000">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -13,857 +13,707 @@
       padding: 0;
       box-sizing: border-box;
       -webkit-tap-highlight-color: transparent;
-    }
-    
-    :root {
-      --primary: #000;
-      --cream: #FAF9F6;
-      --gold: #C9A961;
-      --border: #e5e5e5;
-      --text-muted: #666;
-      --chat-bg: #f8f8f8;
-      --safe-top: env(safe-area-inset-top);
-      --safe-bottom: env(safe-area-inset-bottom);
+      -webkit-user-select: none;
+      user-select: none;
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-      background: var(--cream);
-      color: var(--primary);
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #000;
+      color: #000;
       height: 100vh;
+      width: 100vw;
       overflow: hidden;
       position: fixed;
-      width: 100%;
     }
     
-    .app-container {
+    .app {
       height: 100vh;
+      width: 100vw;
+      background: #f2f2f7;
       display: flex;
       flex-direction: column;
-      background: white;
     }
     
-    /* Header */
-    .app-header {
-      background: var(--primary);
-      color: white;
-      padding: calc(var(--safe-top) + 1rem) 1rem 1rem;
+    /* Status Bar */
+    .status-bar {
+      background: #000;
+      color: #fff;
+      padding: 8px 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    /* Navigation Bar */
+    .nav-bar {
+      background: #000;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      z-index: 100;
     }
     
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
+    .nav-title {
+      color: #fff;
+      font-size: 17px;
+      font-weight: 600;
+      flex: 1;
+      text-align: center;
     }
     
-    .back-btn {
+    .nav-btn {
       background: none;
       border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.25rem;
+      color: #fff;
+      font-size: 28px;
+      width: 44px;
+      height: 44px;
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    
-    .header-logo {
-      height: 28px;
-      width: auto;
-    }
-    
-    .header-title {
-      font-size: 1.125rem;
-      font-weight: 300;
-      letter-spacing: 1px;
-    }
-    
-    .header-right {
-      display: flex;
-      gap: 0.5rem;
-    }
-    
-    .icon-btn {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.25rem;
       cursor: pointer;
-      padding: 0.5rem;
+    }
+    
+    /* View Container */
+    .view-container {
+      flex: 1;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .view {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: none;
+      flex-direction: column;
+      background: #fff;
+    }
+    
+    .view.active {
+      display: flex;
+    }
+    
+    /* Chat View */
+    .chat-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #fff;
+      -webkit-overflow-scrolling: touch;
+    }
+    
+    .chat-bubble {
+      max-width: 75%;
+      margin-bottom: 12px;
+      animation: slideIn 0.2s ease;
+    }
+    
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .chat-bubble.user {
+      margin-left: auto;
+    }
+    
+    .bubble-content {
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 16px;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+    
+    .chat-bubble.assistant .bubble-content {
+      background: #e9e9eb;
+      color: #000;
+    }
+    
+    .chat-bubble.user .bubble-content {
+      background: #007aff;
+      color: #fff;
+    }
+    
+    .chat-time {
+      font-size: 11px;
+      color: #8e8e93;
+      margin-top: 4px;
+      padding: 0 8px;
+    }
+    
+    .chat-bubble.user .chat-time {
+      text-align: right;
+    }
+    
+    /* Chat Input */
+    .chat-input-bar {
+      background: #fff;
+      border-top: 0.5px solid #c6c6c8;
+      padding: 8px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    
+    .input-field {
+      flex: 1;
+      background: #f2f2f7;
+      border: 1px solid #c6c6c8;
+      border-radius: 20px;
+      padding: 8px 16px;
+      font-size: 16px;
+      outline: none;
+      resize: none;
+      max-height: 120px;
+      line-height: 20px;
+    }
+    
+    .send-button {
+      width: 36px;
+      height: 36px;
+      background: #007aff;
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .send-button:active {
+      background: #0051d5;
+    }
+    
+    /* Products View */
+    .products-view {
+      background: #f2f2f7;
+    }
+    
+    .search-bar {
+      background: #fff;
+      padding: 8px 16px;
+      border-bottom: 0.5px solid #c6c6c8;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: 8px 12px;
+      background: #f2f2f7;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      outline: none;
+    }
+    
+    .products-scroll {
+      flex: 1;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 12px;
+    }
+    
+    .products-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #f2f2f7;
+    }
+    
+    .product-details {
+      padding: 12px;
+    }
+    
+    .product-name {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      line-height: 1.2;
+      height: 34px;
+      overflow: hidden;
+    }
+    
+    .product-desc {
+      font-size: 12px;
+      color: #8e8e93;
+      margin-bottom: 8px;
+      height: 30px;
+      overflow: hidden;
+      line-height: 1.25;
+    }
+    
+    .product-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 8px;
+    }
+    
+    .add-cart-btn {
+      width: 100%;
+      padding: 8px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .add-cart-btn:active {
+      background: #333;
+    }
+    
+    .show-more-btn {
+      width: 100%;
+      padding: 16px;
+      background: #fff;
+      border: none;
+      font-size: 16px;
+      font-weight: 600;
+      color: #007aff;
+      margin-top: 12px;
+      border-radius: 12px;
+      cursor: pointer;
     }
     
     /* Tab Bar */
     .tab-bar {
-      background: white;
-      border-bottom: 1px solid var(--border);
+      background: #fff;
+      border-top: 0.5px solid #c6c6c8;
       display: flex;
-      padding: 0.5rem 0;
+      padding: 8px 0;
     }
     
-    .tab {
+    .tab-item {
       flex: 1;
-      padding: 0.75rem;
-      background: none;
-      border: none;
-      font-size: 0.875rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      position: relative;
-      transition: color 0.3s ease;
-    }
-    
-    .tab.active {
-      color: var(--primary);
-    }
-    
-    .tab.active::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 20%;
-      right: 20%;
-      height: 2px;
-      background: var(--gold);
-    }
-    
-    /* Main Content Area */
-    .main-content {
-      flex: 1;
-      overflow: hidden;
       display: flex;
       flex-direction: column;
-      background: var(--chat-bg);
-    }
-    
-    /* Chat Messages */
-    .chat-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 1rem;
-      padding-bottom: 1rem;
-      -webkit-overflow-scrolling: touch;
-    }
-    
-    .chat-date {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 0.75rem;
-      margin: 1rem 0;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    
-    .message {
-      margin-bottom: 1rem;
-      display: flex;
-      gap: 0.5rem;
-      animation: fadeInUp 0.3s ease;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .message.user {
-      flex-direction: row-reverse;
-    }
-    
-    .message-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
       align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 0.75rem;
-      font-weight: 600;
-      flex-shrink: 0;
-    }
-    
-    .message.user .message-avatar {
-      background: var(--gold);
-    }
-    
-    .message-content {
-      max-width: 75%;
-    }
-    
-    .message-bubble {
-      padding: 0.75rem 1rem;
-      border-radius: 18px;
-      background: white;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-      font-size: 0.9375rem;
-      line-height: 1.4;
-    }
-    
-    .message.user .message-bubble {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .message-time {
-      font-size: 0.6875rem;
-      color: var(--text-muted);
-      margin-top: 0.25rem;
-      padding: 0 0.5rem;
-    }
-    
-    /* Product Cards in Chat */
-    .products-carousel {
-      padding: 0.5rem 0;
-      margin-top: 0.5rem;
-    }
-    
-    .products-scroll {
-      display: flex;
-      gap: 0.75rem;
-      overflow-x: auto;
-      padding: 0.5rem 0;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    
-    .products-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .mini-product-card {
-      flex: 0 0 140px;
-      background: white;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      gap: 4px;
+      padding: 4px;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      color: #8e8e93;
     }
     
-    .mini-product-card:active {
-      transform: scale(0.98);
+    .tab-item.active {
+      color: #007aff;
     }
     
-    .mini-product-image {
-      width: 100%;
-      height: 100px;
-      object-fit: cover;
-      background: #f5f5f5;
+    .tab-icon {
+      font-size: 24px;
     }
     
-    .mini-product-info {
-      padding: 0.5rem;
+    .tab-label {
+      font-size: 10px;
+      font-weight: 500;
     }
     
-    .mini-product-name {
-      font-size: 0.75rem;
-      font-weight: 600;
-      line-height: 1.2;
-      margin-bottom: 0.25rem;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
+    /* Typing indicator */
+    .typing-bubble {
+      max-width: 60px;
+      margin-bottom: 12px;
     }
     
-    .mini-product-price {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--gold);
-    }
-    
-    /* Typing Indicator */
-    .typing-indicator {
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      padding: 0.75rem 1rem;
-      background: white;
+    .typing-dots {
+      padding: 12px 16px;
+      background: #e9e9eb;
       border-radius: 18px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-      display: inline-flex;
+      display: flex;
+      gap: 4px;
     }
     
-    .typing-dot {
+    .dot {
       width: 8px;
       height: 8px;
+      background: #8e8e93;
       border-radius: 50%;
-      background: var(--text-muted);
-      animation: typingBounce 1.4s infinite ease-in-out;
+      animation: pulse 1.4s infinite;
     }
     
-    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
-    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
     
-    @keyframes typingBounce {
-      0%, 80%, 100% {
-        transform: scale(0.8);
-        opacity: 0.5;
-      }
-      40% {
-        transform: scale(1);
-        opacity: 1;
-      }
+    @keyframes pulse {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
     }
     
-    /* Input Area */
-    .input-area {
-      background: white;
-      border-top: 1px solid var(--border);
-      padding: 0.75rem;
-      padding-bottom: calc(var(--safe-bottom) + 0.75rem);
-    }
-    
-    .input-container {
-      display: flex;
-      gap: 0.5rem;
-      align-items: flex-end;
-    }
-    
-    .input-wrapper {
-      flex: 1;
-      background: var(--chat-bg);
-      border-radius: 24px;
-      padding: 0.5rem 1rem;
-      display: flex;
-      align-items: center;
-      min-height: 40px;
-    }
-    
-    #chatInput {
-      flex: 1;
-      border: none;
-      background: none;
-      outline: none;
-      font-size: 0.9375rem;
-      resize: none;
-      max-height: 100px;
-      line-height: 1.4;
-    }
-    
-    .send-btn {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-      flex-shrink: 0;
-    }
-    
-    .send-btn:active {
-      transform: scale(0.9);
-    }
-    
-    .send-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-    
-    /* Quick Actions */
-    .quick-actions {
-      display: flex;
-      gap: 0.5rem;
-      overflow-x: auto;
-      padding: 0.75rem 1rem;
-      background: white;
-      border-top: 1px solid var(--border);
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    
-    .quick-actions::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .quick-action {
-      flex: 0 0 auto;
-      padding: 0.5rem 1rem;
-      background: var(--chat-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 0.875rem;
-      white-space: nowrap;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    
-    .quick-action:active {
-      background: var(--primary);
-      color: white;
-      transform: scale(0.95);
-    }
-    
-    /* Empty State */
+    /* Empty state */
     .empty-state {
       flex: 1;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 32px;
       text-align: center;
     }
     
     .empty-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
+      font-size: 48px;
+      margin-bottom: 16px;
       opacity: 0.3;
     }
     
     .empty-title {
-      font-size: 1.25rem;
+      font-size: 20px;
       font-weight: 600;
-      margin-bottom: 0.5rem;
+      margin-bottom: 8px;
     }
     
     .empty-text {
-      color: var(--text-muted);
-      font-size: 0.875rem;
-      max-width: 250px;
-    }
-    
-    /* Loading State */
-    .loading {
-      display: inline-block;
-      width: 20px;
-      height: 20px;
-      border: 2px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    
-    /* Product Modal */
-    .product-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .product-modal.active {
-      display: flex;
-      align-items: flex-end;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    .modal-content {
-      background: white;
-      width: 100%;
-      border-radius: 24px 24px 0 0;
-      padding: 1.5rem;
-      padding-bottom: calc(var(--safe-bottom) + 1.5rem);
-      max-height: 80vh;
-      overflow-y: auto;
-      animation: slideUp 0.3s ease;
-    }
-    
-    @keyframes slideUp {
-      from { transform: translateY(100%); }
-      to { transform: translateY(0); }
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      padding: 0.5rem;
+      font-size: 14px;
+      color: #8e8e93;
     }
   </style>
 </head>
 <body>
-  <div class="app-container">
-    <!-- Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <button class="back-btn" onclick="window.location.href='/'">‹</button>
-        <img src="/images/luminous-logo-white.png" alt="Luminous" class="header-logo" 
-             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-        <span class="header-title" style="display:none;">LUMINOUS</span>
+  <div class="app">
+    <!-- Status Bar -->
+    <div class="status-bar">
+      <span id="time">9:41 AM</span>
+      <span>⚡ 🔋 📶</span>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+      <button class="nav-btn" style="visibility: hidden;">‹</button>
+      <div class="nav-title">Luminous Beauty</div>
+      <button class="nav-btn" onclick="location.reload()">↻</button>
+    </div>
+    
+    <!-- Views Container -->
+    <div class="view-container">
+      <!-- Chat View -->
+      <div class="view active" id="chatView">
+        <div class="chat-view">
+          <div class="chat-messages" id="chatMessages"></div>
+          <div class="chat-input-bar">
+            <textarea class="input-field" id="chatInput" 
+                      placeholder="Ask about beauty treatments..." 
+                      rows="1"></textarea>
+            <button class="send-button" id="sendBtn">➤</button>
+          </div>
+        </div>
       </div>
-      <div class="header-right">
-        <button class="icon-btn" onclick="clearChat()">🔄</button>
+      
+      <!-- Products View -->
+      <div class="view" id="productsView">
+        <div class="products-view">
+          <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" 
+                   placeholder="Search products..." />
+          </div>
+          <div class="products-scroll">
+            <div class="products-grid" id="productsGrid"></div>
+            <button class="show-more-btn" id="showMoreBtn" style="display:none;">
+              Show More Products
+            </button>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
     
     <!-- Tab Bar -->
     <div class="tab-bar">
-      <button class="tab active" onclick="switchTab('chat')">Chat</button>
-      <button class="tab" onclick="switchTab('products')">Products</button>
-      <button class="tab" onclick="switchTab('history')">History</button>
-    </div>
-    
-    <!-- Main Content -->
-    <div class="main-content">
-      <!-- Chat Messages -->
-      <div class="chat-messages" id="chatMessages">
-        <div class="chat-date">Today</div>
-        <!-- Messages will appear here -->
+      <div class="tab-item active" onclick="switchView('chat')">
+        <div class="tab-icon">💬</div>
+        <div class="tab-label">Ask AI</div>
       </div>
-      
-      <!-- Quick Actions -->
-      <div class="quick-actions" id="quickActions">
-        <div class="quick-action" onclick="sendQuickMessage('Recommend products for dry hair')">Dry Hair</div>
-        <div class="quick-action" onclick="sendQuickMessage('Anti-aging skincare')">Anti-Aging</div>
-        <div class="quick-action" onclick="sendQuickMessage('Best shampoo for color-treated hair')">Color Care</div>
-        <div class="quick-action" onclick="sendQuickMessage('Moisturizer for sensitive skin')">Sensitive Skin</div>
-        <div class="quick-action" onclick="sendQuickMessage('Hair growth products')">Hair Growth</div>
+      <div class="tab-item" onclick="switchView('products')">
+        <div class="tab-icon">🛍️</div>
+        <div class="tab-label">Products</div>
       </div>
-    </div>
-    
-    <!-- Input Area -->
-    <div class="input-area">
-      <div class="input-container">
-        <div class="input-wrapper">
-          <textarea id="chatInput" 
-                    placeholder="Ask about products or beauty advice..." 
-                    rows="1"></textarea>
-        </div>
-        <button class="send-btn" id="sendBtn">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
-          </svg>
-        </button>
+      <div class="tab-item" onclick="switchView('cart')">
+        <div class="tab-icon">🛒</div>
+        <div class="tab-label">Cart</div>
       </div>
-    </div>
-  </div>
-  
-  <!-- Product Modal -->
-  <div class="product-modal" id="productModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>Product Details</h3>
-        <button class="modal-close" onclick="closeModal()">×</button>
+      <div class="tab-item" onclick="switchView('profile')">
+        <div class="tab-icon">👤</div>
+        <div class="tab-label">Profile</div>
       </div>
-      <div id="modalBody"></div>
     </div>
   </div>
   
   <script>
-  (() => {
+    // App State
+    let currentView = 'chat';
+    let products = [];
+    let currentPage = 0;
+    const pageSize = 10;
+    
+    // DOM Elements
     const $ = id => document.getElementById(id);
     const chatMessages = $('chatMessages');
     const chatInput = $('chatInput');
     const sendBtn = $('sendBtn');
-    const quickActions = $('quickActions');
-    
-    let isTyping = false;
-    let messageHistory = [];
+    const searchInput = $('searchInput');
+    const productsGrid = $('productsGrid');
+    const showMoreBtn = $('showMoreBtn');
     
     // Initialize
-    window.addEventListener('load', () => {
-      addMessage('assistant', 'Hello! I\'m your personal beauty consultant. How can I help you today?');
-      adjustTextareaHeight();
-    });
-    
-    // Auto-resize textarea
-    function adjustTextareaHeight() {
-      chatInput.style.height = 'auto';
-      chatInput.style.height = Math.min(chatInput.scrollHeight, 100) + 'px';
+    function init() {
+      updateTime();
+      setInterval(updateTime, 60000);
+      
+      // Add welcome message for chat
+      addChatMessage('assistant', 'Welcome! I\'m your beauty consultant. Ask me anything about hair care, skincare, or beauty treatments.');
+      
+      // Load initial products
+      loadProducts('');
+      
+      // Setup event listeners
+      setupEventListeners();
     }
     
-    chatInput.addEventListener('input', adjustTextareaHeight);
+    // Update status bar time
+    function updateTime() {
+      const now = new Date();
+      const time = now.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+      });
+      $('time').textContent = time;
+    }
     
-    // Add message to chat
-    function addMessage(type, text, products = null) {
-      const messageDiv = document.createElement('div');
-      messageDiv.className = `message ${type}`;
+    // Switch between views
+    window.switchView = function(view) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
       
-      const avatar = type === 'user' ? 'U' : 'AI';
+      if (view === 'cart' || view === 'profile') {
+        alert(`${view.charAt(0).toUpperCase() + view.slice(1)} coming soon!`);
+        return;
+      }
+      
+      $(`${view}View`).classList.add('active');
+      event.currentTarget.classList.add('active');
+      currentView = view;
+      
+      if (view === 'products' && products.length === 0) {
+        loadProducts('');
+      }
+    };
+    
+    // CHAT FUNCTIONALITY (Questions & Recommendations Only)
+    function addChatMessage(type, text) {
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble ${type}`;
+      
       const time = new Date().toLocaleTimeString('en-US', { 
         hour: 'numeric', 
         minute: '2-digit' 
       });
       
-      messageDiv.innerHTML = `
-        <div class="message-avatar">${avatar}</div>
-        <div class="message-content">
-          <div class="message-bubble">${escapeHtml(text)}</div>
-          <div class="message-time">${time}</div>
-          ${products ? renderProductsCarousel(products) : ''}
-        </div>
+      bubble.innerHTML = `
+        <div class="bubble-content">${escapeHtml(text)}</div>
+        <div class="chat-time">${time}</div>
       `;
       
-      chatMessages.appendChild(messageDiv);
+      chatMessages.appendChild(bubble);
       chatMessages.scrollTop = chatMessages.scrollHeight;
-      
-      // Save to history
-      messageHistory.push({ type, text, time: new Date() });
     }
     
-    // Render products carousel
-    function renderProductsCarousel(products) {
-      if (!products || products.length === 0) return '';
-      
-      const productsHtml = products.slice(0, 5).map(p => `
-        <div class="mini-product-card" onclick="showProduct('${escapeHtml(JSON.stringify(p).replace(/'/g, "\\'"))}')">
-          <img class="mini-product-image" 
-               src="${p.image || '/images/placeholder.jpg'}" 
-               alt="${escapeHtml(p.name)}"
-               onerror="this.src='/images/placeholder.jpg'">
-          <div class="mini-product-info">
-            <div class="mini-product-name">${escapeHtml(p.name)}</div>
-            <div class="mini-product-price">${formatPrice(p.price)}</div>
-          </div>
-        </div>
-      `).join('');
-      
-      return `
-        <div class="products-carousel">
-          <div class="products-scroll">
-            ${productsHtml}
-          </div>
-        </div>
-      `;
-    }
-    
-    // Show typing indicator
     function showTyping() {
-      if (isTyping) return;
-      isTyping = true;
-      
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'message assistant';
-      typingDiv.id = 'typing';
-      typingDiv.innerHTML = `
-        <div class="message-avatar">AI</div>
-        <div class="message-content">
-          <div class="typing-indicator">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-          </div>
+      const typing = document.createElement('div');
+      typing.className = 'typing-bubble';
+      typing.id = 'typing';
+      typing.innerHTML = `
+        <div class="typing-dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
         </div>
       `;
-      chatMessages.appendChild(typingDiv);
+      chatMessages.appendChild(typing);
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
     
-    // Hide typing indicator
     function hideTyping() {
-      isTyping = false;
       const typing = $('typing');
       if (typing) typing.remove();
     }
     
-    // Format price
-    function formatPrice(price) {
-      if (typeof price === 'number' && price > 0) {
-        return `$${price.toFixed(2)}`;
-      }
-      return 'Contact us';
-    }
-    
-    // Escape HTML
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text || '';
-      return div.innerHTML;
-    }
-    
-    // Send message
-    async function sendMessage(text) {
-      const message = text || chatInput.value.trim();
+    async function sendChatMessage() {
+      const message = chatInput.value.trim();
       if (!message) return;
       
-      // Clear input
-      if (!text) {
-        chatInput.value = '';
-        adjustTextareaHeight();
-      }
-      
       // Add user message
-      addMessage('user', message);
-      
-      // Hide quick actions after first message
-      if (quickActions) quickActions.style.display = 'none';
+      addChatMessage('user', message);
+      chatInput.value = '';
+      autoResize();
       
       // Show typing
       showTyping();
       sendBtn.disabled = true;
       
       try {
-        // Send chat request with timeout
-        const chatPromise = fetch('/api/chat', {
+        // Call chat API for beauty consultation
+        const response = await fetch('/api/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ message })
         });
         
-        // Set timeout for chat request
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Request timeout')), 10000)
-        );
+        let reply = 'I can help you with beauty and skincare advice. What would you like to know?';
         
-        const chatResponse = await Promise.race([chatPromise, timeoutPromise]);
-        
-        let chatText = 'I can help you find the perfect products. What are you looking for?';
-        
-        // Try to parse response
-        try {
-          if (chatResponse.ok) {
-            const contentType = chatResponse.headers.get('content-type');
-            if (contentType && contentType.includes('application/json')) {
-              const chatData = await chatResponse.json();
-              if (chatData.success && chatData.response) {
-                chatText = chatData.response;
-              }
-            } else {
-              // If not JSON, read as text
-              const textData = await chatResponse.text();
-              console.warn('Non-JSON response:', textData);
-            }
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.response) {
+            reply = data.response;
           }
-        } catch (parseError) {
-          console.warn('Failed to parse chat response:', parseError);
         }
         
-        // Fetch products
-        let products = [];
-        try {
-          const productsResponse = await fetch(`/api/products?q=${encodeURIComponent(message)}&limit=8`);
-          if (productsResponse.ok) {
-            const productsData = await productsResponse.json();
-            if (productsData.success && productsData.items) {
-              products = productsData.items;
-            }
-          }
-        } catch (productError) {
-          console.warn('Failed to fetch products:', productError);
-        }
-        
-        // Hide typing and show response
         hideTyping();
-        addMessage('assistant', chatText, products);
+        addChatMessage('assistant', reply);
         
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Chat error:', error);
         hideTyping();
-        addMessage('assistant', 'I\'m here to help! Let me know what products or beauty advice you\'re looking for.');
+        addChatMessage('assistant', 'Let me help you with your beauty questions. What would you like to know?');
       } finally {
         sendBtn.disabled = false;
       }
     }
     
-    // Quick message
-    window.sendQuickMessage = function(text) {
-      sendMessage(text);
-    };
-    
-    // Show product details
-    window.showProduct = function(productJson) {
+    // PRODUCTS FUNCTIONALITY (Separate from Chat)
+    async function loadProducts(query) {
       try {
-        const product = JSON.parse(productJson);
-        const modal = $('productModal');
-        const modalBody = $('modalBody');
+        const response = await fetch(`/api/products?q=${encodeURIComponent(query)}&limit=50`);
         
-        modalBody.innerHTML = `
-          <img src="${product.image || '/images/placeholder.jpg'}" 
-               style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; margin-bottom: 1rem;"
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.items) {
+            products = data.items;
+            currentPage = 0;
+            renderProducts();
+          }
+        }
+      } catch (error) {
+        console.error('Products error:', error);
+        productsGrid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1/-1;">
+            <div class="empty-icon">📦</div>
+            <div class="empty-title">No Products</div>
+            <div class="empty-text">Check back later</div>
+          </div>
+        `;
+      }
+    }
+    
+    function renderProducts() {
+      const start = currentPage * pageSize;
+      const end = start + pageSize;
+      const pageProducts = products.slice(start, end);
+      
+      if (currentPage === 0) {
+        productsGrid.innerHTML = '';
+      }
+      
+      pageProducts.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <img class="product-image" 
+               src="${product.image || '/images/placeholder.jpg'}" 
+               alt="${escapeHtml(product.name)}"
                onerror="this.src='/images/placeholder.jpg'">
-          <h3>${escapeHtml(product.name)}</h3>
-          <p style="color: var(--text-muted); font-size: 0.875rem;">${escapeHtml(product.brand)} • ${escapeHtml(product.category)}</p>
-          <p style="margin: 1rem 0;">${escapeHtml(product.description)}</p>
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem;">
-            <span style="font-size: 1.5rem; font-weight: 700; color: var(--gold);">${formatPrice(product.price)}</span>
-            <button onclick="alert('Added to cart!')" style="padding: 0.75rem 2rem; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 600;">
+          <div class="product-details">
+            <div class="product-name">${escapeHtml(product.name || 'Product')}</div>
+            <div class="product-desc">${escapeHtml(product.description || '')}</div>
+            <div class="product-price">${formatPrice(product.price)}</div>
+            <button class="add-cart-btn" onclick="addToCart('${escapeHtml(product.name)}')">
               Add to Cart
             </button>
           </div>
         `;
-        
-        modal.classList.add('active');
-      } catch (e) {
-        console.error('Failed to show product:', e);
-      }
-    };
-    
-    // Close modal
-    window.closeModal = function() {
-      $('productModal').classList.remove('active');
-    };
-    
-    // Clear chat
-    window.clearChat = function() {
-      if (confirm('Clear all messages?')) {
-        chatMessages.innerHTML = '<div class="chat-date">Today</div>';
-        messageHistory = [];
-        addMessage('assistant', 'Chat cleared. How can I help you today?');
-        if (quickActions) quickActions.style.display = 'flex';
-      }
-    };
-    
-    // Switch tabs
-    window.switchTab = function(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
+        productsGrid.appendChild(card);
+      });
       
-      if (tab === 'products') {
-        window.location.href = '/products';
-      } else if (tab === 'history') {
-        alert('Chat history coming soon!');
-      }
+      // Show/hide "Show More" button
+      showMoreBtn.style.display = end < products.length ? 'block' : 'none';
+    }
+    
+    window.addToCart = function(name) {
+      alert(`Added "${name}" to cart!`);
     };
     
-    // Send button click
-    sendBtn.addEventListener('click', () => sendMessage());
+    // Utility Functions
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
     
-    // Enter key to send (Shift+Enter for new line)
-    chatInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+    function formatPrice(price) {
+      if (typeof price === 'number' && price > 0) {
+        return `$${price.toFixed(2)}`;
       }
-    });
+      return '$0.00';
+    }
     
-    // Modal backdrop click to close
-    $('productModal').addEventListener('click', (e) => {
-      if (e.target.id === 'productModal') {
-        closeModal();
-      }
-    });
-  })();
+    function autoResize() {
+      chatInput.style.height = 'auto';
+      chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+    }
+    
+    // Event Listeners
+    function setupEventListeners() {
+      // Chat events
+      sendBtn.addEventListener('click', sendChatMessage);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          sendChatMessage();
+        }
+      });
+      chatInput.addEventListener('input', autoResize);
+      
+      // Product search
+      let searchTimeout;
+      searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => {
+          loadProducts(e.target.value);
+        }, 500);
+      });
+      
+      // Show more products
+      showMoreBtn.addEventListener('click', () => {
+        currentPage++;
+        renderProducts();
+      });
+    }
+    
+    // Start app
+    init();
   </script>
 </body>
 </html>
