@@ -1,6 +1,11 @@
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+import express from 'express';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,7 +48,15 @@ function loadRealData() {
     console.log(`[PRODUCTS] Loaded ${SALON_PRODUCTS.length} real products`);
   } catch (error) {
     console.warn('[PRODUCTS] Could not load salon_inventory.json:', error.message);
-    SALON_PRODUCTS = [];
+    // Load products.json as fallback
+    try {
+      const fallbackData = fs.readFileSync('products.json', 'utf8');
+      SALON_PRODUCTS = JSON.parse(fallbackData);
+      console.log(`[PRODUCTS] Loaded ${SALON_PRODUCTS.length} products from fallback`);
+    } catch (fallbackError) {
+      console.warn('[PRODUCTS] Could not load products.json:', fallbackError.message);
+      SALON_PRODUCTS = [];
+    }
   }
 
   // Load FAQ database
@@ -173,7 +186,7 @@ async function generateChatResponse(message) {
     
 PRODUCTS AVAILABLE TO RECOMMEND:
 ${relevantProducts.map(p => 
-  `- ${p.name} by ${p.brand} ($${(p.price/100).toFixed(2)}) - ${p.description}`
+  `- ${p.name} by ${p.brand} ($${typeof p.price === 'number' ? p.price.toFixed(2) : p.price}) - ${p.description}`
 ).join('\n')}
 
 Only recommend products from the list above. Include exact names and prices.`;
