@@ -1,159 +1,136 @@
-// server.cjs  — CommonJS, minimal & stable
+// server.cjs  — CommonJS, simple + stable
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
-const cors = require('cors');
+const fs = require('fs');
+
+const PORT = process.env.PORT || 10000;
+const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
+const OPENAI_MODEL   = process.env.OPENAI_MODEL   || 'gpt-4o-mini';
 
 const app = express();
 
-// ---- config/env ----
-const PORT = process.env.PORT || 10000;
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY || '';
-const OPENAI_MODEL = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+// --- Basic security/CORS (loose for now; tighten later) ---
+app.disable('x-powered-by');
+app.use((req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+  res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
 
-// ---- middleware ----
-app.use(cors()); // keep simple/allow all for now
 app.use(express.json({ limit: '1mb' }));
-app.use(express.urlencoded({ extended: true }));
 
-// ---- static ----
-const PUBLIC_DIR = path.join(__dirname, 'public');
-app.use(express.static(PUBLIC_DIR));
+// --- Static ---
+const PUB = path.join(__dirname, 'public');
+app.use(express.static(PUB, { extensions: ['html'] }));
 
-// ---- load products once (for /api/products) ----
-let PRODUCTS = [];
-try {
-  const p = path.join(PUBLIC_DIR, 'products.json');
-  if (fs.existsSync(p)) {
-    PRODUCTS = JSON.parse(fs.readFileSync(p, 'utf8'));
-    console.log(`[PRODUCTS] Loaded ${PRODUCTS.length} products`);
-  } else {
-    console.log('[PRODUCTS] public/products.json not found (ok if you only use static)');
-  }
-} catch (e) {
-  console.error('[PRODUCTS] Failed to load:', e.message);
-  PRODUCTS = [];
-}
-
-// ---- health ----
-app.get('/health', (req, res) => {
+// --- Health ---
+app.get('/health', (_req, res) => {
   res.json({
     ok: true,
     node: process.version,
     hasOpenAI: Boolean(OPENAI_API_KEY),
-    model: OPENAI_MODEL,
+    model: OPENAI_MODEL
   });
 });
 
-// ---- optional: simple product search/paginate ----
-// front-end can call /api/products?q=retinol&offset=0&limit=12
-app.get('/api/products', (req, res) => {
+// --- Load products.json into memory (and cheap reload on demand) ---
+let CATALOG = [];
+const PRODUCTS_PATH = path.join(PUB, 'products.json');
+
+function loadCatalog() {
   try {
-    const q = (req.query.q || '').toString().trim().toLowerCase();
-    const offset = Math.max(parseInt(req.query.offset || '0', 10), 0);
-    const limit = Math.max(Math.min(parseInt(req.query.limit || '12', 10), 50), 1);
-
-    let filtered = PRODUCTS;
-    if (q) {
-      filtered = PRODUCTS.filter(p => {
-        const hay = [
-          p.name, p.brand, p.category, p.description, p.usage, p.ingredients, p.suitableFor, (p.tags || []).join(' ')
-        ].filter(Boolean).join(' ').toLowerCase();
-        return hay.includes(q);
-      });
+    const txt = fs.readFileSync(PRODUCTS_PATH, 'utf8');
+    const json = JSON.parse(txt);
+    if (Array.isArray(json)) {
+      CATALOG = json;
+      console.log(`[PRODUCTS] Loaded ${CATALOG.length} items`);
+    } else {
+      throw new Error('products.json is not an array');
     }
-
-    const total = filtered.length;
-    const items = filtered.slice(offset, offset + limit);
-    res.json({ success: true, total, items });
-  } catch (err) {
-    console.error('api/products error:', err);
-    res.status(500).json({ success: false, error: 'SERVER_ERROR' });
+  } catch (e) {
+    console.error('[PRODUCTS] Failed to load products.json:', e.message);
+    CATALOG = [];
   }
+}
+loadCatalog();
+
+// Optional small helper to reload on demand
+app.post('/admin/reload-products', (req, res) => {
+  loadCatalog();
+  res.json({ ok: true, count: CATALOG.length });
 });
 
-// ---- chat (/ask) ----
-app.post('/ask', async (req, res) => {
-  const message = (req.body && req.body.message) ? String(req.body.message) : '';
-  if (!message) {
-    return res.status(400).json({ provider: 'openai', model: OPENAI_MODEL, reply: 'Please include a message.' });
-  }
+// --- API: products (filterable) ---
+app.get('/api/products', (req, res) => {
+  const q = (req.query.q || '').toString().trim().toLowerCase();
+  const category = (req.query.category || '').toString().trim().toLowerCase();
+  const offset = Math.max(0, parseInt(req.query.offset || '0', 10));
+  const limit  = Math.max(1, Math.min(50, parseInt(req.query.limit || '16', 10)));
 
-  // If no key present, keep the server usable with a friendly fallback
-  if (!OPENAI_API_KEY) {
-    res.set('X-Provider', 'baseline');
-    res.set('X-Model', 'none');
-    return res.json({
-      provider: 'baseline',
-      model: 'none',
-      reply: 'Hi! The AI key is not configured on this server yet. Please try again later.',
+  let rows = CATALOG;
+
+  if (category) {
+    rows = rows.filter(p => (p.category || '').toLowerCase() === category);
+  }
+  if (q) {
+    rows = rows.filter(p => {
+      const hay = [
+        p.name, p.brand, p.category, p.description,
+        ...(Array.isArray(p.tags) ? p.tags : [])
+      ].filter(Boolean).join(' ').toLowerCase();
+      return hay.includes(q);
     });
   }
 
+  const total = rows.length;
+  const items = rows.slice(offset, offset + limit);
+
+  res.json({ success: true, total, items });
+});
+
+// --- Ask AI (OpenAI proxy) ---
+app.post('/ask', async (req, res) => {
   try {
-    // Use native fetch in Node 18+
-    const sys = `You are a friendly, professional salon stylist assistant.
-- Be concise, warm, and practical.
-- If the user mentions a skin concern, undertone, or event, tailor advice.
-- Avoid medical claims; stay within beauty care guidance.`;
+    const message = (req.body && req.body.message) ? String(req.body.message) : '';
+    if (!message) return res.status(400).json({ error: 'Missing message' });
+    if (!OPENAI_API_KEY) return res.status(503).json({ error: 'OPENAI_API_KEY missing' });
 
-    const payload = {
-      model: OPENAI_MODEL,
-      messages: [
-        { role: 'system', content: sys },
-        { role: 'user', content: message }
-      ],
-      temperature: 0.7
-    };
-
+    // Node 18+ has global fetch
     const r = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${OPENAI_API_KEY}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(payload)
-    });
-
-    if (!r.ok) {
-      const body = await r.text().catch(()=>'');
-      console.error('OpenAI error:', r.status, body);
-      res.set('X-Provider', 'openai');
-      res.set('X-Model', OPENAI_MODEL);
-      return res.status(502).json({
-        provider: 'openai',
+      body: JSON.stringify({
         model: OPENAI_MODEL,
-        reply: 'Sorry—our stylist assistant is having trouble responding right now.'
-      });
-    }
+        messages: [
+          { role: 'system', content: 'You are a friendly, concise beauty stylist assistant. Be clear, calm, and helpful.' },
+          { role: 'user', content: message }
+        ],
+        temperature: 0.6,
+        max_tokens: 500
+      })
+    });
 
     const data = await r.json();
-    const reply = data?.choices?.[0]?.message?.content?.trim() || 'Sorry, I could not find that.';
-    res.set('X-Provider', 'openai');
-    res.set('X-Model', OPENAI_MODEL);
-    return res.json({ provider: 'openai', model: OPENAI_MODEL, reply });
+    const reply = data?.choices?.[0]?.message?.content?.trim() || 'Sorry, I couldn’t find that.';
+    res.setHeader('X-Provider', 'openai');
+    res.setHeader('X-Model', OPENAI_MODEL);
+    res.json({ provider: 'openai', model: OPENAI_MODEL, reply });
   } catch (err) {
-    console.error('ask error:', err);
-    res.set('X-Provider', 'openai');
-    res.set('X-Model', OPENAI_MODEL);
-    return res.status(500).json({
-      provider: 'openai',
-      model: OPENAI_MODEL,
-      reply: 'An error occurred while processing your request. Please try again.'
-    });
+    console.error('ASK error', err);
+    res.status(500).json({ error: 'ask_failed' });
   }
 });
 
-// ---- fallback to index.html (SPA-ish) ----
-app.get('*', (req, res) => {
-  try {
-    res.sendFile(path.join(PUBLIC_DIR, 'index.html'));
-  } catch {
-    res.status(404).send('Not found');
-  }
-});
+// --- Fallback to index.html for top-level routes (optional SPA-like) ---
+app.get('/', (req, res) => res.sendFile(path.join(PUB, 'index.html')));
 
-// ---- start ----
+// --- Start ---
 app.listen(PORT, () => {
   console.log(`Luminous listening on ${PORT} { hasOpenAI: ${Boolean(OPENAI_API_KEY)} }`);
 });
