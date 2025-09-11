@@ -107,13 +107,18 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-2px);
     }
     
     .product-image {
       width: 100%;
       height: 140px;
       object-fit: cover;
-      background: #f0f0f0;
+      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
     }
     
     .product-body {
@@ -151,6 +156,13 @@
       font-size: 15px;
       font-weight: 700;
       color: #000;
+      margin-bottom: 8px;
+    }
+    
+    .product-origin {
+      font-size: 10px;
+      color: #888;
+      text-transform: uppercase;
       margin-bottom: 8px;
     }
     
@@ -305,7 +317,7 @@
       
       <!-- Flutter AppBar -->
       <div class="app-bar">
-        <div class="app-bar-leading" onclick="window.location.href='/'">
+        <div class="app-bar-leading" onclick="window.location.href='index.html'">
           <span style="font-size: 24px;">‹</span>
         </div>
         <div class="app-bar-title">Luminous Beauty</div>
@@ -329,11 +341,11 @@
       
       <!-- Flutter BottomNavigationBar -->
       <div class="bottom-nav">
-        <div class="nav-item active">
+        <div class="nav-item" onclick="window.location.href='index.html'">
           <div class="nav-icon">🏠</div>
           <div class="nav-label">Home</div>
         </div>
-        <div class="nav-item">
+        <div class="nav-item active">
           <div class="nav-icon">🔍</div>
           <div class="nav-label">Search</div>
         </div>
@@ -354,44 +366,79 @@
     // Get category from URL
     const params = new URLSearchParams(window.location.search);
     const category = params.get('category') || '';
-    const query = params.get('q') || category;
+    const query = params.get('q') || '';
     
     // Initialize
     async function init() {
       // Update category display
-      if (category) {
-        const names = {
-          'anti-aging': 'Anti-Aging Products',
-          'eye-care': 'Eye Care',
-          'moisturizers': 'Moisturizers',
-          'cleansers': 'Cleansers',
-          'serums': 'Serums',
-          'masks': 'Face Masks'
-        };
-        document.getElementById('categoryChip').textContent = 
-          names[category] || category.split('-').map(w => 
-            w.charAt(0).toUpperCase() + w.slice(1)
-          ).join(' ');
-      }
+      updateCategoryDisplay();
       
       await loadProducts();
     }
     
-    // Load products
+    // Update category display
+    function updateCategoryDisplay() {
+      const categoryNames = {
+        'all': 'All Products',
+        'skincare': 'Skin Care',
+        'haircare': 'Hair Care',
+        'anti-aging': 'Anti-Aging',
+        'wellness': 'Wellness',
+        'makeup': 'Makeup',
+        'tools': 'Beauty Tools'
+      };
+      
+      if (query) {
+        document.getElementById('categoryChip').textContent = `Search: "${query}"`;
+      } else if (category) {
+        document.getElementById('categoryChip').textContent = 
+          categoryNames[category] || category.split('-').map(w => 
+            w.charAt(0).toUpperCase() + w.slice(1)
+          ).join(' ');
+      }
+    }
+    
+    // Load products from local JSON file
     async function loadProducts() {
       const gridView = document.getElementById('gridView');
       
       try {
-        const response = await fetch(`/api/products?q=${encodeURIComponent(query)}&limit=50`);
-        const data = await response.json();
+        // Load the local products.json file
+        const response = await fetch('products.json');
+        const products = await response.json();
         
-        if (data.success && data.items && data.items.length > 0) {
-          renderProducts(data.items);
+        // Filter products based on category or search query
+        let filteredProducts = products;
+        
+        if (category && category !== 'all') {
+          filteredProducts = products.filter(product => 
+            product.category.toLowerCase().includes(category.toLowerCase()) ||
+            (product.tags && product.tags.some(tag => 
+              tag.toLowerCase().includes(category.toLowerCase())
+            ))
+          );
+        }
+        
+        if (query) {
+          const searchTerm = query.toLowerCase();
+          filteredProducts = products.filter(product => 
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.brand.toLowerCase().includes(searchTerm) ||
+            product.category.toLowerCase().includes(searchTerm) ||
+            (product.tags && product.tags.some(tag => 
+              tag.toLowerCase().includes(searchTerm)
+            )) ||
+            product.description.toLowerCase().includes(searchTerm)
+          );
+        }
+        
+        if (filteredProducts.length > 0) {
+          renderProducts(filteredProducts);
         } else {
           showEmpty();
         }
       } catch (error) {
-        console.error('Error:', error);
+        console.error('Error loading products:', error);
         showEmpty();
       }
     }
@@ -402,14 +449,12 @@
       
       gridView.innerHTML = products.map(product => `
         <div class="product-card">
-          <img class="product-image" 
-               src="${product.image || '/images/placeholder.jpg'}"
-               alt="${escapeHtml(product.name)}"
-               onerror="this.src='/images/placeholder.jpg'">
+          <div class="product-image" style="background: linear-gradient(135deg, #${Math.random().toString(16).substr(2,6)} 0%, #${Math.random().toString(16).substr(2,6)} 100%);"></div>
           <div class="product-body">
             <div class="product-brand">${escapeHtml((product.brand || 'Premium').substring(0, 20))}</div>
             <div class="product-title">${escapeHtml(product.name || 'Product')}</div>
-            <div class="product-subtitle">${escapeHtml((product.description || '').substring(0, 50))}</div>
+            <div class="product-subtitle">${escapeHtml((product.description || '').substring(0, 50))}...</div>
+            <div class="product-origin">${escapeHtml(product.origin || 'Global')}</div>
             <div class="product-price">${formatPrice(product.price)}</div>
             <button class="elevated-button" onclick="addToCart('${escapeHtml(product.name)}')">
               Add to Cart
@@ -425,6 +470,9 @@
         <div class="empty-widget">
           <div class="empty-icon">📦</div>
           <div class="empty-text">No products found</div>
+          <button class="elevated-button" style="margin-top: 16px; width: auto; padding: 0 16px;" onclick="window.location.href='chat.html?category=all'">
+            View All Products
+          </button>
         </div>
       `;
     }
@@ -432,10 +480,6 @@
     // Format price
     function formatPrice(price) {
       if (typeof price === 'number') {
-        // Handle prices that might be in cents
-        if (price > 500) {
-          return `$${(price / 100).toFixed(2)}`;
-        }
         return `$${price.toFixed(2)}`;
       }
       return '$0.00';
