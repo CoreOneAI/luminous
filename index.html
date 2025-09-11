@@ -722,181 +722,32 @@
   </div>
   
   <script>
-    // Chat functionality
-    async function sendChat() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-      if (!message) return;
-      
-      const chatContainer = document.getElementById('chatContainer');
-      
-      // Add user message
-      chatContainer.innerHTML += `
-        <div style="padding: 8px; background: #000; color: #fff; border-radius: 8px; margin-bottom: 8px; 
-                    font-size: 12px; text-align: right;">
-          ${message}
-        </div>
-      `;
-      
-      input.value = '';
-      
-      // Show typing indicator
-      chatContainer.innerHTML += `
-        <div id="typing" style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; 
-                                font-size: 12px; font-style: italic;">
-          Typing...
-        </div>
-      `;
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-      try {
-        // Call chat API
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
-        
-        // Remove typing indicator
-        document.getElementById('typing')?.remove();
-        
-        if (response.ok) {
-          const data = await response.json();
-          chatContainer.innerHTML += `
-            <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
-              ${data.response || 'How can I help you with your beauty needs?'}
-            </div>
-          `;
-        } else {
-          chatContainer.innerHTML += `
-            <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
-              I'm here to help with your beauty questions. Please try again.
-            </div>
-          `;
-        }
-      } catch (error) {
-        document.getElementById('typing')?.remove();
-        chatContainer.innerHTML += `
-          <div style="padding: 8px; background: #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 12px;">
-            Let me help you with beauty advice. Please try again.
-          </div>
-        `;
-      }
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+  // --- add near top of your chat.html script ---
+  const slug = s => (s||'').toLowerCase().replace(/\s+/g,'-');
+  const sameCategory = (a,b) => slug(a) === slug(b);
+
+  async function loadProducts() {
+    const params = new URLSearchParams(location.search);
+    const q        = (params.get('q') || '').trim();
+    const category = (params.get('category') || '').trim(); // e.g. "anti-aging"
+
+    // fetch your catalog
+    const res  = await fetch('/products.json?bust=' + Date.now());
+    const all  = await res.json();
+
+    // filter by category or search text
+    let items = all;
+    if (category) {
+      items = all.filter(p => sameCategory(p.category, category));
+    } else if (q) {
+      const needle = q.toLowerCase();
+      items = all.filter(p => [
+        p.name, p.brand, p.category, ...(p.tags||[]), p.description
+      ].filter(Boolean).join(' ').toLowerCase().includes(needle));
     }
-    
-    // Product search
-    function searchProducts() {
-      const query = document.getElementById('productSearch').value.trim();
-      if (query) {
-        window.location.href = `chat.html?q=${encodeURIComponent(query)}`;
-      }
-    }
-    
-    // Quick Actions
-    function bookNow() {
-      openBooking();
-    }
-    
-    function callUs() {
-      if (confirm('Call (555) 123-4567?')) {
-        window.location.href = 'tel:5551234567';
-      }
-    }
-    
-    function viewOffers() {
-      alert('Special offers coming soon!');
-    }
-    
-    function rewards() {
-      alert('Loyalty rewards coming soon!');
-    }
-    
-    function consultation() {
-      // Scroll to chat section
-      document.getElementById('chatInput').scrollIntoView({ behavior: 'smooth' });
-      document.getElementById('chatInput').focus();
-    }
-    
-    // Services
-    function bookService(service) {
-      openBooking();
-    }
-    
-    // Navigation
-    function openBooking() {
-      // Hide main view, show booking view
-      document.getElementById('mainView').style.display = 'none';
-      document.getElementById('profileView').style.display = 'none';
-      document.getElementById('bookingView').style.display = 'block';
-    }
-    
-    function openProfile() {
-      // Hide main view, show profile view
-      document.getElementById('mainView').style.display = 'none';
-      document.getElementById('bookingView').style.display = 'none';
-      document.getElementById('profileView').style.display = 'block';
-    }
-    
-    function openAI() {
-      window.location.href = 'chat.html';
-    }
-    
-    function goHome() {
-      // Show main view, hide others
-      document.getElementById('mainView').style.display = 'block';
-      document.getElementById('profileView').style.display = 'none';
-      document.getElementById('bookingView').style.display = 'none';
-    }
-    
-    // Save profile
-    function saveProfile() {
-      const profile = {
-        name: document.getElementById('userName').value,
-        style: document.getElementById('preferredStyle').value,
-        stylist: document.getElementById('stylistName').value,
-        phone: document.getElementById('userPhone').value,
-        email: document.getElementById('userEmail').value
-      };
-      localStorage.setItem('userProfile', JSON.stringify(profile));
-      alert('Profile saved!');
-    }
-    
-    // Load profile on startup
-    window.addEventListener('load', () => {
-      const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-      if (profile.name) {
-        document.getElementById('userName').value = profile.name || '';
-        document.getElementById('preferredStyle').value = profile.style || '';
-        document.getElementById('stylistName').value = profile.stylist || '';
-        document.getElementById('userPhone').value = profile.phone || '';
-        document.getElementById('userEmail').value = profile.email || '';
-      }
-    });
-    
-    // Book appointment
-    function bookAppointment() {
-      const appointment = {
-        date: document.getElementById('appointmentDate').value,
-        time: document.getElementById('appointmentTime').value,
-        service: document.getElementById('serviceSelect').value,
-        stylist: document.getElementById('stylistSelect').value,
-        phone: document.getElementById('bookingPhone').value,
-        notes: document.getElementById('bookingNotes').value
-      };
-      
-      if (!appointment.date || !appointment.time || !appointment.service) {
-        alert('Please fill in all required fields');
-        return;
-      }
-      
-      // Here you would send to your booking API
-      console.log('Booking:', appointment);
-      alert(`Appointment booked for ${appointment.date} at ${appointment.time}`);
-      goHome();
-    }
-  </script>
+
+    renderProducts(items);
+  }
+</script>
 </body>
 </html>
