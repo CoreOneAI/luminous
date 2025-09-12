@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luminous Beauty</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    /* Browser Background */
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    
+    /* Phone Container */
+    .phone-frame {
+      width: 375px;
+      height: 812px;
+      background: #000;
+      border-radius: 40px;
+      padding: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Phone Screen */
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 30px;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    /* Flutter AppBar */
+    .app-bar {
+      background: #000;
+      color: #fff;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .app-bar-leading {
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    
+    .app-bar-title {
+      flex: 1;
+      text-align: center;
+      font-size: 18px;
+      font-weight: 600;
+      margin-right: 48px;
+    }
+    
+    /* Category Chip */
+    .category-chip {
+      background: #f5f5f5;
+      padding: 12px 16px;
+      margin: 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+    }
+    
+    /* Flutter Scaffold Body */
+    .scaffold-body {
+      flex: 1;
+      overflow-y: auto;
+      background: #fafafa;
+      position: relative;
+    }
+    
+    /* Product GridView */
+    .grid-view {
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+    
+    /* Product Card */
+    .product-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .product-image {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      background: #f0f0f0;
+    }
+    
+    .product-body {
+      padding: 10px;
+    }
+    
+    .product-brand {
+      font-size: 10px;
+      color: #757575;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+    
+    .product-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #212121;
+      margin: 4px 0;
+      line-height: 1.2;
+      height: 30px;
+      overflow: hidden;
+    }
+    
+    .product-subtitle {
+      font-size: 11px;
+      color: #757575;
+      line-height: 1.2;
+      height: 26px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+    
+    .product-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: #000;
+      margin-bottom: 8px;
+    }
+    
+    /* Flutter ElevatedButton */
+    .elevated-button {
+      width: 100%;
+      height: 32px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .elevated-button:hover {
+      background: #333;
+    }
+    
+    .elevated-button:active {
+      transform: scale(0.98);
+    }
+    
+    /* Flutter BottomNavigationBar */
+    .bottom-nav {
+      background: #fff;
+      height: 56px;
+      border-top: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+    
+    .nav-item {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #757575;
+      transition: all 0.2s;
+    }
+    
+    .nav-item.active {
+      color: #000;
+    }
+    
+    .nav-icon {
+      font-size: 20px;
+      margin-bottom: 2px;
+    }
+    
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+    }
+    
+    /* Flutter FloatingActionButton */
+    .fab {
+      position: absolute;
+      bottom: 70px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background: #000;
+      color: #fff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+    
+    .fab:hover {
+      transform: scale(1.05);
+    }
+    
+    .fab:active {
+      transform: scale(0.95);
+    }
+    
+    /* Loading Indicator */
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+      grid-column: 1/-1;
+    }
+    
+    .circular-progress {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #e0e0e0;
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Empty State Widget */
+    .empty-widget {
+      grid-column: 1/-1;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+      opacity: 0.3;
+    }
+    
+    .empty-text {
+      font-size: 14px;
+      color: #757575;
+    }
+    
+    /* Chat Modal */
+    .chat-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #fff;
+      z-index: 9999;
+      display: none;
+      flex-direction: column;
+    }
+    
+    .chat-modal.show {
+      display: flex;
+    }
+    
+    .chat-header {
+      background: #000;
+      color: #fff;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .chat-title {
+      font-size: 17px;
+      font-weight: 600;
+    }
+    
+    .close-chat {
+      font-size: 24px;
+      cursor: pointer;
+    }
+    
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #f8f8f8;
+    }
+    
+    .message {
+      margin-bottom: 12px;
+      display: flex;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .message.user {
+      justify-content: flex-end;
+    }
+    
+    .bubble {
+      max-width: 70%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      font-size: 15px;
+      line-height: 1.4;
+    }
+    
+    .message.bot .bubble {
+      background: #fff;
+      color: #000;
+    }
+    
+    .message.user .bubble {
+      background: #007aff;
+      color: #fff;
+    }
+    
+    .input-bar {
+      background: #fff;
+      border-top: 1px solid #e5e5e5;
+      padding: 12px;
+      display: flex;
+      gap: 8px;
+    }
+    
+    .msg-input {
+      flex: 1;
+      border: 1px solid #e5e5e5;
+      border-radius: 20px;
+      padding: 10px 16px;
+      font-size: 15px;
+      outline: none;
+    }
+    
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      background: #007aff;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+    }
+    
+    .send-btn:active {
+      background: #0051d5;
+    }
+    
+    /* Responsive */
+    @media (max-width: 425px) {
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+      }
+      
+      .phone-screen {
+        border-radius: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Phone Frame Container -->
+  <div class="phone-frame">
+    <div class="phone-screen">
+      
+      <!-- Flutter AppBar -->
+      <div class="app-bar">
+        <div class="app-bar-leading" onclick="window.location.href='/'">
+          <span style="font-size: 24px;">‹</span>
+        </div>
+        <div class="app-bar-title">Luminous Beauty</div>
+      </div>
+      
+      <!-- Category Display -->
+      <div class="category-chip" id="categoryChip">All Products</div>
+      
+      <!-- Flutter Scaffold Body -->
+      <div class="scaffold-body">
+        <!-- Product GridView -->
+        <div class="grid-view" id="gridView">
+          <div class="loading">
+            <div class="circular-progress"></div>
+          </div>
+        </div>
+        
+        <!-- Floating Action Button -->
+        <div class="fab" onclick="openChat()">💬</div>
+      </div>
+      
+      <!-- Flutter BottomNavigationBar -->
+      <div class="bottom-nav">
+        <div class="nav-item">
+          <div class="nav-icon">🏠</div>
+          <div class="nav-label">Home</div>
+        </div>
+        <div class="nav-item active">
+          <div class="nav-icon">🔍</div>
+          <div class="nav-label">Search</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">🛒</div>
+          <div class="nav-label">Cart</div>
+        </div>
+        <div class="nav-item">
+          <div class="nav-icon">👤</div>
+          <div class="nav-label">Profile</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <!-- Chat Modal -->
+  <div class="chat-modal" id="chatModal">
+    <div class="chat-header">
+      <div class="chat-title">Beauty Expert</div>
+      <div class="close-chat" onclick="closeChat()">×</div>
+    </div>
+    <div class="messages" id="messages">
+      <div class="message bot">
+        <div class="bubble">Hello! I'm your beauty expert. How can I help you today?</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <input type="text" class="msg-input" id="msgInput" placeholder="Ask a question...">
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+  
+  <script>
+    // Get category from URL
+    const params = new URLSearchParams(window.location.search);
+    const category = params.get('category') || '';
+    const query = params.get('q') || category;
+    
+    // Product state
+    let allProducts = [];
+    let displayedProducts = 10;
+    const productsPerPage = 10;
+    
+    // Initialize
+    async function init() {
+      // Update category display
+      if (category) {
+        const names = {
+          'haircare': 'Hair Care',
+          'skincare': 'Skin Care',
+          'anti-aging': 'Anti-Aging',
+          'eye-care': 'Eye Care',
+          'treatments': 'Treatments',
+          'masks': 'Face Masks',
+          'all': 'All Products'
+        };
+        document.getElementById('categoryChip').textContent = 
+          names[category] || category.split('-').map(w => 
+            w.charAt(0).toUpperCase() + w.slice(1)
+          ).join(' ');
+      }
+      
+      await loadProducts();
+    }
+    
+    // Load products from API
+    async function loadProducts() {
+      const gridView = document.getElementById('gridView');
+      
+      try {
+        // Use the API endpoint - NOT products.json directly
+        const response = await fetch(`/api/products?q=${encodeURIComponent(query)}&limit=50`);
+        
+        if (!response.ok) {
+          throw new Error('Failed to load products');
+        }
+        
+        const data = await response.json();
+        
+        // API returns {success: true, items: [...]}
+        if (data.success && data.items && data.items.length > 0) {
+          allProducts = data.items;
+          displayedProducts = productsPerPage;
+          renderProducts();
+        } else {
+          showEmpty();
+        }
+      } catch (error) {
+        console.error('Error loading products:', error);
+        showEmpty();
+      }
+    }
+    
+    // Render products in Flutter card style
+    function renderProducts() {
+      const gridView = document.getElementById('gridView');
+      
+      // Show initial products
+      const productsToShow = allProducts.slice(0, displayedProducts);
+      
+      let html = productsToShow.map(product => `
+        <div class="product-card">
+          <img class="product-image" 
+               src="${product.image || '/images/placeholder.jpg'}"
+               alt="${escapeHtml(product.name)}"
+               onerror="this.src='/images/placeholder.jpg'">
+          <div class="product-body">
+            <div class="product-brand">${escapeHtml((product.brand || 'Premium').substring(0, 20))}</div>
+            <div class="product-title">${escapeHtml(product.name || 'Product')}</div>
+            <div class="product-subtitle">${escapeHtml((product.description || '').substring(0, 50))}</div>
+            <div class="product-price">${formatPrice(product.price)}</div>
+            <button class="elevated-button" onclick="addToCart('${escapeHtml(product.name)}')">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      `).join('');
+      
+      // Add Show More button if there are more products
+      if (allProducts.length > displayedProducts) {
+        html += `
+          <div style="grid-column: 1/-1; padding: 16px;">
+            <button class="elevated-button" style="height: 44px; font-size: 14px;" onclick="showMore()">
+              Show More (${allProducts.length - displayedProducts} remaining)
+            </button>
+          </div>
+        `;
+      }
+      
+      gridView.innerHTML = html;
+    }
+    
+    // Show more products
+    function showMore() {
+      displayedProducts += productsPerPage;
+      renderProducts();
+    }
+    
+    // Show empty state
+    function showEmpty() {
+      document.getElementById('gridView').innerHTML = `
+        <div class="empty-widget">
+          <div class="empty-icon">📦</div>
+          <div class="empty-text">No products found</div>
+        </div>
+      `;
+    }
+    
+    // Format price
+    function formatPrice(price) {
+      if (typeof price === 'number') {
+        return `$${price.toFixed(2)}`;
+      }
+      return '$0.00';
+    }
+    
+    // Add to cart
+    function addToCart(name) {
+      alert(`Added "${name}" to cart!`);
+    }
+    
+    // Open chat
+    function openChat() {
+      document.getElementById('chatModal').classList.add('show');
+      document.getElementById('msgInput').focus();
+    }
+    
+    // Close chat
+    function closeChat() {
+      document.getElementById('chatModal').classList.remove('show');
+    }
+    
+    // Send message
+    async function sendMessage() {
+      const input = document.getElementById('msgInput');
+      const message = input.value.trim();
+      if (!message) return;
+      
+      const messagesDiv = document.getElementById('messages');
+      
+      // Add user message
+      messagesDiv.innerHTML += `
+        <div class="message user">
+          <div class="bubble">${escapeHtml(message)}</div>
+        </div>
+      `;
+      
+      input.value = '';
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+      
+      // Get AI response
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message })
+        });
+        
+        let reply = 'I can help you with beauty advice!';
+        if (response.ok) {
+          const data = await response.json();
+          if (data.success && data.response) {
+            reply = data.response;
+          }
+        }
+        
+        messagesDiv.innerHTML += `
+          <div class="message bot">
+            <div class="bubble">${escapeHtml(reply)}</div>
+          </div>
+        `;
+        
+      } catch (error) {
+        messagesDiv.innerHTML += `
+          <div class="message bot">
+            <div class="bubble">Let me help you with your beauty questions!</div>
+          </div>
+        `;
+      }
+      
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+    
+    // Escape HTML
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text || '';
+      return div.innerHTML;
+    }
+    
+    // Enter key to send
+    document.getElementById('msgInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') sendMessage();
+    });
+    
+    // Start app
+    init();
+  </script>
+</body>
+</html>
