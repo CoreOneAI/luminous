@@ -1,0 +1,217 @@
+[
+  {
+    "id": "aa-retinol-serum-001",
+    "name": "Retinol Renewal Serum 0.3%",
+    "brand": "Luminous Lab",
+    "category": "Anti-Aging",
+    "tags": ["retinol", "anti-aging", "fine lines", "wrinkles", "night"],
+    "price": 39.00,
+    "was": 49.00,
+    "description": "Gentle retinol serum for first-time users. Softens fine lines and improves texture.",
+    "image": "/images/0010.jpg"
+  },
+  {
+    "id": "aa-retinol-cream-002",
+    "name": "Pro Retinol Night Cream",
+    "brand": "Salon Pro",
+    "category": "Anti-Aging",
+    "tags": ["retinol", "night cream", "plumping"],
+    "price": 46.00,
+    "was": 0,
+    "description": "Rich, cushiony night cream with encapsulated retinol and ceramides.",
+    "image": "/images/0014CC.jpg"
+  },
+  {
+    "id": "aa-retinol-boost-003",
+    "name": "Retinol Booster Drops",
+    "brand": "Baine",
+    "category": "Anti-Aging",
+    "tags": ["retinol", "booster", "add-to-moisturizer"],
+    "price": 29.00,
+    "was": 35.00,
+    "description": "Highly concentrated retinoid drops to layer with your favorite moisturizer.",
+    "image": "/images/0010.jpg"
+  },
+  {
+    "id": "aa-peptide-cream-004",
+    "name": "Peptide Firming Cream",
+    "brand": "Luminous Lab",
+    "category": "Facial Care",
+    "tags": ["peptide", "firming", "barrier"],
+    "price": 36.00,
+    "was": 0,
+    "description": "Multi-peptide complex visibly firms while strengthening the moisture barrier.",
+    "image": "/images/0014CC.jpg"
+  },
+
+  {
+    "id": "ec-retinol-eye-001",
+    "name": "Retinol Eye Treatment",
+    "brand": "Salon Pro",
+    "category": "Eye Care",
+    "tags": ["retinol", "eye", "dark circles", "lines"],
+    "price": 34.00,
+    "was": 0,
+    "description": "Low-irritation retinol eye cream to smooth crow’s feet and brighten tone.",
+    "image": "/images/hispanic-american.jpg"
+  },
+  {
+    "id": "ec-ceramide-eye-002",
+    "name": "Ceramide Eye Repair Gel",
+    "brand": "Luminous Lab",
+    "category": "Eye Care",
+    "tags": ["eye", "puffiness", "hydration"],
+    "price": 22.00,
+    "was": 0,
+    "description": "Cooling gel with caffeine and ceramides for morning depuff and long-lasting hydration.",
+    "image": "/images/black-americanfemale.jpg"
+  },
+  {
+    "id": "ec-bright-eye-003",
+    "name": "Brightening Eye Serum",
+    "brand": "Baine",
+    "category": "Eye Care",
+    "tags": ["eye", "brightening", "vitamin c"],
+    "price": 28.00,
+    "was": 0,
+    "description": "Lightweight serum with stabilized Vitamin C to reduce dark under-eye shadows.",
+    "image": "/images/hispanic-american.jpg"
+  },
+
+  {
+    "id": "sc-night-renew-001",
+    "name": "Night Renewal Cream",
+    "brand": "Baine",
+    "category": "Skin Care",
+    "tags": ["night", "renewal", "ceramides"],
+    "price": 33.00,
+    "was": 0,
+    "description": "Creamy overnight hydrator that supports renewal with AHAs + barrier lipids.",
+    "image": "/images/0010.jpg"
+  },
+  {
+    "id": "sc-balancing-002",
+    "name": "Balancing Gel Cleanser",
+    "brand": "Salon Pro",
+    "category": "Skin Care",
+    "tags": ["cleanser", "gentle", "ph-balanced"],
+    "price": 14.00,
+    "was": 0,
+    "description": "pH-balanced gel cleanser that removes makeup without stripping.",
+    "image": "/images/0014CC.jpg"
+  },
+  {
+    "id": "sc-hydrating-toner-003",
+    "name": "Hydrating Essence Toner",
+    "brand": "Luminous Lab",
+    "category": "Skin Care",
+    "tags": ["toner", "hydration", "essence"],
+    "price": 18.00,
+    "was": 0,
+    "description": "Essence-style toner with hyaluronic acid and panthenol for dewy bounce.",
+    "image": "/images/0010.jpg"
+  },
+
+  {
+    "id": "vc-serum-001",
+    "name": "Vitamin C 15% Bright Serum",
+    "brand": "Luminous Lab",
+    "category": "Brightening",
+    "tags": ["vitamin c", "brightening", "tone"],
+    "price": 32.00,
+    "was": 0,
+    "description": "Water-light L-ascorbic acid + ferulic + E to boost radiance and even tone.",
+    "image": "/images/0014CC.jpg"
+  },
+  {
+    "id": "vc-cream-002",
+    "name": "C-Glow Day Cream",
+    "brand": "Salon Pro",
+    "category": "Brightening",
+    "tags": ["vitamin c", "day cream", "glow"],
+    "price": 27.00,
+    "was": 0,
+    "description": "Daily moisturizer with stabilized Vitamin C for city-proof glow.",
+    "image": "/images/0010.jpg"
+  },
+  {
+    "id": "vc-spot-003",
+    "name": "Dark Spot Corrector",
+    "brand": "Baine",
+    "category": "Brightening",
+    "tags": ["spots", "niacinamide", "vitamin c"],
+    "price": 26.00,
+    "was": 0,
+    "description": "Targeted serum with Vitamin C + niacinamide for stubborn discoloration.",
+    "image": "/images/0014CC.jpg"
+  },
+
+  {
+    "id": "spf-30-001",
+    "name": "Daily Mineral SPF 30",
+    "brand": "Luminous Lab",
+    "category": "Daily Protection",
+    "tags": ["spf", "mineral", "uva/uvb", "daily protection"],
+    "price": 21.00,
+    "was": 0,
+    "description": "Non-nano zinc oxide with sheer finish. No white cast on most skin tones.",
+    "image": "/images/0010.jpg"
+  },
+  {
+    "id": "spf-50-002",
+    "name": "Ultra Light SPF 50",
+    "brand": "Salon Pro",
+    "category": "Daily Protection",
+    "tags": ["spf", "light", "oil-free", "daily protection"],
+    "price": 24.00,
+    "was": 0,
+    "description": "Weightless fluid sunscreen; perfect under makeup.",
+    "image": "/images/0014CC.jpg"
+  },
+  {
+    "id": "spf-stick-003",
+    "name": "On-the-Go SPF Stick",
+    "brand": "Baine",
+    "category": "Daily Protection",
+    "tags": ["spf", "reapply", "travel"],
+    "price": 16.00,
+    "was": 0,
+    "description": "Clear stick for easy mid-day reapplication—no mess, no cast.",
+    "image": "/images/0010.jpg"
+  },
+
+  {
+    "id": "nc-ceramide-repair-001",
+    "name": "Ceramide Repair Night Cream",
+    "brand": "Luminous Lab",
+    "category": "Night Cream",
+    "tags": ["repair", "night cream", "ceramide"],
+    "price": 29.00,
+    "was": 0,
+    "description": "Deep repair cream with ceramides + cholesterol for dry, stressed skin.",
+    "image": "/images/0014CC.jpg"
+  },
+  {
+    "id": "nc-sleep-mask-002",
+    "name": "Overnight Recovery Sleep Mask",
+    "brand": "Salon Pro",
+    "category": "Night Cream",
+    "tags": ["repair", "sleep mask", "glow"],
+    "price": 25.00,
+    "was": 0,
+    "description": "Cushiony sleep mask seals in moisture for plump skin by morning.",
+    "image": "/images/0010.jpg"
+  },
+
+  {
+    "id": "eye-targeted-001",
+    "name": "Peptide + C Eye Lift",
+    "brand": "Baine",
+    "category": "Eye",
+    "tags": ["eye", "targeted care", "peptide", "vitamin c"],
+    "price": 31.00,
+    "was": 0,
+    "description": "Targets puffiness and dull tone around the eyes for a rested look.",
+    "image": "/images/hispanic-american.jpg"
+  }
+]
