@@ -126,7 +126,7 @@
     .category-title {
       font-size: 13px;
       font-weight: 600;
-      color: #212121;
+      color: 212121;
       margin: 4px 0;
       line-height: 1.2;
     }
@@ -560,7 +560,7 @@
           
           <div class="category-card" onclick="showProducts('Skin Care')">
             <div class="category-image">
-              <img src="/images/005C.jpg" alt="Skin Care" onerror="handleImageError(this)">
+              <img src="/images/skin-care.jpg" alt="Skin Care" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Skin Care</div>
@@ -570,7 +570,7 @@
           
           <div class="category-card" onclick="showProducts('Eye Care')">
             <div class="category-image">
-              <img src="/images/0011CC.jpg" alt="Eye Care" onerror="handleImageError(this)">
+              <img src="/images/eye-care.jpg" alt="Eye Care" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Eye Care</div>
@@ -580,7 +580,7 @@
           
           <div class="category-card" onclick="showProducts('Brightening')">
             <div class="category-image">
-              <img src="/images/0012CC.jpg" alt="Brightening" onerror="handleImageError(this)">
+              <img src="/images/brightening.jpg" alt="Brightening" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Brightening</div>
@@ -590,7 +590,7 @@
 
           <div class="category-card" onclick="showProducts('Daily Protection')">
             <div class="category-image">
-              <img src="/images/0015CC.jpg" alt="Daily Protection" onerror="handleImageError(this)">
+              <img src="/images/daily-protection.jpg" alt="Daily Protection" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Daily Protection</div>
@@ -646,7 +646,7 @@
         <div class="grid-view">
           <div class="category-card" onclick="bookService('color')">
             <div class="category-image">
-              <img src="/images/0015CC.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
+              <img src="/images/hair-color.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Color & Highlights</div>
@@ -705,7 +705,6 @@
     // Handle image errors
     function handleImageError(img) {
         img.style.display = 'none';
-        // Keep the gradient background that's in the CSS
     }
 
     // Load products from API
@@ -866,6 +865,98 @@
         });
     }
 
+    // Chat function with AI integration
+    async function sendChat() {
+        const input = document.getElementById('chatInput');
+        if (!input) return;
+        
+        const message = input.value.trim();
+        if (!message) return;
+        
+        addChatMessage('user', message);
+        input.value = '';
+        
+        try {
+            // Send to your OpenAI API endpoint
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            if (!response.ok) {
+                throw new Error(`API error: ${response.status}`);
+            }
+            
+            const data = await response.json();
+            const aiReply = data.reply || data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
+            
+            addChatMessage('bot', aiReply);
+            
+        } catch (error) {
+            console.error('Chat error:', error);
+            
+            // Fallback responses if API fails
+            setTimeout(() => {
+                const lowerMsg = message.toLowerCase();
+                let response;
+                
+                if (lowerMsg.includes('retinol') || lowerMsg.includes('anti-aging')) {
+                    response = "Our retinol products are perfect for anti-aging! Try our Retinol Renewal Serum for gentle yet effective results.";
+                } else if (lowerMsg.includes('eye') || lowerMsg.includes('dark circles')) {
+                    response = "For eye care, we recommend our Ceramide Eye Repair Gel or Brightening Eye Serum for dark circles.";
+                } else if (lowerMsg.includes('vitamin c') || lowerMsg.includes('bright')) {
+                    response = "Our Vitamin C 15% Bright Serum is excellent for radiant skin and even tone.";
+                } else if (lowerMsg.includes('spf') || lowerMsg.includes('sun')) {
+                    response = "Protect your skin with our Daily Mineral SPF 30 or Ultra Light SPF 50 for weightless protection.";
+                } else if (lowerMsg.includes('service') || lowerMsg.includes('book') || lowerMsg.includes('appointment')) {
+                    response = "I can help you book services! We offer hair coloring ($120), facials ($90), manicures ($45), and more. What are you interested in?";
+                } else if (lowerMsg.includes('product') || lowerMsg.includes('buy')) {
+                    response = "Check out our products by category: Anti-Aging, Eye Care, Skin Care, Brightening, Daily Protection, or browse all products.";
+                } else {
+                    response = "I'm here to help with beauty advice, product recommendations, and salon services. What would you like to know?";
+                }
+                
+                addChatMessage('bot', response);
+            }, 1000);
+        }
+    }
+
+    function searchProducts() {
+        const searchTerm = document.getElementById('productSearch').value.trim();
+        if (searchTerm) {
+            addChatMessage('user', `Search: ${searchTerm}`);
+            document.getElementById('productSearch').value = '';
+            
+            // Use the AI for search too
+            setTimeout(async () => {
+                try {
+                    const response = await fetch('/ask', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ 
+                            message: `I'm searching for products related to: ${searchTerm}. What do you recommend from your catalog?` 
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        const aiReply = data.reply || data.choices?.[0]?.message?.content;
+                        addChatMessage('bot', aiReply);
+                    } else {
+                        addChatMessage('bot', `I found several products matching "${searchTerm}". Check our categories for the best matches!`);
+                    }
+                } catch (error) {
+                    addChatMessage('bot', `Searching for "${searchTerm}"... Check our categories for related products!`);
+                }
+            }, 1000);
+        }
+    }
+
     // Chat functions
     function addChatMessage(type, message) {
         const chatContainer = document.getElementById('chatContainer');
@@ -876,44 +967,6 @@
         messageDiv.textContent = message;
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-
-    function sendChat() {
-        const input = document.getElementById('chatInput');
-        if (!input) return;
-        
-        const message = input.value.trim();
-        if (!message) return;
-        
-        addChatMessage('user', message);
-        input.value = '';
-        
-        setTimeout(() => {
-            const lowerMsg = message.toLowerCase();
-            let response;
-            
-            if (lowerMsg.includes('product') || lowerMsg.includes('buy') || lowerMsg.includes('shop')) {
-                response = 'Check out our products by category: Anti-Aging, Eye Care, Skin Care, Brightening, Daily Protection, Night Cream, or Eye products.';
-            } else if (lowerMsg.includes('cart') || lowerMsg.includes('purchase')) {
-                response = `You have ${cart.items.length} items in cart. Total: $${cart.total.toFixed(2)}`;
-            } else {
-                response = 'I can help you find products or answer questions about our beauty items. What are you looking for?';
-            }
-            
-            addChatMessage('bot', response);
-        }, 1000);
-    }
-
-    function searchProducts() {
-        const searchTerm = document.getElementById('productSearch').value.trim();
-        if (searchTerm) {
-            addChatMessage('user', `Search: ${searchTerm}`);
-            document.getElementById('productSearch').value = '';
-            
-            setTimeout(() => {
-                addChatMessage('bot', `Searching for "${searchTerm}"... Try browsing our categories for specific products!`);
-            }, 1000);
-        }
     }
 
     // Navigation functions
@@ -948,7 +1001,7 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts();
-        addChatMessage('bot', 'Welcome! Ask me about our beauty products or shop by category.');
+        addChatMessage('bot', 'Hello! I\'m your beauty assistant. Ask me about skincare, products, or salon services!');
     });
   </script>
 </body>
