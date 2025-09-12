@@ -695,7 +695,7 @@
   <!-- Modal Overlay -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
 
-  <script>
+<script>
     // Current cart
     let cart = {
         items: [],
@@ -713,8 +713,11 @@
             const response = await fetch('/api/products');
             const data = await response.json();
             
-            if (data.success && data.items && data.items.length > 0) {
-                displayProducts(data.items.slice(0, 6));
+            // FIX: Check the correct response structure
+            const products = data.items || data.products || [];
+            
+            if (products.length > 0) {
+                displayProducts(products.slice(0, 6));
             } else {
                 displayProducts(getFallbackProducts().slice(0, 6));
             }
@@ -724,7 +727,7 @@
         }
     }
 
-    // Show products by category
+    // Show products by category - FIXED
     async function showProducts(category) {
         try {
             let url = '/api/products';
@@ -735,8 +738,11 @@
             const response = await fetch(url);
             const data = await response.json();
             
-            if (data.success && data.items && data.items.length > 0) {
-                showProductsModal(data.items, category);
+            // FIX: Check the correct response structure
+            const products = data.items || data.products || [];
+            
+            if (products.length > 0) {
+                showProductsModal(products, category);
             } else {
                 addChatMessage('bot', `No products found in ${category} category.`);
             }
@@ -746,7 +752,7 @@
         }
     }
 
-    // Show products in a modal
+    // Show products in a modal - IMPROVED
     function showProductsModal(products, category) {
         const overlay = document.getElementById('modalOverlay');
         overlay.innerHTML = '';
@@ -754,35 +760,152 @@
         
         const modal = document.createElement('div');
         modal.className = 'product-modal';
+        modal.style.width = '320px';
+        modal.style.maxHeight = '500px';
+        modal.style.overflowY = 'auto';
         
         const title = document.createElement('h3');
-        title.textContent = `${category} Products`;
+        title.textContent = `${category} Products (${products.length})`;
         title.style.marginBottom = '15px';
         title.style.textAlign = 'center';
+        title.style.color = '#333';
         modal.appendChild(title);
         
+        // Create product grid (2 per row)
+        const productGrid = document.createElement('div');
+        productGrid.style.display = 'grid';
+        productGrid.style.gridTemplateColumns = '1fr 1fr';
+        productGrid.style.gap = '10px';
+        productGrid.style.padding = '10px';
+        
         products.forEach(product => {
-            const productDiv = document.createElement('div');
-            productDiv.style.padding = '10px';
-            productDiv.style.borderBottom = '1px solid #eee';
-            productDiv.style.display = 'flex';
-            productDiv.style.justifyContent = 'space-between';
-            productDiv.style.alignItems = 'center';
+            const productCard = document.createElement('div');
+            productCard.style.background = '#fff';
+            productCard.style.borderRadius = '8px';
+            productCard.style.padding = '10px';
+            productCard.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            productCard.style.cursor = 'pointer';
+            productCard.style.transition = 'transform 0.2s';
             
-            productDiv.innerHTML = `
-                <div style="flex: 1;">
-                    <strong>${product.name}</strong>
-                    <div>$${product.price.toFixed(2)}</div>
-                    <small style="color: #666;">${product.description}</small>
-                </div>
-                <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})" 
-                        style="background: #C9A961; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
-                    Add to Cart
-                </button>
-            `;
+            productCard.onmouseenter = () => {
+                productCard.style.transform = 'translateY(-2px)';
+            };
             
-            modal.appendChild(productDiv);
+            productCard.onmouseleave = () => {
+                productCard.style.transform = 'none';
+            };
+            
+            productCard.onclick = () => showProductDetailModal(product);
+            
+            const imageContainer = document.createElement('div');
+            imageContainer.style.height = '80px';
+            imageContainer.style.marginBottom = '8px';
+            imageContainer.style.borderRadius = '6px';
+            imageContainer.style.overflow = 'hidden';
+            imageContainer.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+            
+            const imageHtml = product.image ? 
+                `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="handleImageError(this)">` :
+                '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px;">💄</div>';
+            
+            imageContainer.innerHTML = imageHtml;
+            
+            const productName = document.createElement('div');
+            productName.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
+            productName.style.fontWeight = '600';
+            productName.style.fontSize = '12px';
+            productName.style.marginBottom = '4px';
+            productName.style.color = '#333';
+            
+            const productPrice = document.createElement('div');
+            productPrice.textContent = `$${product.price.toFixed(2)}`;
+            productPrice.style.fontWeight = '700';
+            productPrice.style.color = '#C9A961';
+            productPrice.style.fontSize = '14px';
+            
+            productCard.appendChild(imageContainer);
+            productCard.appendChild(productName);
+            productCard.appendChild(productPrice);
+            
+            productGrid.appendChild(productCard);
         });
+        
+        modal.appendChild(productGrid);
+        overlay.appendChild(modal);
+    }
+
+    // Show individual product detail modal
+    function showProductDetailModal(product) {
+        const overlay = document.getElementById('modalOverlay');
+        overlay.innerHTML = '';
+        
+        const modal = document.createElement('div');
+        modal.className = 'product-modal';
+        modal.style.width = '300px';
+        
+        const imageContainer = document.createElement('div');
+        imageContainer.style.height = '150px';
+        imageContainer.style.marginBottom = '15px';
+        imageContainer.style.borderRadius = '8px';
+        imageContainer.style.overflow = 'hidden';
+        imageContainer.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+        
+        const imageHtml = product.image ? 
+            `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="handleImageError(this)">` :
+            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
+        
+        imageContainer.innerHTML = imageHtml;
+        
+        const productName = document.createElement('h3');
+        productName.textContent = product.name;
+        productName.style.marginBottom = '8px';
+        productName.style.color = '#333';
+        productName.style.textAlign = 'center';
+        
+        const productPrice = document.createElement('div');
+        productPrice.textContent = `Price: $${product.price.toFixed(2)}`;
+        productPrice.style.fontWeight = '700';
+        productPrice.style.color = '#C9A961';
+        productPrice.style.fontSize = '18px';
+        productPrice.style.textAlign = 'center';
+        productPrice.style.marginBottom = '12px';
+        
+        const productBrand = document.createElement('div');
+        productBrand.textContent = `Brand: ${product.brand || 'Luminous'}`;
+        productBrand.style.color = '#666';
+        productBrand.style.fontSize = '12px';
+        productBrand.style.marginBottom = '8px';
+        productBrand.style.textAlign = 'center';
+        
+        const productDescription = document.createElement('div');
+        productDescription.textContent = product.description || 'No description available.';
+        productDescription.style.color = '#555';
+        productDescription.style.fontSize = '12px';
+        productDescription.style.marginBottom = '20px';
+        productDescription.style.lineHeight = '1.4';
+        productDescription.style.textAlign = 'center';
+        
+        const addToCartBtn = document.createElement('button');
+        addToCartBtn.textContent = 'Add to Cart';
+        addToCartBtn.style.background = '#C9A961';
+        addToCartBtn.style.color = 'white';
+        addToCartBtn.style.border = 'none';
+        addToCartBtn.style.padding = '12px 20px';
+        addToCartBtn.style.borderRadius = '8px';
+        addToCartBtn.style.cursor = 'pointer';
+        addToCartBtn.style.width = '100%';
+        addToCartBtn.style.fontWeight = '600';
+        addToCartBtn.onclick = () => {
+            addToCart(product);
+            closeModal();
+        };
+        
+        modal.appendChild(imageContainer);
+        modal.appendChild(productName);
+        modal.appendChild(productPrice);
+        modal.appendChild(productBrand);
+        modal.appendChild(productDescription);
+        modal.appendChild(addToCartBtn);
         
         overlay.appendChild(modal);
     }
@@ -800,7 +923,6 @@
         cart.total += product.price;
         
         addChatMessage('bot', `Added ${product.name} to cart! Total: $${cart.total.toFixed(2)}`);
-        closeModal();
     }
 
     // Fallback products
@@ -812,7 +934,7 @@
                 brand: "Luminous Lab",
                 category: "Anti-Aging",
                 price: 39.00,
-                description: "Gentle retinol serum for first-time users.",
+                description: "Gentle retinol serum for first-time users. Softens fine lines and improves texture.",
                 image: "/images/0010.jpg"
             },
             {
@@ -821,7 +943,7 @@
                 brand: "Luminous Lab", 
                 category: "Eye Care",
                 price: 22.00,
-                description: "Cooling gel with caffeine and ceramides.",
+                description: "Cooling gel with caffeine and ceramides for morning depuff and long-lasting hydration.",
                 image: "/images/black-americanfemale.jpg"
             },
             {
@@ -830,7 +952,7 @@
                 brand: "Salon Pro",
                 category: "Skin Care",
                 price: 14.00,
-                description: "pH-balanced gel cleanser.",
+                description: "pH-balanced gel cleanser that removes makeup without stripping.",
                 image: "/images/0014CC.jpg"
             }
         ];
@@ -846,7 +968,7 @@
         products.forEach(product => {
             const productElement = document.createElement('div');
             productElement.className = 'mini-product';
-            productElement.onclick = () => addToCart(product);
+            productElement.onclick = () => showProductDetailModal(product);
             
             const imageHtml = product.image ? 
                 `<img src="${product.image}" alt="${product.name}" onerror="handleImageError(this)">` :
@@ -877,7 +999,6 @@
         input.value = '';
         
         try {
-            // Send to your OpenAI API endpoint
             const response = await fetch('/ask', {
                 method: 'POST',
                 headers: {
@@ -898,7 +1019,6 @@
         } catch (error) {
             console.error('Chat error:', error);
             
-            // Fallback responses if API fails
             setTimeout(() => {
                 const lowerMsg = message.toLowerCase();
                 let response;
@@ -930,7 +1050,6 @@
             addChatMessage('user', `Search: ${searchTerm}`);
             document.getElementById('productSearch').value = '';
             
-            // Use the AI for search too
             setTimeout(async () => {
                 try {
                     const response = await fetch('/ask', {
@@ -1006,3 +1125,4 @@
   </script>
 </body>
 </html>
+
