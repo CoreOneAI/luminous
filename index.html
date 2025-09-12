@@ -514,279 +514,138 @@
         
         <div style="padding: 16px; overflow-y: auto;">
           <!-- Personal Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Personal Information</h3>
+          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+            <div style="display: flex; align-items: center; margin-bottom: 16px;">
+              <div style="width: 60px; height: 60px; background: #e0e0e0; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-right: 16px;">
+                👤
+              </div>
+              <div>
+                <div style="font-size: 16px; font-weight: 600;">Alex Johnson</div>
+                <div style="font-size: 12px; color: #757575;">Luminous Member since 2023</div>
+              </div>
+            </div>
             
-            <input type="text" id="userName" placeholder="Your Name" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <select id="preferredStyle" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-              <option value="">Preferred Style</option>
-              <option>Classic</option>
-              <option>Modern</option>
-              <option>Natural</option>
-              <option>Glamorous</option>
-              <option>Edgy</option>
-            </select>
-            
-            <input type="text" id="stylistName" placeholder="Preferred Stylist" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <input type="tel" id="userPhone" placeholder="Phone Number" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <input type="email" id="userEmail" placeholder="Email Address" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div style="text-align: center;">
+                <div style="font-size: 16px; font-weight: 600;">12</div>
+                <div style="font-size: 12px; color: #757575;">Appointments</div>
+              </div>
+              <div style="text-align: center;">
+                <div style="font-size: 16px; font-weight: 600;">350</div>
+                <div style="font-size: 12px; color: #757575;">Reward Points</div>
+              </div>
+            </div>
           </div>
           
-          <!-- Salon Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Salon Information</h3>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📍 123 Beauty Ave, Suite 100</p>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📞 (555) 123-4567</p>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">✉️ info@luminoussalon.com</p>
-            <p style="font-size: 12px; color: #666;">⏰ Mon-Sat: 9AM-7PM, Sun: 10AM-5PM</p>
+          <!-- Menu Items -->
+          <div style="background: #fff; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
+            <div class="menu-item" onclick="navigateTo('appointments')">
+              <span style="font-size: 20px; margin-right: 16px;">📅</span>
+              <span>My Appointments</span>
+              <span style="margin-left: auto; color: #757575;">›</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('favorites')">
+              <span style="font-size: 20px; margin-right: 16px;">❤️</span>
+              <span>Favorites</span>
+              <span style="margin-left: auto; color: #757575;">›</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('rewards')">
+              <span style="font-size: 20px; margin-right: 16px;">⭐</span>
+              <span>Rewards</span>
+              <span style="margin-left: auto; color: #757575;">›</span>
+            </div>
+            <div class="menu-item" onclick="navigateTo('settings')">
+              <span style="font-size: 20px; margin-right: 16px;">⚙️</span>
+              <span>Settings</span>
+              <span style="margin-left: auto; color: #757575;">›</span>
+            </div>
           </div>
           
-          <!-- Preferences -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Preferences</h3>
-            <label style="display: flex; align-items: center; margin-bottom: 8px;">
-              <input type="checkbox" style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">Email notifications</span>
-            </label>
-            <label style="display: flex; align-items: center; margin-bottom: 8px;">
-              <input type="checkbox" checked style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">SMS reminders</span>
-            </label>
-            <label style="display: flex; align-items: center;">
-              <input type="checkbox" checked style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">Special offers</span>
-            </label>
+          <!-- Promo Card -->
+          <div class="promo-card">
+            <div class="promo-title">Refer a Friend</div>
+            <div class="promo-text">Get $25 off when your friend books their first appointment</div>
           </div>
-          
-          <button onclick="saveProfile()" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Save Profile
-          </button>
         </div>
       </div>
       
-      <!-- Booking View -->
-      <div class="scaffold-body" id="bookingView" style="display: none;">
-        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
-          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
-          <h2 style="font-size: 18px; font-weight: 600;">Book Appointment</h2>
-        </div>
-        
-        <div style="padding: 16px; overflow-y: auto;">
-          <!-- Date & Time -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Select Date & Time</h3>
-            
-            <input type="date" id="appointmentDate" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <select id="appointmentTime" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
-              <option value="">Select Time</option>
-              <option>9:00 AM</option>
-              <option>9:30 AM</option>
-              <option>10:00 AM</option>
-              <option>10:30 AM</option>
-              <option>11:00 AM</option>
-              <option>11:30 AM</option>
-              <option>12:00 PM</option>
-              <option>12:30 PM</option>
-              <option>1:00 PM</option>
-              <option>1:30 PM</option>
-              <option>2:00 PM</option>
-              <option>2:30 PM</option>
-              <option>3:00 PM</option>
-              <option>3:30 PM</option>
-              <option>4:00 PM</option>
-              <option>4:30 PM</option>
-              <option>5:00 PM</option>
-              <option>5:30 PM</option>
-              <option>6:00 PM</option>
-              <option>6:30 PM</option>
-            </select>
-          </div>
-          
-          <!-- Service Selection -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Choose Service</h3>
-            
-            <select id="serviceSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-              <option value="">Select Service</option>
-              <option value="haircut">Haircut & Style - $65</option>
-              <option value="color">Color - $120</option>
-              <option value="highlights">Highlights - $150</option>
-              <option value="balayage">Balayage - $200</option>
-              <option value="treatment">Deep Treatment - $45</option>
-              <option value="blowdry">Blow Dry - $45</option>
-              <option value="updo">Special Event Updo - $85</option>
-              <option value="makeup">Makeup Application - $75</option>
-              <option value="facial">Facial - $95</option>
-              <option value="brows">Brow Service - $35</option>
-              <option value="lashes">Lash Extensions - $120</option>
-              <option value="manicure">Manicure - $35</option>
-              <option value="pedicure">Pedicure - $45</option>
-            </select>
-            
-            <select id="stylistSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
-              <option value="">Select Stylist</option>
-              <option>Sarah Johnson</option>
-              <option>Maria Rodriguez</option>
-              <option>Emily Chen</option>
-              <option>Jessica Williams</option>
-              <option>Any Available</option>
-            </select>
-          </div>
-          
-          <!-- Contact Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Contact Information</h3>
-            
-            <input type="tel" id="bookingPhone" placeholder="Phone Number" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <textarea id="bookingNotes" placeholder="Special requests or notes..." 
-                      style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; height: 60px; font-size: 13px; resize: none;"></textarea>
-          </div>
-          
-          <button onclick="bookAppointment()" style="width: 100%; padding: 12px; background: #C9A961; color: #fff; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px; cursor: pointer;">
-            Book Appointment
-          </button>
-          
-          <button onclick="goHome()" style="width: 100%; padding: 12px; background: #f0f0f0; color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Cancel
-          </button>
-        </div>
-      </div>
-      
-      <!-- Flutter BottomNavigationBar -->
+      <!-- Bottom Navigation -->
       <div class="bottom-nav">
-        <div class="nav-item active" onclick="goHome()">
+        <a class="nav-item active" onclick="goHome()">
           <span style="font-size: 20px;">🏠</span>
           <div class="nav-label">Home</div>
-        </div>
-        <a href="chat.html?category=all" class="nav-item">
-          <span style="font-size: 20px;">🛍️</span>
-          <div class="nav-label">Shop</div>
         </a>
-        <div class="nav-item" onclick="openBooking()">
-          <span style="font-size: 20px;">📅</span>
-          <div class="nav-label">Book</div>
-        </div>
-        <div class="nav-item" onclick="openProfile()">
+        <a class="nav-item" onclick="navigateTo('services')">
+          <span style="font-size: 20px;">✂️</span>
+          <div class="nav-label">Services</div>
+        </a>
+        <a class="nav-item" onclick="navigateTo('products')">
+          <span style="font-size: 20px;">🛍️</span>
+          <div class="nav-label">Products</div>
+        </a>
+        <a class="nav-item" onclick="showProfile()">
           <span style="font-size: 20px;">👤</span>
           <div class="nav-label">Profile</div>
-        </div>
+        </a>
       </div>
-      
     </div>
   </div>
-  
+
   <script>
-    // Global variables
-    let allProducts = [];
-    
-    // Initialize the app
-    async function init() {
-      loadProfile();
-      await loadFeaturedProducts();
-    }
-    
-    // Load featured products for homepage - USING API ENDPOINT
-    async function loadFeaturedProducts() {
+    // Fallback product data in case API is not available
+    const fallbackProducts = [
+      { id: 1, name: "Hydrating Shampoo", price: "$24.99", image: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)" },
+      { id: 2, name: "Nourishing Conditioner", price: "$26.99", image: "linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)" },
+      { id: 3, name: "Anti-Frizz Serum", price: "$32.50", image: "linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)" },
+      { id: 4, name: "Repairing Hair Mask", price: "$29.99", image: "linear-gradient(135deg, #fd79a8 0%, #e84393 100%)" },
+      { id: 5, name: "Volumizing Mousse", price: "$19.99", image: "linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%)" },
+      { id: 6, name: "Heat Protectant Spray", price: "$22.50", image: "linear-gradient(135deg, #81ecec 0%, #00cec9 100%)" }
+    ];
+
+    // Function to load products from API with fallback
+    async function loadProducts() {
       try {
-        // CORRECT - Use the API endpoint
-        const response = await fetch('/api/products?limit=8');
+        const response = await fetch('/api/products');
         
-        if (!response.ok) {
-          throw new Error('Failed to load products');
+        // Check if response is JSON
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          throw new TypeError("API returned non-JSON response");
         }
         
-        const data = await response.json();
-        
-        // API returns {success: true, items: [...]}
-        if (data.success && data.items && data.items.length > 0) {
-          allProducts = data.items;
-          displayFeaturedProducts(data.items.slice(0, 4));
-        } else {
-          displayPlaceholderProducts();
-        }
+        const products = await response.json();
+        displayProducts(products);
       } catch (error) {
         console.error('Error loading products:', error);
-        displayPlaceholderProducts();
+        console.log('Using fallback product data');
+        displayProducts(fallbackProducts);
       }
     }
-    
-    // Display featured products
-    function displayFeaturedProducts(products) {
-      const featuredContainer = document.getElementById('featuredProducts');
-      if (!featuredContainer) return;
+
+    // Function to display products
+    function displayProducts(products) {
+      const container = document.getElementById('featuredProducts');
+      container.innerHTML = '';
       
-      featuredContainer.innerHTML = products.map(product => `
-        <div class="mini-product" onclick="viewProduct('${encodeURIComponent(product.name)}')" style="cursor: pointer;">
-          <img class="mini-product-image" src="${product.image || '/images/placeholder.jpg'}" 
-               alt="${escapeHtml(product.name)}"
-               onerror="this.src='/images/placeholder.jpg'">
-          <div class="mini-product-info">
-            <div class="mini-product-name">${escapeHtml(product.name)}</div>
-            <div class="mini-product-price">$${formatPrice(product.price)}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-    
-    // Display placeholder products if API fails
-    function displayPlaceholderProducts() {
-      const featuredContainer = document.getElementById('featuredProducts');
-      if (!featuredContainer) return;
-      
-      const placeholders = [
-        { name: 'Hydrating Serum', price: 45.00 },
-        { name: 'Repair Mask', price: 32.00 },
-        { name: 'Volume Shampoo', price: 28.00 },
-        { name: 'Eye Cream', price: 55.00 }
-      ];
-      
-      featuredContainer.innerHTML = placeholders.map(product => `
-        <div class="mini-product" style="cursor: pointer;">
-          <div class="mini-product-image" style="background: linear-gradient(135deg, #C9A961 0%, #B8984F 100%);"></div>
+      products.forEach(product => {
+        const productElement = document.createElement('div');
+        productElement.className = 'mini-product';
+        productElement.innerHTML = `
+          <div class="mini-product-image" style="background: ${product.image || 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'};"></div>
           <div class="mini-product-info">
             <div class="mini-product-name">${product.name}</div>
-            <div class="mini-product-price">$${product.price.toFixed(2)}</div>
+            <div class="mini-product-price">${product.price}</div>
           </div>
-        </div>
-      `).join('');
+        `;
+        container.appendChild(productElement);
+      });
     }
-    
-    // Format price correctly
-    function formatPrice(price) {
-      if (typeof price === 'number') {
-        return price.toFixed(2);
-      }
-      return '0.00';
-    }
-    
-    // Search products
-    function searchProducts() {
-      const searchTerm = document.getElementById('productSearch').value.toLowerCase().trim();
-      if (searchTerm) {
-        window.location.href = `chat.html?q=${encodeURIComponent(searchTerm)}`;
-      }
-    }
-    
-    // View product details
-    function viewProduct(productName) {
-      window.location.href = `chat.html?q=${encodeURIComponent(productName)}`;
-    }
-    
-    // Chat functions with real API
-    async function sendChat() {
+
+    // Chat functionality
+    function sendChat() {
       const input = document.getElementById('chatInput');
       const message = input.value.trim();
+      
       if (!message) return;
       
       const chatContainer = document.getElementById('chatContainer');
@@ -800,160 +659,118 @@
       // Clear input
       input.value = '';
       
-      // Show typing indicator
-      const typingDiv = document.createElement('div');
-      typingDiv.className = 'chat-message bot';
-      typingDiv.innerHTML = '<em style="color: #999;">typing...</em>';
-      chatContainer.appendChild(typingDiv);
+      // Scroll to bottom
       chatContainer.scrollTop = chatContainer.scrollHeight;
       
-      try {
-        // Call the actual chat API
-        const response = await fetch('/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message })
-        });
-        
-        let botResponse = 'I can help you with beauty and skincare advice.';
-        
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success && data.response) {
-            botResponse = data.response;
-          }
-        }
-        
-        // Remove typing indicator
-        chatContainer.removeChild(typingDiv);
-        
-        // Add bot response
+      // Simulate AI response after a short delay
+      setTimeout(() => {
         const botMessage = document.createElement('div');
         botMessage.className = 'chat-message bot';
-        botMessage.textContent = botResponse;
-        chatContainer.appendChild(botMessage);
         
-      } catch (error) {
-        console.error('Chat error:', error);
-        // Remove typing indicator
-        if (typingDiv.parentNode) {
-          chatContainer.removeChild(typingDiv);
+        // Simple response logic
+        if (message.toLowerCase().includes('hair')) {
+          botMessage.textContent = "For hair care, I recommend our hydrating shampoo and deep conditioner. They work wonders for dry or damaged hair!";
+        } else if (message.toLowerCase().includes('skin')) {
+          botMessage.textContent = "Our skincare line includes cleansers, toners, and moisturizers for all skin types. What's your primary skin concern?";
+        } else if (message.toLowerCase().includes('price') || message.toLowerCase().includes('cost')) {
+          botMessage.textContent = "Prices vary by service. A basic haircut starts at $65, coloring from $120, and facials from $90. Would you like more specific pricing?";
+        } else if (message.toLowerCase().includes('appointment') || message.toLowerCase().includes('book')) {
+          botMessage.textContent = "To book an appointment, you can call us at (555) 123-4567 or use our online booking system. What service are you interested in?";
+        } else {
+          botMessage.textContent = "Thanks for your question! Our beauty experts can help with that. Would you like to schedule a consultation?";
         }
         
-        // Show error message
-        const botMessage = document.createElement('div');
-        botMessage.className = 'chat-message bot';
-        botMessage.textContent = 'I can help you find the perfect beauty products and treatments.';
         chatContainer.appendChild(botMessage);
-      }
-      
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 1000);
     }
-    
+
+    // Search products function
+    function searchProducts() {
+      const searchTerm = document.getElementById('productSearch').value;
+      if (searchTerm) {
+        const chatContainer = document.getElementById('chatContainer');
+        
+        // Add user message
+        const userMessage = document.createElement('div');
+        userMessage.className = 'chat-message user';
+        userMessage.textContent = `Search for: ${searchTerm}`;
+        chatContainer.appendChild(userMessage);
+        
+        // Clear input
+        document.getElementById('productSearch').value = '';
+        
+        // Scroll to bottom
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        
+        // Simulate search results
+        setTimeout(() => {
+          const botMessage = document.createElement('div');
+          botMessage.className = 'chat-message bot';
+          botMessage.textContent = `I found several products matching "${searchTerm}". Our top recommendations would be our hydrating shampoo and repair mask. Would you like more details?`;
+          
+          chatContainer.appendChild(botMessage);
+          chatContainer.scrollTop = chatContainer.scrollHeight;
+        }, 1000);
+      }
+    }
+
     // Navigation functions
     function goHome() {
-      document.getElementById('mainView').style.display = 'block';
+      document.getElementById('mainView').style.display = 'flex';
       document.getElementById('profileView').style.display = 'none';
-      document.getElementById('bookingView').style.display = 'none';
       
       // Update nav items
-      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
       document.querySelectorAll('.nav-item')[0].classList.add('active');
     }
-    
-    function openProfile() {
+
+    function showProfile() {
       document.getElementById('mainView').style.display = 'none';
       document.getElementById('profileView').style.display = 'block';
-      document.getElementById('bookingView').style.display = 'none';
+      
+      // Update nav items
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      document.querySelectorAll('.nav-item')[3].classList.add('active');
     }
-    
-    function openBooking() {
-      document.getElementById('mainView').style.display = 'none';
-      document.getElementById('profileView').style.display = 'none';
-      document.getElementById('bookingView').style.display = 'block';
+
+    function navigateTo(page) {
+      alert(`Navigating to ${page} page...`);
+      // In a real app, this would change the view or route
     }
-    
+
     function bookNow() {
-      openBooking();
+      alert('Opening booking system...');
     }
-    
+
     function callUs() {
-      if (confirm('Call (555) 123-4567?')) {
-        window.location.href = 'tel:5551234567';
-      }
+      alert('Calling (555) 123-4567...');
     }
-    
+
     function viewOffers() {
-      alert('Check out our special offers:\n\n• 20% off first visit\n• Free consultation\n• Loyalty rewards program');
+      alert('Viewing current offers...');
     }
-    
+
     function rewards() {
-      alert('Join our rewards program and earn points on every visit!');
+      alert('Viewing rewards program...');
     }
-    
+
     function bookService(service) {
-      openBooking();
-      // Pre-select the service
-      setTimeout(() => {
-        const serviceMap = {
-          'color': 'color',
-          'styling': 'makeup'
-        };
-        document.getElementById('serviceSelect').value = serviceMap[service] || '';
-      }, 100);
+      alert(`Booking ${service} service...`);
     }
-    
-    function bookAppointment() {
-      const date = document.getElementById('appointmentDate').value;
-      const time = document.getElementById('appointmentTime').value;
-      const service = document.getElementById('serviceSelect').value;
-      
-      if (!date || !time || !service) {
-        alert('Please fill in all required fields');
-        return;
-      }
-      
-      alert(`Appointment booked!\n\nDate: ${date}\nTime: ${time}\nService: ${service}\n\nWe'll send you a confirmation.`);
-      goHome();
-    }
-    
-    function saveProfile() {
-      const profile = {
-        name: document.getElementById('userName').value,
-        style: document.getElementById('preferredStyle').value,
-        stylist: document.getElementById('stylistName').value,
-        phone: document.getElementById('userPhone').value,
-        email: document.getElementById('userEmail').value
-      };
-      
-      localStorage.setItem('userProfile', JSON.stringify(profile));
-      alert('Profile saved successfully!');
-    }
-    
-    function loadProfile() {
-      const profile = JSON.parse(localStorage.getItem('userProfile') || '{}');
-      if (profile.name) {
-        document.getElementById('userName').value = profile.name || '';
-        document.getElementById('preferredStyle').value = profile.style || '';
-        document.getElementById('stylistName').value = profile.stylist || '';
-        document.getElementById('userPhone').value = profile.phone || '';
-        document.getElementById('userEmail').value = profile.email || '';
-      }
-    }
-    
+
     function openAI() {
-      window.location.href = 'chat.html';
+      document.getElementById('chatInput').focus();
     }
-    
-    // Utility functions
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text || '';
-      return div.innerHTML;
-    }
-    
-    // Initialize the app when DOM is ready
-    document.addEventListener('DOMContentLoaded', init);
+
+    // Initialize the app
+    document.addEventListener('DOMContentLoaded', function() {
+      loadProducts();
+    });
   </script>
 </body>
 </html>
