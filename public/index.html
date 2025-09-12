@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Luminous Beauty</title>
+  <title>Luminous Salon & Spa</title>
   <style>
     * {
       margin: 0;
@@ -74,43 +74,37 @@
       gap: 8px;
     }
     
-    .category-card {
+    .service-card {
       background: #fff;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      text-decoration: none;
-      color: inherit;
       cursor: pointer;
       transition: transform 0.2s;
+      text-align: center;
+      padding: 15px;
     }
     
-    .category-card:hover {
+    .service-card:hover {
       transform: translateY(-2px);
     }
     
-    .category-image {
-      width: 100%;
-      height: 100px;
-      object-fit: cover;
+    .service-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
     }
     
-    .category-body {
-      padding: 10px;
-    }
-    
-    .category-title {
-      font-size: 13px;
+    .service-title {
+      font-size: 14px;
       font-weight: 600;
       color: #212121;
-      margin: 4px 0;
-      line-height: 1.2;
+      margin-bottom: 4px;
     }
     
-    .category-subtitle {
-      font-size: 11px;
-      color: #757575;
-      line-height: 1.2;
+    .service-price {
+      font-size: 12px;
+      color: #C9A961;
+      font-weight: 600;
     }
     
     .hero-banner {
@@ -119,6 +113,7 @@
       padding: 16px;
       margin: 8px;
       border-radius: 12px;
+      text-align: center;
     }
     
     .hero-title {
@@ -138,16 +133,11 @@
       gap: 8px;
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    
-    .quick-actions::-webkit-scrollbar {
-      display: none;
     }
     
     .action-button {
       flex: 0 0 auto;
-      padding: 8px 16px;
+      padding: 12px 20px;
       background: #000;
       color: #fff;
       border: none;
@@ -156,138 +146,14 @@
       font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
-      display: flex;
-      align-items: center;
-      gap: 6px;
     }
     
     .section-label {
-      padding: 12px 12px 4px;
-      font-size: 14px;
-      font-weight: 600;
-      color: #000;
-    }
-    
-    .products-scroll {
-      padding: 8px;
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-    
-    .products-scroll::-webkit-scrollbar {
-      display: none;
-    }
-    
-    .mini-product {
-      flex: 0 0 120px;
-      background: #fff;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      cursor: pointer;
-    }
-    
-    .mini-product-image {
-      width: 100%;
-      height: 80px;
-      object-fit: cover;
-      background: #f0f0f0;
-    }
-    
-    .mini-product-info {
-      padding: 8px;
-    }
-    
-    .mini-product-name {
-      font-size: 11px;
-      font-weight: 600;
-      margin-bottom: 2px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    
-    .mini-product-price {
-      font-size: 13px;
+      padding: 16px 12px 8px;
+      font-size: 16px;
       font-weight: 700;
       color: #000;
-    }
-    
-    .promo-card {
-      margin: 8px;
-      padding: 12px;
-      background: linear-gradient(135deg, #000000 0%, #000000 100%);
-      border-radius: 12px;
-      color: #fff;
-    }
-    
-    .promo-title {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 2px;
-      color: #C9A961;
-    }
-    
-    .promo-text {
-      font-size: 11px;
-      opacity: 0.95;
-    }
-    
-    .bottom-nav {
-      background: #fff;
-      height: 56px;
-      border-top: 1px solid #e0e0e0;
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-    }
-    
-    .nav-item {
-      flex: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #757575;
-      transition: all 0.2s;
-      text-decoration: none;
-    }
-    
-    .nav-item.active {
-      color: #000;
-    }
-    
-    .nav-label {
-      font-size: 10px;
-      font-weight: 500;
-    }
-    
-    .fab {
-      position: absolute;
-      bottom: 70px;
-      right: 16px;
-      width: 56px;
-      height: 56px;
-      background: #000;
-      color: #fff;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-      cursor: pointer;
-      font-size: 24px;
-      z-index: 10;
-      transition: all 0.2s;
-    }
-    
-    .fab:hover {
-      transform: scale(1.05);
+      text-align: center;
     }
     
     .chat-container {
@@ -302,7 +168,7 @@
     }
     
     .chat-messages {
-      height: 200px;
+      height: 150px;
       overflow-y: auto;
       background: #f9f9f9;
       border-radius: 8px;
@@ -356,39 +222,89 @@
       cursor: pointer;
     }
     
-    .search-container {
-      padding: 8px;
-    }
-    
-    .search-box {
+    .bottom-nav {
       background: #fff;
-      border-radius: 12px;
-      padding: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-    }
-    
-    .search-input-container {
+      height: 56px;
+      border-top: 1px solid #e0e0e0;
       display: flex;
-      gap: 8px;
+      align-items: center;
+      justify-content: space-around;
     }
     
-    .search-input {
+    .nav-item {
       flex: 1;
-      padding: 10px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      font-size: 13px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #757575;
+      transition: all 0.2s;
     }
     
-    .search-button {
-      padding: 10px 20px;
-      background: #C9A961;
+    .nav-item.active {
+      color: #000;
+    }
+    
+    .nav-label {
+      font-size: 10px;
+      font-weight: 500;
+    }
+    
+    .fab {
+      position: absolute;
+      bottom: 70px;
+      right: 16px;
+      width: 56px;
+      height: 56px;
+      background: #000;
       color: #fff;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      cursor: pointer;
+      font-size: 24px;
+      z-index: 10;
+    }
+    
+    .product-modal {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      z-index: 1000;
+      width: 300px;
+      display: none;
+    }
+    
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      display: none;
+    }
+    
+    .add-to-cart {
+      background: #C9A961;
+      color: white;
       border: none;
+      padding: 12px;
       border-radius: 8px;
-      font-size: 13px;
+      width: 100%;
       font-weight: 600;
       cursor: pointer;
+      margin-top: 15px;
     }
 
     @media (max-width: 425px) {
@@ -410,137 +326,120 @@
     <div class="phone-screen">
       
       <div class="app-bar">
-        <div class="app-bar-title">Luminous Beauty</div>
+        <div class="app-bar-title">Luminous Salon & Spa</div>
       </div>
       
       <div class="scaffold-body" id="mainView">
         
         <div class="hero-banner">
           <div class="hero-title">Welcome to Luminous</div>
-          <div class="hero-text">Premium skincare & beauty products</div>
+          <div class="hero-text">Your premium salon experience</div>
         </div>
         
         <div class="quick-actions">
-          <button class="action-button" onclick="bookNow()">
-            <span>📅</span> Book Now
-          </button>
-          <button class="action-button" onclick="callUs()">
-            <span>📞</span> Call Us
-          </button>
-          <button class="action-button" onclick="viewOffers()">
-            <span>🎁</span> Specials
-          </button>
-          <button class="action-button" onclick="rewards()">
-            <span>⭐</span> Rewards
-          </button>
+          <button class="action-button" onclick="bookService('hair')">💇‍♀️ Hair</button>
+          <button class="action-button" onclick="bookService('nails')">💅 Nails</button>
+          <button class="action-button" onclick="bookService('facial')">✨ Facial</button>
+          <button class="action-button" onclick="bookService('massage')">💆‍♀️ Massage</button>
+          <button class="action-button" onclick="bookNow()">📅 Book Now</button>
         </div>
         
-        <div class="section-label">Ask Our Beauty Expert</div>
+        <div class="section-label">Our Services</div>
+        <div class="grid-view">
+          <div class="service-card" onclick="bookService('hair-color')">
+            <div class="service-icon">🎨</div>
+            <div class="service-title">Hair Color</div>
+            <div class="service-price">From $120</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('haircut')">
+            <div class="service-icon">✂️</div>
+            <div class="service-title">Haircut & Style</div>
+            <div class="service-price">From $85</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('facial')">
+            <div class="service-icon">✨</div>
+            <div class="service-title">Facials</div>
+            <div class="service-price">From $90</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('manicure')">
+            <div class="service-icon">💅</div>
+            <div class="service-title">Manicure</div>
+            <div class="service-price">From $45</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('waxing')">
+            <div class="service-icon">⭐</div>
+            <div class="service-title">Waxing</div>
+            <div class="service-price">From $35</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('makeup')">
+            <div class="service-icon">💄</div>
+            <div class="service-title">Makeup</div>
+            <div class="service-price">From $75</div>
+          </div>
+          
+          <div class="service-card" onclick="bookService('massage')">
+            <div class="service-icon">💆‍♀️</div>
+            <div class="service-title">Massage</div>
+            <div class="service-price">From $80</div>
+          </div>
+          
+          <div class="service-card" onclick="showAllServices()">
+            <div class="service-icon">📋</div>
+            <div class="service-title">View All</div>
+            <div class="service-price">Services</div>
+          </div>
+        </div>
+        
+        <div class="section-label">Salon Products</div>
+        <div class="grid-view">
+          <div class="service-card" onclick="showProducts('Anti-Aging')">
+            <div class="service-icon">🌟</div>
+            <div class="service-title">Anti-Aging</div>
+            <div class="service-price">Serums & Creams</div>
+          </div>
+          
+          <div class="service-card" onclick="showProducts('Eye Care')">
+            <div class="service-icon">👁️</div>
+            <div class="service-title">Eye Care</div>
+            <div class="service-price">Treatments</div>
+          </div>
+          
+          <div class="service-card" onclick="showProducts('Skin Care')">
+            <div class="service-icon">🧴</div>
+            <div class="service-title">Skin Care</div>
+            <div class="service-price">Essentials</div>
+          </div>
+          
+          <div class="service-card" onclick="showProducts('all')">
+            <div class="service-icon">🛍️</div>
+            <div class="service-title">All Products</div>
+            <div class="service-price">Shop Now</div>
+          </div>
+        </div>
+        
+        <div class="section-label">Beauty Assistant</div>
         <div class="chat-container">
           <div class="chat-box">
             <div id="chatContainer" class="chat-messages">
               <div class="chat-message bot">
-                Welcome! Ask me anything about skincare, beauty products, or treatments.
+                Hi! I'm your beauty assistant. Ask me about services, products, or book an appointment!
               </div>
             </div>
             
             <div class="chat-input-container">
-              <input id="chatInput" type="text" placeholder="Ask about products or beauty advice..." 
+              <input id="chatInput" type="text" placeholder="Ask about services or products..." 
                      class="chat-input" onkeypress="if(event.key === 'Enter') sendChat()">
               <button onclick="sendChat()" class="chat-send">Send</button>
             </div>
           </div>
         </div>
         
-        <div class="section-label">Search Products</div>
-        <div class="search-container">
-          <div class="search-box">
-            <div class="search-input-container">
-              <input id="productSearch" type="text" placeholder="Search for specific products..." 
-                     class="search-input" onkeypress="if(event.key === 'Enter') searchProducts()">
-              <button onclick="searchProducts()" class="search-button">Search</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="section-label">Shop by Category</div>
-        <div class="grid-view">
-          <div class="category-card" onclick="filterProducts('Anti-Aging')">
-            <div class="category-image" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Anti-Aging</div>
-              <div class="category-subtitle">Retinol & peptide treatments</div>
-            </div>
-          </div>
-          
-          <div class="category-card" onclick="filterProducts('Eye Care')">
-            <div class="category-image" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Eye Care</div>
-              <div class="category-subtitle">Serums & treatments</div>
-            </div>
-          </div>
-          
-          <div class="category-card" onclick="filterProducts('Skin Care')">
-            <div class="category-image" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Skin Care</div>
-              <div class="category-subtitle">Cleansers & toners</div>
-            </div>
-          </div>
-          
-          <div class="category-card" onclick="filterProducts('Brightening')">
-            <div class="category-image" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Brightening</div>
-              <div class="category-subtitle">Vitamin C & glow products</div>
-            </div>
-          </div>
-
-          <div class="category-card" onclick="filterProducts('Daily Protection')">
-            <div class="category-image" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Daily Protection</div>
-              <div class="category-subtitle">SPF & sun care</div>
-            </div>
-          </div>
-          
-          <div class="category-card" onclick="filterProducts('Night Cream')">
-            <div class="category-image" style="background: linear-gradient(135deg, #81ecec 0%, #00cec9 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Night Cream</div>
-              <div class="category-subtitle">Overnight repair</div>
-            </div>
-          </div>
-
-          <div class="category-card" onclick="filterProducts('Eye')">
-            <div class="category-image" style="background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Targeted Eye</div>
-              <div class="category-subtitle">Specialized eye treatments</div>
-            </div>
-          </div>
-          
-          <div class="category-card" onclick="filterProducts('all')">
-            <div class="category-image" style="background: linear-gradient(135deg, #636e72 0%, #2d3436 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">All Products</div>
-              <div class="category-subtitle">Browse everything</div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="promo-card">
-          <div class="promo-title">New Client Special</div>
-          <div class="promo-text">Get 20% off your first purchase + free consultation</div>
-        </div>
-        
-        <div class="section-label">Featured Products</div>
-        <div class="products-scroll" id="featuredProducts">
-          <!-- Products will be loaded here -->
-        </div>
-        
-        <div class="fab" onclick="openAI()">💬</div>
+        <div class="fab" onclick="openChat()">💬</div>
         
       </div>
       
@@ -549,121 +448,52 @@
           <span>🏠</span>
           <div class="nav-label">Home</div>
         </a>
-        <a class="nav-item" onclick="navigateTo('services')">
+        <a class="nav-item" onclick="showServices()">
           <span>✨</span>
           <div class="nav-label">Services</div>
         </a>
-        <a class="nav-item" onclick="navigateTo('products')">
+        <a class="nav-item" onclick="showProducts('all')">
           <span>🛍️</span>
           <div class="nav-label">Products</div>
         </a>
-        <a class="nav-item" onclick="navigateTo('profile')">
-          <span>👤</span>
-          <div class="nav-label">Profile</div>
+        <a class="nav-item" onclick="bookNow()">
+          <span>📅</span>
+          <div class="nav-label">Book</div>
         </a>
       </div>
     </div>
   </div>
 
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+  <div class="product-modal" id="productModal">
+    <h3 id="modalProductName">Product Name</h3>
+    <p id="modalProductPrice">$0.00</p>
+    <p id="modalProductDesc">Product description</p>
+    <button class="add-to-cart" onclick="addToCart()">Add to Cart</button>
+  </div>
+
   <script>
-    // Fallback product data matching your actual products
-    const fallbackProducts = [
-      {
-        id: "aa-retinol-serum-001",
-        name: "Retinol Renewal Serum 0.3%",
-        price: 39.00,
-        image: "/images/0010.jpg",
-        category: "Anti-Aging"
-      },
-      {
-        id: "ec-ceramide-eye-002", 
-        name: "Ceramide Eye Repair Gel",
-        price: 22.00,
-        image: "/images/black-americanfemale.jpg",
-        category: "Eye Care"
-      },
-      {
-        id: "sc-balancing-002",
-        name: "Balancing Gel Cleanser", 
-        price: 14.00,
-        image: "/images/0014CC.jpg",
-        category: "Skin Care"
-      },
-      {
-        id: "vc-serum-001",
-        name: "Vitamin C 15% Bright Serum",
-        price: 32.00,
-        image: "/images/0014CC.jpg",
-        category: "Brightening"
-      },
-      {
-        id: "spf-30-001",
-        name: "Daily Mineral SPF 30",
-        price: 21.00,
-        image: "/images/0010.jpg",
-        category: "Daily Protection"
-      },
-      {
-        id: "nc-ceramide-repair-001",
-        name: "Ceramide Repair Night Cream",
-        price: 29.00,
-        image: "/images/0014CC.jpg",
-        category: "Night Cream"
-      }
-    ];
+    // Salon Services Data
+    const salonServices = {
+      'hair-color': { name: 'Hair Coloring', price: 120, duration: '2 hours' },
+      'haircut': { name: 'Haircut & Styling', price: 85, duration: '1 hour' },
+      'facial': { name: 'Luxury Facial', price: 90, duration: '1.5 hours' },
+      'manicure': { name: 'Manicure', price: 45, duration: '45 mins' },
+      'waxing': { name: 'Waxing', price: 35, duration: '30 mins' },
+      'makeup': { name: 'Professional Makeup', price: 75, duration: '1 hour' },
+      'massage': { name: 'Relaxing Massage', price: 80, duration: '1 hour' }
+    };
 
-    // Load products from API
-    async function loadProducts() {
-      try {
-        const response = await fetch('/api/products');
-        
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new TypeError("API returned non-JSON response");
-        }
-        
-        const data = await response.json();
-        
-        if (data.success && data.products && data.products.length > 0) {
-          displayProducts(data.products.slice(0, 6)); // Show first 6 products
-        } else {
-          console.log('No products found, using fallback');
-          displayProducts(fallbackProducts);
-        }
-      } catch (error) {
-        console.error('Error loading products:', error);
-        displayProducts(fallbackProducts);
-      }
-    }
+    // Current cart
+    let cart = {
+      services: [],
+      products: [],
+      total: 0
+    };
 
-    // Display products
-    function displayProducts(products) {
-      const container = document.getElementById('featuredProducts');
-      container.innerHTML = '';
-      
-      products.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.className = 'mini-product';
-        productElement.onclick = () => showProductDetail(product);
-        productElement.innerHTML = `
-          <div class="mini-product-image" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">
-            ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` : ''}
-          </div>
-          <div class="mini-product-info">
-            <div class="mini-product-name">${product.name}</div>
-            <div class="mini-product-price">$${product.price.toFixed(2)}</div>
-          </div>
-        `;
-        container.appendChild(productElement);
-      });
-    }
-
-    // Filter products by category
-    async function filterProducts(category) {
+    // Show products in modal
+    async function showProducts(category) {
       try {
         let url = '/api/products';
         if (category !== 'all') {
@@ -674,123 +504,133 @@
         const data = await response.json();
         
         if (data.success && data.products && data.products.length > 0) {
-          // Show filtered products in chat
-          const chatContainer = document.getElementById('chatContainer');
-          const message = document.createElement('div');
-          message.className = 'chat-message bot';
-          message.innerHTML = `Found ${data.products.length} products in ${category}:<br>
-            ${data.products.slice(0, 3).map(p => `• ${p.name} - $${p.price}`).join('<br>')}
-            ${data.products.length > 3 ? '<br>...and more' : ''}`;
-          chatContainer.appendChild(message);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          // Show first product in modal as example
+          const product = data.products[0];
+          showProductModal(product);
         } else {
-          const chatContainer = document.getElementById('chatContainer');
-          const message = document.createElement('div');
-          message.className = 'chat-message bot';
-          message.textContent = `No products found in ${category} category.`;
-          chatContainer.appendChild(message);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
+          // Show in chat if no products
+          addChatMessage('bot', `No products found in ${category} category. Ask about our services instead!`);
         }
       } catch (error) {
-        console.error('Error filtering products:', error);
+        console.error('Error loading products:', error);
+        addChatMessage('bot', 'Sorry, having trouble loading products. Please try again.');
       }
     }
 
-    // Chat functionality
+    // Show product modal
+    function showProductModal(product) {
+      document.getElementById('modalProductName').textContent = product.name;
+      document.getElementById('modalProductPrice').textContent = `$${product.price.toFixed(2)}`;
+      document.getElementById('modalProductDesc').textContent = product.description;
+      
+      document.getElementById('productModal').style.display = 'block';
+      document.getElementById('modalOverlay').style.display = 'block';
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById('productModal').style.display = 'none';
+      document.getElementById('modalOverlay').style.display = 'none';
+    }
+
+    // Add to cart
+    function addToCart() {
+      const productName = document.getElementById('modalProductName').textContent;
+      const productPrice = parseFloat(document.getElementById('modalProductPrice').textContent.replace('$', ''));
+      
+      cart.products.push({ name: productName, price: productPrice });
+      cart.total += productPrice;
+      
+      addChatMessage('bot', `Added ${productName} to your cart! Total: $${cart.total.toFixed(2)}`);
+      closeModal();
+    }
+
+    // Book service
+    function bookService(serviceId) {
+      const service = salonServices[serviceId];
+      if (service) {
+        cart.services.push(service);
+        cart.total += service.price;
+        addChatMessage('bot', `Added ${service.name} to your booking! $${service.price} - ${service.duration}`);
+      }
+    }
+
+    // Book now
+    function bookNow() {
+      if (cart.services.length > 0) {
+        const serviceList = cart.services.map(s => `${s.name} (${s.duration}) - $${s.price}`).join('\n');
+        addChatMessage('bot', `Ready to book!\n\nServices:\n${serviceList}\n\nTotal: $${cart.total.toFixed(2)}\n\nShall I proceed with booking?`);
+      } else {
+        addChatMessage('bot', 'Let me help you book an appointment! What service are you interested in?');
+      }
+    }
+
+    // Chat functions
+    function addChatMessage(type, message) {
+      const chatContainer = document.getElementById('chatContainer');
+      const messageDiv = document.createElement('div');
+      messageDiv.className = `chat-message ${type}`;
+      messageDiv.textContent = message;
+      chatContainer.appendChild(messageDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
     function sendChat() {
       const input = document.getElementById('chatInput');
       const message = input.value.trim();
       
       if (!message) return;
       
-      const chatContainer = document.getElementById('chatContainer');
-      
-      // Add user message
-      const userMessage = document.createElement('div');
-      userMessage.className = 'chat-message user';
-      userMessage.textContent = message;
-      chatContainer.appendChild(userMessage);
-      
-      // Clear input
+      addChatMessage('user', message);
       input.value = '';
       
-      // Scroll to bottom
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-      // Send to AI (you can implement actual AI integration here)
+      // AI responses focused on salon services
       setTimeout(() => {
-        const botMessage = document.createElement('div');
-        botMessage.className = 'chat-message bot';
+        const lowerMsg = message.toLowerCase();
+        let response;
         
-        // Simple response logic
-        const lowerMessage = message.toLowerCase();
-        if (lowerMessage.includes('retinol') || lowerMessage.includes('anti-aging')) {
-          botMessage.textContent = "Our retinol products are perfect for anti-aging! Try our Retinol Renewal Serum for gentle yet effective results.";
-        } else if (lowerMessage.includes('eye') || lowerMessage.includes('dark circles')) {
-          botMessage.textContent = "For eye care, we recommend our Ceramide Eye Repair Gel or Brightening Eye Serum for dark circles.";
-        } else if (lowerMessage.includes('vitamin c') || lowerMessage.includes('bright')) {
-          botMessage.textContent = "Our Vitamin C 15% Bright Serum is excellent for radiant skin and even tone.";
-        } else if (lowerMessage.includes('spf') || lowerMessage.includes('sun')) {
-          botMessage.textContent = "Protect your skin with our Daily Mineral SPF 30 or Ultra Light SPF 50 for weightless protection.";
+        if (lowerMsg.includes('book') || lowerMsg.includes('appointment')) {
+          response = 'I can help you book! What service are you interested in? Hair, nails, facial, or massage?';
+        } else if (lowerMsg.includes('hair')) {
+          response = 'We offer haircuts, coloring, styling, and treatments. Prices start at $85. Want to book?';
+        } else if (lowerMsg.includes('facial') || lowerMsg.includes('skin')) {
+          response = 'Our facials start at $90. We use premium products for glowing skin!';
+        } else if (lowerMsg.includes('product')) {
+          response = 'We carry anti-aging serums, eye creams, and skincare essentials. Ask about specific products!';
+        } else if (lowerMsg.includes('price') || lowerMsg.includes('cost')) {
+          response = 'Hair: $85+, Facials: $90+, Nails: $45+, Massage: $80+. Want details on a specific service?';
         } else {
-          botMessage.textContent = "Thanks for your question! I'd be happy to help you find the perfect product. What are your main skin concerns?";
+          response = 'How can I help with your salon experience today? Booking, products, or questions?';
         }
         
-        chatContainer.appendChild(botMessage);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        addChatMessage('bot', response);
       }, 1000);
     }
 
-    // Search products
-    function searchProducts() {
-      const searchTerm = document.getElementById('productSearch').value.trim();
-      if (searchTerm) {
-        const chatContainer = document.getElementById('chatContainer');
-        
-        const userMessage = document.createElement('div');
-        userMessage.className = 'chat-message user';
-        userMessage.textContent = `Search: ${searchTerm}`;
-        chatContainer.appendChild(userMessage);
-        
-        document.getElementById('productSearch').value = '';
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        
-        setTimeout(() => {
-          const botMessage = document.createElement('div');
-          botMessage.className = 'chat-message bot';
-          botMessage.textContent = `Searching for "${searchTerm}"... I found several matching products in our collection. Would you like me to show you specific categories?`;
-          
-          chatContainer.appendChild(botMessage);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-        }, 1000);
-      }
+    function openChat() {
+      document.getElementById('chatInput').focus();
     }
 
-    // Navigation functions
     function goHome() {
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-      });
+      // Reset navigation
+      document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
       document.querySelectorAll('.nav-item')[0].classList.add('active');
     }
 
-    function navigateTo(page) {
-      alert(`Navigating to ${page} page...`);
+    function showServices() {
+      addChatMessage('bot', 'Our services: Hair coloring ($120), Haircuts ($85), Facials ($90), Manicures ($45), Waxing ($35), Makeup ($75), Massage ($80). What interests you?');
     }
 
-    function showProductDetail(product) {
-      alert(`Product: ${product.name}\nPrice: $${product.price}\nCategory: ${product.category}`);
+    function showAllServices() {
+      const servicesList = Object.values(salonServices).map(s => 
+        `${s.name} - $${s.price} (${s.duration})`
+      ).join('\n');
+      addChatMessage('bot', `All Services:\n${servicesList}\n\nWhat would you like to book?`);
     }
 
-    function bookNow() { alert('Opening booking system...'); }
-    function callUs() { alert('Calling (555) 123-4567...'); }
-    function viewOffers() { alert('Viewing current offers...'); }
-    function rewards() { alert('Viewing rewards program...'); }
-    function openAI() { document.getElementById('chatInput').focus(); }
-
-    // Initialize
+    // Initialize chat
     document.addEventListener('DOMContentLoaded', function() {
-      loadProducts();
+      addChatMessage('bot', 'Welcome to Luminous Salon! How can I help you today?');
     });
   </script>
 </body>
