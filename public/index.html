@@ -727,7 +727,7 @@
         }
     }
 
-    // Show products by category - SIMPLIFIED
+    // Show products by category - FIXED to handle your actual product categories
     async function showProducts(category) {
         try {
             let url = '/api/products';
@@ -744,18 +744,120 @@
             if (products.length > 0) {
                 showProductsModal(products, category);
             } else {
-                // Show in chat but don't wait for response
-                addChatMessage('bot', `No products found in ${category} category.`);
+                // Show modal with fallback products for that category
+                showProductsModal(getProductsByCategory(category), category);
             }
         } catch (error) {
             console.error('Error loading products:', error);
-            // Don't show error in chat since it's not chat-related
+            // Show fallback products
+            showProductsModal(getProductsByCategory(category), category);
         }
     }
 
-    // Show products in a modal - SIMPLIFIED
+    // Get products by category from your actual data
+    function getProductsByCategory(category) {
+        const allProducts = getAllProducts();
+        if (category === 'all') return allProducts;
+        
+        return allProducts.filter(product => 
+            product.category && product.category.toLowerCase() === category.toLowerCase()
+        );
+    }
+
+    // Get all products from your actual data
+    function getAllProducts() {
+        return [
+            {
+                id: "aa-retinol-serum-001",
+                name: "Retinol Renewal Serum 0.3%",
+                brand: "Luminous Lab",
+                category: "Anti-Aging",
+                price: 39.00,
+                description: "Gentle retinol serum for first-time users. Softens fine lines and improves texture.",
+                image: "/images/0010.jpg"
+            },
+            {
+                id: "aa-retinol-cream-002",
+                name: "Pro Retinol Night Cream",
+                brand: "Salon Pro",
+                category: "Anti-Aging",
+                price: 46.00,
+                description: "Rich, cushiony night cream with encapsulated retinol and ceramides.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "ec-retinol-eye-001",
+                name: "Retinol Eye Treatment",
+                brand: "Salon Pro",
+                category: "Eye Care",
+                price: 34.00,
+                description: "Low-irritation retinol eye cream to smooth crow's feet and brighten tone.",
+                image: "/images/hispanic-american.jpg"
+            },
+            {
+                id: "ec-ceramide-eye-002",
+                name: "Ceramide Eye Repair Gel",
+                brand: "Luminous Lab", 
+                category: "Eye Care",
+                price: 22.00,
+                description: "Cooling gel with caffeine and ceramides for morning depuff and long-lasting hydration.",
+                image: "/images/black-americanfemale.jpg"
+            },
+            {
+                id: "sc-balancing-002",
+                name: "Balancing Gel Cleanser", 
+                brand: "Salon Pro",
+                category: "Skin Care",
+                price: 14.00,
+                description: "pH-balanced gel cleanser that removes makeup without stripping.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "vc-serum-001",
+                name: "Vitamin C 15% Bright Serum",
+                brand: "Luminous Lab",
+                category: "Brightening",
+                price: 32.00,
+                description: "Water-light L-ascorbic acid + ferulic + E to boost radiance and even tone.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "spf-30-001",
+                name: "Daily Mineral SPF 30",
+                brand: "Luminous Lab",
+                category: "Daily Protection",
+                price: 21.00,
+                description: "Non-nano zinc oxide with sheer finish. No white cast on most skin tones.",
+                image: "/images/0010.jpg"
+            },
+            {
+                id: "nc-ceramide-repair-001",
+                name: "Ceramide Repair Night Cream",
+                brand: "Luminous Lab",
+                category: "Night Cream",
+                price: 29.00,
+                description: "Deep repair cream with ceramides + cholesterol for dry, stressed skin.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "eye-targeted-001",
+                name: "Peptide + C Eye Lift",
+                brand: "Baine",
+                category: "Eye",
+                price: 31.00,
+                description: "Targets puffiness and dull tone around the eyes for a rested look.",
+                image: "/images/hispanic-american.jpg"
+            }
+        ];
+    }
+
+    // Show products in a modal
     function showProductsModal(products, category) {
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
+        
         const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
@@ -766,11 +868,7 @@
         overlay.style.display = 'flex';
         overlay.style.justifyContent = 'center';
         overlay.style.alignItems = 'center';
-        overlay.onclick = (e) => {
-            if (e.target === overlay) {
-                document.body.removeChild(overlay);
-            }
-        };
+        overlay.onclick = () => document.body.removeChild(overlay);
         
         const modal = document.createElement('div');
         modal.style.background = 'white';
@@ -787,76 +885,86 @@
         title.style.textAlign = 'center';
         modal.appendChild(title);
         
-        // Create product grid
-        const productGrid = document.createElement('div');
-        productGrid.style.display = 'grid';
-        productGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
-        productGrid.style.gap = '10px';
-        
-        products.forEach(product => {
-            const productCard = document.createElement('div');
-            productCard.style.padding = '10px';
-            productCard.style.background = '#f9f9f9';
-            productCard.style.borderRadius = '8px';
-            productCard.style.cursor = 'pointer';
-            productCard.style.textAlign = 'center';
-            productCard.onclick = (e) => {
-                e.stopPropagation();
-                showProductDetail(product);
-            };
+        if (products.length === 0) {
+            const noProducts = document.createElement('div');
+            noProducts.textContent = 'No products found in this category.';
+            noProducts.style.textAlign = 'center';
+            noProducts.style.color = '#666';
+            modal.appendChild(noProducts);
+        } else {
+            // Create product grid
+            const productGrid = document.createElement('div');
+            productGrid.style.display = 'grid';
+            productGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            productGrid.style.gap = '10px';
             
-            const imageDiv = document.createElement('div');
-            imageDiv.style.height = '60px';
-            imageDiv.style.marginBottom = '8px';
-            imageDiv.style.borderRadius = '6px';
-            imageDiv.style.overflow = 'hidden';
-            imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
-            
-            if (product.image) {
-                const img = document.createElement('img');
-                img.src = product.image;
-                img.alt = product.name;
-                img.style.width = '100%';
-                img.style.height = '100%';
-                img.style.objectFit = 'cover';
-                img.onerror = function() {
-                    this.style.display = 'none';
-                    imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.style.padding = '10px';
+                productCard.style.background = '#f9f9f9';
+                productCard.style.borderRadius = '8px';
+                productCard.style.cursor = 'pointer';
+                productCard.style.textAlign = 'center';
+                productCard.onclick = (e) => {
+                    e.stopPropagation();
+                    showProductDetail(product);
                 };
-                imageDiv.appendChild(img);
-            } else {
-                imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
-            }
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '60px';
+                imageDiv.style.marginBottom = '8px';
+                imageDiv.style.borderRadius = '6px';
+                imageDiv.style.overflow = 'hidden';
+                imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+                
+                if (product.image) {
+                    const img = document.createElement('img');
+                    img.src = product.image;
+                    img.alt = product.name;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+                    };
+                    imageDiv.appendChild(img);
+                } else {
+                    imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+                }
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
+                nameDiv.style.fontSize = '12px';
+                nameDiv.style.fontWeight = '600';
+                nameDiv.style.marginBottom = '5px';
+                
+                const priceDiv = document.createElement('div');
+                priceDiv.textContent = `$${product.price.toFixed(2)}`;
+                priceDiv.style.fontSize = '14px';
+                priceDiv.style.fontWeight = '700';
+                priceDiv.style.color = '#C9A961';
+                
+                productCard.appendChild(imageDiv);
+                productCard.appendChild(nameDiv);
+                productCard.appendChild(priceDiv);
+                productGrid.appendChild(productCard);
+            });
             
-            const nameDiv = document.createElement('div');
-            nameDiv.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
-            nameDiv.style.fontSize = '12px';
-            nameDiv.style.fontWeight = '600';
-            nameDiv.style.marginBottom = '5px';
-            
-            const priceDiv = document.createElement('div');
-            priceDiv.textContent = `$${product.price.toFixed(2)}`;
-            priceDiv.style.fontSize = '14px';
-            priceDiv.style.fontWeight = '700';
-            priceDiv.style.color = '#C9A961';
-            
-            productCard.appendChild(imageDiv);
-            productCard.appendChild(nameDiv);
-            productCard.appendChild(priceDiv);
-            productGrid.appendChild(productCard);
-        });
+            modal.appendChild(productGrid);
+        }
         
-        modal.appendChild(productGrid);
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
     }
 
     // Show individual product detail
     function showProductDetail(product) {
-        // Remove any existing modals
-        document.querySelectorAll('[style*="position: fixed"][style*="background: rgba(0,0,0,0.8)"]').forEach(el => el.remove());
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
         
         const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
         overlay.style.position = 'fixed';
         overlay.style.top = '0';
         overlay.style.left = '0';
@@ -867,11 +975,7 @@
         overlay.style.display = 'flex';
         overlay.style.justifyContent = 'center';
         overlay.style.alignItems = 'center';
-        overlay.onclick = (e) => {
-            if (e.target === overlay) {
-                document.body.removeChild(overlay);
-            }
-        };
+        overlay.onclick = () => document.body.removeChild(overlay);
         
         const modal = document.createElement('div');
         modal.style.background = 'white';
@@ -951,31 +1055,28 @@
     function addToCart(product) {
         cart.items.push(product);
         cart.total += product.price;
-        addChatMessage('bot', `Added ${product.name} to cart! Total: $${cart.total.toFixed(2)}`);
+        // Show brief notification instead of chat message
+        const notification = document.createElement('div');
+        notification.textContent = `✓ Added ${product.name} to cart`;
+        notification.style.position = 'fixed';
+        notification.style.bottom = '100px';
+        notification.style.left = '50%';
+        notification.style.transform = 'translateX(-50%)';
+        notification.style.background = '#4CAF50';
+        notification.style.color = 'white';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '20px';
+        notification.style.zIndex = '1001';
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 2000);
     }
 
     // Fallback products
     function getFallbackProducts() {
-        return [
-            {
-                id: "aa-retinol-serum-001",
-                name: "Retinol Renewal Serum 0.3%",
-                brand: "Luminous Lab",
-                category: "Anti-Aging",
-                price: 39.00,
-                description: "Gentle retinol serum for first-time users.",
-                image: "/images/0010.jpg"
-            },
-            {
-                id: "ec-ceramide-eye-002",
-                name: "Ceramide Eye Repair Gel",
-                brand: "Luminous Lab", 
-                category: "Eye Care",
-                price: 22.00,
-                description: "Cooling gel with caffeine and ceramides.",
-                image: "/images/black-americanfemale.jpg"
-            }
-        ];
+        return getAllProducts().slice(0, 6);
     }
 
     // Display featured products
@@ -1007,7 +1108,44 @@
         });
     }
 
-    // Chat function with AI integration (unchanged)
+    // FIXED: Navigation functions
+    function goHome() {
+        document.getElementById('mainView').style.display = 'block';
+        document.getElementById('profileView').style.display = 'none';
+        updateNavActive(0);
+    }
+
+    function showServices() {
+        showProducts('all');
+    }
+
+    function navigateTo(page) {
+        if (page === 'services') {
+            showServices();
+        } else if (page === 'products') {
+            showProducts('all');
+        } else {
+            alert(`${page} page would show here`);
+        }
+    }
+
+    function showProfile() {
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'block';
+        updateNavActive(3);
+    }
+
+    function updateNavActive(index) {
+        document.querySelectorAll('.nav-item').forEach((item, i) => {
+            if (i === index) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
+    }
+
+    // Chat function with AI integration
     async function sendChat() {
         const input = document.getElementById('chatInput');
         if (!input) return;
@@ -1065,15 +1203,11 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Navigation functions (unchanged)
-    function goHome() {
-        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-        document.querySelectorAll('.nav-item')[0].classList.add('active');
+    // Service functions
+    function bookService(service) {
+        alert(`Booking ${service} service...`);
     }
 
-    function showProfile() { alert('Profile view would show here'); }
-    function navigateTo(page) { alert(`Navigating to ${page} page...`); }
-    function bookService(service) { alert(`Booking ${service} service...`); }
     function bookNow() { alert('Opening booking system...'); }
     function callUs() { alert('Calling (555) 123-4567...'); }
     function viewOffers() { alert('Viewing current offers...'); }
@@ -1087,6 +1221,12 @@
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts();
         addChatMessage('bot', 'Hello! I\'m your beauty assistant. Ask me about skincare, products, or salon services!');
+        
+        // Fix navigation click handlers
+        document.querySelectorAll('.nav-item')[0].onclick = goHome;
+        document.querySelectorAll('.nav-item')[1].onclick = () => navigateTo('services');
+        document.querySelectorAll('.nav-item')[2].onclick = () => navigateTo('products');
+        document.querySelectorAll('.nav-item')[3].onclick = showProfile;
     });
   </script>
 </body>
