@@ -104,8 +104,19 @@
     .category-image {
       width: 100%;
       height: 100px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-image img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .category-card:hover .category-image img {
+      transform: scale(1.05);
     }
     
     .category-body {
@@ -214,8 +225,14 @@
     .mini-product-image {
       width: 100%;
       height: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mini-product-image img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      background: #f0f0f0;
     }
     
     .mini-product-info {
@@ -318,21 +335,29 @@
       transform: scale(0.95);
     }
     
-    /* Responsive */
-    @media (max-width: 425px) {
-      .phone-frame {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        padding: 0;
-      }
-      
-      .phone-screen {
-        border-radius: 0;
-      }
-    }
-
     /* Chat Container Styles */
+    .chat-container {
+      padding: 8px;
+    }
+    
+    .chat-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .chat-messages {
+      height: 200px;
+      overflow-y: auto;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    
     .chat-message {
       padding: 8px;
       margin: 4px 0;
@@ -351,6 +376,104 @@
       color: white;
       align-self: flex-end;
       margin-left: auto;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    
+    .chat-send {
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* Search Container */
+    .search-container {
+      padding: 8px;
+    }
+    
+    .search-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .search-input-container {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    
+    .search-button {
+      padding: 10px 20px;
+      background: #C9A961;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .product-modal {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 90%;
+      max-height: 80%;
+      overflow-y: auto;
+      z-index: 1001;
+    }
+    
+    /* Responsive */
+    @media (max-width: 425px) {
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+      }
+      
+      .phone-screen {
+        border-radius: 0;
+      }
     }
   </style>
 </head>
@@ -394,38 +517,30 @@
         
         <!-- AI Chat Section -->
         <div class="section-label">Ask Our Beauty Expert</div>
-        <div style="padding: 8px;">
-          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div id="chatContainer" style="height: 200px; overflow-y: auto; background: #f9f9f9; border-radius: 8px; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column;">
+        <div class="chat-container">
+          <div class="chat-box">
+            <div id="chatContainer" class="chat-messages">
               <div class="chat-message bot">
                 Welcome! Ask me anything about skincare, haircare, or beauty treatments.
               </div>
             </div>
             
-            <div style="display: flex; gap: 8px;">
+            <div class="chat-input-container">
               <input id="chatInput" type="text" placeholder="Ask about treatments, products, or beauty advice..." 
-                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
-                     onkeypress="if(event.key === 'Enter') sendChat()">
-              <button onclick="sendChat()" style="padding: 10px 20px; background: #000; color: #fff; border: none; 
-                                                  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                Send
-              </button>
+                     class="chat-input" onkeypress="if(event.key === 'Enter') sendChat()">
+              <button onclick="sendChat()" class="chat-send">Send</button>
             </div>
           </div>
         </div>
         
         <!-- Product Search Bar -->
         <div class="section-label">Search Products</div>
-        <div style="padding: 8px;">
-          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div style="display: flex; gap: 8px;">
+        <div class="search-container">
+          <div class="search-box">
+            <div class="search-input-container">
               <input id="productSearch" type="text" placeholder="Search for specific products..." 
-                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
-                     onkeypress="if(event.key === 'Enter') searchProducts()">
-              <button onclick="searchProducts()" style="padding: 10px 20px; background: #C9A961; color: #fff; border: none; 
-                                                        border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                Search
-              </button>
+                     class="search-input" onkeypress="if(event.key === 'Enter') searchProducts()">
+              <button onclick="searchProducts()" class="search-button">Search</button>
             </div>
           </div>
         </div>
@@ -433,37 +548,85 @@
         <!-- Shop Categories -->
         <div class="section-label">Shop by Category</div>
         <div class="grid-view">
-          <a href="chat.html?category=haircare" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Hair Care</div>
-              <div class="category-subtitle">Shampoos, conditioners & more</div>
+          <div class="category-card" onclick="showProducts('Anti-Aging')">
+            <div class="category-image">
+              <img src="/images/anti-aging.jpg" alt="Anti-Aging" onerror="handleImageError(this)">
             </div>
-          </a>
-          
-          <a href="chat.html?category=skincare" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Skin Care</div>
-              <div class="category-subtitle">Cleansers, moisturizers & serums</div>
-            </div>
-          </a>
-          
-          <a href="chat.html?category=anti-aging" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);"></div>
             <div class="category-body">
               <div class="category-title">Anti-Aging</div>
-              <div class="category-subtitle">Turn back time</div>
+              <div class="category-subtitle">Retinol & peptide treatments</div>
             </div>
-          </a>
+          </div>
           
-          <a href="chat.html?category=all" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);"></div>
+          <div class="category-card" onclick="showProducts('Skin Care')">
+            <div class="category-image">
+              <img src="/images/005C.jpg" alt="Skin Care" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Skin Care</div>
+              <div class="category-subtitle">Cleansers & toners</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Eye Care')">
+            <div class="category-image">
+              <img src="/images/0011CC.jpg" alt="Eye Care" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Eye Care</div>
+              <div class="category-subtitle">Serums & treatments</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Brightening')">
+            <div class="category-image">
+              <img src="/images/0012CC.jpg" alt="Brightening" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Brightening</div>
+              <div class="category-subtitle">Vitamin C & glow products</div>
+            </div>
+          </div>
+
+          <div class="category-card" onclick="showProducts('Daily Protection')">
+            <div class="category-image">
+              <img src="/images/0015CC.jpg" alt="Daily Protection" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Daily Protection</div>
+              <div class="category-subtitle">SPF & sun care</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Night Cream')">
+            <div class="category-image">
+              <img src="/images/night-cream.jpg" alt="Night Cream" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Night Cream</div>
+              <div class="category-subtitle">Overnight repair</div>
+            </div>
+          </div>
+
+          <div class="category-card" onclick="showProducts('Eye')">
+            <div class="category-image">
+              <img src="/images/targeted-eye.jpg" alt="Targeted Eye" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Targeted Eye</div>
+              <div class="category-subtitle">Specialized eye treatments</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('all')">
+            <div class="category-image">
+              <img src="/images/all-products.jpg" alt="All Products" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">All Products</div>
               <div class="category-subtitle">Browse everything</div>
             </div>
-          </a>
+          </div>
         </div>
         
         <!-- Promo -->
@@ -482,7 +645,9 @@
         <div class="section-label">Our Services</div>
         <div class="grid-view">
           <div class="category-card" onclick="bookService('color')">
-            <div class="category-image" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);"></div>
+            <div class="category-image">
+              <img src="/images/0015CC.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">Color & Highlights</div>
               <div class="category-subtitle">Starting at $120</div>
@@ -490,7 +655,9 @@
           </div>
           
           <div class="category-card" onclick="bookService('styling')">
-            <div class="category-image" style="background: linear-gradient(135deg, #81ecec 0%, #00cec9 100%);"></div>
+            <div class="category-image">
+              <img src="/images/styling-makeup.jpg" alt="Styling & Makeup" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">Styling & Makeup</div>
               <div class="category-subtitle">Starting at $85</div>
@@ -499,198 +666,47 @@
         </div>
         
         <!-- Floating Action Button -->
-        <div class="fab" onclick="openAI()">
-          💬
-        </div>
+        <div class="fab" onclick="openAI()">💬</div>
         
       </div>
       
-      <!-- Profile View -->
-      <div class="scaffold-body" id="profileView" style="display: none;">
-        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
-          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
-          <h2 style="font-size: 18px; font-weight: 600;">My Profile</h2>
-        </div>
-        
-        <div style="padding: 16px; overflow-y: auto;">
-          <!-- Personal Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Personal Information</h3>
-            
-            <input type="text" id="userName" placeholder="Your Name" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <select id="preferredStyle" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-              <option value="">Preferred Style</option>
-              <option>Classic</option>
-              <option>Modern</option>
-              <option>Natural</option>
-              <option>Glamorous</option>
-              <option>Edgy</option>
-            </select>
-            
-            <input type="text" id="stylistName" placeholder="Preferred Stylist" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <input type="tel" id="userPhone" placeholder="Phone Number" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <input type="email" id="userEmail" placeholder="Email Address" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-          </div>
-          
-          <!-- Salon Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Salon Information</h3>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📍 123 Beauty Ave, Suite 100</p>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">📞 (555) 123-4567</p>
-            <p style="font-size: 12px; color: #666; margin-bottom: 8px;">✉️ info@luminoussalon.com</p>
-            <p style="font-size: 12px; color: #666;">⏰ Mon-Sat: 9AM-7PM, Sun: 10AM-5PM</p>
-          </div>
-          
-          <!-- Preferences -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Preferences</h3>
-            <label style="display: flex; align-items: center; margin-bottom: 8px;">
-              <input type="checkbox" style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">Email notifications</span>
-            </label>
-            <label style="display: flex; align-items: center; margin-bottom: 8px;">
-              <input type="checkbox" checked style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">SMS reminders</span>
-            </label>
-            <label style="display: flex; align-items: center;">
-              <input type="checkbox" checked style="margin-right: 8px;"> 
-              <span style="font-size: 13px;">Special offers</span>
-            </label>
-          </div>
-          
-          <button onclick="saveProfile()" style="width: 100%; padding: 12px; background: #000; color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Save Profile
-          </button>
-        </div>
-      </div>
-      
-      <!-- Booking View -->
-      <div class="scaffold-body" id="bookingView" style="display: none;">
-        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
-          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
-          <h2 style="font-size: 18px; font-weight: 600;">Book Appointment</h2>
-        </div>
-        
-        <div style="padding: 16px; overflow-y: auto;">
-          <!-- Date & Time -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Select Date & Time</h3>
-            
-            <input type="date" id="appointmentDate" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <select id="appointmentTime" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
-              <option value="">Select Time</option>
-              <option>9:00 AM</option>
-              <option>9:30 AM</option>
-              <option>10:00 AM</option>
-              <option>10:30 AM</option>
-              <option>11:00 AM</option>
-              <option>11:30 AM</option>
-              <option>12:00 PM</option>
-              <option>12:30 PM</option>
-              <option>1:00 PM</option>
-              <option>1:30 PM</option>
-              <option>2:00 PM</option>
-              <option>2:30 PM</option>
-              <option>3:00 PM</option>
-              <option>3:30 PM</option>
-              <option>4:00 PM</option>
-              <option>4:30 PM</option>
-              <option>5:00 PM</option>
-              <option>5:30 PM</option>
-              <option>6:00 PM</option>
-              <option>6:30 PM</option>
-            </select>
-          </div>
-          
-          <!-- Service Selection -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Choose Service</h3>
-            
-            <select id="serviceSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-              <option value="">Select Service</option>
-              <option value="haircut">Haircut & Style - $65</option>
-              <option value="color">Color - $120</option>
-              <option value="highlights">Highlights - $150</option>
-              <option value="balayage">Balayage - $200</option>
-              <option value="treatment">Deep Treatment - $45</option>
-              <option value="blowdry">Blow Dry - $45</option>
-              <option value="updo">Special Event Updo - $85</option>
-              <option value="makeup">Makeup Application - $75</option>
-              <option value="facial">Facial - $95</option>
-              <option value="brows">Brow Service - $35</option>
-              <option value="lashes">Lash Extensions - $120</option>
-              <option value="manicure">Manicure - $35</option>
-              <option value="pedicure">Pedicure - $45</option>
-            </select>
-            
-            <select id="stylistSelect" style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;">
-              <option value="">Select Stylist</option>
-              <option>Sarah Johnson</option>
-              <option>Maria Rodriguez</option>
-              <option>Emily Chen</option>
-              <option>Jessica Williams</option>
-              <option>Any Available</option>
-            </select>
-          </div>
-          
-          <!-- Contact Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 12px;">
-            <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Contact Information</h3>
-            
-            <input type="tel" id="bookingPhone" placeholder="Phone Number" 
-                   style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 8px; font-size: 13px;">
-            
-            <textarea id="bookingNotes" placeholder="Special requests or notes..." 
-                      style="width: 100%; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; height: 60px; font-size: 13px; resize: none;"></textarea>
-          </div>
-          
-          <button onclick="bookAppointment()" style="width: 100%; padding: 12px; background: #C9A961; color: #fff; border: none; border-radius: 8px; font-weight: 600; margin-bottom: 8px; cursor: pointer;">
-            Book Appointment
-          </button>
-          
-          <button onclick="goHome()" style="width: 100%; padding: 12px; background: #f0f0f0; color: #000; border: none; border-radius: 8px; font-weight: 600; cursor: pointer;">
-            Cancel
-          </button>
-        </div>
-      </div>
-      
-      <!-- Flutter BottomNavigationBar -->
+      <!-- Bottom Navigation -->
       <div class="bottom-nav">
-        <div class="nav-item active" onclick="goHome()">
+        <a class="nav-item active" onclick="goHome()">
           <span style="font-size: 20px;">🏠</span>
           <div class="nav-label">Home</div>
-        </div>
-        <a href="chat.html?category=all" class="nav-item">
-          <span style="font-size: 20px;">🛍️</span>
-          <div class="nav-label">Shop</div>
         </a>
-        <div class="nav-item" onclick="openBooking()">
-          <span style="font-size: 20px;">📅</span>
-          <div class="nav-label">Book</div>
-        </div>
-        <div class="nav-item" onclick="openProfile()">
+        <a class="nav-item" onclick="navigateTo('services')">
+          <span style="font-size: 20px;">✂️</span>
+          <div class="nav-label">Services</div>
+        </a>
+        <a class="nav-item" onclick="navigateTo('products')">
+          <span style="font-size: 20px;">🛍️</span>
+          <div class="nav-label">Products</div>
+        </a>
+        <a class="nav-item" onclick="showProfile()">
           <span style="font-size: 20px;">👤</span>
           <div class="nav-label">Profile</div>
-        </div>
+        </a>
       </div>
-
     </div>
   </div>
-  <<script>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
+  <script>
     // Current cart
     let cart = {
         items: [],
         total: 0
     };
+
+    // Handle image errors
+    function handleImageError(img) {
+        img.style.display = 'none';
+        // Keep the gradient background that's in the CSS
+    }
 
     // Load products from API
     async function loadProducts() {
@@ -733,38 +749,19 @@
 
     // Show products in a modal
     function showProductsModal(products, category) {
-        // Create modal overlay
-        const overlay = document.createElement('div');
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.right = '0';
-        overlay.style.bottom = '0';
-        overlay.style.background = 'rgba(0,0,0,0.8)';
-        overlay.style.zIndex = '1000';
+        const overlay = document.getElementById('modalOverlay');
+        overlay.innerHTML = '';
         overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        overlay.onclick = () => document.body.removeChild(overlay);
         
-        // Create modal content
         const modal = document.createElement('div');
-        modal.style.background = 'white';
-        modal.style.padding = '20px';
-        modal.style.borderRadius = '12px';
-        modal.style.maxWidth = '90%';
-        modal.style.maxHeight = '80%';
-        modal.style.overflowY = 'auto';
-        modal.onclick = (e) => e.stopPropagation();
+        modal.className = 'product-modal';
         
-        // Modal title
         const title = document.createElement('h3');
         title.textContent = `${category} Products`;
         title.style.marginBottom = '15px';
         title.style.textAlign = 'center';
         modal.appendChild(title);
         
-        // Products grid
         products.forEach(product => {
             const productDiv = document.createElement('div');
             productDiv.style.padding = '10px';
@@ -774,13 +771,13 @@
             productDiv.style.alignItems = 'center';
             
             productDiv.innerHTML = `
-                <div>
+                <div style="flex: 1;">
                     <strong>${product.name}</strong>
                     <div>$${product.price.toFixed(2)}</div>
-                    <small>${product.description}</small>
+                    <small style="color: #666;">${product.description}</small>
                 </div>
                 <button onclick="addToCart(${JSON.stringify(product).replace(/"/g, '&quot;')})" 
-                        style="background: #C9A961; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer;">
+                        style="background: #C9A961; color: white; border: none; padding: 8px 12px; border-radius: 5px; cursor: pointer; margin-left: 10px;">
                     Add to Cart
                 </button>
             `;
@@ -789,7 +786,13 @@
         });
         
         overlay.appendChild(modal);
-        document.body.appendChild(overlay);
+    }
+
+    // Close modal
+    function closeModal() {
+        const overlay = document.getElementById('modalOverlay');
+        overlay.style.display = 'none';
+        overlay.innerHTML = '';
     }
 
     // Add to cart function
@@ -798,13 +801,10 @@
         cart.total += product.price;
         
         addChatMessage('bot', `Added ${product.name} to cart! Total: $${cart.total.toFixed(2)}`);
-        
-        // Close any open modals
-        const modals = document.querySelectorAll('[style*="position: fixed"]');
-        modals.forEach(modal => document.body.removeChild(modal));
+        closeModal();
     }
 
-    // Fallback products that match your actual categories
+    // Fallback products
     function getFallbackProducts() {
         return [
             {
@@ -813,7 +813,8 @@
                 brand: "Luminous Lab",
                 category: "Anti-Aging",
                 price: 39.00,
-                description: "Gentle retinol serum for first-time users."
+                description: "Gentle retinol serum for first-time users.",
+                image: "/images/0010.jpg"
             },
             {
                 id: "ec-ceramide-eye-002",
@@ -821,7 +822,8 @@
                 brand: "Luminous Lab", 
                 category: "Eye Care",
                 price: 22.00,
-                description: "Cooling gel with caffeine and ceramides."
+                description: "Cooling gel with caffeine and ceramides.",
+                image: "/images/black-americanfemale.jpg"
             },
             {
                 id: "sc-balancing-002",
@@ -829,39 +831,8 @@
                 brand: "Salon Pro",
                 category: "Skin Care",
                 price: 14.00,
-                description: "pH-balanced gel cleanser."
-            },
-            {
-                id: "vc-serum-001",
-                name: "Vitamin C 15% Bright Serum",
-                brand: "Luminous Lab",
-                category: "Brightening",
-                price: 32.00,
-                description: "Water-light L-ascorbic acid serum."
-            },
-            {
-                id: "spf-30-001",
-                name: "Daily Mineral SPF 30",
-                brand: "Luminous Lab",
-                category: "Daily Protection",
-                price: 21.00,
-                description: "Non-nano zinc oxide sunscreen."
-            },
-            {
-                id: "nc-ceramide-repair-001",
-                name: "Ceramide Repair Night Cream",
-                brand: "Luminous Lab",
-                category: "Night Cream",
-                price: 29.00,
-                description: "Deep repair cream with ceramides."
-            },
-            {
-                id: "eye-targeted-001",
-                name: "Peptide + C Eye Lift",
-                brand: "Baine",
-                category: "Eye",
-                price: 31.00,
-                description: "Targets puffiness and dull tone."
+                description: "pH-balanced gel cleanser.",
+                image: "/images/0014CC.jpg"
             }
         ];
     }
@@ -877,9 +848,14 @@
             const productElement = document.createElement('div');
             productElement.className = 'mini-product';
             productElement.onclick = () => addToCart(product);
+            
+            const imageHtml = product.image ? 
+                `<img src="${product.image}" alt="${product.name}" onerror="handleImageError(this)">` :
+                '<div style="font-size: 24px; display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">💄</div>';
+            
             productElement.innerHTML = `
-                <div class="mini-product-image" style="background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">
-                    ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;">` : ''}
+                <div class="mini-product-image">
+                    ${imageHtml}
                 </div>
                 <div class="mini-product-info">
                     <div class="mini-product-name">${product.name}</div>
@@ -928,7 +904,19 @@
         }, 1000);
     }
 
-    // Navigation functions (keep existing)
+    function searchProducts() {
+        const searchTerm = document.getElementById('productSearch').value.trim();
+        if (searchTerm) {
+            addChatMessage('user', `Search: ${searchTerm}`);
+            document.getElementById('productSearch').value = '';
+            
+            setTimeout(() => {
+                addChatMessage('bot', `Searching for "${searchTerm}"... Try browsing our categories for specific products!`);
+            }, 1000);
+        }
+    }
+
+    // Navigation functions
     function goHome() {
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
@@ -936,8 +924,16 @@
         document.querySelectorAll('.nav-item')[0].classList.add('active');
     }
 
+    function showProfile() {
+        alert('Profile view would show here');
+    }
+
     function navigateTo(page) {
         alert(`Navigating to ${page} page...`);
+    }
+
+    function bookService(service) {
+        alert(`Booking ${service} service...`);
     }
 
     function bookNow() { alert('Opening booking system...'); }
@@ -949,35 +945,11 @@
         if (input) input.focus();
     }
 
-    // Update category card clicks to show products
-    function updateCategoryClicks() {
-        // Update existing category cards
-        const categories = {
-            'Anti-Aging': 'Anti-Aging',
-            'Eye Care': 'Eye Care', 
-            'Skin Care': 'Skin Care',
-            'Brightening': 'Brightening',
-            'Daily Protection': 'Daily Protection',
-            'Night Cream': 'Night Cream',
-            'Eye': 'Eye',
-            'all': 'all'
-        };
-        
-        for (const [text, category] of Object.entries(categories)) {
-            const cards = document.querySelectorAll('.category-card');
-            cards.forEach(card => {
-                if (card.textContent.includes(text)) {
-                    card.onclick = () => showProducts(category);
-                }
-            });
-        }
-    }
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts();
-        updateCategoryClicks();
         addChatMessage('bot', 'Welcome! Ask me about our beauty products or shop by category.');
     });
-</script>
+  </script>
 </body>
 </html>
