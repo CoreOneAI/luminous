@@ -104,8 +104,19 @@
     .category-image {
       width: 100%;
       height: 100px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .category-image img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+      transition: transform 0.3s ease;
+    }
+    
+    .category-card:hover .category-image img {
+      transform: scale(1.05);
     }
     
     .category-body {
@@ -115,7 +126,7 @@
     .category-title {
       font-size: 13px;
       font-weight: 600;
-      color: #212121;
+      color: 212121;
       margin: 4px 0;
       line-height: 1.2;
     }
@@ -214,8 +225,14 @@
     .mini-product-image {
       width: 100%;
       height: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .mini-product-image img {
+      width: 100%;
+      height: 100%;
       object-fit: cover;
-      background: #f0f0f0;
     }
     
     .mini-product-info {
@@ -256,6 +273,71 @@
     .promo-text {
       font-size: 11px;
       opacity: 0.95;
+    }
+    
+    /* Profile View */
+    .profile-view {
+      display: none;
+      padding: 16px;
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #C9A961;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+    }
+    
+    .profile-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .profile-email {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .profile-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .profile-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .profile-card-content {
+      font-size: 14px;
+    }
+    
+    .appointment-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .appointment-item:last-child {
+      border-bottom: none;
     }
     
     /* Bottom Navigation */
@@ -318,21 +400,29 @@
       transform: scale(0.95);
     }
     
-    /* Responsive */
-    @media (max-width: 425px) {
-      .phone-frame {
-        width: 100%;
-        height: 100vh;
-        border-radius: 0;
-        padding: 0;
-      }
-      
-      .phone-screen {
-        border-radius: 0;
-      }
-    }
-
     /* Chat Container Styles */
+    .chat-container {
+      padding: 8px;
+    }
+    
+    .chat-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .chat-messages {
+      height: 200px;
+      overflow-y: auto;
+      background: #f9f9f9;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+    
     .chat-message {
       padding: 8px;
       margin: 4px 0;
@@ -351,6 +441,114 @@
       color: white;
       align-self: flex-end;
       margin-left: auto;
+    }
+    
+    .chat-input-container {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .chat-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    
+    .chat-send {
+      padding: 10px 20px;
+      background: #000;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* Search Container */
+    .search-container {
+      padding: 8px;
+    }
+    
+    .search-box {
+      background: #fff;
+      border-radius: 12px;
+      padding: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    }
+    
+    .search-input-container {
+      display: flex;
+      gap: 8px;
+    }
+    
+    .search-input {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 13px;
+    }
+    
+    .search-button {
+      padding: 10px 20px;
+      background: #C9A961;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .product-modal {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      max-width: 90%;
+      max-height: 80%;
+      overflow-y: auto;
+      z-index: 1001;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1002;
+    }
+    
+    /* Responsive */
+    @media (max-width: 425px) {
+      .phone-frame {
+        width: 100%;
+        height: 100vh;
+        border-radius: 0;
+        padding: 0;
+      }
+      
+      .phone-screen {
+        border-radius: 0;
+      }
     }
   </style>
 </head>
@@ -384,7 +582,7 @@
           <button class="action-button" onclick="callUs()">
             <span style="font-size: 16px;">📞</span> Call Us
           </button>
-          <button class="action-button" onclick="viewOffers()">
+          <button class="action-button" onclick="showServicesModal()">
             <span style="font-size: 16px;">🎁</span> Services
           </button>
           <button class="action-button" onclick="rewards()">
@@ -394,38 +592,30 @@
         
         <!-- AI Chat Section -->
         <div class="section-label">Ask Our Beauty Expert</div>
-        <div style="padding: 8px;">
-          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div id="chatContainer" style="height: 200px; overflow-y: auto; background: #f9f9f9; border-radius: 8px; padding: 10px; margin-bottom: 10px; display: flex; flex-direction: column;">
+        <div class="chat-container">
+          <div class="chat-box">
+            <div id="chatContainer" class="chat-messages">
               <div class="chat-message bot">
                 Welcome! Ask me anything about skincare, haircare, or beauty treatments.
               </div>
             </div>
             
-            <div style="display: flex; gap: 8px;">
+            <div class="chat-input-container">
               <input id="chatInput" type="text" placeholder="Ask about treatments, products, or beauty advice..." 
-                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
-                     onkeypress="if(event.key === 'Enter') sendChat()">
-              <button onclick="sendChat()" style="padding: 10px 20px; background: #000; color: #fff; border: none; 
-                                                  border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                Send
-              </button>
+                     class="chat-input" onkeypress="if(event.key === 'Enter') sendChat()">
+              <button onclick="sendChat()" class="chat-send">Send</button>
             </div>
           </div>
         </div>
         
         <!-- Product Search Bar -->
         <div class="section-label">Search Products</div>
-        <div style="padding: 8px;">
-          <div style="background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div style="display: flex; gap: 8px;">
+        <div class="search-container">
+          <div class="search-box">
+            <div class="search-input-container">
               <input id="productSearch" type="text" placeholder="Search for specific products..." 
-                     style="flex: 1; padding: 10px; border: 1px solid #e0e0e0; border-radius: 8px; font-size: 13px;"
-                     onkeypress="if(event.key === 'Enter') searchProducts()">
-              <button onclick="searchProducts()" style="padding: 10px 20px; background: #C9A961; color: #fff; border: none; 
-                                                        border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer;">
-                Search
-              </button>
+                     class="search-input" onkeypress="if(event.key === 'Enter') searchProducts()">
+              <button onclick="searchProducts()" class="search-button">Search</button>
             </div>
           </div>
         </div>
@@ -433,37 +623,85 @@
         <!-- Shop Categories -->
         <div class="section-label">Shop by Category</div>
         <div class="grid-view">
-          <a href="chat.html?category=haircare" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Hair Care</div>
-              <div class="category-subtitle">Shampoos, conditioners & more</div>
+          <div class="category-card" onclick="showProducts('Anti-Aging')">
+            <div class="category-image">
+              <img src="/images/0013CC.jpg" alt="Anti-Aging" onerror="handleImageError(this)">
             </div>
-          </a>
-          
-          <a href="chat.html?category=skincare" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);"></div>
-            <div class="category-body">
-              <div class="category-title">Skin Care</div>
-              <div class="category-subtitle">Cleansers, moisturizers & serums</div>
-            </div>
-          </a>
-          
-          <a href="chat.html?category=anti-aging" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%);"></div>
             <div class="category-body">
               <div class="category-title">Anti-Aging</div>
-              <div class="category-subtitle">Turn back time</div>
+              <div class="category-subtitle">Retinol & peptide treatments</div>
             </div>
-          </a>
+          </div>
           
-          <a href="chat.html?category=all" class="category-card">
-            <div class="category-image" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);"></div>
+          <div class="category-card" onclick="showProducts('Skin Care')">
+            <div class="category-image">
+              <img src="/images/0014CC.jpg" alt="Skin Care" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Skin Care</div>
+              <div class="category-subtitle">Cleansers & toners</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Eye Care')">
+            <div class="category-image">
+              <img src="/images/009C.jpg" alt="Eye Care" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Eye Care</div>
+              <div class="category-subtitle">Serums & treatments</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Brightening')">
+            <div class="category-image">
+              <img src="/images/006C.jpg" alt="Brightening" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Brightening</div>
+              <div class="category-subtitle">Vitamin C & glow products</div>
+            </div>
+          </div>
+
+          <div class="category-card" onclick="showProducts('Daily Protection')">
+            <div class="category-image">
+              <img src="/images/001C.jpg" alt="Daily Protection" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Daily Protection</div>
+              <div class="category-subtitle">SPF & sun care</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('Night Cream')">
+            <div class="category-image">
+              <img src="/images/005C.jpg" alt="Night Cream" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Night Cream</div>
+              <div class="category-subtitle">Overnight repair</div>
+            </div>
+          </div>
+
+          <div class="category-card" onclick="showProducts('Eye')">
+            <div class="category-image">
+              <img src="/images/6CC.jpg" alt="Targeted Eye" onerror="handleImageError(this)">
+            </div>
+            <div class="category-body">
+              <div class="category-title">Targeted Eye</div>
+              <div class="category-subtitle">Specialized eye treatments</div>
+            </div>
+          </div>
+          
+          <div class="category-card" onclick="showProducts('all')">
+            <div class="category-image">
+              <img src="/images/4CC.jpg" alt="All Products" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">All Products</div>
               <div class="category-subtitle">Browse everything</div>
             </div>
-          </a>
+          </div>
         </div>
         
         <!-- Promo -->
@@ -482,7 +720,9 @@
         <div class="section-label">Our Services</div>
         <div class="grid-view">
           <div class="category-card" onclick="bookService('color')">
-            <div class="category-image" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%);"></div>
+            <div class="category-image">
+              <img src="/images/7CC.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">Color & Highlights</div>
               <div class="category-subtitle">Starting at $120</div>
@@ -490,7 +730,9 @@
           </div>
           
           <div class="category-card" onclick="bookService('styling')">
-            <div class="category-image" style="background: linear-gradient(135deg, #81ecec 0%, #00cec9 100%);"></div>
+            <div class="category-image">
+              <img src="/images/4CC.jpg" alt="Styling & Makeup" onerror="handleImageError(this)">
+            </div>
             <div class="category-body">
               <div class="category-title">Styling & Makeup</div>
               <div class="category-subtitle">Starting at $85</div>
@@ -499,72 +741,64 @@
         </div>
         
         <!-- Floating Action Button -->
-        <div class="fab" onclick="openAI()">
-          💬
-        </div>
+        <div class="fab" onclick="openAI()">💬</div>
         
       </div>
       
-      <!-- Profile View -->
-      <div class="scaffold-body" id="profileView" style="display: none;">
-        <div style="background: #000; color: #fff; padding: 16px; display: flex; align-items: center;">
-          <button onclick="goHome()" style="background: none; border: none; color: #fff; font-size: 24px; margin-right: 16px; cursor: pointer;">‹</button>
-          <h2 style="font-size: 18px; font-weight: 600;">My Profile</h2>
+      <!-- Profile View (Hidden by default) -->
+      <div class="scaffold-body profile-view" id="profileView">
+        <div class="profile-header">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-name">Alex Johnson</div>
+          <div class="profile-email">alex.j@example.com</div>
         </div>
         
-        <div style="padding: 16px; overflow-y: auto;">
-          <!-- Personal Info -->
-          <div style="background: #fff; border-radius: 12px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div style="display: flex; align-items: center; margin-bottom: 16px;">
-              <div style="width: 60px; height: 60px; background: #e0e0e0; border-radius: 30px; display: flex; align-items: center; justify-content: center; font-size: 24px; margin-right: 16px;">
-                👤
-              </div>
-              <div>
-                <div style="font-size: 16px; font-weight: 600;">Alex Johnson</div>
-                <div style="font-size: 12px; color: #757575;">Luminous Member since 2023</div>
-              </div>
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Membership</span>
+            <span style="color: #C9A961; font-weight: 600;">Gold Tier</span>
+          </div>
+          <div class="profile-card-content">
+            <p>You've earned 345 rewards points</p>
+            <p style="margin-top: 8px;">Next reward: 55 points away</p>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Upcoming Appointments</span>
+          </div>
+          <div class="profile-card-content">
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Hair Color & Cut</div>
+              <div>Tomorrow at 2:00 PM</div>
+              <div>With Stylist: Maria</div>
             </div>
-            
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-              <div style="text-align: center;">
-                <div style="font-size: 16px; font-weight: 600;">12</div>
-                <div style="font-size: 12px; color: #757575;">Appointments</div>
-              </div>
-              <div style="text-align: center;">
-                <div style="font-size: 16px; font-weight: 600;">350</div>
-                <div style="font-size: 12px; color: #757575;">Reward Points</div>
-              </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Facial Treatment</div>
+              <div>June 15 at 10:30 AM</div>
+              <div>With Esthetician: Sarah</div>
             </div>
           </div>
-          
-          <!-- Menu Items -->
-          <div style="background: #fff; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.12);">
-            <div class="menu-item" onclick="navigateTo('appointments')">
-              <span style="font-size: 20px; margin-right: 16px;">📅</span>
-              <span>My Appointments</span>
-              <span style="margin-left: auto; color: #757575;">›</span>
-            </div>
-            <div class="menu-item" onclick="navigateTo('favorites')">
-              <span style="font-size: 20px; margin-right: 16px;">❤️</span>
-              <span>Favorites</span>
-              <span style="margin-left: auto; color: #757575;">›</span>
-            </div>
-            <div class="menu-item" onclick="navigateTo('rewards')">
-              <span style="font-size: 20px; margin-right: 16px;">⭐</span>
-              <span>Rewards</span>
-              <span style="margin-left: auto; color: #757575;">›</span>
-            </div>
-            <div class="menu-item" onclick="navigateTo('settings')">
-              <span style="font-size: 20px; margin-right: 16px;">⚙️</span>
-              <span>Settings</span>
-              <span style="margin-left: auto; color: #757575;">›</span>
-            </div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Purchase History</span>
           </div>
-          
-          <!-- Promo Card -->
-          <div class="promo-card">
-            <div class="promo-title">Refer a Friend</div>
-            <div class="promo-text">Get $25 off when your friend books their first appointment</div>
+          <div class="profile-card-content">
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Retinol Renewal Serum</div>
+              <div>May 28, 2023 - $39.00</div>
+            </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Vitamin C Bright Serum</div>
+              <div>April 15, 2023 - $32.00</div>
+            </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Hair Treatment</div>
+              <div>March 22, 2023 - $85.00</div>
+            </div>
           </div>
         </div>
       </div>
@@ -591,185 +825,651 @@
     </div>
   </div>
 
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
+
   <script>
-    // Fallback product data in case API is not available
-    const fallbackProducts = [
-      { id: 1, name: "Hydrating Shampoo", price: "$24.99", image: "linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%)" },
-      { id: 2, name: "Nourishing Conditioner", price: "$26.99", image: "linear-gradient(135deg, #74b9ff 0%, #0984e3 100%)" },
-      { id: 3, name: "Anti-Frizz Serum", price: "$32.50", image: "linear-gradient(135deg, #a29bfe 0%, #6c5ce7 100%)" },
-      { id: 4, name: "Repairing Hair Mask", price: "$29.99", image: "linear-gradient(135deg, #fd79a8 0%, #e84393 100%)" },
-      { id: 5, name: "Volumizing Mousse", price: "$19.99", image: "linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%)" },
-      { id: 6, name: "Heat Protectant Spray", price: "$22.50", image: "linear-gradient(135deg, #81ecec 0%, #00cec9 100%)" }
-    ];
+    // Current cart
+    let cart = {
+        items: [],
+        total: 0
+    };
 
-    // Function to load products from API with fallback
+    // Handle image errors
+    function handleImageError(img) {
+        img.style.display = 'none';
+    }
+
+    // Load products from API
     async function loadProducts() {
-      try {
-        const response = await fetch('/api/products');
-        
-        // Check if response is JSON
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          throw new TypeError("API returned non-JSON response");
+        try {
+            const response = await fetch('/api/products');
+            const data = await response.json();
+            
+            // Handle different response structures
+            const products = data.items || data.products || [];
+            
+            if (products.length > 0) {
+                displayProducts(products.slice(0, 6));
+            } else {
+                displayProducts(getFallbackProducts().slice(0, 6));
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            displayProducts(getFallbackProducts().slice(0, 6));
         }
-        
-        const products = await response.json();
-        displayProducts(products);
-      } catch (error) {
-        console.error('Error loading products:', error);
-        console.log('Using fallback product data');
-        displayProducts(fallbackProducts);
-      }
     }
 
-    // Function to display products
-    function displayProducts(products) {
-      const container = document.getElementById('featuredProducts');
-      container.innerHTML = '';
-      
-      products.forEach(product => {
-        const productElement = document.createElement('div');
-        productElement.className = 'mini-product';
-        productElement.innerHTML = `
-          <div class="mini-product-image" style="background: ${product.image || 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)'};"></div>
-          <div class="mini-product-info">
-            <div class="mini-product-name">${product.name}</div>
-            <div class="mini-product-price">${product.price}</div>
-          </div>
-        `;
-        container.appendChild(productElement);
-      });
+    // Show products by category - FIXED to handle your actual product categories
+    async function showProducts(category) {
+        try {
+            let url = '/api/products';
+            if (category !== 'all') {
+                url += `?category=${encodeURIComponent(category)}`;
+            }
+            
+            const response = await fetch(url);
+            const data = await response.json();
+            
+            // Handle different response structures
+            const products = data.items || data.products || [];
+            
+            if (products.length > 0) {
+                showProductsModal(products, category);
+            } else {
+                // Show modal with fallback products for that category
+                showProductsModal(getProductsByCategory(category), category);
+            }
+        } catch (error) {
+            console.error('Error loading products:', error);
+            // Show fallback products
+            showProductsModal(getProductsByCategory(category), category);
+        }
     }
 
-    // Chat functionality
-    function sendChat() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-      
-      if (!message) return;
-      
-      const chatContainer = document.getElementById('chatContainer');
-      
-      // Add user message
-      const userMessage = document.createElement('div');
-      userMessage.className = 'chat-message user';
-      userMessage.textContent = message;
-      chatContainer.appendChild(userMessage);
-      
-      // Clear input
-      input.value = '';
-      
-      // Scroll to bottom
-      chatContainer.scrollTop = chatContainer.scrollHeight;
-      
-      // Simulate AI response after a short delay
-      setTimeout(() => {
-        const botMessage = document.createElement('div');
-        botMessage.className = 'chat-message bot';
+    // Get products by category from your actual data
+    function getProductsByCategory(category) {
+        const allProducts = getAllProducts();
+        if (category === 'all') return allProducts;
         
-        // Simple response logic
-        if (message.toLowerCase().includes('hair')) {
-          botMessage.textContent = "For hair care, I recommend our hydrating shampoo and deep conditioner. They work wonders for dry or damaged hair!";
-        } else if (message.toLowerCase().includes('skin')) {
-          botMessage.textContent = "Our skincare line includes cleansers, toners, and moisturizers for all skin types. What's your primary skin concern?";
-        } else if (message.toLowerCase().includes('price') || message.toLowerCase().includes('cost')) {
-          botMessage.textContent = "Prices vary by service. A basic haircut starts at $65, coloring from $120, and facials from $90. Would you like more specific pricing?";
-        } else if (message.toLowerCase().includes('appointment') || message.toLowerCase().includes('book')) {
-          botMessage.textContent = "To book an appointment, you can call us at (555) 123-4567 or use our online booking system. What service are you interested in?";
+        return allProducts.filter(product => 
+            product.category && product.category.toLowerCase() === category.toLowerCase()
+        );
+    }
+
+    // Get all products from your actual data
+    function getAllProducts() {
+        return [
+            {
+                id: "aa-retinol-serum-001",
+                name: "Retinol Renewal Serum 0.3%",
+                brand: "Luminous Lab",
+                category: "Anti-Aging",
+                price: 39.00,
+                description: "Gentle retinol serum for first-time users. Softens fine lines and improves texture.",
+                image: "/images/3CC.jpg"
+            },
+            {
+                id: "aa-retinol-cream-002",
+                name: "Pro Retinol Night Cream",
+                brand: "Salon Pro",
+                category: "Anti-Aging",
+                price: 46.00,
+                description: "Rich, cushiony night cream with encapsulated retinol and ceramides.",
+                image: "/images/2CC.jpg"
+            },
+            {
+                id: "ec-retinol-eye-001",
+                name: "Retinol Eye Treatment",
+                brand: "Salon Pro",
+                category: "Eye Care",
+                price: 34.00,
+                description: "Low-irritation retinol eye cream to smooth crow's feet and brighten tone.",
+                image: "/images/1CC.jpg"
+            },
+            {
+                id: "ec-ceramide-eye-002",
+                name: "Ceramide Eye Repair Gel",
+                brand: "Luminous Lab", 
+                category: "Eye Care",
+                price: 22.00,
+                description: "Cooling gel with caffeine and ceramides for morning depuff and long-lasting hydration.",
+                image: "/images/black-americanfemale.jpg"
+            },
+            {
+                id: "sc-balancing-002",
+                name: "Balancing Gel Cleanser", 
+                brand: "Salon Pro",
+                category: "Skin Care",
+                price: 14.00,
+                description: "pH-balanced gel cleanser that removes makeup without stripping.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "vc-serum-001",
+                name: "Vitamin C 15% Bright Serum",
+                brand: "Luminous Lab",
+                category: "Brightening",
+                price: 32.00,
+                description: "Water-light L-ascorbic acid + ferulic + E to boost radiance and even tone.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "spf-30-001",
+                name: "Daily Mineral SPF 30",
+                brand: "Luminous Lab",
+                category: "Daily Protection",
+                price: 21.00,
+                description: "Non-nano zinc oxide with sheer finish. No white cast on most skin tones.",
+                image: "/images/0010.jpg"
+            },
+            {
+                id: "nc-ceramide-repair-001",
+                name: "Ceramide Repair Night Cream",
+                brand: "Luminous Lab",
+                category: "Night Cream",
+                price: 29.00,
+                description: "Deep repair cream with ceramides + cholesterol for dry, stressed skin.",
+                image: "/images/0014CC.jpg"
+            },
+            {
+                id: "eye-targeted-001",
+                name: "Peptide + C Eye Lift",
+                brand: "Baine",
+                category: "Eye",
+                price: 31.00,
+                description: "Targets puffiness and dull tone around the eyes for a rested look.",
+                image: "/images/hispanic-american.jpg"
+            }
+        ];
+    }
+
+    // Show products in a modal
+    function showProductsModal(products, category) {
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = () => document.body.removeChild(overlay);
+        
+        const modal = document.createElement('div');
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '90%';
+        modal.style.maxHeight = '80%';
+        modal.style.overflowY = 'auto';
+        modal.style.position = 'relative';
+        modal.onclick = (e) => e.stopPropagation();
+        
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
+        
+        const title = document.createElement('h3');
+        title.textContent = `${category} Products (${products.length})`;
+        title.style.marginBottom = '15px';
+        title.style.textAlign = 'center';
+        modal.appendChild(title);
+        
+        if (products.length === 0) {
+            const noProducts = document.createElement('div');
+            noProducts.textContent = 'No products found in this category.';
+            noProducts.style.textAlign = 'center';
+            noProducts.style.color = '#666';
+            modal.appendChild(noProducts);
         } else {
-          botMessage.textContent = "Thanks for your question! Our beauty experts can help with that. Would you like to schedule a consultation?";
+            // Create product grid
+            const productGrid = document.createElement('div');
+            productGrid.style.display = 'grid';
+            productGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
+            productGrid.style.gap = '10px';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.style.padding = '10px';
+                productCard.style.background = '#f9f9f9';
+                productCard.style.borderRadius = '8px';
+                productCard.style.cursor = 'pointer';
+                productCard.style.textAlign = 'center';
+                productCard.onclick = (e) => {
+                    e.stopPropagation();
+                    showProductDetail(product);
+                };
+                
+                const imageDiv = document.createElement('div');
+                imageDiv.style.height = '60px';
+                imageDiv.style.marginBottom = '8px';
+                imageDiv.style.borderRadius = '6px';
+                imageDiv.style.overflow = 'hidden';
+                imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+                
+                if (product.image) {
+                    const img = document.createElement('img');
+                    img.src = product.image;
+                    img.alt = product.name;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.onerror = function() {
+                        this.style.display = 'none';
+                        imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+                    };
+                    imageDiv.appendChild(img);
+                } else {
+                    imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+                }
+                
+                const nameDiv = document.createElement('div');
+                nameDiv.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
+                nameDiv.style.fontSize = '12px';
+                nameDiv.style.fontWeight = '600';
+                nameDiv.style.marginBottom = '5px';
+                
+                const priceDiv = document.createElement('div');
+                priceDiv.textContent = `$${product.price.toFixed(2)}`;
+                priceDiv.style.fontSize = '14px';
+                priceDiv.style.fontWeight = '700';
+                priceDiv.style.color = '#C9A961';
+                
+                productCard.appendChild(imageDiv);
+                productCard.appendChild(nameDiv);
+                productCard.appendChild(priceDiv);
+                productGrid.appendChild(productCard);
+            });
+            
+            modal.appendChild(productGrid);
         }
         
-        chatContainer.appendChild(botMessage);
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-      }, 1000);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
     }
 
-    // Search products function
-    function searchProducts() {
-      const searchTerm = document.getElementById('productSearch').value;
-      if (searchTerm) {
-        const chatContainer = document.getElementById('chatContainer');
+    // Show individual product detail
+    function showProductDetail(product) {
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
         
-        // Add user message
-        const userMessage = document.createElement('div');
-        userMessage.className = 'chat-message user';
-        userMessage.textContent = `Search for: ${searchTerm}`;
-        chatContainer.appendChild(userMessage);
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = () => document.body.removeChild(overlay);
         
-        // Clear input
-        document.getElementById('productSearch').value = '';
+        const modal = document.createElement('div');
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '300px';
+        modal.style.textAlign = 'center';
+        modal.style.position = 'relative';
+        modal.onclick = (e) => e.stopPropagation();
         
-        // Scroll to bottom
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
         
-        // Simulate search results
+        const imageDiv = document.createElement('div');
+        imageDiv.style.height = '120px';
+        imageDiv.style.marginBottom = '15px';
+        imageDiv.style.borderRadius = '8px';
+        imageDiv.style.overflow = 'hidden';
+        imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+        
+        if (product.image) {
+            const img = document.createElement('img');
+            img.src = product.image;
+            img.alt = product.name;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.onerror = function() {
+                this.style.display = 'none';
+                imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
+            };
+            imageDiv.appendChild(img);
+        } else {
+            imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
+        }
+        
+        const nameDiv = document.createElement('h3');
+        nameDiv.textContent = product.name;
+        nameDiv.style.marginBottom = '10px';
+        nameDiv.style.color = '#333';
+        
+        const priceDiv = document.createElement('div');
+        priceDiv.textContent = `$${product.price.toFixed(2)}`;
+        priceDiv.style.fontSize = '18px';
+        priceDiv.style.fontWeight = '700';
+        priceDiv.style.color = '#C9A961';
+        priceDiv.style.marginBottom = '10px';
+        
+        const descDiv = document.createElement('div');
+        descDiv.textContent = product.description || 'No description available.';
+        descDiv.style.fontSize = '12px';
+        descDiv.style.color = '#666';
+        descDiv.style.marginBottom = '20px';
+        descDiv.style.lineHeight = '1.4';
+        
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Add to Cart';
+        addButton.style.background = '#C9A961';
+        addButton.style.color = 'white';
+        addButton.style.border = 'none';
+        addButton.style.padding = '12px 20px';
+        addButton.style.borderRadius = '8px';
+        addButton.style.cursor = 'pointer';
+        addButton.style.fontWeight = '600';
+        addButton.onclick = (e) => {
+            e.stopPropagation();
+            addToCart(product);
+            document.body.removeChild(overlay);
+        };
+        
+        modal.appendChild(imageDiv);
+        modal.appendChild(nameDiv);
+        modal.appendChild(priceDiv);
+        modal.appendChild(descDiv);
+        modal.appendChild(addButton);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+    }
+
+    // Show services modal
+    function showServicesModal() {
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = () => document.body.removeChild(overlay);
+        
+        const modal = document.createElement('div');
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '90%';
+        modal.style.maxHeight = '80%';
+        modal.style.overflowY = 'auto';
+        modal.style.position = 'relative';
+        modal.onclick = (e) => e.stopPropagation();
+        
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
+        
+        const title = document.createElement('h3');
+        title.textContent = 'Our Services';
+        title.style.marginBottom = '15px';
+        title.style.textAlign = 'center';
+        modal.appendChild(title);
+        
+        // Services list
+        const services = [
+            { name: 'Haircut & Style', price: '$45-85', duration: '60 min' },
+            { name: 'Color & Highlights', price: '$120-250', duration: '120-180 min' },
+            { name: 'Facial Treatment', price: '$80-150', duration: '60-90 min' },
+            { name: 'Manicure', price: '$35-60', duration: '45 min' },
+            { name: 'Pedicure', price: '$45-75', duration: '60 min' },
+            { name: 'Waxing', price: '$25-85', duration: '30-60 min' },
+            { name: 'Makeup Application', price: '$65-120', duration: '60 min' },
+            { name: 'Massage Therapy', price: '$75-125', duration: '60 min' }
+        ];
+        
+        services.forEach(service => {
+            const serviceItem = document.createElement('div');
+            serviceItem.style.padding = '12px';
+            serviceItem.style.borderBottom = '1px solid #eee';
+            serviceItem.style.display = 'flex';
+            serviceItem.style.justifyContent = 'space-between';
+            serviceItem.style.alignItems = 'center';
+            
+            const serviceInfo = document.createElement('div');
+            serviceInfo.innerHTML = `
+                <div style="font-weight: 600;">${service.name}</div>
+                <div style="font-size: 12px; color: #666;">${service.duration}</div>
+            `;
+            
+            const servicePrice = document.createElement('div');
+            servicePrice.innerHTML = `
+                <div style="font-weight: 600; color: #C9A961;">${service.price}</div>
+                <button style="background: #000; color: white; border: none; padding: 6px 12px; 
+                        border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px;">
+                    Book Now
+                </button>
+            `;
+            
+            servicePrice.querySelector('button').onclick = () => {
+                alert(`Booking ${service.name} service for ${service.price}`);
+            };
+            
+            serviceItem.appendChild(serviceInfo);
+            serviceItem.appendChild(servicePrice);
+            modal.appendChild(serviceItem);
+        });
+        
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+    }
+
+    // Add to cart function
+    function addToCart(product) {
+        cart.items.push(product);
+        cart.total += product.price;
+        // Show brief notification instead of chat message
+        const notification = document.createElement('div');
+        notification.textContent = `✓ Added ${product.name} to cart`;
+        notification.style.position = 'fixed';
+        notification.style.bottom = '100px';
+        notification.style.left = '50%';
+        notification.style.transform = 'translateX(-50%)';
+        notification.style.background = '#4CAF50';
+        notification.style.color = 'white';
+        notification.style.padding = '10px 20px';
+        notification.style.borderRadius = '20px';
+        notification.style.zIndex = '1001';
+        document.body.appendChild(notification);
+        
         setTimeout(() => {
-          const botMessage = document.createElement('div');
-          botMessage.className = 'chat-message bot';
-          botMessage.textContent = `I found several products matching "${searchTerm}". Our top recommendations would be our hydrating shampoo and repair mask. Would you like more details?`;
-          
-          chatContainer.appendChild(botMessage);
-          chatContainer.scrollTop = chatContainer.scrollHeight;
-        }, 1000);
-      }
+            document.body.removeChild(notification);
+        }, 2000);
     }
 
-    // Navigation functions
+    // Fallback products
+    function getFallbackProducts() {
+        return getAllProducts().slice(0, 6);
+    }
+
+    // Display featured products
+    function displayProducts(products) {
+        const container = document.getElementById('featuredProducts');
+        if (!container) return;
+        
+        container.innerHTML = '';
+        
+        products.forEach(product => {
+            const productElement = document.createElement('div');
+            productElement.className = 'mini-product';
+            productElement.onclick = () => showProductDetail(product);
+            
+            const imageHtml = product.image ? 
+                `<img src="${product.image}" alt="${product.name}" onerror="handleImageError(this)">` :
+                '<div style="font-size: 24px; display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);">💄</div>';
+            
+            productElement.innerHTML = `
+                <div class="mini-product-image">
+                    ${imageHtml}
+                </div>
+                <div class="mini-product-info">
+                    <div class="mini-product-name">${product.name}</div>
+                    <div class="mini-product-price">$${product.price.toFixed(2)}</div>
+                </div>
+            `;
+            container.appendChild(productElement);
+        });
+    }
+
+    // FIXED: Navigation functions
     function goHome() {
-      document.getElementById('mainView').style.display = 'flex';
-      document.getElementById('profileView').style.display = 'none';
-      
-      // Update nav items
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      document.querySelectorAll('.nav-item')[0].classList.add('active');
+        document.getElementById('mainView').style.display = 'block';
+        document.getElementById('profileView').style.display = 'none';
+        updateNavActive(0);
     }
 
-    function showProfile() {
-      document.getElementById('mainView').style.display = 'none';
-      document.getElementById('profileView').style.display = 'block';
-      
-      // Update nav items
-      document.querySelectorAll('.nav-item').forEach(item => {
-        item.classList.remove('active');
-      });
-      document.querySelectorAll('.nav-item')[3].classList.add('active');
+    function showServices() {
+        showServicesModal();
     }
 
     function navigateTo(page) {
-      alert(`Navigating to ${page} page...`);
-      // In a real app, this would change the view or route
+        if (page === 'services') {
+            showServicesModal();
+        } else if (page === 'products') {
+            showProducts('all');
+        } else {
+            alert(`${page} page would show here`);
+        }
     }
 
-    function bookNow() {
-      alert('Opening booking system...');
+    function showProfile() {
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'block';
+        updateNavActive(3);
     }
 
-    function callUs() {
-      alert('Calling (555) 123-4567...');
+    function updateNavActive(index) {
+        document.querySelectorAll('.nav-item').forEach((item, i) => {
+            if (i === index) {
+                item.classList.add('active');
+            } else {
+                item.classList.remove('active');
+            }
+        });
     }
 
-    function viewOffers() {
-      alert('Viewing current offers...');
+    // Chat function with AI integration
+    async function sendChat() {
+        const input = document.getElementById('chatInput');
+        if (!input) return;
+        
+        const message = input.value.trim();
+        if (!message) return;
+        
+        addChatMessage('user', message);
+        input.value = '';
+        
+        try {
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ message: message })
+            });
+            
+            if (!response.ok) throw new Error(`API error: ${response.status}`);
+            
+            const data = await response.json();
+            const aiReply = data.reply || data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
+            addChatMessage('bot', aiReply);
+            
+        } catch (error) {
+            console.error('Chat error:', error);
+            setTimeout(() => {
+                addChatMessage('bot', "I'm here to help with beauty advice and product recommendations. What would you like to know?");
+            }, 1000);
+        }
     }
 
-    function rewards() {
-      alert('Viewing rewards program...');
+    function searchProducts() {
+        const searchTerm = document.getElementById('productSearch').value.trim();
+        if (searchTerm) {
+            addChatMessage('user', `Search: ${searchTerm}`);
+            document.getElementById('productSearch').value = '';
+            
+            setTimeout(() => {
+                addChatMessage('bot', `Searching for "${searchTerm}"... Check our categories for related products!`);
+            }, 1000);
+        }
     }
 
+    // Chat functions
+    function addChatMessage(type, message) {
+        const chatContainer = document.getElementById('chatContainer');
+        if (!chatContainer) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `chat-message ${type}`;
+        messageDiv.textContent = message;
+        chatContainer.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Service functions
     function bookService(service) {
-      alert(`Booking ${service} service...`);
+        alert(`Booking ${service} service...`);
     }
 
-    function openAI() {
-      document.getElementById('chatInput').focus();
+    function bookNow() { alert('Opening booking system...'); }
+    function callUs() { alert('Calling (555) 123-4567...'); }
+    function viewOffers() { showServicesModal(); }
+    function rewards() { alert('Viewing rewards program...'); }
+    function openAI() { 
+        const input = document.getElementById('chatInput');
+        if (input) input.focus();
     }
 
-    // Initialize the app
+    function closeModal() {
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
+    }
+
+    // Initialize
     document.addEventListener('DOMContentLoaded', function() {
-      loadProducts();
+        loadProducts();
+        addChatMessage('bot', 'Hello! I\'m your beauty assistant. Ask me about skincare, products, or salon services!');
+        
+        // Fix navigation click handlers
+        document.querySelectorAll('.nav-item')[0].onclick = goHome;
+        document.querySelectorAll('.nav-item')[1].onclick = () => navigateTo('services');
+        document.querySelectorAll('.nav-item')[2].onclick = () => navigateTo('products');
+        document.querySelectorAll('.nav-item')[3].onclick = showProfile;
     });
   </script>
 </body>
