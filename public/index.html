@@ -275,6 +275,71 @@
       opacity: 0.95;
     }
     
+    /* Profile View */
+    .profile-view {
+      display: none;
+      padding: 16px;
+    }
+    
+    .profile-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .profile-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #C9A961;
+      margin: 0 auto 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: white;
+    }
+    
+    .profile-name {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .profile-email {
+      font-size: 14px;
+      color: #666;
+    }
+    
+    .profile-card {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .profile-card-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .profile-card-content {
+      font-size: 14px;
+    }
+    
+    .appointment-item {
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .appointment-item:last-child {
+      border-bottom: none;
+    }
+    
     /* Bottom Navigation */
     .bottom-nav {
       background: #fff;
@@ -460,6 +525,16 @@
       max-height: 80%;
       overflow-y: auto;
       z-index: 1001;
+      position: relative;
+    }
+    
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      font-size: 24px;
+      cursor: pointer;
+      z-index: 1002;
     }
     
     /* Responsive */
@@ -507,7 +582,7 @@
           <button class="action-button" onclick="callUs()">
             <span style="font-size: 16px;">📞</span> Call Us
           </button>
-          <button class="action-button" onclick="viewOffers()">
+          <button class="action-button" onclick="showServicesModal()">
             <span style="font-size: 16px;">🎁</span> Services
           </button>
           <button class="action-button" onclick="rewards()">
@@ -668,6 +743,64 @@
         <!-- Floating Action Button -->
         <div class="fab" onclick="openAI()">💬</div>
         
+      </div>
+      
+      <!-- Profile View (Hidden by default) -->
+      <div class="scaffold-body profile-view" id="profileView">
+        <div class="profile-header">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-name">Alex Johnson</div>
+          <div class="profile-email">alex.j@example.com</div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Membership</span>
+            <span style="color: #C9A961; font-weight: 600;">Gold Tier</span>
+          </div>
+          <div class="profile-card-content">
+            <p>You've earned 345 rewards points</p>
+            <p style="margin-top: 8px;">Next reward: 55 points away</p>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Upcoming Appointments</span>
+          </div>
+          <div class="profile-card-content">
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Hair Color & Cut</div>
+              <div>Tomorrow at 2:00 PM</div>
+              <div>With Stylist: Maria</div>
+            </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Facial Treatment</div>
+              <div>June 15 at 10:30 AM</div>
+              <div>With Esthetician: Sarah</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Purchase History</span>
+          </div>
+          <div class="profile-card-content">
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Retinol Renewal Serum</div>
+              <div>May 28, 2023 - $39.00</div>
+            </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Vitamin C Bright Serum</div>
+              <div>April 15, 2023 - $32.00</div>
+            </div>
+            <div class="appointment-item">
+              <div style="font-weight: 600;">Hair Treatment</div>
+              <div>March 22, 2023 - $85.00</div>
+            </div>
+          </div>
+        </div>
       </div>
       
       <!-- Bottom Navigation -->
@@ -877,7 +1010,15 @@
         modal.style.maxWidth = '90%';
         modal.style.maxHeight = '80%';
         modal.style.overflowY = 'auto';
+        modal.style.position = 'relative';
         modal.onclick = (e) => e.stopPropagation();
+        
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
         
         const title = document.createElement('h3');
         title.textContent = `${category} Products (${products.length})`;
@@ -983,7 +1124,15 @@
         modal.style.borderRadius = '12px';
         modal.style.maxWidth = '300px';
         modal.style.textAlign = 'center';
+        modal.style.position = 'relative';
         modal.onclick = (e) => e.stopPropagation();
+        
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
         
         const imageDiv = document.createElement('div');
         imageDiv.style.height = '120px';
@@ -1047,6 +1196,96 @@
         modal.appendChild(priceDiv);
         modal.appendChild(descDiv);
         modal.appendChild(addButton);
+        overlay.appendChild(modal);
+        document.body.appendChild(overlay);
+    }
+
+    // Show services modal
+    function showServicesModal() {
+        // Remove any existing modals first
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'modal-overlay';
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = () => document.body.removeChild(overlay);
+        
+        const modal = document.createElement('div');
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '90%';
+        modal.style.maxHeight = '80%';
+        modal.style.overflowY = 'auto';
+        modal.style.position = 'relative';
+        modal.onclick = (e) => e.stopPropagation();
+        
+        // Add close button
+        const closeButton = document.createElement('span');
+        closeButton.className = 'modal-close';
+        closeButton.innerHTML = '&times;';
+        closeButton.onclick = () => document.body.removeChild(overlay);
+        modal.appendChild(closeButton);
+        
+        const title = document.createElement('h3');
+        title.textContent = 'Our Services';
+        title.style.marginBottom = '15px';
+        title.style.textAlign = 'center';
+        modal.appendChild(title);
+        
+        // Services list
+        const services = [
+            { name: 'Haircut & Style', price: '$45-85', duration: '60 min' },
+            { name: 'Color & Highlights', price: '$120-250', duration: '120-180 min' },
+            { name: 'Facial Treatment', price: '$80-150', duration: '60-90 min' },
+            { name: 'Manicure', price: '$35-60', duration: '45 min' },
+            { name: 'Pedicure', price: '$45-75', duration: '60 min' },
+            { name: 'Waxing', price: '$25-85', duration: '30-60 min' },
+            { name: 'Makeup Application', price: '$65-120', duration: '60 min' },
+            { name: 'Massage Therapy', price: '$75-125', duration: '60 min' }
+        ];
+        
+        services.forEach(service => {
+            const serviceItem = document.createElement('div');
+            serviceItem.style.padding = '12px';
+            serviceItem.style.borderBottom = '1px solid #eee';
+            serviceItem.style.display = 'flex';
+            serviceItem.style.justifyContent = 'space-between';
+            serviceItem.style.alignItems = 'center';
+            
+            const serviceInfo = document.createElement('div');
+            serviceInfo.innerHTML = `
+                <div style="font-weight: 600;">${service.name}</div>
+                <div style="font-size: 12px; color: #666;">${service.duration}</div>
+            `;
+            
+            const servicePrice = document.createElement('div');
+            servicePrice.innerHTML = `
+                <div style="font-weight: 600; color: #C9A961;">${service.price}</div>
+                <button style="background: #000; color: white; border: none; padding: 6px 12px; 
+                        border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px;">
+                    Book Now
+                </button>
+            `;
+            
+            servicePrice.querySelector('button').onclick = () => {
+                alert(`Booking ${service.name} service for ${service.price}`);
+            };
+            
+            serviceItem.appendChild(serviceInfo);
+            serviceItem.appendChild(servicePrice);
+            modal.appendChild(serviceItem);
+        });
+        
         overlay.appendChild(modal);
         document.body.appendChild(overlay);
     }
@@ -1116,12 +1355,12 @@
     }
 
     function showServices() {
-        showProducts('all');
+        showServicesModal();
     }
 
     function navigateTo(page) {
         if (page === 'services') {
-            showServices();
+            showServicesModal();
         } else if (page === 'products') {
             showProducts('all');
         } else {
@@ -1210,11 +1449,15 @@
 
     function bookNow() { alert('Opening booking system...'); }
     function callUs() { alert('Calling (555) 123-4567...'); }
-    function viewOffers() { alert('Viewing current offers...'); }
+    function viewOffers() { showServicesModal(); }
     function rewards() { alert('Viewing rewards program...'); }
     function openAI() { 
         const input = document.getElementById('chatInput');
         if (input) input.focus();
+    }
+
+    function closeModal() {
+        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
     }
 
     // Initialize
