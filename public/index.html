@@ -695,7 +695,7 @@
   <!-- Modal Overlay -->
   <div class="modal-overlay" id="modalOverlay" onclick="closeModal()"></div>
 
-<script>
+  <script>
     // Current cart
     let cart = {
         items: [],
@@ -713,7 +713,7 @@
             const response = await fetch('/api/products');
             const data = await response.json();
             
-            // FIX: Check the correct response structure
+            // Handle different response structures
             const products = data.items || data.products || [];
             
             if (products.length > 0) {
@@ -727,7 +727,7 @@
         }
     }
 
-    // Show products by category - FIXED
+    // Show products by category - SIMPLIFIED
     async function showProducts(category) {
         try {
             let url = '/api/products';
@@ -738,190 +738,219 @@
             const response = await fetch(url);
             const data = await response.json();
             
-            // FIX: Check the correct response structure
+            // Handle different response structures
             const products = data.items || data.products || [];
             
             if (products.length > 0) {
                 showProductsModal(products, category);
             } else {
+                // Show in chat but don't wait for response
                 addChatMessage('bot', `No products found in ${category} category.`);
             }
         } catch (error) {
             console.error('Error loading products:', error);
-            addChatMessage('bot', 'Sorry, having trouble loading products. Please try again.');
+            // Don't show error in chat since it's not chat-related
         }
     }
 
-    // Show products in a modal - IMPROVED
+    // Show products in a modal - SIMPLIFIED
     function showProductsModal(products, category) {
-        const overlay = document.getElementById('modalOverlay');
-        overlay.innerHTML = '';
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
         overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+            }
+        };
         
         const modal = document.createElement('div');
-        modal.className = 'product-modal';
-        modal.style.width = '320px';
-        modal.style.maxHeight = '500px';
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '90%';
+        modal.style.maxHeight = '80%';
         modal.style.overflowY = 'auto';
+        modal.onclick = (e) => e.stopPropagation();
         
         const title = document.createElement('h3');
         title.textContent = `${category} Products (${products.length})`;
         title.style.marginBottom = '15px';
         title.style.textAlign = 'center';
-        title.style.color = '#333';
         modal.appendChild(title);
         
-        // Create product grid (2 per row)
+        // Create product grid
         const productGrid = document.createElement('div');
         productGrid.style.display = 'grid';
-        productGrid.style.gridTemplateColumns = '1fr 1fr';
+        productGrid.style.gridTemplateColumns = 'repeat(2, 1fr)';
         productGrid.style.gap = '10px';
-        productGrid.style.padding = '10px';
         
         products.forEach(product => {
             const productCard = document.createElement('div');
-            productCard.style.background = '#fff';
-            productCard.style.borderRadius = '8px';
             productCard.style.padding = '10px';
-            productCard.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            productCard.style.background = '#f9f9f9';
+            productCard.style.borderRadius = '8px';
             productCard.style.cursor = 'pointer';
-            productCard.style.transition = 'transform 0.2s';
-            
-            productCard.onmouseenter = () => {
-                productCard.style.transform = 'translateY(-2px)';
+            productCard.style.textAlign = 'center';
+            productCard.onclick = (e) => {
+                e.stopPropagation();
+                showProductDetail(product);
             };
             
-            productCard.onmouseleave = () => {
-                productCard.style.transform = 'none';
-            };
+            const imageDiv = document.createElement('div');
+            imageDiv.style.height = '60px';
+            imageDiv.style.marginBottom = '8px';
+            imageDiv.style.borderRadius = '6px';
+            imageDiv.style.overflow = 'hidden';
+            imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
             
-            productCard.onclick = () => showProductDetailModal(product);
+            if (product.image) {
+                const img = document.createElement('img');
+                img.src = product.image;
+                img.alt = product.name;
+                img.style.width = '100%';
+                img.style.height = '100%';
+                img.style.objectFit = 'cover';
+                img.onerror = function() {
+                    this.style.display = 'none';
+                    imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+                };
+                imageDiv.appendChild(img);
+            } else {
+                imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 20px;">💄</div>';
+            }
             
-            const imageContainer = document.createElement('div');
-            imageContainer.style.height = '80px';
-            imageContainer.style.marginBottom = '8px';
-            imageContainer.style.borderRadius = '6px';
-            imageContainer.style.overflow = 'hidden';
-            imageContainer.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+            const nameDiv = document.createElement('div');
+            nameDiv.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
+            nameDiv.style.fontSize = '12px';
+            nameDiv.style.fontWeight = '600';
+            nameDiv.style.marginBottom = '5px';
             
-            const imageHtml = product.image ? 
-                `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="handleImageError(this)">` :
-                '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 24px;">💄</div>';
+            const priceDiv = document.createElement('div');
+            priceDiv.textContent = `$${product.price.toFixed(2)}`;
+            priceDiv.style.fontSize = '14px';
+            priceDiv.style.fontWeight = '700';
+            priceDiv.style.color = '#C9A961';
             
-            imageContainer.innerHTML = imageHtml;
-            
-            const productName = document.createElement('div');
-            productName.textContent = product.name.length > 20 ? product.name.substring(0, 20) + '...' : product.name;
-            productName.style.fontWeight = '600';
-            productName.style.fontSize = '12px';
-            productName.style.marginBottom = '4px';
-            productName.style.color = '#333';
-            
-            const productPrice = document.createElement('div');
-            productPrice.textContent = `$${product.price.toFixed(2)}`;
-            productPrice.style.fontWeight = '700';
-            productPrice.style.color = '#C9A961';
-            productPrice.style.fontSize = '14px';
-            
-            productCard.appendChild(imageContainer);
-            productCard.appendChild(productName);
-            productCard.appendChild(productPrice);
-            
+            productCard.appendChild(imageDiv);
+            productCard.appendChild(nameDiv);
+            productCard.appendChild(priceDiv);
             productGrid.appendChild(productCard);
         });
         
         modal.appendChild(productGrid);
         overlay.appendChild(modal);
+        document.body.appendChild(overlay);
     }
 
-    // Show individual product detail modal
-    function showProductDetailModal(product) {
-        const overlay = document.getElementById('modalOverlay');
-        overlay.innerHTML = '';
+    // Show individual product detail
+    function showProductDetail(product) {
+        // Remove any existing modals
+        document.querySelectorAll('[style*="position: fixed"][style*="background: rgba(0,0,0,0.8)"]').forEach(el => el.remove());
         
-        const modal = document.createElement('div');
-        modal.className = 'product-modal';
-        modal.style.width = '300px';
-        
-        const imageContainer = document.createElement('div');
-        imageContainer.style.height = '150px';
-        imageContainer.style.marginBottom = '15px';
-        imageContainer.style.borderRadius = '8px';
-        imageContainer.style.overflow = 'hidden';
-        imageContainer.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
-        
-        const imageHtml = product.image ? 
-            `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" onerror="handleImageError(this)">` :
-            '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
-        
-        imageContainer.innerHTML = imageHtml;
-        
-        const productName = document.createElement('h3');
-        productName.textContent = product.name;
-        productName.style.marginBottom = '8px';
-        productName.style.color = '#333';
-        productName.style.textAlign = 'center';
-        
-        const productPrice = document.createElement('div');
-        productPrice.textContent = `Price: $${product.price.toFixed(2)}`;
-        productPrice.style.fontWeight = '700';
-        productPrice.style.color = '#C9A961';
-        productPrice.style.fontSize = '18px';
-        productPrice.style.textAlign = 'center';
-        productPrice.style.marginBottom = '12px';
-        
-        const productBrand = document.createElement('div');
-        productBrand.textContent = `Brand: ${product.brand || 'Luminous'}`;
-        productBrand.style.color = '#666';
-        productBrand.style.fontSize = '12px';
-        productBrand.style.marginBottom = '8px';
-        productBrand.style.textAlign = 'center';
-        
-        const productDescription = document.createElement('div');
-        productDescription.textContent = product.description || 'No description available.';
-        productDescription.style.color = '#555';
-        productDescription.style.fontSize = '12px';
-        productDescription.style.marginBottom = '20px';
-        productDescription.style.lineHeight = '1.4';
-        productDescription.style.textAlign = 'center';
-        
-        const addToCartBtn = document.createElement('button');
-        addToCartBtn.textContent = 'Add to Cart';
-        addToCartBtn.style.background = '#C9A961';
-        addToCartBtn.style.color = 'white';
-        addToCartBtn.style.border = 'none';
-        addToCartBtn.style.padding = '12px 20px';
-        addToCartBtn.style.borderRadius = '8px';
-        addToCartBtn.style.cursor = 'pointer';
-        addToCartBtn.style.width = '100%';
-        addToCartBtn.style.fontWeight = '600';
-        addToCartBtn.onclick = () => {
-            addToCart(product);
-            closeModal();
+        const overlay = document.createElement('div');
+        overlay.style.position = 'fixed';
+        overlay.style.top = '0';
+        overlay.style.left = '0';
+        overlay.style.right = '0';
+        overlay.style.bottom = '0';
+        overlay.style.background = 'rgba(0,0,0,0.8)';
+        overlay.style.zIndex = '1000';
+        overlay.style.display = 'flex';
+        overlay.style.justifyContent = 'center';
+        overlay.style.alignItems = 'center';
+        overlay.onclick = (e) => {
+            if (e.target === overlay) {
+                document.body.removeChild(overlay);
+            }
         };
         
-        modal.appendChild(imageContainer);
-        modal.appendChild(productName);
-        modal.appendChild(productPrice);
-        modal.appendChild(productBrand);
-        modal.appendChild(productDescription);
-        modal.appendChild(addToCartBtn);
+        const modal = document.createElement('div');
+        modal.style.background = 'white';
+        modal.style.padding = '20px';
+        modal.style.borderRadius = '12px';
+        modal.style.maxWidth = '300px';
+        modal.style.textAlign = 'center';
+        modal.onclick = (e) => e.stopPropagation();
         
+        const imageDiv = document.createElement('div');
+        imageDiv.style.height = '120px';
+        imageDiv.style.marginBottom = '15px';
+        imageDiv.style.borderRadius = '8px';
+        imageDiv.style.overflow = 'hidden';
+        imageDiv.style.background = 'linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)';
+        
+        if (product.image) {
+            const img = document.createElement('img');
+            img.src = product.image;
+            img.alt = product.name;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.onerror = function() {
+                this.style.display = 'none';
+                imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
+            };
+            imageDiv.appendChild(img);
+        } else {
+            imageDiv.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px;">💄</div>';
+        }
+        
+        const nameDiv = document.createElement('h3');
+        nameDiv.textContent = product.name;
+        nameDiv.style.marginBottom = '10px';
+        nameDiv.style.color = '#333';
+        
+        const priceDiv = document.createElement('div');
+        priceDiv.textContent = `$${product.price.toFixed(2)}`;
+        priceDiv.style.fontSize = '18px';
+        priceDiv.style.fontWeight = '700';
+        priceDiv.style.color = '#C9A961';
+        priceDiv.style.marginBottom = '10px';
+        
+        const descDiv = document.createElement('div');
+        descDiv.textContent = product.description || 'No description available.';
+        descDiv.style.fontSize = '12px';
+        descDiv.style.color = '#666';
+        descDiv.style.marginBottom = '20px';
+        descDiv.style.lineHeight = '1.4';
+        
+        const addButton = document.createElement('button');
+        addButton.textContent = 'Add to Cart';
+        addButton.style.background = '#C9A961';
+        addButton.style.color = 'white';
+        addButton.style.border = 'none';
+        addButton.style.padding = '12px 20px';
+        addButton.style.borderRadius = '8px';
+        addButton.style.cursor = 'pointer';
+        addButton.style.fontWeight = '600';
+        addButton.onclick = (e) => {
+            e.stopPropagation();
+            addToCart(product);
+            document.body.removeChild(overlay);
+        };
+        
+        modal.appendChild(imageDiv);
+        modal.appendChild(nameDiv);
+        modal.appendChild(priceDiv);
+        modal.appendChild(descDiv);
+        modal.appendChild(addButton);
         overlay.appendChild(modal);
-    }
-
-    // Close modal
-    function closeModal() {
-        const overlay = document.getElementById('modalOverlay');
-        overlay.style.display = 'none';
-        overlay.innerHTML = '';
+        document.body.appendChild(overlay);
     }
 
     // Add to cart function
     function addToCart(product) {
         cart.items.push(product);
         cart.total += product.price;
-        
         addChatMessage('bot', `Added ${product.name} to cart! Total: $${cart.total.toFixed(2)}`);
     }
 
@@ -934,7 +963,7 @@
                 brand: "Luminous Lab",
                 category: "Anti-Aging",
                 price: 39.00,
-                description: "Gentle retinol serum for first-time users. Softens fine lines and improves texture.",
+                description: "Gentle retinol serum for first-time users.",
                 image: "/images/0010.jpg"
             },
             {
@@ -943,17 +972,8 @@
                 brand: "Luminous Lab", 
                 category: "Eye Care",
                 price: 22.00,
-                description: "Cooling gel with caffeine and ceramides for morning depuff and long-lasting hydration.",
+                description: "Cooling gel with caffeine and ceramides.",
                 image: "/images/black-americanfemale.jpg"
-            },
-            {
-                id: "sc-balancing-002",
-                name: "Balancing Gel Cleanser", 
-                brand: "Salon Pro",
-                category: "Skin Care",
-                price: 14.00,
-                description: "pH-balanced gel cleanser that removes makeup without stripping.",
-                image: "/images/0014CC.jpg"
             }
         ];
     }
@@ -968,7 +988,7 @@
         products.forEach(product => {
             const productElement = document.createElement('div');
             productElement.className = 'mini-product';
-            productElement.onclick = () => showProductDetailModal(product);
+            productElement.onclick = () => showProductDetail(product);
             
             const imageHtml = product.image ? 
                 `<img src="${product.image}" alt="${product.name}" onerror="handleImageError(this)">` :
@@ -987,7 +1007,7 @@
         });
     }
 
-    // Chat function with AI integration
+    // Chat function with AI integration (unchanged)
     async function sendChat() {
         const input = document.getElementById('chatInput');
         if (!input) return;
@@ -1007,39 +1027,16 @@
                 body: JSON.stringify({ message: message })
             });
             
-            if (!response.ok) {
-                throw new Error(`API error: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`API error: ${response.status}`);
             
             const data = await response.json();
             const aiReply = data.reply || data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
-            
             addChatMessage('bot', aiReply);
             
         } catch (error) {
             console.error('Chat error:', error);
-            
             setTimeout(() => {
-                const lowerMsg = message.toLowerCase();
-                let response;
-                
-                if (lowerMsg.includes('retinol') || lowerMsg.includes('anti-aging')) {
-                    response = "Our retinol products are perfect for anti-aging! Try our Retinol Renewal Serum for gentle yet effective results.";
-                } else if (lowerMsg.includes('eye') || lowerMsg.includes('dark circles')) {
-                    response = "For eye care, we recommend our Ceramide Eye Repair Gel or Brightening Eye Serum for dark circles.";
-                } else if (lowerMsg.includes('vitamin c') || lowerMsg.includes('bright')) {
-                    response = "Our Vitamin C 15% Bright Serum is excellent for radiant skin and even tone.";
-                } else if (lowerMsg.includes('spf') || lowerMsg.includes('sun')) {
-                    response = "Protect your skin with our Daily Mineral SPF 30 or Ultra Light SPF 50 for weightless protection.";
-                } else if (lowerMsg.includes('service') || lowerMsg.includes('book') || lowerMsg.includes('appointment')) {
-                    response = "I can help you book services! We offer hair coloring ($120), facials ($90), manicures ($45), and more. What are you interested in?";
-                } else if (lowerMsg.includes('product') || lowerMsg.includes('buy')) {
-                    response = "Check out our products by category: Anti-Aging, Eye Care, Skin Care, Brightening, Daily Protection, or browse all products.";
-                } else {
-                    response = "I'm here to help with beauty advice, product recommendations, and salon services. What would you like to know?";
-                }
-                
-                addChatMessage('bot', response);
+                addChatMessage('bot', "I'm here to help with beauty advice and product recommendations. What would you like to know?");
             }, 1000);
         }
     }
@@ -1050,28 +1047,8 @@
             addChatMessage('user', `Search: ${searchTerm}`);
             document.getElementById('productSearch').value = '';
             
-            setTimeout(async () => {
-                try {
-                    const response = await fetch('/ask', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ 
-                            message: `I'm searching for products related to: ${searchTerm}. What do you recommend from your catalog?` 
-                        })
-                    });
-                    
-                    if (response.ok) {
-                        const data = await response.json();
-                        const aiReply = data.reply || data.choices?.[0]?.message?.content;
-                        addChatMessage('bot', aiReply);
-                    } else {
-                        addChatMessage('bot', `I found several products matching "${searchTerm}". Check our categories for the best matches!`);
-                    }
-                } catch (error) {
-                    addChatMessage('bot', `Searching for "${searchTerm}"... Check our categories for related products!`);
-                }
+            setTimeout(() => {
+                addChatMessage('bot', `Searching for "${searchTerm}"... Check our categories for related products!`);
             }, 1000);
         }
     }
@@ -1088,26 +1065,15 @@
         chatContainer.scrollTop = chatContainer.scrollHeight;
     }
 
-    // Navigation functions
+    // Navigation functions (unchanged)
     function goHome() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.classList.remove('active');
-        });
+        document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
         document.querySelectorAll('.nav-item')[0].classList.add('active');
     }
 
-    function showProfile() {
-        alert('Profile view would show here');
-    }
-
-    function navigateTo(page) {
-        alert(`Navigating to ${page} page...`);
-    }
-
-    function bookService(service) {
-        alert(`Booking ${service} service...`);
-    }
-
+    function showProfile() { alert('Profile view would show here'); }
+    function navigateTo(page) { alert(`Navigating to ${page} page...`); }
+    function bookService(service) { alert(`Booking ${service} service...`); }
     function bookNow() { alert('Opening booking system...'); }
     function callUs() { alert('Calling (555) 123-4567...'); }
     function viewOffers() { alert('Viewing current offers...'); }
@@ -1125,4 +1091,3 @@
   </script>
 </body>
 </html>
-
