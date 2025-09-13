@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Luminous Salon</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * {
       margin: 0;
@@ -44,6 +45,64 @@
       position: relative;
       display: flex;
       flex-direction: column;
+    }
+    
+    /* Splash Screen */
+    .splash-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      transition: opacity 0.6s ease-in-out;
+    }
+    
+    .splash-logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 25px;
+      background: linear-gradient(135deg, #C9A961 0%, #D4B97A 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      box-shadow: 0 5px 15px rgba(201, 169, 97, 0.4);
+    }
+    
+    .splash-logo span {
+      font-size: 50px;
+      color: white;
+    }
+    
+    .splash-text {
+      color: white;
+      font-size: 24px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-top: 20px;
+    }
+    
+    .splash-progress {
+      width: 200px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      margin-top: 30px;
+      overflow: hidden;
+    }
+    
+    .splash-progress-bar {
+      height: 100%;
+      width: 0%;
+      background: #C9A961;
+      border-radius: 2px;
+      transition: width 0.5s ease;
     }
     
     /* Flutter AppBar */
@@ -297,6 +356,21 @@
       justify-content: center;
       font-size: 32px;
       color: white;
+      position: relative;
+    }
+    
+    .profile-avatar-edit {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: #000;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
     }
     
     .profile-name {
@@ -338,6 +412,304 @@
     
     .appointment-item:last-child {
       border-bottom: none;
+    }
+    
+    .profile-edit-btn {
+      background: #C9A961;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .profile-field {
+      margin-bottom: 12px;
+    }
+    
+    .profile-field label {
+      display: block;
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 4px;
+    }
+    
+    .profile-field input, .profile-field textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .profile-field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    
+    /* Message View */
+    .message-view {
+      display: none;
+      padding: 16px;
+    }
+    
+    .message-contact {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      background: white;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .message-contact-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: #C9A961;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+      margin-right: 12px;
+    }
+    
+    .message-contact-info {
+      flex: 1;
+    }
+    
+    .message-contact-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .message-contact-role {
+      font-size: 12px;
+      color: #666;
+    }
+    
+    .message-contact-action {
+      display: flex;
+      gap: 10px;
+    }
+    
+    .message-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      color: white;
+      cursor: pointer;
+    }
+    
+    /* Booking View */
+    .booking-view {
+      display: none;
+      padding: 16px;
+    }
+    
+    .booking-steps {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      position: relative;
+    }
+    
+    .booking-steps::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #eee;
+      z-index: 1;
+    }
+    
+    .booking-step {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: white;
+      border: 2px solid #eee;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 600;
+      position: relative;
+      z-index: 2;
+    }
+    
+    .booking-step.active {
+      background: #C9A961;
+      border-color: #C9A961;
+      color: white;
+    }
+    
+    .booking-step-label {
+      position: absolute;
+      top: 35px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      white-space: nowrap;
+      color: #666;
+    }
+    
+    .booking-step.active .booking-step-label {
+      color: #C9A961;
+      font-weight: 600;
+    }
+    
+    .booking-form {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    .booking-section {
+      display: none;
+    }
+    
+    .booking-section.active {
+      display: block;
+    }
+    
+    .booking-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    
+    .booking-field {
+      margin-bottom: 16px;
+    }
+    
+    .booking-field label {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+    
+    .booking-field input, .booking-field select, .booking-field textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    
+    .booking-nav {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+    
+    .booking-btn {
+      padding: 12px 20px;
+      background: #000;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    
+    .booking-btn.next {
+      background: #C9A961;
+    }
+    
+    .booking-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      margin-bottom: 16px;
+    }
+    
+    .calendar-header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .calendar-weekday {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 600;
+      color: #666;
+      padding: 5px;
+    }
+    
+    .calendar-day {
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .calendar-day:hover {
+      background: #f0f0f0;
+    }
+    
+    .calendar-day.selected {
+      background: #C9A961;
+      color: white;
+    }
+    
+    .calendar-day.disabled {
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    
+    .time-slots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    
+    .time-slot {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    .time-slot:hover {
+      background: #f0f0f0;
+    }
+    
+    .time-slot.selected {
+      background: #C9A961;
+      color: white;
+      border-color: #C9A961;
+    }
+    
+    .time-slot.disabled {
+      color: #ccc;
+      cursor: not-allowed;
     }
     
     /* Bottom Navigation */
@@ -557,6 +929,17 @@
   <div class="phone-frame">
     <div class="phone-screen">
       
+      <!-- Splash Screen -->
+      <div class="splash-screen" id="splashScreen">
+        <div class="splash-logo">
+          <span>💇</span>
+        </div>
+        <div class="splash-text">Luminous Salon</div>
+        <div class="splash-progress">
+          <div class="splash-progress-bar" id="splashProgress"></div>
+        </div>
+      </div>
+      
       <!-- Flutter AppBar -->
       <div class="app-bar">
         <div class="app-bar-leading">
@@ -576,14 +959,14 @@
         
         <!-- Quick Actions -->
         <div class="quick-actions">
-          <button class="action-button" onclick="bookNow()">
+          <button class="action-button" onclick="showBookingView()">
             <span style="font-size: 16px;">📅</span> Book Now
           </button>
           <button class="action-button" onclick="callUs()">
             <span style="font-size: 16px;">📞</span> Call Us
           </button>
-          <button class="action-button" onclick="showServicesModal()">
-            <span style="font-size: 16px;">🎁</span> Services
+          <button class="action-button" onclick="showMessageView()">
+            <span style="font-size: 16px;">✉️</span> Message
           </button>
           <button class="action-button" onclick="rewards()">
             <span style="font-size: 16px;">⭐</span> Rewards
@@ -635,7 +1018,7 @@
           
           <div class="category-card" onclick="showProducts('Skin Care')">
             <div class="category-image">
-              <img src="/images/5CC.jpg" alt="Skin Care" onerror="handleImageError(this)">
+              <img src="/images/0014CC.jpg" alt="Skin Care" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Skin Care</div>
@@ -695,7 +1078,7 @@
           
           <div class="category-card" onclick="showProducts('all')">
             <div class="category-image">
-              <img src="/images/male-american.jpg" alt="All Products" onerror="handleImageError(this)">
+              <img src="/images/4CC.jpg" alt="All Products" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">All Products</div>
@@ -721,7 +1104,7 @@
         <div class="grid-view">
           <div class="category-card" onclick="bookService('color')">
             <div class="category-image">
-              <img src="/images/222DDD.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
+              <img src="/images/7CC.jpg" alt="Color & Highlights" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Color & Highlights</div>
@@ -731,7 +1114,7 @@
           
           <div class="category-card" onclick="bookService('styling')">
             <div class="category-image">
-              <img src="/images/111HHH.jpg" alt="Styling & Makeup" onerror="handleImageError(this)">
+              <img src="/images/4CC.jpg" alt="Styling & Makeup" onerror="handleImageError(this)">
             </div>
             <div class="category-body">
               <div class="category-title">Styling & Makeup</div>
@@ -748,9 +1131,14 @@
       <!-- Profile View (Hidden by default) -->
       <div class="scaffold-body profile-view" id="profileView">
         <div class="profile-header">
-          <div class="profile-avatar">👤</div>
-          <div class="profile-name">Alex Johnson</div>
-          <div class="profile-email">alex.j@example.com</div>
+          <div class="profile-avatar">
+            <span>👤</span>
+            <div class="profile-avatar-edit" onclick="editProfilePicture()">
+              <i class="fas fa-camera" style="font-size: 14px;"></i>
+            </div>
+          </div>
+          <div class="profile-name" id="profileName">Alex Johnson</div>
+          <div class="profile-email" id="profileEmail">alex.j@example.com</div>
         </div>
         
         <div class="profile-card">
@@ -761,6 +1149,31 @@
           <div class="profile-card-content">
             <p>You've earned 345 rewards points</p>
             <p style="margin-top: 8px;">Next reward: 55 points away</p>
+          </div>
+        </div>
+        
+        <div class="profile-card">
+          <div class="profile-card-title">
+            <span>Personal Information</span>
+            <button class="profile-edit-btn" id="profileEditBtn" onclick="toggleEditProfile()">Edit</button>
+          </div>
+          <div class="profile-card-content">
+            <div class="profile-field">
+              <label>Full Name</label>
+              <input type="text" id="profileNameInput" value="Alex Johnson" disabled>
+            </div>
+            <div class="profile-field">
+              <label>Email</label>
+              <input type="email" id="profileEmailInput" value="alex.j@example.com" disabled>
+            </div>
+            <div class="profile-field">
+              <label>Phone Number</label>
+              <input type="tel" id="profilePhoneInput" value="(555) 123-4567" disabled>
+            </div>
+            <div class="profile-field">
+              <label>Bio</label>
+              <textarea id="profileBioInput" disabled>I love trying new beauty treatments and staying up to date with the latest skincare trends.</textarea>
+            </div>
           </div>
         </div>
         
@@ -803,15 +1216,231 @@
         </div>
       </div>
       
+      <!-- Message View (Hidden by default) -->
+      <div class="scaffold-body message-view" id="messageView">
+        <div class="section-label">Message Your Salon Rep</div>
+        
+        <div class="message-contact">
+          <div class="message-contact-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="message-contact-info">
+            <div class="message-contact-name">Jessica Williams</div>
+            <div class="message-contact-role">Senior Stylist & Salon Manager</div>
+          </div>
+          <div class="message-contact-action">
+            <div class="message-btn" onclick="messageViaSMS()">
+              <i class="fas fa-sms"></i>
+            </div>
+            <div class="message-btn" onclick="messageViaEmail()">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="message-contact">
+          <div class="message-contact-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="message-contact-info">
+            <div class="message-contact-name">Michael Rodriguez</div>
+            <div class="message-contact-role">Color Specialist</div>
+          </div>
+          <div class="message-contact-action">
+            <div class="message-btn" onclick="messageViaSMS()">
+              <i class="fas fa-sms"></i>
+            </div>
+            <div class="message-btn" onclick="messageViaEmail()">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="message-contact">
+          <div class="message-contact-avatar">
+            <i class="fas fa-user"></i>
+          </div>
+          <div class="message-contact-info">
+            <div class="message-contact-name">Sarah Johnson</div>
+            <div class="message-contact-role">Skincare Expert</div>
+          </div>
+          <div class="message-contact-action">
+            <div class="message-btn" onclick="messageViaSMS()">
+              <i class="fas fa-sms"></i>
+            </div>
+            <div class="message-btn" onclick="messageViaEmail()">
+              <i class="fas fa-envelope"></i>
+            </div>
+          </div>
+        </div>
+        
+        <div class="promo-card">
+          <div class="promo-title">Need Immediate Assistance?</div>
+          <div class="promo-text">Call us directly at (555) 123-4567 during business hours: Mon-Fri 9am-7pm, Sat 10am-5pm</div>
+        </div>
+      </div>
+      
+      <!-- Booking View (Hidden by default) -->
+      <div class="scaffold-body booking-view" id="bookingView">
+        <div class="booking-steps">
+          <div class="booking-step active" id="bookingStep1">
+            <span>1</span>
+            <div class="booking-step-label">Service</div>
+          </div>
+          <div class="booking-step" id="bookingStep2">
+            <span>2</span>
+            <div class="booking-step-label">Date & Time</div>
+          </div>
+          <div class="booking-step" id="bookingStep3">
+            <span>3</span>
+            <div class="booking-step-label">Details</div>
+          </div>
+          <div class="booking-step" id="bookingStep4">
+            <span>4</span>
+            <div class="booking-step-label">Confirm</div>
+          </div>
+        </div>
+        
+        <div class="booking-form">
+          <!-- Service Selection -->
+          <div class="booking-section active" id="bookingService">
+            <div class="booking-title">Select a Service</div>
+            
+            <div class="booking-field">
+              <label>Service Type</label>
+              <select id="serviceType">
+                <option value="">Select a service</option>
+                <option value="haircut">Haircut & Style ($45-85)</option>
+                <option value="color">Color & Highlights ($120-250)</option>
+                <option value="facial">Facial Treatment ($80-150)</option>
+                <option value="manicure">Manicure ($35-60)</option>
+                <option value="pedicure">Pedicure ($45-75)</option>
+                <option value="waxing">Waxing ($25-85)</option>
+                <option value="makeup">Makeup Application ($65-120)</option>
+                <option value="massage">Massage Therapy ($75-125)</option>
+              </select>
+            </div>
+            
+            <div class="booking-field">
+              <label>Preferred Stylist</label>
+              <select id="serviceStylist">
+                <option value="">Any available stylist</option>
+                <option value="jessica">Jessica Williams (Senior Stylist)</option>
+                <option value="michael">Michael Rodriguez (Color Specialist)</option>
+                <option value="sarah">Sarah Johnson (Skincare Expert)</option>
+                <option value="david">David Chen (Hair Specialist)</option>
+              </select>
+            </div>
+            
+            <div class="booking-nav">
+              <button class="booking-btn" onclick="goHome()">Cancel</button>
+              <button class="booking-btn next" onclick="goToBookingStep(2)">Next</button>
+            </div>
+          </div>
+          
+          <!-- Date & Time Selection -->
+          <div class="booking-section" id="bookingDateTime">
+            <div class="booking-title">Select Date & Time</div>
+            
+            <div class="calendar-header">
+              <button onclick="changeMonth(-1)">←</button>
+              <span id="currentMonth">September 2025</span>
+              <button onclick="changeMonth(1)">→</button>
+            </div>
+            
+            <div class="calendar" id="calendarDays">
+              <!-- Calendar days will be generated here -->
+            </div>
+            
+            <div class="booking-field">
+              <label>Available Time Slots</label>
+              <div class="time-slots" id="timeSlots">
+                <!-- Time slots will be generated here -->
+              </div>
+            </div>
+            
+            <div class="booking-nav">
+              <button class="booking-btn" onclick="goToBookingStep(1)">Back</button>
+              <button class="booking-btn next" onclick="goToBookingStep(3)">Next</button>
+            </div>
+          </div>
+          
+          <!-- Personal Details -->
+          <div class="booking-section" id="bookingDetails">
+            <div class="booking-title">Your Information</div>
+            
+            <div class="booking-field">
+              <label>Full Name</label>
+              <input type="text" id="bookingName" placeholder="Enter your full name">
+            </div>
+            
+            <div class="booking-field">
+              <label>Phone Number</label>
+              <input type="tel" id="bookingPhone" placeholder="Enter your phone number">
+            </div>
+            
+            <div class="booking-field">
+              <label>Email Address</label>
+              <input type="email" id="bookingEmail" placeholder="Enter your email address">
+            </div>
+            
+            <div class="booking-field">
+              <label>Special Requests</label>
+              <textarea id="bookingRequests" placeholder="Any special requests or notes for your appointment"></textarea>
+            </div>
+            
+            <div class="booking-nav">
+              <button class="booking-btn" onclick="goToBookingStep(2)">Back</button>
+              <button class="booking-btn next" onclick="goToBookingStep(4)">Next</button>
+            </div>
+          </div>
+          
+          <!-- Confirmation -->
+          <div class="booking-section" id="bookingConfirm">
+            <div class="booking-title">Confirm Your Appointment</div>
+            
+            <div class="booking-field">
+              <label>Service:</label>
+              <div id="confirmService">Haircut & Style ($45-85)</div>
+            </div>
+            
+            <div class="booking-field">
+              <label>Stylist:</label>
+              <div id="confirmStylist">Any available stylist</div>
+            </div>
+            
+            <div class="booking-field">
+              <label>Date & Time:</label>
+              <div id="confirmDateTime">September 15, 2025 at 2:00 PM</div>
+            </div>
+            
+            <div class="booking-field">
+              <label>Your Information:</label>
+              <div id="confirmInfo">Alex Johnson<br>(555) 123-4567<br>alex.j@example.com</div>
+            </div>
+            
+            <div class="booking-field">
+              <label>Special Requests:</label>
+              <div id="confirmRequests">None</div>
+            </div>
+            
+            <div class="booking-nav">
+              <button class="booking-btn" onclick="goToBookingStep(3)">Back</button>
+              <button class="booking-btn next" onclick="confirmBooking()">Confirm Booking</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Bottom Navigation -->
       <div class="bottom-nav">
         <a class="nav-item active" onclick="goHome()">
           <span style="font-size: 20px;">🏠</span>
           <div class="nav-label">Home</div>
         </a>
-        <a class="nav-item" onclick="navigateTo('services')">
-          <span style="font-size: 20px;">✂️</span>
-          <div class="nav-label">Services</div>
+        <a class="nav-item" onclick="showMessageView()">
+          <span style="font-size: 20px;">✉️</span>
+          <div class="nav-label">Message</div>
         </a>
         <a class="nav-item" onclick="navigateTo('products')">
           <span style="font-size: 20px;">🛍️</span>
@@ -835,9 +1464,42 @@
         total: 0
     };
 
+    // Profile data
+    let profileData = {
+        name: "Alex Johnson",
+        email: "alex.j@example.com",
+        phone: "(555) 123-4567",
+        bio: "I love trying new beauty treatments and staying up to date with the latest skincare trends."
+    };
+
+    // Booking data
+    let bookingData = {
+        service: "",
+        stylist: "",
+        date: "",
+        time: "",
+        name: "",
+        phone: "",
+        email: "",
+        requests: ""
+    };
+
+    // Current date for calendar
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
     // Handle image errors
     function handleImageError(img) {
         img.style.display = 'none';
+    }
+
+    // Typewriter effect for AI replies :cite[1]:cite[5]:cite[10]
+    function typeWriter(text, element, speed = 50, index = 0) {
+        if (index < text.length) {
+            element.innerHTML += text.charAt(index);
+            setTimeout(() => typeWriter(text, element, speed, index + 1), speed);
+        }
     }
 
     // Load products from API
@@ -860,7 +1522,7 @@
         }
     }
 
-    // Show products by category - FIXED to handle your actual product categories
+    // Show products by category
     async function showProducts(category) {
         try {
             let url = '/api/products';
@@ -943,7 +1605,7 @@
                 category: "Skin Care",
                 price: 14.00,
                 description: "pH-balanced gel cleanser that removes makeup without stripping.",
-                image: "/images/3434AAA.jpg"
+                image: "/images/0014CC.jpg"
             },
             {
                 id: "vc-serum-001",
@@ -961,7 +1623,7 @@
                 category: "Daily Protection",
                 price: 21.00,
                 description: "Non-nano zinc oxide with sheer finish. No white cast on most skin tones.",
-                image: "/images/0011CC.jpg"
+                image: "/images/0010.jpg"
             },
             {
                 id: "nc-ceramide-repair-001",
@@ -1200,96 +1862,6 @@
         document.body.appendChild(overlay);
     }
 
-    // Show services modal
-    function showServicesModal() {
-        // Remove any existing modals first
-        document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
-        
-        const overlay = document.createElement('div');
-        overlay.className = 'modal-overlay';
-        overlay.style.position = 'fixed';
-        overlay.style.top = '0';
-        overlay.style.left = '0';
-        overlay.style.right = '0';
-        overlay.style.bottom = '0';
-        overlay.style.background = 'rgba(0,0,0,0.8)';
-        overlay.style.zIndex = '1000';
-        overlay.style.display = 'flex';
-        overlay.style.justifyContent = 'center';
-        overlay.style.alignItems = 'center';
-        overlay.onclick = () => document.body.removeChild(overlay);
-        
-        const modal = document.createElement('div');
-        modal.style.background = 'white';
-        modal.style.padding = '20px';
-        modal.style.borderRadius = '12px';
-        modal.style.maxWidth = '90%';
-        modal.style.maxHeight = '80%';
-        modal.style.overflowY = 'auto';
-        modal.style.position = 'relative';
-        modal.onclick = (e) => e.stopPropagation();
-        
-        // Add close button
-        const closeButton = document.createElement('span');
-        closeButton.className = 'modal-close';
-        closeButton.innerHTML = '&times;';
-        closeButton.onclick = () => document.body.removeChild(overlay);
-        modal.appendChild(closeButton);
-        
-        const title = document.createElement('h3');
-        title.textContent = 'Our Services';
-        title.style.marginBottom = '15px';
-        title.style.textAlign = 'center';
-        modal.appendChild(title);
-        
-        // Services list
-        const services = [
-            { name: 'Haircut & Style', price: '$45-85', duration: '60 min' },
-            { name: 'Color & Highlights', price: '$120-250', duration: '120-180 min' },
-            { name: 'Facial Treatment', price: '$80-150', duration: '60-90 min' },
-            { name: 'Manicure', price: '$35-60', duration: '45 min' },
-            { name: 'Pedicure', price: '$45-75', duration: '60 min' },
-            { name: 'Waxing', price: '$25-85', duration: '30-60 min' },
-            { name: 'Makeup Application', price: '$65-120', duration: '60 min' },
-            { name: 'Massage Therapy', price: '$75-125', duration: '60 min' }
-        ];
-        
-        services.forEach(service => {
-            const serviceItem = document.createElement('div');
-            serviceItem.style.padding = '12px';
-            serviceItem.style.borderBottom = '1px solid #eee';
-            serviceItem.style.display = 'flex';
-            serviceItem.style.justifyContent = 'space-between';
-            serviceItem.style.alignItems = 'center';
-            
-            const serviceInfo = document.createElement('div');
-            serviceInfo.innerHTML = `
-                <div style="font-weight: 600;">${service.name}</div>
-                <div style="font-size: 12px; color: #666;">${service.duration}</div>
-            `;
-            
-            const servicePrice = document.createElement('div');
-            servicePrice.innerHTML = `
-                <div style="font-weight: 600; color: #C9A961;">${service.price}</div>
-                <button style="background: #000; color: white; border: none; padding: 6px 12px; 
-                        border-radius: 6px; font-size: 12px; cursor: pointer; margin-top: 5px;">
-                    Book Now
-                </button>
-            `;
-            
-            servicePrice.querySelector('button').onclick = () => {
-                alert(`Booking ${service.name} service for ${service.price}`);
-            };
-            
-            serviceItem.appendChild(serviceInfo);
-            serviceItem.appendChild(servicePrice);
-            modal.appendChild(serviceItem);
-        });
-        
-        overlay.appendChild(modal);
-        document.body.appendChild(overlay);
-    }
-
     // Add to cart function
     function addToCart(product) {
         cart.items.push(product);
@@ -1347,20 +1919,22 @@
         });
     }
 
-    // FIXED: Navigation functions
+    // Navigation functions
     function goHome() {
         document.getElementById('mainView').style.display = 'block';
         document.getElementById('profileView').style.display = 'none';
+        document.getElementById('messageView').style.display = 'none';
+        document.getElementById('bookingView').style.display = 'none';
         updateNavActive(0);
     }
 
     function showServices() {
-        showServicesModal();
+        showProducts('all');
     }
 
     function navigateTo(page) {
         if (page === 'services') {
-            showServicesModal();
+            showServices();
         } else if (page === 'products') {
             showProducts('all');
         } else {
@@ -1371,7 +1945,29 @@
     function showProfile() {
         document.getElementById('mainView').style.display = 'none';
         document.getElementById('profileView').style.display = 'block';
+        document.getElementById('messageView').style.display = 'none';
+        document.getElementById('bookingView').style.display = 'none';
         updateNavActive(3);
+    }
+
+    function showMessageView() {
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('messageView').style.display = 'block';
+        document.getElementById('bookingView').style.display = 'none';
+        updateNavActive(1);
+    }
+
+    function showBookingView() {
+        document.getElementById('mainView').style.display = 'none';
+        document.getElementById('profileView').style.display = 'none';
+        document.getElementById('messageView').style.display = 'none';
+        document.getElementById('bookingView').style.display = 'block';
+        updateNavActive(0);
+        
+        // Initialize booking process
+        goToBookingStep(1);
+        generateCalendar();
     }
 
     function updateNavActive(index) {
@@ -1384,7 +1980,7 @@
         });
     }
 
-    // Chat function with AI integration
+    // Chat function with AI integration and typewriter effect
     async function sendChat() {
         const input = document.getElementById('chatInput');
         if (!input) return;
@@ -1407,13 +2003,22 @@
             if (!response.ok) throw new Error(`API error: ${response.status}`);
             
             const data = await response.json();
-            const aiReply = data.reply || data.choices?.[0]?.message?.content || "Sorry, I couldn't process that.";
-            addChatMessage('bot', aiReply);
+            const aiReply = data.reply || data.choices?.[0]?.message?.content || "I'm here to help with beauty advice and product recommendations. What would you like to know?";
+            
+            // Add bot message with typewriter effect
+            addChatMessage('bot', '', true);
+            const botMessages = document.querySelectorAll('.chat-message.bot');
+            const lastBotMessage = botMessages[botMessages.length - 1];
+            typeWriter(aiReply, lastBotMessage, 30);
             
         } catch (error) {
             console.error('Chat error:', error);
+            // Add bot message with typewriter effect for fallback response
             setTimeout(() => {
-                addChatMessage('bot', "I'm here to help with beauty advice and product recommendations. What would you like to know?");
+                addChatMessage('bot', '', true);
+                const botMessages = document.querySelectorAll('.chat-message.bot');
+                const lastBotMessage = botMessages[botMessages.length - 1];
+                typeWriter("I'm here to help with beauty advice and product recommendations. What would you like to know?", lastBotMessage, 30);
             }, 1000);
         }
     }
@@ -1425,21 +2030,280 @@
             document.getElementById('productSearch').value = '';
             
             setTimeout(() => {
-                addChatMessage('bot', `Searching for "${searchTerm}"... Check our categories for related products!`);
+                addChatMessage('bot', '', true);
+                const botMessages = document.querySelectorAll('.chat-message.bot');
+                const lastBotMessage = botMessages[botMessages.length - 1];
+                typeWriter(`Searching for "${searchTerm}"... Check our categories for related products!`, lastBotMessage, 30);
             }, 1000);
         }
     }
 
     // Chat functions
-    function addChatMessage(type, message) {
+    function addChatMessage(type, message, empty = false) {
         const chatContainer = document.getElementById('chatContainer');
         if (!chatContainer) return;
         
         const messageDiv = document.createElement('div');
         messageDiv.className = `chat-message ${type}`;
-        messageDiv.textContent = message;
+        if (!empty) {
+            messageDiv.textContent = message;
+        }
         chatContainer.appendChild(messageDiv);
         chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    // Profile editing functions :cite[2]:cite[6]
+    function toggleEditProfile() {
+        const editBtn = document.getElementById('profileEditBtn');
+        const inputs = document.querySelectorAll('#profileView input, #profileView textarea');
+        const isEditing = editBtn.textContent === 'Save';
+        
+        if (isEditing) {
+            // Save changes
+            profileData.name = document.getElementById('profileNameInput').value;
+            profileData.email = document.getElementById('profileEmailInput').value;
+            profileData.phone = document.getElementById('profilePhoneInput').value;
+            profileData.bio = document.getElementById('profileBioInput').value;
+            
+            // Update profile display
+            document.getElementById('profileName').textContent = profileData.name;
+            document.getElementById('profileEmail').textContent = profileData.email;
+            
+            // Disable inputs
+            inputs.forEach(input => input.disabled = true);
+            editBtn.textContent = 'Edit';
+        } else {
+            // Enable inputs for editing
+            inputs.forEach(input => input.disabled = false);
+            editBtn.textContent = 'Save';
+        }
+    }
+
+    function editProfilePicture() {
+        alert("Profile picture upload would be implemented here. In a real app, this would open a file dialog.");
+    }
+
+    // Message functions :cite[3]:cite[7]
+    function messageViaSMS() {
+        alert("SMS messaging would be implemented here. This would open your device's SMS app with the salon's number.");
+    }
+
+    function messageViaEmail() {
+        alert("Email messaging would be implemented here. This would open your device's email app with the salon's email address.");
+    }
+
+    // Booking functions :cite[8]
+    function goToBookingStep(step) {
+        // Validate current step before proceeding
+        if (step > 1) {
+            const currentStep = Array.from(document.querySelectorAll('.booking-section')).findIndex(section => 
+                section.classList.contains('active')
+            ) + 1;
+            
+            if (currentStep === 1 && !document.getElementById('serviceType').value) {
+                alert("Please select a service to continue.");
+                return;
+            }
+            
+            if (currentStep === 2 && (!bookingData.date || !bookingData.time)) {
+                alert("Please select a date and time to continue.");
+                return;
+            }
+            
+            if (currentStep === 3) {
+                // Validate personal details
+                const name = document.getElementById('bookingName').value;
+                const phone = document.getElementById('bookingPhone').value;
+                const email = document.getElementById('bookingEmail').value;
+                
+                if (!name || !phone || !email) {
+                    alert("Please fill in all required fields to continue.");
+                    return;
+                }
+                
+                // Update booking data
+                bookingData.name = name;
+                bookingData.phone = phone;
+                bookingData.email = email;
+                bookingData.requests = document.getElementById('bookingRequests').value;
+                
+                // Update confirmation page
+                document.getElementById('confirmService').textContent = 
+                    document.getElementById('serviceType').selectedOptions[0].text;
+                document.getElementById('confirmStylist').textContent = 
+                    document.getElementById('serviceStylist').selectedOptions[0].text || "Any available stylist";
+                document.getElementById('confirmDateTime').textContent = 
+                    `${formatDate(bookingData.date)} at ${bookingData.time}`;
+                document.getElementById('confirmInfo').innerHTML = 
+                    `${bookingData.name}<br>${bookingData.phone}<br>${bookingData.email}`;
+                document.getElementById('confirmRequests').textContent = 
+                    bookingData.requests || "None";
+            }
+        }
+        
+        // Update steps UI
+        document.querySelectorAll('.booking-step').forEach((step, index) => {
+            if (index < step) {
+                step.classList.add('active');
+            } else {
+                step.classList.remove('active');
+            }
+        });
+        
+        // Show the selected step
+        document.querySelectorAll('.booking-section').forEach((section, index) => {
+            if (index === step - 1) {
+                section.classList.add('active');
+            } else {
+                section.classList.remove('active');
+            }
+        });
+    }
+
+    function generateCalendar() {
+        const calendarDays = document.getElementById('calendarDays');
+        if (!calendarDays) return;
+        
+        // Clear previous calendar
+        calendarDays.innerHTML = '';
+        
+        // Add weekday headers
+        const weekdays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        weekdays.forEach(day => {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-weekday';
+            dayElement.textContent = day;
+            calendarDays.appendChild(dayElement);
+        });
+        
+        // Get first day of month and number of days in month
+        const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        
+        // Update month display
+        document.getElementById('currentMonth').textContent = 
+            new Date(currentYear, currentMonth).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+        
+        // Add empty cells for days before the first day of the month
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDay = document.createElement('div');
+            emptyDay.className = 'calendar-day disabled';
+            calendarDays.appendChild(emptyDay);
+        }
+        
+        // Add days of the month
+        const today = new Date();
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'calendar-day';
+            dayElement.textContent = day;
+            
+            // Disable past days
+            const cellDate = new Date(currentYear, currentMonth, day);
+            if (cellDate < today) {
+                dayElement.classList.add('disabled');
+            } else {
+                dayElement.onclick = () => selectDate(day);
+            }
+            
+            // Highlight today
+            if (cellDate.toDateString() === today.toDateString()) {
+                dayElement.style.fontWeight = 'bold';
+                dayElement.style.border = '2px solid #C9A961';
+            }
+            
+            calendarDays.appendChild(dayElement);
+        }
+        
+        // Generate time slots
+        generateTimeSlots();
+    }
+
+    function changeMonth(direction) {
+        currentMonth += direction;
+        
+        // Adjust year if necessary
+        if (currentMonth < 0) {
+            currentMonth = 11;
+            currentYear--;
+        } else if (currentMonth > 11) {
+            currentMonth = 0;
+            currentYear++;
+        }
+        
+        generateCalendar();
+    }
+
+    function selectDate(day) {
+        bookingData.date = new Date(currentYear, currentMonth, day);
+        
+        // Remove previous selections
+        document.querySelectorAll('.calendar-day.selected').forEach(el => {
+            el.classList.remove('selected');
+        });
+        
+        // Highlight selected date
+        const days = document.querySelectorAll('.calendar-day');
+        days.forEach((el, index) => {
+            if (parseInt(el.textContent) === day) {
+                el.classList.add('selected');
+            }
+        });
+        
+        // Generate available time slots
+        generateTimeSlots();
+    }
+
+    function generateTimeSlots() {
+        const timeSlotsContainer = document.getElementById('timeSlots');
+        if (!timeSlotsContainer) return;
+        
+        timeSlotsContainer.innerHTML = '';
+        
+        // Only generate time slots if a date is selected
+        if (!bookingData.date) return;
+        
+        // Generate time slots from 9am to 5pm
+        for (let hour = 9; hour <= 17; hour++) {
+            for (let minute = 0; minute < 60; minute += 30) {
+                const timeString = `${hour % 12 === 0 ? 12 : hour % 12}:${minute === 0 ? '00' : '30'} ${hour >= 12 ? 'PM' : 'AM'}`;
+                
+                const timeSlot = document.createElement('div');
+                timeSlot.className = 'time-slot';
+                timeSlot.textContent = timeString;
+                
+                // Randomly disable some time slots for demonstration
+                if (Math.random() > 0.7) {
+                    timeSlot.classList.add('disabled');
+                } else {
+                    timeSlot.onclick = () => selectTime(timeString, timeSlot);
+                }
+                
+                timeSlotsContainer.appendChild(timeSlot);
+            }
+        }
+    }
+
+    function selectTime(time, element) {
+        bookingData.time = time;
+        
+        // Remove previous selections
+        document.querySelectorAll('.time-slot.selected').forEach(el => {
+            el.classList.remove('selected');
+        });
+        
+        // Highlight selected time
+        element.classList.add('selected');
+    }
+
+    function formatDate(date) {
+        if (!date) return '';
+        return date.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+    }
+
+    function confirmBooking() {
+        alert(`Booking confirmed!\n\nService: ${bookingData.service}\nDate: ${formatDate(bookingData.date)}\nTime: ${bookingData.time}\n\nWe'll see you soon!`);
+        goHome();
     }
 
     // Service functions
@@ -1447,9 +2311,8 @@
         alert(`Booking ${service} service...`);
     }
 
-    function bookNow() { alert('Opening booking system...'); }
+    function bookNow() { showBookingView(); }
     function callUs() { alert('Calling (555) 123-4567...'); }
-    function viewOffers() { showServicesModal(); }
     function rewards() { alert('Viewing rewards program...'); }
     function openAI() { 
         const input = document.getElementById('chatInput');
@@ -1460,16 +2323,52 @@
         document.querySelectorAll('.modal-overlay').forEach(el => el.remove());
     }
 
+    // Splash screen functions :cite[4]:cite[9]
+    function showSplashScreen() {
+        const splashScreen = document.getElementById('splashScreen');
+        const progressBar = document.getElementById('splashProgress');
+        
+        let progress = 0;
+        const interval = setInterval(() => {
+            progress += 5;
+            progressBar.style.width = `${progress}%`;
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    splashScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        splashScreen.style.display = 'none';
+                    }, 600);
+                }, 500);
+            }
+        }, 100);
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', function() {
         loadProducts();
-        addChatMessage('bot', 'Hello! I\'m your beauty assistant. Ask me about skincare, products, or salon services!');
+        showSplashScreen();
+        
+        // Initialize chat with typewriter effect
+        setTimeout(() => {
+            addChatMessage('bot', '', true);
+            const botMessages = document.querySelectorAll('.chat-message.bot');
+            const lastBotMessage = botMessages[botMessages.length - 1];
+            typeWriter('Hello! I\'m your beauty assistant. Ask me about skincare, products, or salon services!', lastBotMessage, 30);
+        }, 1000);
         
         // Fix navigation click handlers
         document.querySelectorAll('.nav-item')[0].onclick = goHome;
-        document.querySelectorAll('.nav-item')[1].onclick = () => navigateTo('services');
+        document.querySelectorAll('.nav-item')[1].onclick = showMessageView;
         document.querySelectorAll('.nav-item')[2].onclick = () => navigateTo('products');
         document.querySelectorAll('.nav-item')[3].onclick = showProfile;
+        
+        // Initialize profile data
+        document.getElementById('profileNameInput').value = profileData.name;
+        document.getElementById('profileEmailInput').value = profileData.email;
+        document.getElementById('profilePhoneInput').value = profileData.phone;
+        document.getElementById('profileBioInput').value = profileData.bio;
     });
   </script>
 </body>
